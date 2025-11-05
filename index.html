@@ -32,11 +32,7 @@
             --maxw: 1100px;
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0 }
 
         html, body {
             background: var(--bg);
@@ -47,26 +43,14 @@
             scroll-padding-top: calc(var(--hdr-h) + 12px)
         }
 
-        a {
-            color: var(--pri-2);
-            text-decoration: none;
-            transition: color .2s
-        }
+        a { color: var(--pri-2); text-decoration: none; transition: color .2s }
+        a:hover { color: var(--pri) }
 
-        a:hover {
-            color: var(--pri)
-        }
-
-        .container {
-            max-width: var(--maxw);
-            margin: 0 auto;
-            padding: 0 20px
-        }
+        .container { max-width: var(--maxw); margin: 0 auto; padding: 0 20px }
 
         /* Header */
         header {
-            position: sticky;
-            top: 0;
+            position: sticky; top: 0;
             background: rgba(255, 255, 255, .95);
             backdrop-filter: blur(10px);
             border-bottom: 1px solid var(--border);
@@ -74,476 +58,144 @@
         }
 
         nav {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 12px 0;
-            min-height: var(--hdr-h)
+            display: flex; align-items: center; justify-content: space-between;
+            gap: 16px; padding: 12px 0; min-height: var(--hdr-h)
         }
 
-        .brand {
-            font-weight: 800;
-            letter-spacing: .2px;
-            color: var(--pri);
-            font-size: 1.25rem;
-            display: flex;
-            align-items: center;
-            gap: 8px
-        }
+        .brand { font-weight: 800; letter-spacing: .2px; color: var(--pri); font-size: 1.25rem; display: flex; align-items: center; gap: 8px }
 
-        .nav {
-            display: flex;
-            gap: 24px
-        }
-
-        .nav a {
-            color: var(--ink);
-            font-weight: 600;
-            position: relative;
-            padding: 8px 0
-        }
-
+        .nav { display: flex; gap: 24px }
+        .nav a { color: var(--ink); font-weight: 600; position: relative; padding: 8px 0 }
         .nav a::after {
-            content: '';
-            position: absolute;
-            inset: auto 0 0 0;
-            height: 2px;
-            background: var(--gradient);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform .25s
+            content: ''; position: absolute; inset: auto 0 0 0; height: 2px;
+            background: var(--gradient); transform: scaleX(0); transform-origin: left; transition: transform .25s
         }
-
-        .nav a:hover::after {
-            transform: scaleX(1)
-        }
+        .nav a:hover::after { transform: scaleX(1) }
 
         .mobile-menu-btn {
-            display: none;
-            border: 1px solid var(--border);
-            background: #fff;
-            border-radius: 10px;
-            padding: 8px;
-            cursor: pointer
+            display: none; border: 1px solid var(--border); background: #fff;
+            border-radius: 10px; padding: 8px; cursor: pointer
         }
 
         /* Hero */
-        .hero {
-            padding: 80px 0 32px;
-            text-align: center
-        }
-
+        .hero { padding: 80px 0 32px; text-align: center }
         .hero h1 {
-            font-size: clamp(28px, 4vw, 48px);
-            line-height: 1.2;
-            margin: 0 0 16px;
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            font-weight: 800
+            font-size: clamp(28px, 4vw, 48px); line-height: 1.2; margin: 0 0 16px;
+            background: var(--gradient); -webkit-background-clip: text; background-clip: text; color: transparent; font-weight: 800
         }
-
-        .hero p {
-            margin: 0 auto 20px;
-            color: var(--muted);
-            font-size: clamp(16px, 2vw, 20px);
-            max-width: 720px
-        }
+        .hero p { margin: 0 auto 20px; color: var(--muted); font-size: clamp(16px, 2vw, 20px); max-width: 720px }
 
         .meta {
-            display: flex;
-            gap: 12px;
-            align-items: center;
-            justify-content: center;
-            margin-top: 10px;
-            color: var(--muted);
-            font-size: 14px;
-            flex-wrap: wrap
+            display: flex; gap: 12px; align-items: center; justify-content: center;
+            margin-top: 10px; color: var(--muted); font-size: 14px; flex-wrap: wrap
         }
 
         .btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--gradient);
-            color: #fff;
-            border: 0;
-            border-radius: 12px;
-            padding: 12px 20px;
-            font-weight: 700;
-            box-shadow: var(--shadow);
-            transition: transform .2s, box-shadow .2s;
-            cursor: pointer
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--gradient); color: #fff; border: 0; border-radius: 12px;
+            padding: 12px 20px; font-weight: 700; box-shadow: var(--shadow);
+            transition: transform .2s, box-shadow .2s; cursor: pointer
         }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-hover)
-        }
-
-        .btn.secondary {
-            background: var(--card);
-            color: var(--pri);
-            border: 1px solid var(--border)
-        }
-
-        .btn[disabled] {
-            opacity: .7;
-            cursor: not-allowed
-        }
+        .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-hover) }
+        .btn.secondary { background: var(--card); color: var(--pri); border: 1px solid var(--border) }
+        .btn[disabled] { opacity: .7; cursor: not-allowed }
 
         /* Cards/Sections */
         .feature-card {
-            background: var(--card);
-            border-radius: var(--radius-lg);
-            padding: 24px;
-            box-shadow: var(--shadow);
-            transition: transform .2s, box-shadow .2s;
-            border: 1px solid var(--border);
-            margin-bottom: 24px
+            background: var(--card); border-radius: var(--radius-lg); padding: 24px; box-shadow: var(--shadow);
+            transition: transform .2s, box-shadow .2s; border: 1px solid var(--border); margin-bottom: 24px
         }
-
-        .feature-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-hover)
-        }
-
-        .feature-card h3 {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-top: 0
-        }
-
+        .feature-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover) }
+        .feature-card h3 { display: flex; align-items: center; gap: 12px; margin-top: 0 }
         .feature-card .icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 10px;
-            background: var(--pri-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--pri)
+            width: 40px; height: 40px; border-radius: 10px; background: var(--pri-light);
+            display: flex; align-items: center; justify-content: center; color: var(--pri)
         }
 
-        .section {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            margin-bottom: 24px;
-            overflow: hidden
-        }
+        .section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); margin-bottom: 24px; overflow: hidden }
+        .section .inner { padding: 28px }
 
-        .section .inner {
-            padding: 28px
-        }
-
-        h2 {
-            font-size: 1.6rem;
-            margin: 0 0 14px;
-            color: var(--pri);
-            font-weight: 700
-        }
-
-        h3 {
-            font-size: 1.15rem;
-            margin: 20px 0 10px;
-            color: var(--ink);
-            font-weight: 600
-        }
-
-        p {
-            margin: 10px 0
-        }
-
-        ul {
-            margin: 10px 0 10px 22px
-        }
-
-        li {
-            margin-bottom: 8px
-        }
-
-        li::marker {
-            color: var(--pri)
-        }
-
-        code.inline {
-            background: var(--pri-light);
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            padding: 2px 8px;
-            font-family: ui-monospace, Consolas, Menlo, monospace;
-            font-size: 90%;
-            color: var(--pri)
-        }
-
-        .note {
-            background: var(--pri-light);
-            border-left: 4px solid var(--pri);
-            padding: 14px 18px;
-            border-radius: 8px;
-            margin: 14px 0
-        }
-
-        .toolbar {
-            display: flex;
-            gap: 12px;
-            margin-top: 20px;
-            flex-wrap: wrap
-        }
+        h2 { font-size: 1.6rem; margin: 0 0 14px; color: var(--pri); font-weight: 700 }
+        h3 { font-size: 1.15rem; margin: 20px 0 10px; color: var(--ink); font-weight: 600 }
+        p { margin: 10px 0 }
+        ul { margin: 10px 0 10px 22px }
+        li { margin-bottom: 8px }
+        li::marker { color: var(--pri) }
+        code.inline { background: var(--pri-light); border: 1px solid var(--border); border-radius: 6px; padding: 2px 8px; font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 90%; color: var(--pri) }
+        .note { background: var(--pri-light); border-left: 4px solid var(--pri); padding: 14px 18px; border-radius: 8px; margin: 14px 0 }
+        .toolbar { display: flex; gap: 12px; margin-top: 20px; flex-wrap: wrap }
 
         /* Progress bar */
-        .progress-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            z-index: 100
-        }
-
-        .progress-bar {
-            height: 4px;
-            background: var(--gradient);
-            width: 0%;
-            transition: width .2s
-        }
+        .progress-container { position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 100 }
+        .progress-bar { height: 4px; background: var(--gradient); width: 0%; transition: width .2s }
 
         /* HOME LAYOUT (centered column) */
-        .home-grid {
-            display: grid;
-            grid-template-columns: 1fr min(820px, calc(100% - 40px)) 1fr; /* center track stays centered */
-            gap: 0;
-            margin: 8px 0 72px;
-        }
-
-        .home-col {
-            grid-column: 2
-        }
+        .home-grid { display: grid; grid-template-columns: 1fr min(820px, calc(100% - 40px)) 1fr; gap: 0; margin: 8px 0 72px; }
+        .home-col { grid-column: 2 }
 
         /* PRIVACY/TERMS layout (keeps your sidebar) */
-        .grid {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 24px;
-            margin: 24px 0 72px;
-        }
-
+        .grid { display: grid; grid-template-columns: 280px 1fr; gap: 24px; margin: 24px 0 72px; }
         .toc {
-            position: sticky;
-            top: calc(var(--hdr-h) + 16px);
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 18px;
-            box-shadow: var(--shadow)
+            position: sticky; top: calc(var(--hdr-h) + 16px);
+            background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+            padding: 18px; box-shadow: var(--shadow)
         }
-
-        .toc h3 {
-            margin: 0 0 12px;
-            font-size: 16px
-        }
-
-        .toc a {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border-radius: 8px;
-            color: var(--muted);
-            font-size: 14px
-        }
-
-        .toc a:hover {
-            background: var(--pri-light);
-            color: var(--pri)
-        }
-
-        .toc a.indent {
-            padding-left: 22px;
-            font-size: 13px
-        }
+        .toc h3 { margin: 0 0 12px; font-size: 16px }
+        .toc a { display: flex; align-items: center; padding: 10px; border-radius: 8px; color: var(--muted); font-size: 14px }
+        .toc a:hover { background: var(--pri-light); color: var(--pri) }
+        .toc a.indent { padding-left: 22px; font-size: 13px }
 
         /* Page toggling */
-        .home-section {
-            display: none
-        }
+        .home-section { display: none }
+        .home-section.active { display: block }
 
-        .home-section.active {
-            display: block
-        }
-
-        /* Forms (unchanged styles from your version, slightly compacted) */
-        .contact-form {
-            max-width: 600px;
-            margin: 18px 0
-        }
-
-        .form-group {
-            margin-bottom: 18px
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600
-        }
-
+        /* Forms */
+        .contact-form { max-width: 600px; margin: 18px 0 }
+        .form-group { margin-bottom: 18px }
+        .form-group label { display: block; margin-bottom: 8px; font-weight: 600 }
         .form-group input, .form-group textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            font-size: 16px;
-            background: var(--bg);
+            width: 100%; padding: 12px 14px; border: 1px solid var(--border); border-radius: 8px; font-size: 16px; background: var(--bg);
             transition: border-color .2s, box-shadow .2s
         }
+        .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--pri); box-shadow: 0 0 0 3px rgba(37, 99, 235, .1) }
 
-        .form-group input:focus, .form-group textarea:focus {
-            outline: none;
-            border-color: var(--pri);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, .1)
-        }
-
-        .captcha-container {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            margin-bottom: 8px
-        }
-
+        .captcha-container { display: flex; align-items: center; gap: 12px; margin-bottom: 8px }
         .captcha-display {
-            flex: 1;
-            background: linear-gradient(45deg, var(--pri-light), #e0f2fe);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            font-family: ui-monospace, Consolas, Menlo, monospace;
-            font-size: 24px;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-align: center;
-            color: var(--pri);
-            user-select: none;
-            min-height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden
+            flex: 1; background: linear-gradient(45deg, var(--pri-light), #e0f2fe);
+            border: 1px solid var(--border); border-radius: 8px; padding: 12px;
+            font-family: ui-monospace, Consolas, Menlo, monospace; font-size: 24px; font-weight: 700; letter-spacing: 2px; text-align: center; color: var(--pri);
+            user-select: none; min-height: 60px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden
         }
-
         .captcha-display::before {
-            content: '';
-            position: absolute;
-            inset: 0;
+            content: ''; position: absolute; inset: 0;
             background: repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(37, 99, 235, .1) 5px, rgba(37, 99, 235, .1) 10px)
         }
+        .captcha-refresh { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 12px; cursor: pointer }
+        .captcha-refresh:hover { background: var(--pri-light); color: var(--pri) }
+        .captcha-error { color: #dc2626; font-size: 14px; min-height: 20px }
 
-        .captcha-refresh {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            cursor: pointer
-        }
+        .submit-btn { width: 100%; justify-content: center; margin-top: 6px }
+        .btn-loading { display: flex; align-items: center; gap: 8px }
+        @keyframes spin { from { transform: rotate(0) } to { transform: rotate(360deg) } }
+        .btn-loading svg { animation: spin 1s linear infinite }
 
-        .captcha-refresh:hover {
-            background: var(--pri-light);
-            color: var(--pri)
-        }
-
-        .captcha-error {
-            color: #dc2626;
-            font-size: 14px;
-            min-height: 20px
-        }
-
-        .submit-btn {
-            width: 100%;
-            justify-content: center;
-            margin-top: 6px
-        }
-
-        .btn-loading {
-            display: flex;
-            align-items: center;
-            gap: 8px
-        }
-
-        @keyframes spin {
-            from {
-                transform: rotate(0)
-            }
-            to {
-                transform: rotate(360deg)
-            }
-        }
-
-        .btn-loading svg {
-            animation: spin 1s linear infinite
-        }
-
-        footer {
-            border-top: 1px solid var(--border);
-            padding: 28px 0;
-            background: #fff
-        }
-
-        .small {
-            font-size: 14px;
-            color: var(--muted)
-        }
+        footer { border-top: 1px solid var(--border); padding: 28px 0; background: #fff }
+        .small { font-size: 14px; color: var(--muted) }
 
         /* Responsive */
         @media (max-width: 980px) {
-            .nav {
-                display: none
-            }
-
-            .mobile-menu-btn {
-                display: block
-            }
-
-            .grid {
-                grid-template-columns:1fr
-            }
-
-            .toc {
-                position: static
-            }
+            .nav { display: none }
+            .mobile-menu-btn { display: block }
+            .grid { grid-template-columns:1fr }
+            .toc { position: static }
         }
-
         @media (max-width: 640px) {
-            .section .inner {
-                padding: 22px
-            }
-
-            .toolbar {
-                flex-direction: column
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center
-            }
-
-            .step {
-                display: flex;
-                flex-direction: column;
-                text-align: center
-            }
-
-            .home-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .home-col {
-                grid-column: 1
-            }
+            .section .inner { padding: 22px }
+            .toolbar { flex-direction: column }
+            .btn { width: 100%; justify-content: center }
+            .step { display: flex; flex-direction: column; text-align: center }
+            .home-grid { grid-template-columns: 1fr; }
+            .home-col { grid-column: 1 }
         }
     </style>
 </head>
@@ -574,23 +226,19 @@
 <main class="container home-section active" id="home-page">
     <section class="hero" id="home">
         <h1>Truck Box – Email Sender for DAT Loads</h1>
-        <p>Send broker emails directly from <span
-                style="font-family:ui-monospace,Consolas,Menlo,monospace">one.dat.com</span> with one click.</p>
+        <p>Send broker emails directly from <span style="font-family:ui-monospace,Consolas,Menlo,monospace">one.dat.com</span> with one click.</p>
         <div class="meta">
             <a class="btn"
                href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd?hl=en-US&utm_source=ext_sidebar"
                target="_blank" rel="noopener">
                 <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2Zm9 7V7l-6-1.5V7h6ZM14 14c0-.6-.4-1-1-1h-2c-.6 0-1 .4-1 1v7h4v-7Zm7 0h-5v7h5v-7ZM6 14v7h4v-7c0-.6-.4-1-1-1H7c-.6 0-1 .4-1 1Z"
-                          fill="currentColor"/>
+                    <path d="M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2Zm9 7V7l-6-1.5V7h6ZM14 14c0-.6-.4-1-1-1h-2c-.6 0-1 .4-1 1v7h4v-7Zm7 0h-5v7h5v-7ZM6 14v7h4v-7c0-.6-.4-1-1-1H7c-.6 0-1 .4-1 1Z" fill="currentColor"/>
                 </svg>
                 Install Chrome Extension
             </a>
         </div>
-
     </section>
 
-    <!-- Centered column for all home sections -->
     <div class="home-grid">
         <div class="home-col">
             <section class="section">
@@ -625,16 +273,6 @@
                 </div>
             </section>
 
-<!--            <section class="section">-->
-<!--                <div class="inner">-->
-<!--                    <h2>Screenshot</h2>-->
-<!--                    <div style="background:linear-gradient(135deg,#f1f5f9,#e2e8f0);height:300px;border-radius:16px;display:flex;align-items:center;justify-content:center;color:var(&#45;&#45;muted)">-->
-<!--                        [Extension Screenshot Placeholder]<br><small>Image: Sending a load request email via Gmail with-->
-<!--                        one click</small>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </section>-->
-
             <section class="section">
                 <div class="inner">
                     <h2>How It Works</h2>
@@ -642,18 +280,15 @@
                     <div style="display:flex;flex-direction:column;gap:16px;margin-top:10px">
                         <div style="display:flex;gap:12px;align-items:flex-start">
                             <div class="feature-card" style="margin:0;padding:10px 14px"><strong>1</strong></div>
-                            <div><h3>Install the Chrome Extension</h3>
-                                <p>Add Truck Box to your Chrome browser from the Chrome Web Store.</p></div>
+                            <div><h3>Install the Chrome Extension</h3><p>Add Truck Box to your Chrome browser from the Chrome Web Store.</p></div>
                         </div>
                         <div style="display:flex;gap:12px;align-items:flex-start">
                             <div class="feature-card" style="margin:0;padding:10px 14px"><strong>2</strong></div>
-                            <div><h3>Click Sign in with Google</h3>
-                                <p>Authorize the extension using secure OAuth authentication.</p></div>
+                            <div><h3>Click Sign in with Google</h3><p>Authorize the extension using secure OAuth authentication.</p></div>
                         </div>
                         <div style="display:flex;gap:12px;align-items:flex-start">
                             <div class="feature-card" style="margin:0;padding:10px 14px"><strong>3</strong></div>
-                            <div><h3>Click Send Email</h3>
-                                <p>The extension sends an email from your Gmail via the Gmail API.</p></div>
+                            <div><h3>Click Send Email</h3><p>The extension sends an email from your Gmail via the Gmail API.</p></div>
                         </div>
                     </div>
                     <div class="note" style="margin-top:16px"><strong>Important:</strong> All actions happen locally in
@@ -666,12 +301,8 @@
                 <div class="inner">
                     <h2>Google OAuth Compliance</h2>
                     <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:1px solid #bae6fd;border-radius:16px;padding:18px">
-                        <p><strong>Truck Box uses your Google account only to send emails you explicitly
-                            authorize.</strong></p>
-                        <p>It complies with the <a
-                                href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank"
-                                rel="noopener">Google API Services User Data Policy</a> and the Limited Use
-                            requirements.</p>
+                        <p><strong>Truck Box uses your Google account only to send emails you explicitly authorize.</strong></p>
+                        <p>It complies with the <a href="https://developers.google.com/terms/api-services-user-data-policy" target="_blank" rel="noopener">Google API Services User Data Policy</a> and the Limited Use requirements.</p>
                     </div>
                 </div>
             </section>
@@ -682,7 +313,6 @@
                     <div class="toolbar">
                         <a class="btn" href="#privacy-policy" data-nav="privacy-policy">Privacy Policy</a>
                         <a class="btn secondary" href="#terms" data-nav="privacy-policy">Terms &amp; Conditions</a>
-                        <a class="btn secondary" href="mailto:info@truckbox.app">Contact Support</a>
                     </div>
                 </div>
             </section>
@@ -722,41 +352,25 @@
             <section id="privacy" class="section">
                 <div class="inner">
                     <h2>Privacy Policy</h2>
-                    <p>The <b>Truck Box</b> extension helps you send broker emails from <span
-                            style="font-family:ui-monospace,Consolas,Menlo,monospace">one.dat.com</span> using your own
-                        Gmail account via OAuth. We designed it to work <b>locally in your browser</b> and keep data
-                        collection to a minimum.</p>
+                    <p>The <b>Truck Box</b> extension helps you send broker emails from <span style="font-family:ui-monospace,Consolas,Menlo,monospace">one.dat.com</span> using your own Gmail account via OAuth. We designed it to work <b>locally in your browser</b> and keep data collection to a minimum.</p>
 
                     <div id="what-we-collect"></div>
                     <h3>Information we collect</h3>
                     <ul>
-                        <li><b>No personal data is sent to our servers.</b> We do not run any backend for this
-                            extension.
-                        </li>
-                        <li><b>Local extension settings.</b> Your name/MC/phone and email templates are stored locally
-                            in <code class="inline">chrome.storage.local</code>.
-                        </li>
-                        <li><b>On-page content you see.</b> The extension reads visible fields on the DAT page (e.g.,
-                            company email, origin, destination, pickup date) to populate your email template. Parsing
-                            happens in your browser only.
-                        </li>
-                        <li><b>Google OAuth tokens.</b> Tokens are issued and cached by Chrome via <code class="inline">chrome.identity</code>.
-                            We do not receive or store your tokens.
-                        </li>
+                        <li><b>No personal data is sent to our servers.</b> We do not run any backend for this extension.</li>
+                        <li><b>Local extension settings.</b> Your name/MC/phone and email templates are stored locally in <code class="inline">chrome.storage.local</code>.</li>
+                        <li><b>On-page content you see.</b> The extension reads visible fields on the DAT page (e.g., company email, origin, destination, pickup date) to populate your email template. Parsing happens in your browser only.</li>
+                        <li><b>Google OAuth tokens.</b> Tokens are issued and cached by Chrome via <code class="inline">chrome.identity</code>. We do not receive or store your tokens.</li>
                     </ul>
 
                     <div id="how-we-use"></div>
                     <h3>How we use information</h3>
                     <ul>
-                        <li><b>Sending email via Gmail API.</b> Uses <code class="inline">https://www.googleapis.com/auth/gmail.send</code>
-                            only to send the composed email from your Gmail.
-                        </li>
+                        <li><b>Sending email via Gmail API.</b> Uses <code class="inline">https://www.googleapis.com/auth/gmail.send</code> only to send the composed email from your Gmail.</li>
                         <li><b>Quality &amp; troubleshooting.</b> We do not collect analytics or crash reports.</li>
                     </ul>
 
-                    <div class="note"><b>OAuth scopes:</b> <code class="inline">gmail.send</code>, <code class="inline">openid</code>,
-                        <code class="inline">email</code>, <code class="inline">profile</code>.
-                    </div>
+                    <div class="note"><b>OAuth scopes:</b> <code class="inline">gmail.send</code>, <code class="inline">openid</code>, <code class="inline">email</code>, <code class="inline">profile</code>.</div>
 
                     <div id="storage-security"></div>
                     <h3>Storage &amp; security</h3>
@@ -769,8 +383,7 @@
                     <div id="deletion"></div>
                     <h3>Data deletion &amp; revoking access</h3>
                     <ul>
-                        <li>Revoke at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>.
-                        </li>
+                        <li>Revoke at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>.</li>
                         <li>Clear local data by removing the extension or using reset in the popup.</li>
                         <li>Uninstalling deletes local storage.</li>
                         <li>Need help? <a href="#contact">Contact us</a>.</li>
@@ -778,8 +391,7 @@
 
                     <div id="rights"></div>
                     <h3>Your rights (CPRA/GDPR)</h3>
-                    <p>Since no server-side storage exists, requests usually involve revoking Google access and/or
-                        uninstalling.</p>
+                    <p>Since no server-side storage exists, requests usually involve revoking Google access and/or uninstalling.</p>
 
                     <div id="children"></div>
                     <h3>Children's Privacy</h3>
@@ -809,77 +421,73 @@
                 <div class="inner">
                     <h2>Terms &amp; Conditions</h2>
                     <p class="small">Last updated: <b>November 4, 2025</b></p>
-                    <h3>Acceptance</h3>
-                    <p>By installing or using the extension, you agree to these Terms.</p>
-                    <h3>License</h3>
-                    <p>Personal, non-transferable, revocable license.</p>
+                    <h3>Acceptance</h3><p>By installing or using the extension, you agree to these Terms.</p>
+                    <h3>License</h3><p>Personal, non-transferable, revocable license.</p>
                     <h3>User obligations</h3>
-                    <ul>
-                        <li>Use lawfully and per site terms.</li>
-                        <li>Do not burden target services.</li>
-                        <li>You are responsible for email content.</li>
-                    </ul>
+                    <ul><li>Use lawfully and per site terms.</li><li>Do not burden target services.</li><li>You are responsible for email content.</li></ul>
                     <h3>Prohibited uses</h3>
-                    <ul>
-                        <li>No reverse engineering (except as permitted).</li>
-                        <li>No spam/harassment.</li>
-                        <li>No unauthorized access.</li>
-                    </ul>
-                    <h3>IP, Third parties, Disclaimer, Liability, Indemnification, Termination, Changes, Governing law
-                        (Illinois).</h3>
+                    <ul><li>No reverse engineering (except as permitted).</li><li>No spam/harassment.</li><li>No unauthorized access.</li></ul>
+                    <h3>IP, Third parties, Disclaimer, Liability, Indemnification, Termination, Changes, Governing law (Illinois).</h3>
                 </div>
             </section>
 
             <!-- CONTACT -->
+
             <section id="contact" class="section">
                 <div class="inner">
                     <h2>Contact Us</h2>
                     <p>Have questions? Send us a message.</p>
 
-                    <form id="contactForm" class="contact-form" novalidate>
+                    <!-- Formspree-powered form -->
+                    <!-- modify this form HTML and place wherever you want your form -->
+                    <form id="contactForm" class="contact-form" action="https://formspree.io/f/mvgwgvky" method="POST" novalidate>
+                        <!-- Honeypot (helps block bots) -->
+                        <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="position:absolute;left:-9999px;opacity:0" aria-hidden="true">
+                        <!-- Custom email subject -->
+                        <input type="hidden" name="_subject" value="Truck Box — Contact form">
+
                         <div class="form-group">
                             <label for="name">Your Name</label>
-                            <input type="text" id="name" name="name" required placeholder="Enter your name"
-                                   autocomplete="name">
-                        </div>
-                        <div class="form-group">
-                            <label for="email">Your Email</label>
-                            <input type="email" id="email" name="email" required placeholder="Enter your email"
-                                   autocomplete="email">
-                        </div>
-                        <div class="form-group">
-                            <label for="subject">Subject</label>
-                            <input type="text" id="subject" name="subject" required
-                                   placeholder="What is this regarding?">
-                        </div>
-                        <div class="form-group">
-                            <label for="message">Message</label>
-                            <textarea id="message" name="message" required rows="5"
-                                      placeholder="Please describe your question or concern..."></textarea>
+                            <input type="text" id="name" name="name" required placeholder="Enter your name" autocomplete="name">
                         </div>
 
+                        <div class="form-group">
+                            <label for="email">Your Email</label>
+                            <input type="email" id="email" name="email" required placeholder="Enter your email" autocomplete="email">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required placeholder="What is this regarding?">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" required rows="5" placeholder="Please describe your question or concern..."></textarea>
+                        </div>
+
+                        <!-- CAPTCHA -->
                         <div class="form-group">
                             <label>Human Verification</label>
                             <div class="captcha-container">
                                 <div class="captcha-display" id="captchaDisplay" aria-live="polite"></div>
-                                <button type="button" class="captcha-refresh" id="refreshCaptcha"
-                                        title="Refresh CAPTCHA">↻
-                                </button>
+                                <button type="button" class="captcha-refresh" id="refreshCaptcha" title="Refresh CAPTCHA">↻</button>
                             </div>
-                            <input type="text" id="captchaInput" name="captcha" required
-                                   placeholder="Enter the code above" aria-describedby="captchaError">
+                            <input type="text" id="captchaInput" name="captcha" required placeholder="Enter the code above" aria-describedby="captchaError">
                             <div class="captcha-error" id="captchaError" role="alert" aria-live="polite"></div>
                         </div>
 
                         <button type="submit" class="btn submit-btn" id="submitBtn">
-                            <span class="btn-text">Send Message</span>
+                            <span class="btn-text">Send</span>
                             <span class="btn-loading" style="display:none">
-                  <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path
-                          d="M12 2v4M12 18v4M4.93 4.93 7.76 7.76M16.24 16.24 19.07 19.07M2 12h4M18 12h4M4.93 19.07 7.76 16.24M16.24 7.76 19.07 4.93"
-                          stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-                  Sending...
-                </span>
+                                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                                    <path d="M12 2v4M12 18v4M4.93 4.93 7.76 7.76M16.24 16.24 19.07 19.07M2 12h4M18 12h4M4.93 19.07 7.76 16.24M16.24 7.76 19.07 4.93"
+                                          stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                                </svg>
+                                Sending...
+                            </span>
                         </button>
+                        <div id="formError" class="captcha-error" style="margin-top:8px"></div>
                     </form>
 
                     <div id="formSuccess" style="display:none;text-align:center;padding:28px">
@@ -944,10 +552,6 @@
     window.addEventListener('hashchange', handleHash);
     handleHash();
 
-    // Install link
-    document.getElementById('installBtn')?.addEventListener('click', () => window.open(WEB_STORE_URL, '_blank', 'noopener'));
-    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
-
     // Progress bar
     const pb = document.getElementById('progressBar');
     window.addEventListener('scroll', () => {
@@ -958,11 +562,12 @@
 </script>
 
 <script>
-    // Simple CAPTCHA
+    // Simple CAPTCHA + Formspree submit
     let currentCaptcha = '';
     const $capDisp = document.getElementById('captchaDisplay');
     const $capIn = document.getElementById('captchaInput');
     const $capErr = document.getElementById('captchaError');
+    const $formErr = document.getElementById('formError');
 
     function randomCaptcha(n = 6) {
         const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789';
@@ -987,40 +592,64 @@
     }
 
     document.getElementById('refreshCaptcha')?.addEventListener('click', () => {
-        gen();
-        $capIn.value = '';
-        $capErr.textContent = '';
+        gen(); $capIn.value = ''; $capErr.textContent = ''; $formErr.textContent = '';
     });
-    document.getElementById('contactForm')?.addEventListener('submit', (e) => {
+
+    // Formspree AJAX submit
+    const form = document.getElementById('contactForm');
+    form?.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        const text = btn.querySelector('.btn-text');
-        const load = btn.querySelector('.btn-loading');
+        $formErr.textContent = '';
+
+        // CAPTCHA check
         if (($capIn.value || '').trim().toLowerCase() !== currentCaptcha.toLowerCase()) {
             $capErr.textContent = 'Incorrect verification code. Please try again.';
             gen();
             return;
         }
         $capErr.textContent = '';
-        text.style.display = 'none';
-        load.style.display = 'flex';
-        btn.disabled = true;
-        setTimeout(() => {
-            document.getElementById('contactForm').style.display = 'none';
-            document.getElementById('formSuccess').style.display = 'block';
+
+        const btn = document.getElementById('submitBtn');
+        const text = btn.querySelector('.btn-text');
+        const load = btn.querySelector('.btn-loading');
+        text.style.display = 'none'; load.style.display = 'flex'; btn.disabled = true;
+
+        try {
+            const fd = new FormData(form);
+            // Optional: send JSON instead of FormData
+            const res = await fetch(form.action, {
+                method: 'POST',
+                body: fd,
+                headers: { 'Accept': 'application/json' }
+            });
+
+            if (res.ok) {
+                form.style.display = 'none';
+                document.getElementById('formSuccess').style.display = 'block';
+            } else {
+                const data = await res.json().catch(()=> ({}));
+                $formErr.textContent = data?.error || 'Failed to send. Please try again later.';
+            }
+        } catch (err) {
+            $formErr.textContent = 'Network error. Please check your connection and try again.';
+        } finally {
             text.style.display = 'block';
             load.style.display = 'none';
             btn.disabled = false;
-        }, 900);
+        }
     });
+
     document.getElementById('resetFormBtn')?.addEventListener('click', () => {
-        const f = document.getElementById('contactForm');
-        f.reset();
-        f.style.display = 'block';
+        form.reset();
+        form.style.display = 'block';
         document.getElementById('formSuccess').style.display = 'none';
         gen();
         $capErr.textContent = '';
+        $formErr.textContent = '';
     });
+
+    document.getElementById('printBtn')?.addEventListener('click', () => window.print());
+
     document.addEventListener('DOMContentLoaded', gen);
 </script>
 </body>
