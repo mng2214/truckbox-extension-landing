@@ -1,0 +1,622 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Truck Box – Email Sender for DAT Loads</title>
+  <meta name="google-site-verification" content="bvy7nZIAzPQ9yrk6uu5sFuuiwQGBn-yNcqidpf2Ap8E"/>
+  <meta name="description" content="Send broker emails directly from one.dat.com with one click. Save time with templates and smart filters."/>
+  <link rel="icon" href="/favicon.ico"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+<div class="bg-grid"></div>
+
+<div class="progress-container">
+  <div class="progress-bar" id="progressBar"></div>
+</div>
+
+<header class="site-header">
+  <div class="container">
+    <div class="header-content">
+      <a href="#home" class="brand" data-nav="home">
+        <span class="brand-mark">TB</span>
+        <span class="brand-text">Truck Box</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Primary">
+        <a href="#home" class="nav-item" data-nav="home">Home</a>
+        <a href="#pricing" class="nav-item" data-nav="home" data-section="pricing">Pricing</a>
+        <a href="guide.html" class="nav-item">Guide</a>
+        <a href="learn.html" class="nav-item">Learning</a>
+        <a href="#privacy-policy" class="nav-item" data-nav="privacy-policy">Privacy</a>
+        <a href="#contact" class="nav-item" data-nav="privacy-policy" data-section="contact">Contact</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Sidebar -->
+<div class="mobile-sidebar" id="mobileSidebar">
+  <!-- Mobile nav -->
+  <div class="mobile-nav-items">
+    <a href="#home" class="mobile-nav-item" data-nav="home">Home</a>
+    <a href="#pricing" class="mobile-nav-item" data-nav="home" data-section="pricing">Pricing</a>
+    <a href="guide.html" class="mobile-nav-item">Guide</a>
+    <a href="learn.html" class="mobile-nav-item">Learning</a>
+    <a href="#privacy-policy" class="mobile-nav-item" data-nav="privacy-policy">Privacy</a>
+    <a href="#contact" class="mobile-nav-item" data-nav="privacy-policy" data-section="contact">Contact</a>  </div>
+  <div class="sidebar-footer">
+    <p>© <span id="sidebarYear"></span> Truck Box</p>
+  </div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- HOME -->
+<main class="container home-section active" id="home-page">
+  <section class="hero hero-modern" id="home">
+    <div class="hero-badge">Chrome extension for DAT carriers</div>
+
+    <h1>
+      Send broker emails from <span>one.dat.com</span><br/>
+      with one click.
+    </h1>
+
+    <p>
+      Truck Box helps carriers work faster with ready templates, cleaner outreach,
+      short-load filtering, and useful stats — directly inside DAT.
+    </p>
+
+    <div class="hero-actions">
+      <a class="btn btn-primary"
+         href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd?hl=en-US&utm_source=ext_sidebar"
+         target="_blank" rel="noopener">
+        Install Chrome Extension
+      </a>
+
+      <a class="btn btn-secondary" href="guide.html">
+        Login Guide
+      </a>
+    </div>
+
+    <div class="hero-note">
+      Login to activate your <strong>7 days free trial</strong>.
+    </div>
+  </section>
+
+  <section class="section reveal" id="features">
+    <div class="section-head center">
+      <div class="eyebrow">Why Truck Box</div>
+      <h2>Simple. Fast. Focused.</h2>
+      <p>Built for real daily DAT work without heavy setup.</p>
+    </div>
+
+    <div class="card-grid">
+      <article class="feature-card reveal">
+        <div class="icon-box">✉️</div>
+        <h3>One-click email sending</h3>
+        <p>Send professional broker emails directly from DAT load rows.</p>
+      </article>
+
+      <article class="feature-card reveal">
+        <div class="icon-box">🧩</div>
+        <h3>Ready templates</h3>
+        <p>Save your subject and body templates and reuse them instantly.</p>
+      </article>
+
+      <article class="feature-card reveal">
+        <div class="icon-box">🗺️</div>
+        <h3>Google Maps support</h3>
+        <p>Review lane context faster while checking loads.</p>
+      </article>
+
+      <article class="feature-card reveal">
+        <div class="icon-box">📉</div>
+        <h3>Filter short loads</h3>
+        <p>Focus on better loads and hide the ones you do not want.</p>
+      </article>
+
+      <article class="feature-card reveal">
+        <div class="icon-box">📊</div>
+        <h3>Useful statistics</h3>
+        <p>Track your activity and see how much time the extension saves.</p>
+      </article>
+
+      <article class="feature-card reveal">
+        <div class="icon-box">🔐</div>
+        <h3>Secure Google login</h3>
+        <p>Use your Gmail account with a cleaner and safer login flow.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="section reveal">
+    <div class="section-head center">
+      <div class="eyebrow">How it works</div>
+      <h2>Start in 3 steps</h2>
+      <p>Fast setup, no complicated flow.</p>
+    </div>
+
+    <div class="steps-grid">
+      <div class="step-card reveal">
+        <div class="step-number">01</div>
+        <h3>Install extension</h3>
+        <p>Add Truck Box to Chrome and pin it in your browser.</p>
+      </div>
+
+      <div class="step-card reveal">
+        <div class="step-number">02</div>
+        <h3>Login with Google</h3>
+        <p>Authorize your account and activate the free trial.</p>
+      </div>
+
+      <div class="step-card reveal">
+        <div class="step-number">03</div>
+        <h3>Open DAT and send</h3>
+        <p>Use your templates and send load emails with one click.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="pricing">
+    <div class="pricing-shell">
+      <div class="pricing-copy">
+        <div class="eyebrow">Pricing</div>
+        <h2>Simple subscription</h2>
+        <p>
+          Start with a 7-day free trial, then continue with Truck Box Pro.
+        </p>
+
+        <ul class="clean-list">
+          <li>7 days free trial</li>
+          <li>One-click email sending</li>
+          <li>Ready templates</li>
+          <li>Short load filtering</li>
+          <li>Statistics and guide access</li>
+        </ul>
+      </div>
+
+      <div class="pricing-card reveal">
+        <div class="plan-pill">Truck Box Pro</div>
+        <h3>For active DAT work</h3>
+
+        <div class="price-row">
+          <span class="price">$7</span>
+          <span class="price-unit">/ month</span>
+        </div>
+
+        <p class="pricing-note">
+          Login to use your free trial first. <br>No credit card required for the trial, and you can cancel anytime.
+        </p>
+
+        <div class="pricing-actions">
+          <a class="btn btn-primary" href="https://chromewebstore.google.com/detail/pbnichodfccghlpfonecdlcbjkipmmhd?utm_source=item-share-cb">
+            Start Free Trial
+          </a>
+          <a class="btn btn-secondary" href="guide.html">
+            See Login Guide
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section reveal" id="guide-preview">
+    <div class="section-head center">
+      <div class="eyebrow">Guide</div>
+      <h2>Step-by-step login and setup</h2>
+      <p>
+        Add screenshots later and show users exactly how to login,
+        connect Gmail, and configure templates.
+      </p>
+    </div>
+
+    <div class="preview-grid">
+      <div class="preview-card reveal">
+        <h3>Login instructions</h3>
+        <p>Show popup steps, Google login, and trial activation.</p>
+      </div>
+      <div class="preview-card reveal">
+        <h3>Email template setup</h3>
+        <p>Explain how subject and body templates should be filled in.</p>
+      </div>
+      <div class="preview-card reveal">
+        <h3>DAT usage examples</h3>
+        <p>Show how sending works directly inside one.dat.com.</p>
+      </div>
+    </div>
+
+    <div class="toolbar center">
+      <a class="btn btn-secondary" href="guide.html">Open Full Guide</a>
+    </div>
+  </section>
+
+  <section class="section reveal" id="learn-preview">
+    <div class="section-head center">
+      <div class="eyebrow">Learning</div>
+      <h2>Future video tutorials</h2>
+      <p>You can later add YouTube videos and quick lessons here.</p>
+    </div>
+
+    <div class="preview-grid">
+      <div class="preview-card reveal">
+        <h3>How to login</h3>
+        <p>Video walk-through for first-time users.</p>
+      </div>
+      <div class="preview-card reveal">
+        <h3>How to use templates</h3>
+        <p>Best way to write reusable load request templates.</p>
+      </div>
+      <div class="preview-card reveal">
+        <h3>How to work faster in DAT</h3>
+        <p>Practical use cases and workflow tips.</p>
+      </div>
+    </div>
+
+    <div class="toolbar center">
+      <a class="btn btn-secondary" href="learn.html">Open Learning Page</a>
+    </div>
+  </section>
+</main>
+
+<!-- PRIVACY / TERMS -->
+<main class="container home-section" id="privacy-policy-page" aria-labelledby="privacy-policy">
+  <section class="hero hero-subpage" id="privacy-policy">
+    <div class="hero-badge">Legal & Compliance</div>
+    <h1>Privacy Policy &amp; Terms</h1>
+    <p>
+      Clear, simple, and compliant. This page explains how the <b>Truck Box</b>
+      Chrome extension works, what data it uses, how Google account access is handled,
+      and your rights.
+    </p>
+    <div class="meta" style="margin-top: 20px; display: flex; gap: 16px; justify-content: center; align-items: center; flex-wrap: wrap;">
+      <span>Last updated: <b>March 17, 2026</b></span>
+      <button class="btn btn-secondary" type="button" id="printBtn">Print / Save as PDF</button>
+    </div>
+  </section>
+
+  <div class="grid">
+    <aside class="toc" aria-label="On this page">
+      <h3>On this page</h3>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#what-we-collect" class="indent">— What we collect</a>
+      <a href="#how-we-use" class="indent">— How we use it</a>
+      <a href="#oauth-scopes" class="indent">— Google OAuth scopes</a>
+      <a href="#storage-security" class="indent">— Storage & Security</a>
+      <a href="#deletion" class="indent">— Data deletion</a>
+      <a href="#rights" class="indent">— Your rights (CPRA/GDPR)</a>
+      <a href="#children" class="indent">— Children's Privacy</a>
+      <a href="#limited-use">Google API Services Limited Use</a>
+      <a href="#terms">Terms & Conditions</a>
+      <a href="#contact">Contact</a>
+    </aside>
+
+    <div>
+      <section id="privacy" class="section legal-section">
+        <div class="inner">
+          <h2>Privacy Policy</h2>
+          <p>
+            <b>Truck Box</b> is a Chrome extension that helps users compose and send broker emails
+            from <span class="mono">one.dat.com</span> using the user's own Gmail account via Google OAuth.
+            We designed Truck Box to minimize data collection and to process data primarily
+            within the user's browser.
+          </p>
+
+          <div id="what-we-collect"></div>
+          <h3>Information we collect</h3>
+          <ul>
+            <li><b>No server-side collection of Gmail content.</b> We do not collect, store, or process Gmail message bodies, Gmail inbox content, Gmail attachments, or Gmail account mailbox data on our servers.</li>
+
+            <li><b>Local extension settings.</b> User-provided values such as name, MC number, phone number, preferred templates, and extension preferences may be stored locally in <code class="inline">chrome.storage.local</code> on the user's device.</li>
+
+            <li><b>On-page data visible to the user.</b> The extension may read data shown on supported webpages, such as broker email addresses, origin, destination, pickup date, equipment, trip length, or similar load details, only to help populate the email the user is preparing to send.</li>
+
+            <li><b>Google account basic identity information.</b> During sign-in, Google may provide basic account information such as name, email address, and profile identifier for authentication purposes. We do not sell or share this information.</li>
+
+            <li><b>OAuth access tokens.</b> Google OAuth tokens are obtained and managed using Chrome and Google authentication flows. We do not intentionally disclose these tokens to third parties, and they are used only to authenticate the Gmail API request needed to send the email the user requested.</li>
+
+            <li><b>Operational service data.</b> If a backend service is enabled for account, subscription, security, abuse prevention, or product operation, that service may process limited account-level or operational information strictly as necessary to provide the service, secure the extension, prevent abuse, or manage access. Gmail message content is not used for unrelated purposes.</li>
+          </ul>
+
+          <div id="how-we-use"></div>
+          <h3>How we use information</h3>
+          <ul>
+            <li><b>Send email that the user explicitly requests.</b> Truck Box uses the Gmail API only to send the email message that the user intentionally initiates through the extension.</li>
+
+            <li><b>Populate email fields.</b> Data read from supported webpages is used only to prepare the draft content or send action requested by the user.</li>
+
+            <li><b>Authentication and account access.</b> Basic Google account information may be used only to authenticate the user and determine whether the extension can access the Gmail sending feature.</li>
+
+            <li><b>Security, reliability, and fraud prevention.</b> Limited operational data may be used to secure the product, prevent abuse, enforce service limits, maintain subscriptions, and troubleshoot technical issues.</li>
+
+            <li><b>No advertising use.</b> We do not use Google user data or Gmail data for advertising, remarketing, profiling, or personalized ads.</li>
+
+            <li><b>No AI or model training use.</b> We do not use Google user data, Gmail data, or email content to train generalized artificial intelligence or machine learning models.</li>
+          </ul>
+
+          <div id="oauth-scopes"></div>
+          <h3>Google OAuth scopes</h3>
+          <p>Truck Box requests only the scopes needed for sign-in and sending email:</p>
+          <ul>
+            <li><code class="inline">https://www.googleapis.com/auth/gmail.send</code> — used only to send emails the user explicitly chooses to send.</li>
+            <li><code class="inline">openid</code> — used for Google sign-in authentication.</li>
+            <li><code class="inline">email</code> — used to identify the signed-in Google account.</li>
+            <li><code class="inline">profile</code> — used for basic account profile information during authentication.</li>
+          </ul>
+
+          <div class="note">
+            <b>Important:</b> Truck Box does <b>not</b> request permission to read the user's inbox,
+            read Gmail messages, access Gmail attachments, or manage Gmail settings.
+          </div>
+
+          <div id="storage-security"></div>
+          <h3>Storage &amp; security</h3>
+          <ul>
+            <li><b>Local-first storage.</b> Templates and settings are primarily stored locally on the user's device.</li>
+
+            <li><b>Restricted processing.</b> Any backend or server-side processing, if enabled for service operation, is limited to what is necessary to provide account functionality, subscription access, security controls, abuse prevention, troubleshooting, or product reliability.</li>
+
+            <li><b>No sale of personal data.</b> We do not sell personal information or Gmail data.</li>
+
+            <li><b>No unauthorized sharing.</b> We do not share Gmail data with third parties except where required by law or where strictly necessary to provide a user-requested service in compliance with applicable Google policies.</li>
+
+            <li><b>Reasonable safeguards.</b> We use reasonable administrative, technical, and organizational safeguards designed to protect data relevant to operation of the extension and related services.</li>
+          </ul>
+
+          <div id="deletion"></div>
+          <h3>Data deletion &amp; revoking access</h3>
+          <ul>
+            <li>Users can revoke Google account access at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener">myaccount.google.com/permissions</a>.</li>
+            <li>Users can remove local extension data by resetting the extension, clearing browser extension storage, or uninstalling the extension.</li>
+            <li>If server-side account data exists for billing, subscription, security, or support purposes, users may request deletion by contacting us.</li>
+            <li>Revoking Google access prevents Truck Box from sending emails through Gmail until the user signs in again.</li>
+          </ul>
+
+          <div id="rights"></div>
+          <h3>Your rights (CPRA/GDPR)</h3>
+          <p>
+            Depending on your jurisdiction, you may have rights to request access, correction, deletion,
+            or restriction of personal data that we control. Where Truck Box stores only local browser data,
+            many of these rights can be exercised directly by the user through browser controls, extension reset,
+            uninstall, or Google account permission revocation. For any server-side data request, contact us below.
+          </p>
+
+          <div id="children"></div>
+          <h3>Children's Privacy</h3>
+          <p>
+            Truck Box is not intended for children under 13, and we do not knowingly collect personal
+            information from children.
+          </p>
+
+          <h3>Changes to this policy</h3>
+          <p>
+            We may update this Privacy Policy and Terms from time to time. When we do, we will update
+            the "Last updated" date shown on this page.
+          </p>
+        </div>
+      </section>
+
+      <section id="limited-use" class="section legal-section">
+        <div class="inner">
+          <h2>Compliance: Google API Services User Data Policy (Limited Use)</h2>
+          <p>
+            Truck Box's use of information received from Google APIs will adhere to the
+            <b>Google API Services User Data Policy</b>, including the <b>Limited Use</b> requirements.
+          </p>
+
+          <ul>
+            <li><b>Purpose limitation.</b> Google user data is used only to provide or improve user-facing features that are directly visible and requested by the user as part of Truck Box functionality.</li>
+
+            <li><b>Gmail send only.</b> Gmail API access is used only to send emails that the user explicitly initiates.</li>
+
+            <li><b>No reading inbox content.</b> Truck Box does not use Google API access to read inbox messages, scan mailbox content, or analyze Gmail conversations for unrelated purposes.</li>
+
+            <li><b>No advertising.</b> Google user data is not used to create, target, or improve advertisements.</li>
+
+            <li><b>No sale.</b> Google user data is not sold.</li>
+
+            <li><b>No transfer for unrelated use.</b> Google user data is not transferred to others except as necessary to provide or secure the user-facing feature, comply with law, or as part of a merger, acquisition, or asset sale where legally permitted and properly disclosed.</li>
+
+            <li><b>No human review of Gmail content.</b> We do not allow humans to read Gmail content unless we have the user's affirmative agreement for specific support or security reasons, or unless required by law.</li>
+
+            <li><b>No AI training.</b> Google user data is not used to train generalized AI or machine learning models.</li>
+          </ul>
+
+          <p>
+            If you revoke Google access, Truck Box will no longer be able to send emails through your Gmail account
+            until you reconnect your account.
+          </p>
+        </div>
+      </section>
+
+      <section id="terms" class="section legal-section">
+        <div class="inner">
+          <h2>Terms &amp; Conditions</h2>
+          <p class="small">Last updated: <b>March 17, 2026</b></p>
+
+          <h3>Acceptance</h3>
+          <p>
+            By installing, accessing, or using Truck Box, you agree to these Terms &amp; Conditions
+            and the Privacy Policy on this page.
+          </p>
+
+          <h3>License</h3>
+          <p>
+            Subject to these Terms, we grant you a limited, non-exclusive, non-transferable,
+            revocable license to use Truck Box for lawful business or personal use.
+          </p>
+
+          <h3>Description of service</h3>
+          <p>
+            Truck Box is a browser extension designed to help users prepare and send emails from supported webpages
+            using the user's own Gmail account and user-authorized Google access.
+          </p>
+
+          <h3>User obligations</h3>
+          <ul>
+            <li>You must use the extension in compliance with applicable laws, regulations, and third-party platform rules.</li>
+            <li>You are solely responsible for the content of the emails you send using Truck Box.</li>
+            <li>You must not use Truck Box for spam, harassment, deceptive practices, phishing, fraud, or unlawful bulk messaging.</li>
+            <li>You must not attempt to misuse Google APIs, bypass security, or interfere with service integrity.</li>
+            <li>You are responsible for ensuring that your use of prepared templates and outreach complies with applicable communication and marketing laws.</li>
+          </ul>
+
+          <h3>Prohibited uses</h3>
+          <ul>
+            <li>No unlawful, abusive, or deceptive use.</li>
+            <li>No reverse engineering, tampering, or unauthorized access, except where such restriction is prohibited by law.</li>
+            <li>No automated or abusive messaging activity that violates Gmail, Google, DAT, or other platform policies.</li>
+            <li>No use of the service to infringe the privacy, rights, or security of others.</li>
+          </ul>
+
+          <h3>Google account and API access</h3>
+          <p>
+            Truck Box uses Google OAuth and limited Google API scopes to authenticate users and send email on behalf of users.
+            By connecting your Google account, you authorize Truck Box to use the approved scopes for the limited purposes
+            described in this Privacy Policy and in accordance with Google's policies.
+          </p>
+
+          <h3>Third-party services</h3>
+          <p>
+            Truck Box may interact with third-party platforms or services, including Google and supported websites such as DAT.
+            Your use of those platforms remains subject to their own terms, privacy policies, and rules.
+            We are not responsible for third-party services or platform changes.
+          </p>
+
+          <h3>Subscriptions, access control, and service operation</h3>
+          <p>
+            Certain features may depend on account status, authentication, subscription status, security checks,
+            operational controls, or service availability. We may suspend, limit, or revoke access where reasonably necessary
+            for maintenance, abuse prevention, legal compliance, payment issues, or platform security.
+          </p>
+
+          <h3>Disclaimer</h3>
+          <p>
+            Truck Box is provided on an "as is" and "as available" basis to the maximum extent permitted by law.
+            We do not guarantee uninterrupted availability, error-free operation, delivery success, or compatibility
+            with every third-party website, browser version, or Gmail environment.
+          </p>
+
+          <h3>Limitation of liability</h3>
+          <p>
+            To the maximum extent permitted by law, we are not liable for any indirect, incidental, special,
+            consequential, exemplary, or punitive damages, or for any loss of profits, revenues, business opportunities,
+            goodwill, or data arising out of or related to your use of Truck Box.
+          </p>
+
+          <h3>Termination</h3>
+          <p>
+            We may suspend or terminate access to Truck Box at any time if necessary to protect the service,
+            comply with law, enforce these Terms, address abuse, or respond to platform or security requirements.
+            You may stop using the extension at any time by uninstalling it and revoking Google access.
+          </p>
+
+          <h3>Governing law</h3>
+          <p>
+            These Terms are governed by the laws of the State of Illinois, without regard to conflict of law principles,
+            except where applicable law requires otherwise.
+          </p>
+        </div>
+      </section>
+
+      <section id="contact" class="section legal-section">
+        <div class="inner">
+          <h2>Contact Us</h2>
+          <p>Have questions about privacy, data use, deletion, or compliance? Send us a message.</p>
+
+          <form id="contactForm" class="contact-form" action="https://formspree.io/f/mvgwgvky" method="POST" novalidate>
+            <input
+                    type="text"
+                    name="_gotcha"
+                    tabindex="-1"
+                    autocomplete="off"
+                    style="position:absolute;left:-9999px;opacity:0"
+                    aria-hidden="true"
+            >
+            <input type="hidden" name="_subject" value="Truck Box — Contact form">
+
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" required placeholder="Enter your name" autocomplete="name">
+            </div>
+
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input type="email" id="email" name="email" required placeholder="Enter your email" autocomplete="email">
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" required placeholder="What is this regarding?">
+            </div>
+
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required rows="5" placeholder="Please describe your question or concern..."></textarea>
+            </div>
+
+            <div class="form-group">
+              <label>Human Verification</label>
+              <div class="captcha-container">
+                <div class="captcha-display" id="captchaDisplay" aria-live="polite"></div>
+                <button type="button" class="captcha-refresh" id="refreshCaptcha" title="Refresh CAPTCHA">↻</button>
+              </div>
+              <input type="text" id="captchaInput" name="captcha" required placeholder="Enter the code above" aria-describedby="captchaError">
+              <div class="captcha-error" id="captchaError" role="alert" aria-live="polite"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary submit-btn" id="submitBtn">
+              <span class="btn-text">Send</span>
+              <span class="btn-loading" style="display:none">
+                <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 2v4M12 18v4M4.93 4.93 7.76 7.76M16.24 16.24 19.07 19.07M2 12h4M18 12h4M4.93 19.07 7.76 16.24M16.24 7.76 19.07 4.93"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                Sending...
+              </span>
+            </button>
+
+            <div id="formError" class="captcha-error" style="margin-top:8px"></div>
+          </form>
+
+          <div id="formSuccess" class="form-success" style="display:none;">
+            <h3>Message Sent Successfully!</h3>
+            <p>Thank you for contacting us.</p>
+            <button class="btn btn-secondary" type="button" id="resetFormBtn">Send Another Message</button>
+          </div>
+
+          <div class="toolbar">
+            <a class="btn btn-secondary" href="#privacy">Back to Privacy</a>
+            <a class="btn btn-secondary" href="#terms">View Terms</a>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="container footer-wrap">
+    <div>© <span id="y"></span> Truck Box — All rights reserved.</div>
+    <div class="footer-links">
+      <a href="guide.html">Guide</a>
+      <a href="learn.html">Learning</a>
+      <a href="#privacy-policy" data-nav="privacy-policy">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<script src="app.js"></script>
+<script>
+  // Set sidebar year
+  document.getElementById('sidebarYear').textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
