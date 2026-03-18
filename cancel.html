@@ -4,12 +4,15 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Subscription Cancelled – Truck Box</title>
-  <meta name="description" content="Sorry to see you go."/>
+  <meta name="description" content="Your subscription was cancelled. You can reactivate anytime."/>
+
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css"/>
 </head>
+
 <body data-page="cancel">
 <div class="bg-grid"></div>
 
@@ -17,7 +20,6 @@
   <div class="container">
     <div class="header-content">
       <a href="index.html" class="brand">
-        <span class="brand-mark">TB</span>
         <span class="brand-text">Truck Box</span>
       </a>
     </div>
@@ -26,17 +28,32 @@
 
 <main class="container standalone-page">
   <section class="center-card reveal visible">
-    <div class="cancel-icon">—</div>
-    <div class="hero-badge">Subscription Not Completed</div>
-    <h1>Subscription was not completed</h1>
+
+    <!-- ICON -->
+    <div class="cancel-icon">✕</div>
+
+    <!-- STATUS -->
+    <div class="hero-badge">Subscription Cancelled</div>
+
+    <!-- TITLE -->
+    <h1>Sorry to see you go</h1>
+
+    <!-- TEXT -->
     <p>
-      You can return anytime and activate Truck Box when you are ready.
+      Your Truck Box subscription has been cancelled.<br/>
+      You can reactivate anytime and continue using all features.
     </p>
 
+    <!-- ACTIONS -->
     <div class="toolbar center">
-      <a class="btn btn-primary" href="index.html#pricing">Back to Pricing</a>
-      <a class="btn btn-secondary" href="guide.html">See Setup Guide</a>
+      <a class="btn btn-primary" href="index.html#pricing">
+        Reactivate Subscription
+      </a>
+      <a class="btn btn-secondary" href="guide.html">
+        See Setup Guide
+      </a>
     </div>
+
   </section>
 </main>
 
