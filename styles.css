@@ -1170,3 +1170,7 @@ code.inline {
     max-width: 240px;
     line-height: 1.5;
 }
+
+.section .toolbar {
+    margin-top: 24px; /* increase if you want more space */
+}
