@@ -1,271 +1,274 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Truck Box – Email Sender for DAT Loads</title>
-  <meta name="google-site-verification" content="bvy7nZIAzPQ9yrk6uu5sFuuiwQGBn-yNcqidpf2Ap8E"/>
-  <meta name="description" content="Send broker emails directly from one.dat.com with one click. Save time with templates and smart filters."/>
-  <link rel="icon" href="/favicon.ico"/>
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css"/>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title>Truck Box – Email Sender for DAT Loads</title>
+    <meta name="google-site-verification" content="bvy7nZIAzPQ9yrk6uu5sFuuiwQGBn-yNcqidpf2Ap8E"/>
+    <meta name="description"
+          content="Send broker emails directly from one.dat.com with one click. Save time with templates and smart filters."/>
+    <link rel="icon" href="/favicon.ico"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+    <link rel="stylesheet" href="styles.css"/>
 </head>
 <body data-page="home">
 <div class="bg-grid"></div>
 
 <div class="progress-container">
-  <div class="progress-bar" id="progressBar"></div>
+    <div class="progress-bar" id="progressBar"></div>
 </div>
 
 <header class="site-header">
-  <div class="container">
-    <div class="header-content">
-      <a href="index.html" class="brand">
-        <span class="brand-text">Truck Box</span>
-      </a>
+    <div class="container">
+        <div class="header-content">
+            <a href="index.html" class="brand">
+                <span class="brand-text">Truck Box</span>
+            </a>
 
-      <nav class="desktop-nav" aria-label="Primary">
-        <a href="index.html" class="nav-item" data-page-link="home">Home</a>
-        <a href="index.html#pricing" class="nav-item">Pricing</a>
-        <a href="guide.html" class="nav-item" data-page-link="guide">Guide</a>
-        <a href="learn.html" class="nav-item" data-page-link="learn">Learning</a>
-        <a href="privacy.html" class="nav-item" data-page-link="privacy">Privacy</a>
-        <a href="privacy.html#contact" class="nav-item">Contact</a>
-      </nav>
+            <nav class="desktop-nav" aria-label="Primary">
+                <a href="index.html" class="nav-item" data-page-link="home">Home</a>
+                <a href="index.html#pricing" class="nav-item">Pricing</a>
+                <a href="guide.html" class="nav-item" data-page-link="guide">Guide</a>
+                <a href="learn.html" class="nav-item" data-page-link="learn">Learning</a>
+                <a href="privacy.html" class="nav-item" data-page-link="privacy">Privacy</a>
+                <a href="privacy.html#contact" class="nav-item">Contact</a>
+            </nav>
 
-      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileSidebar">
-        <span></span><span></span><span></span>
-      </button>
+            <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false"
+                    aria-controls="mobileSidebar">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
     </div>
-  </div>
 </header>
 
 <div class="mobile-sidebar" id="mobileSidebar" aria-hidden="true">
-  <div class="mobile-nav-items">
-    <a href="index.html" class="mobile-nav-item" data-page-link="home">Home</a>
-    <a href="index.html#pricing" class="mobile-nav-item">Pricing</a>
-    <a href="guide.html" class="mobile-nav-item" data-page-link="guide">Guide</a>
-    <a href="learn.html" class="mobile-nav-item" data-page-link="learn">Learning</a>
-    <a href="privacy.html" class="mobile-nav-item" data-page-link="privacy">Privacy</a>
-    <a href="privacy.html#contact" class="mobile-nav-item">Contact</a>
-  </div>
-  <div class="sidebar-footer">
-    <p>© <span data-year></span> Truck Box</p>
-  </div>
+    <div class="mobile-nav-items">
+        <a href="index.html" class="mobile-nav-item" data-page-link="home">Home</a>
+        <a href="index.html#pricing" class="mobile-nav-item">Pricing</a>
+        <a href="guide.html" class="mobile-nav-item" data-page-link="guide">Guide</a>
+        <a href="learn.html" class="mobile-nav-item" data-page-link="learn">Learning</a>
+        <a href="privacy.html" class="mobile-nav-item" data-page-link="privacy">Privacy</a>
+        <a href="privacy.html#contact" class="mobile-nav-item">Contact</a>
+    </div>
+    <div class="sidebar-footer">
+        <p>© <span data-year></span> Truck Box</p>
+    </div>
 </div>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <main class="container page-shell">
-  <section class="hero hero-modern reveal">
-    <div class="hero-badge">Chrome extension for DAT carriers</div>
-    <h1>
-      Send broker emails from <span>one.dat.com</span><br/>
-      with one click.
-    </h1>
-    <p>
-      Truck Box helps carriers work faster with ready templates, short-load filtering,
-      Google Maps support, and useful stats directly inside DAT.
-    </p>
-
-    <div class="hero-actions">
-      <a class="btn btn-primary"
-         href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd?hl=en-US&utm_source=ext_sidebar"
-         target="_blank" rel="noopener">
-        Install Chrome Extension
-      </a>
-      <a class="btn btn-secondary" href="guide.html">Login Guide</a>
-    </div>
-
-    <div class="hero-note">
-      Login to activate your <strong>7 days free trial</strong>.
-    </div>
-  </section>
-
-  <section class="section reveal" id="features">
-    <div class="section-head center">
-      <div class="eyebrow">Why Truck Box</div>
-      <h2>Simple. Fast. Focused.</h2>
-      <p>Built for real daily DAT work without heavy setup.</p>
-    </div>
-
-    <div class="card-grid">
-      <article class="feature-card reveal">
-        <div class="icon-box">✉️</div>
-        <h3>One-click email sending</h3>
-        <p>Send professional broker emails directly from DAT load rows.</p>
-      </article>
-
-      <article class="feature-card reveal">
-        <div class="icon-box">🧩</div>
-        <h3>Ready templates</h3>
-        <p>Save your subject and body templates and reuse them instantly.</p>
-      </article>
-
-      <article class="feature-card reveal">
-        <div class="icon-box">🗺️</div>
-        <h3>Google Maps support</h3>
-        <p>Review lane context faster while checking loads.</p>
-      </article>
-
-      <article class="feature-card reveal">
-        <div class="icon-box">📉</div>
-        <h3>Filter short loads</h3>
-        <p>Focus on better loads and hide the ones you do not want.</p>
-      </article>
-
-      <article class="feature-card reveal">
-        <div class="icon-box">📊</div>
-        <h3>Useful statistics</h3>
-        <p>Track your activity and see how much time the extension saves.</p>
-      </article>
-
-      <article class="feature-card reveal">
-        <div class="icon-box">🔐</div>
-        <h3>Secure Google login</h3>
-        <p>Use your Gmail account with a cleaner and safer login flow.</p>
-      </article>
-    </div>
-  </section>
-
-  <section class="section reveal">
-    <div class="section-head center">
-      <div class="eyebrow">How it works</div>
-      <h2>Start in 3 steps</h2>
-      <p>Fast setup, no complicated flow.</p>
-    </div>
-
-    <div class="steps-grid">
-      <div class="step-card reveal">
-        <div class="step-number">01</div>
-        <h3>Install extension</h3>
-        <p>Add Truck Box to Chrome and pin it in your browser.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-number">02</div>
-        <h3>Login with Google</h3>
-        <p>Authorize your account and activate the free trial.</p>
-      </div>
-
-      <div class="step-card reveal">
-        <div class="step-number">03</div>
-        <h3>Open DAT and send</h3>
-        <p>Use your templates and send load emails with one click.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="section reveal" id="pricing">
-    <div class="pricing-shell">
-      <div class="pricing-copy">
-        <div class="eyebrow">Pricing</div>
-        <h2>Simple subscription</h2>
+    <section class="hero hero-modern reveal">
+        <div class="hero-badge">Chrome extension for DAT carriers</div>
+        <h1>
+            Send broker emails from <span>one.dat.com</span><br/>
+            with one click.
+        </h1>
         <p>
-          Start with a 7-day free trial, then continue with Truck Box Pro.
+            Truck Box helps carriers work faster with ready templates, short-load filtering,
+            Google Maps support, and useful stats directly inside DAT.
         </p>
 
-        <ul class="clean-list">
-          <li>7 days free trial</li>
-          <li>One-click email sending</li>
-          <li>Ready templates</li>
-          <li>Short load filtering</li>
-          <li>Statistics and guide access</li>
-        </ul>
-      </div>
-
-      <div class="pricing-card reveal">
-        <div class="plan-pill">Truck Box Pro</div>
-        <h3>For active DAT work</h3>
-
-        <div class="price-row">
-          <span class="price">$7</span>
-          <span class="price-unit">/ month</span>
+        <div class="hero-actions">
+            <a class="btn btn-primary"
+               href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd?hl=en-US&utm_source=ext_sidebar"
+               target="_blank" rel="noopener">
+                Install Chrome Extension
+            </a>
+            <a class="btn btn-secondary" href="guide.html">Login Guide</a>
         </div>
 
-        <p class="pricing-note">
-          Login to use your free trial first.<br>
-          No credit card required for the trial, and you can cancel anytime.
-        </p>
-
-        <div class="pricing-actions toolbar">
-          <a class="btn btn-primary"
-             href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd"
-             target="_blank" rel="noopener">
-            Start Free Trial
-          </a>
-          <a class="btn btn-secondary" href="guide.html">See Login Guide</a>
+        <div class="hero-note">
+            Login to activate your <strong>7 days free trial</strong>.
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <section class="section reveal" id="guide-preview">
-    <div class="section-head center">
-      <div class="eyebrow">Guide</div>
-      <h2>Step-by-step login and setup</h2>
-      <p>Use clear screenshots so users can follow the whole flow fast.</p>
-    </div>
+    <section class="section reveal" id="features">
+        <div class="section-head center">
+            <div class="eyebrow">Why Truck Box</div>
+            <h2>Simple. Fast. Focused.</h2>
+            <p>Built for real daily DAT work without heavy setup.</p>
+        </div>
 
-    <div class="preview-grid">
-      <div class="preview-card reveal">
-        <h3>Login instructions</h3>
-        <p>Show popup steps, Google login, and trial activation.</p>
-      </div>
-      <div class="preview-card reveal">
-        <h3>Email template setup</h3>
-        <p>Explain how subject and body templates should be filled in.</p>
-      </div>
-      <div class="preview-card reveal">
-        <h3>DAT usage examples</h3>
-        <p>Show how sending works directly inside one.dat.com.</p>
-      </div>
-    </div>
+        <div class="card-grid">
+            <article class="feature-card reveal">
+                <div class="icon-box">✉️</div>
+                <h3>One-click email sending</h3>
+                <p>Send professional broker emails directly from DAT load rows.</p>
+            </article>
 
-    <div class="toolbar center">
-      <a class="btn btn-secondary" href="guide.html">Open Full Guide</a>
-    </div>
-  </section>
+            <article class="feature-card reveal">
+                <div class="icon-box">🧩</div>
+                <h3>Ready templates</h3>
+                <p>Save your subject and body templates and reuse them instantly.</p>
+            </article>
 
-  <section class="section reveal" id="learn-preview">
-    <div class="section-head center">
-      <div class="eyebrow">Learning</div>
-      <h2>Quick screenshot walkthroughs</h2>
-      <p>Add screenshots now. You can replace any block with a video later.</p>
-    </div>
+            <article class="feature-card reveal">
+                <div class="icon-box">🗺️</div>
+                <h3>Google Maps support</h3>
+                <p>Review lane context faster while checking loads.</p>
+            </article>
 
-    <div class="preview-grid">
-      <div class="preview-card reveal">
-        <h3>How to login</h3>
-        <p>Simple screenshot flow for first-time users.</p>
-      </div>
-      <div class="preview-card reveal">
-        <h3>How to use templates</h3>
-        <p>Show where users save and update their templates.</p>
-      </div>
-      <div class="preview-card reveal">
-        <h3>How to work faster in DAT</h3>
-        <p>Show the extension in action with real load examples.</p>
-      </div>
-    </div>
+            <article class="feature-card reveal">
+                <div class="icon-box">📉</div>
+                <h3>Filter short loads</h3>
+                <p>Focus on better loads and hide the ones you do not want.</p>
+            </article>
 
-    <div class="toolbar center">
-      <a class="btn btn-secondary" href="learn.html">Open Learning Page</a>
-    </div>
-  </section>
+            <article class="feature-card reveal">
+                <div class="icon-box">📊</div>
+                <h3>Useful statistics</h3>
+                <p>Track your activity and see how much time the extension saves.</p>
+            </article>
+
+            <article class="feature-card reveal">
+                <div class="icon-box">🔐</div>
+                <h3>Secure Google login</h3>
+                <p>Use your Gmail account with a cleaner and safer login flow.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="section reveal">
+        <div class="section-head center">
+            <div class="eyebrow">How it works</div>
+            <h2>Start in 3 steps</h2>
+            <p>Fast setup, no complicated flow.</p>
+        </div>
+
+        <div class="steps-grid">
+            <div class="step-card reveal">
+                <div class="step-number">01</div>
+                <h3>Install extension</h3>
+                <p>Add Truck Box to Chrome and pin it in your browser.</p>
+            </div>
+
+            <div class="step-card reveal">
+                <div class="step-number">02</div>
+                <h3>Login with Google</h3>
+                <p>Authorize your account and activate the free trial.</p>
+            </div>
+
+            <div class="step-card reveal">
+                <div class="step-number">03</div>
+                <h3>Open DAT and send</h3>
+                <p>Use your templates and send load emails with one click.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section reveal" id="pricing">
+        <div class="pricing-shell">
+            <div class="pricing-copy">
+                <div class="eyebrow">Pricing</div>
+                <h2>Simple subscription</h2>
+                <p>
+                    Start with a 7-day free trial, then continue with Truck Box Pro.
+                </p>
+
+                <ul class="clean-list">
+                    <li>7 days free trial</li>
+                    <li>One-click email sending</li>
+                    <li>Ready templates</li>
+                    <li>Short load filtering</li>
+                    <li>Statistics and guide access</li>
+                </ul>
+            </div>
+
+            <div class="pricing-card reveal">
+                <div class="plan-pill">Truck Box Pro</div>
+                <h3>For active DAT work</h3>
+
+                <div class="price-row">
+                    <span class="price">$7</span>
+                    <span class="price-unit">/ month</span>
+                </div>
+
+                <p class="pricing-note">
+                    Login to use your free trial first.<br>
+                    No credit card required for the trial, and you can cancel anytime.
+                </p>
+
+                <div class="pricing-actions toolbar">
+                    <a class="btn btn-primary"
+                       href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd"
+                       target="_blank" rel="noopener">
+                        Start Free Trial
+                    </a>
+                    <a class="btn btn-secondary" href="guide.html">See Login Guide</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section reveal" id="guide-preview">
+        <div class="section-head center">
+            <div class="eyebrow">Guide</div>
+            <h2>Step-by-step login and setup</h2>
+            <p>Use clear screenshots so users can follow the whole flow fast.</p>
+        </div>
+
+        <div class="preview-grid">
+            <div class="preview-card reveal">
+                <h3>Login instructions</h3>
+                <p>Show popup steps, Google login, and trial activation.</p>
+            </div>
+            <div class="preview-card reveal">
+                <h3>Email template setup</h3>
+                <p>Explain how subject and body templates should be filled in.</p>
+            </div>
+            <div class="preview-card reveal">
+                <h3>DAT usage examples</h3>
+                <p>Show how sending works directly inside one.dat.com.</p>
+            </div>
+        </div>
+
+        <div class="toolbar center">
+            <a class="btn btn-secondary" href="guide.html">Open Full Guide</a>
+        </div>
+    </section>
+
+    <section class="section reveal" id="learn-preview">
+        <div class="section-head center">
+            <div class="eyebrow">Learning</div>
+            <h2>Quick screenshot walkthroughs</h2>
+            <p>Add screenshots now. You can replace any block with a video later.</p>
+        </div>
+
+        <div class="preview-grid">
+            <div class="preview-card reveal">
+                <h3>How to login</h3>
+                <p>Simple screenshot flow for first-time users.</p>
+            </div>
+            <div class="preview-card reveal">
+                <h3>How to use templates</h3>
+                <p>Show where users save and update their templates.</p>
+            </div>
+            <div class="preview-card reveal">
+                <h3>How to work faster in DAT</h3>
+                <p>Show the extension in action with real load examples.</p>
+            </div>
+        </div>
+
+        <div class="toolbar center">
+            <a class="btn btn-secondary" href="learn.html">Open Learning Page</a>
+        </div>
+    </section>
 </main>
 
 <footer class="site-footer">
-  <div class="container footer-wrap">
-    <div>© <span data-year></span> Truck Box — All rights reserved.</div>
-    <div class="footer-links">
-      <a href="guide.html">Guide</a>
-      <a href="learn.html">Learning</a>
-      <a href="privacy.html">Privacy</a>
-      <a href="privacy.html#contact">Contact</a>
+    <div class="container footer-wrap">
+        <div>© <span data-year></span> Truck Box — All rights reserved.</div>
+        <div class="footer-links">
+            <a href="guide.html">Guide</a>
+            <a href="learn.html">Learning</a>
+            <a href="privacy.html">Privacy</a>
+            <a href="privacy.html#contact">Contact</a>
+        </div>
     </div>
-  </div>
 </footer>
 
 <script src="app.js"></script>

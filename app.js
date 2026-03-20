@@ -67,6 +67,35 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // =======================
+    // PROGRESS BAR
+    // =======================
+    const progressBar = document.getElementById("progressBar");
+
+    function updateProgressBar() {
+        if (!progressBar) return;
+
+        const scrollTop = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+        const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+        progressBar.style.width = progress + "%";
+    }
+
+    if (progressBar) {
+        window.addEventListener("scroll", updateProgressBar, {passive: true});
+        window.addEventListener("resize", updateProgressBar, {passive: true});
+
+        window.addEventListener("hashchange", () => {
+            setTimeout(updateProgressBar, 80);
+        });
+
+        window.addEventListener("load", updateProgressBar);
+
+        // initial run
+        updateProgressBar();
+    }
+
+    // =======================
     // SMOOTH SCROLL (same page anchors)
     // =======================
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -79,28 +108,28 @@ document.addEventListener("DOMContentLoaded", () => {
 
             e.preventDefault();
 
-            target.scrollIntoView({
-                behavior: "smooth",
-                block: "start"
+            const headerOffset = 88;
+            const targetPosition =
+                target.getBoundingClientRect().top + window.pageYOffset - headerOffset;
+
+            window.scrollTo({
+                top: targetPosition,
+                behavior: "smooth"
             });
+
+            setTimeout(updateProgressBar, 120);
+            setTimeout(updateProgressBar, 350);
         });
     });
 
     // =======================
-    // PROGRESS BAR
+    // SAFE TOP SPACING FOR ACTION BUTTON AREAS
     // =======================
-    const progressBar = document.getElementById("progressBar");
-
-    if (progressBar) {
-        window.addEventListener("scroll", () => {
-            const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-            const scrollHeight =
-                document.documentElement.scrollHeight - document.documentElement.clientHeight;
-
-            const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-            progressBar.style.width = progress + "%";
-        }, { passive: true });
-    }
+    document.querySelectorAll(".hero-actions, .pricing-actions, .cta-actions").forEach((section) => {
+        if (!section.style.marginTop) {
+            section.style.marginTop = "16px";
+        }
+    });
 
     // =======================
     // REVEAL ANIMATION
@@ -117,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 });
             },
-            { threshold: 0.1, rootMargin: "0px 0px -50px 0px" }
+            {threshold: 0.1, rootMargin: "0px 0px -50px 0px"}
         );
 
         revealElements.forEach((el) => observer.observe(el));
@@ -143,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function randomCaptcha(length = 6) {
         const chars = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghjkmnpqrstuvwxyz23456789";
-        return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+        return Array.from({length}, () => chars[Math.floor(Math.random() * chars.length)]).join("");
     }
 
     function renderCaptcha(code) {
@@ -192,8 +221,8 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
-            captchaError.textContent = "";
-            formError.textContent = "";
+            if (captchaError) captchaError.textContent = "";
+            if (formError) formError.textContent = "";
 
             const submitBtn = document.getElementById("submitBtn");
             const btnText = submitBtn?.querySelector(".btn-text");
@@ -209,17 +238,18 @@ document.addEventListener("DOMContentLoaded", () => {
                 const res = await fetch(form.action, {
                     method: "POST",
                     body: formData,
-                    headers: { Accept: "application/json" }
+                    headers: {Accept: "application/json"}
                 });
 
                 if (res.ok) {
                     form.style.display = "none";
                     document.getElementById("formSuccess")?.style.setProperty("display", "block");
+                    setTimeout(updateProgressBar, 100);
                 } else {
-                    formError.textContent = "Failed to send. Try again.";
+                    if (formError) formError.textContent = "Failed to send. Try again.";
                 }
             } catch (err) {
-                formError.textContent = "Network error.";
+                if (formError) formError.textContent = "Network error.";
             } finally {
                 if (btnText) btnText.style.display = "inline";
                 if (btnLoading) btnLoading.style.display = "none";
@@ -233,8 +263,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // =======================
     document.getElementById("resetFormBtn")?.addEventListener("click", () => {
         form?.reset();
-        form.style.display = "block";
+        if (form) form.style.display = "block";
         document.getElementById("formSuccess")?.style.setProperty("display", "none");
         generateCaptcha();
+        setTimeout(updateProgressBar, 100);
     });
 });
