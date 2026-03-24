@@ -516,7 +516,7 @@ textarea {
 }
 
 .clean-list li::before {
-    content: "âœ“";
+    content: "\2713";
     display: flex;
     align-items: center;
     justify-content: center;
