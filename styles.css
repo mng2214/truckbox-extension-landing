@@ -1227,3 +1227,45 @@ code.inline {
     width: 18px;
     height: 18px;
 }
+
+/* =========================
+   Demo Button (Purple Glow)
+========================= */
+
+.btn-demo {
+    background: linear-gradient(135deg, #7c3aed, #a855f7);
+    color: #fff;
+    border: none;
+    position: relative;
+    box-shadow:
+            0 0 10px rgba(168, 85, 247, 0.5),
+            0 0 20px rgba(168, 85, 247, 0.4);
+    transition: all 0.25s ease;
+}
+
+/* glow halo */
+.btn-demo::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(135deg, #a855f7, #c084fc);
+    z-index: -1;
+    filter: blur(12px);
+    opacity: 0.6;
+    transition: opacity 0.25s ease;
+}
+
+/* hover effect */
+.btn-demo:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow:
+            0 0 15px rgba(168, 85, 247, 0.8),
+            0 0 35px rgba(168, 85, 247, 0.6);
+}
+
+/* stronger glow on hover */
+.btn-demo:hover::before {
+    opacity: 1;
+    filter: blur(18px);
+}
