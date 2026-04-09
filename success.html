@@ -4,51 +4,35 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Subscription Successful – Truck Box</title>
-  <meta name="description" content="Thank you for subscribing to Truck Box."/>
+  <meta name="description" content="Your Truck Box subscription is now active. Go back, sign in, and start using the extension."/>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css"/>
-  <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GDTV32WN06"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-
     gtag('config', 'G-GDTV32WN06');
   </script>
 </head>
 <body data-page="success">
 <div class="bg-grid"></div>
-
-<header class="site-header">
-  <div class="container">
-    <div class="header-content">
-      <a href="index.html" class="brand">
-        <span class="brand-text">Truck Box</span>
-      </a>
-    </div>
-  </div>
-</header>
-
+<div data-include="partials/header.html"></div>
 <main class="container standalone-page">
   <section class="center-card reveal visible">
     <div class="success-icon">✓</div>
     <div class="hero-badge">Subscription Active</div>
     <h1>Thank you for subscribing</h1>
-    <p>
-      Your Truck Box subscription is now active.
-      Go back, login, and start using the extension.
-    </p>
-
+    <p>Your Truck Box subscription is now active. Go back, sign in, and start using the extension.</p>
     <div class="toolbar center">
       <a class="btn btn-primary" href="index.html">Back to Home</a>
-      <a class="btn btn-secondary" href="guide.html">Open Login Guide</a>
+      <a class="btn btn-secondary" href="learn.html">Open Learning Center</a>
     </div>
   </section>
 </main>
-
+<div data-include="partials/footer.html"></div>
 <script src="app.js"></script>
 </body>
 </html>
