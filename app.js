@@ -195,7 +195,7 @@ function initCaptchaAndForm() {
 
 function initRolePopup() {
     const modal = document.getElementById('roleModal');
-    if (!modal || document.body.dataset.page !== 'home') return;
+    if (!modal || document.body.dataset.page !== 'home' || /Instagram/i.test(navigator.userAgent || '')) return;
 
     const step1 = modal.querySelector('[data-role-step="1"]');
     const step2 = modal.querySelector('[data-role-step="2"]');
@@ -360,7 +360,7 @@ function initFaqAccordion() {
 }
 
 async function initPage() {
-    await loadIncludes();
+    try { await loadIncludes(); } catch (e) { console.warn('[Truck Box] includes skipped', e); }
     initYears();
     initSidebar();
     initActiveNav();

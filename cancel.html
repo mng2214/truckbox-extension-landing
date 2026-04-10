@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
   <title>Subscription Cancelled – Truck Box</title>
   <meta name="description" content="Your Truck Box subscription has been cancelled. You can reactivate anytime and continue using all features."/>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
@@ -17,10 +17,70 @@
     gtag('js', new Date());
     gtag('config', 'G-GDTV32WN06');
   </script>
+
+<style>
+html{-webkit-text-size-adjust:100%}body{margin:0;font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#f8fafc;color:#0b1e33}a{text-decoration:none;color:inherit}img{max-width:100%;height:auto}.container{max-width:1200px;margin:0 auto;padding:0 20px}.page-shell,.standalone-page{padding:24px 0 48px}.site-header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.96);border-bottom:1px solid rgba(148,163,184,.16)}.header-content{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:64px}.desktop-nav{display:flex;gap:8px;flex-wrap:wrap}.nav-item,.mobile-nav-item{padding:8px 14px;border-radius:999px;color:#52637a}.hero{padding:32px 0 56px;text-align:center}.hero-badge,.eyebrow,.plan-pill{display:inline-flex;align-items:center;padding:8px 14px;border-radius:999px;background:#dbeafe;color:#1d4ed8;font-weight:600;font-size:.88rem;border:1px solid rgba(29,78,216,.16)}.hero h1,.center-card h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1.1;margin:18px auto;max-width:900px;font-weight:800;letter-spacing:-.03em}.hero p,.center-card p{max-width:720px;margin:0 auto 24px;color:#52637a;font-size:1.05rem}.hero-actions,.pricing-actions,.toolbar{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 22px;border-radius:999px;font-weight:600;font-size:1rem;border:1px solid transparent;box-shadow:0 4px 12px rgba(0,0,0,.05)}.btn-primary{background:linear-gradient(135deg,#1d4ed8,#2563eb 50%,#3b82f6);color:#fff}.btn-secondary{background:#fff;color:#1d4ed8;border-color:rgba(29,78,216,.2)}.btn-demo{background:#eff6ff;color:#0b1e33;border-color:rgba(148,163,184,.18)}.hero-note{margin-top:18px;color:#52637a}.hero-metrics,.card-grid,.steps-grid,.preview-grid{display:grid;gap:18px}.hero-metrics{grid-template-columns:repeat(auto-fit,minmax(200px,1fr));margin-top:26px}.card-grid,.steps-grid,.preview-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}.metric-pill,.feature-card,.step-card,.preview-card,.section,.pricing-card,.toc,.legal-section,.support-card,.faq-item,.center-card,.video-placeholder{background:#fff;border:1px solid rgba(148,163,184,.16);border-radius:24px;box-shadow:0 8px 24px rgba(15,23,42,.05)}.metric-pill,.feature-card,.step-card,.preview-card{padding:22px}.section{padding:32px;margin-bottom:24px}.section-head{margin-bottom:28px}.section-head.center{text-align:center}.section-head h2,.legal-section h2{font-size:clamp(1.9rem,4vw,2.5rem);font-weight:700;letter-spacing:-.02em;margin:12px 0}.icon-box{width:56px;height:56px;border-radius:18px;display:flex;align-items:center;justify-content:center;background:#eff6ff;margin-bottom:18px;font-size:1.7rem}.site-footer{padding:28px 0 40px}.footer-wrap{display:flex;gap:18px;justify-content:space-between;align-items:center;flex-wrap:wrap}.footer-links,.footer-social{display:flex;gap:14px;flex-wrap:wrap}.mobile-sidebar,.sidebar-overlay{display:none}.instagram-browser-note{position:sticky;top:0;z-index:250;background:#0b1e33;color:#fff;padding:10px 14px;text-align:center;font-size:14px}.instagram-browser-note a{color:#fff;text-decoration:underline;font-weight:600}@media (max-width:768px){.desktop-nav{display:none}.mobile-sidebar,.sidebar-overlay{display:block}.menu-btn{display:flex}.container{padding:0 16px}.section{padding:24px}.hero{padding:24px 0 42px}.btn{width:100%}.hero-actions .btn,.pricing-actions .btn,.toolbar .btn{width:100%}}
+</style>
+
+<script>
+(function(){
+  var ua = navigator.userAgent || '';
+  var isInstagram = /Instagram/i.test(ua);
+  document.documentElement.classList.toggle('is-instagram-browser', isInstagram);
+  if (!isInstagram) return;
+  document.addEventListener('DOMContentLoaded', function(){
+    if (document.querySelector('.instagram-browser-note')) return;
+    var note = document.createElement('div');
+    note.className = 'instagram-browser-note';
+    note.innerHTML = 'Opened inside Instagram. For the best experience, use the ••• menu and choose <strong>Open in browser</strong>.';
+    document.body.insertBefore(note, document.body.firstChild);
+  });
+})();
+</script>
+
 </head>
 <body data-page="cancel">
 <div class="bg-grid"></div>
-<div data-include="partials/header.html"></div>
+<header class="site-header">
+  <div class="container">
+    <div class="header-content">
+      <a href="index.html" class="brand">
+        <span class="brand-text">Truck Box</span>
+      </a>
+
+      <nav class="desktop-nav" aria-label="Primary">
+        <a href="index.html" class="nav-item" data-page-link="home">Home</a>
+        <a href="index.html#features" class="nav-item">Features</a>
+        <a href="index.html#pricing" class="nav-item">Pricing</a>
+        <a href="learn.html" class="nav-item" data-page-link="learn">Learning</a>
+        <a href="faq.html" class="nav-item" data-page-link="faq">FAQ</a>
+        <a href="privacy.html" class="nav-item" data-page-link="privacy">Privacy</a>
+        <a href="privacy.html#contact" class="nav-item">Contact</a>
+      </nav>
+
+      <button class="menu-btn" id="menuBtn" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobileSidebar">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="mobile-sidebar" id="mobileSidebar" aria-hidden="true">
+  <div class="mobile-nav-items">
+    <a href="index.html" class="mobile-nav-item" data-page-link="home">Home</a>
+    <a href="index.html#features" class="mobile-nav-item">Features</a>
+    <a href="index.html#pricing" class="mobile-nav-item">Pricing</a>
+    <a href="learn.html" class="mobile-nav-item" data-page-link="learn">Learning</a>
+    <a href="faq.html" class="mobile-nav-item" data-page-link="faq">FAQ</a>
+    <a href="privacy.html" class="mobile-nav-item" data-page-link="privacy">Privacy</a>
+    <a href="privacy.html#contact" class="mobile-nav-item">Contact</a>
+  </div>
+  <div class="sidebar-footer">
+    <p>© <span data-year></span> Truck Box</p>
+  </div>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
 <main class="container standalone-page">
   <section class="center-card reveal visible">
     <div class="cancel-icon">✕</div>
@@ -33,7 +93,42 @@
     </div>
   </section>
 </main>
-<div data-include="partials/footer.html"></div>
+<footer class="site-footer">
+
+  <div class="container footer-wrap">
+    <div>© <span data-year></span> Truck Box — All rights reserved.</div>
+
+    <div class="footer-links">
+      <a href="index.html">Home</a>
+      <a href="learn.html">Learning</a>
+      <a href="faq.html">FAQ</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="privacy.html#contact">Contact</a>
+    </div>
+
+    <div class="footer-social">
+      <a href="https://instagram.com/truckbox.app" target="_blank" rel="noopener" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M7 2C4.2 2 2 4.2 2 7v10c0 2.8 2.2 5 5 5h10c2.8 0 5-2.2 5-5V7c0-2.8-2.2-5-5-5H7zm0 2h10c1.7 0 3 1.3 3 3v10c0 1.7-1.3 3-3 3H7c-1.7 0-3-1.3-3-3V7c0-1.7 1.3-3 3-3zm11 1.5a1.5 1.5 0 1 0 .001 3.001A1.5 1.5 0 0 0 18 5.5zM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10zm0 2a3 3 0 1 1 0 6 3 3 0 0 1 0-6z"/>
+        </svg>
+      </a>
+      <a href="https://facebook.com/truckboxapp" target="_blank" rel="noopener" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M22 12a10 10 0 1 0-11.6 9.9v-7H8v-3h2.4V9.5c0-2.4 1.4-3.7 3.6-3.7 1 0 2 .2 2 .2v2.3h-1.2c-1.2 0-1.6.8-1.6 1.5V12H16l-.4 3h-2.3v7A10 10 0 0 0 22 12z"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+</footer>
+
+<a href="https://t.me/mngartur" class="telegram-float" target="_blank" rel="noopener">
+  <span class="tg-label">Ask a question</span>
+  <svg viewBox="0 0 24 24">
+    <path d="M9.999 15.875 9.937 19a.625.625 0 0 0 1.001.516l2.125-1.562 3.441 2.563a1.249 1.249 0 0 0 1.98-.766L21.962 5.91a1.25 1.25 0 0 0-1.67-1.379L3.372 10.485a1.25 1.25 0 0 0 .055 2.382l4.662 1.466 8.637-5.84-6.727 7.382Z"/>
+  </svg>
+</a>
+
 <script src="app.js"></script>
 </body>
 </html>

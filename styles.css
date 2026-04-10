@@ -1798,3 +1798,31 @@ body.modal-open {
         justify-content: center;
     }
 }
+
+
+/* Instagram in-app browser compatibility */
+html { -webkit-text-size-adjust: 100%; }
+body { min-height: 100svh; }
+.hero, .section, .pricing-card, .feature-card, .step-card, .preview-card, .metric-pill { transform: translateZ(0); }
+.hero-actions a, .pricing-actions a, .toolbar a { text-decoration: none !important; }
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .site-header,
+  .mobile-sidebar,
+  .sidebar-overlay,
+  .section,
+  .center-card,
+  .faq-item,
+  .support-card,
+  .toc,
+  .legal-section,
+  .pricing-card,
+  .video-placeholder,
+  .hero-luxe { backdrop-filter: none !important; }
+}
+@supports not (display: grid) {
+  .card-grid, .steps-grid, .preview-grid, .hero-metrics { display: block; }
+  .card-grid > *, .steps-grid > *, .preview-grid > *, .hero-metrics > * { margin-bottom: 16px; }
+}
+@media (max-width: 768px) {
+  .hero-actions .btn, .pricing-actions .btn, .toolbar .btn { width: 100%; }
+}
