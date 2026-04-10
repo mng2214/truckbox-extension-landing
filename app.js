@@ -193,6 +193,147 @@ function initCaptchaAndForm() {
     });
 }
 
+function initRolePopup() {
+    const modal = document.getElementById('roleModal');
+    if (!modal || document.body.dataset.page !== 'home') return;
+
+    const step1 = modal.querySelector('[data-role-step="1"]');
+    const step2 = modal.querySelector('[data-role-step="2"]');
+    const nextBtn = document.getElementById('roleNextBtn');
+    const skipBtn = document.getElementById('roleSkipBtn');
+    const backBtn = document.getElementById('roleBackBtn');
+    const closeBtn = document.getElementById('roleModalClose');
+    const closeTargets = modal.querySelectorAll('[data-role-close]');
+    const roleInputs = modal.querySelectorAll('input[name="userRole"]');
+    const titleEl = document.getElementById('roleDynamicTitle');
+    const introEl = document.getElementById('roleDynamicIntro');
+    const benefitsEl = document.getElementById('roleBenefits');
+    const ctaBtn = document.getElementById('roleCtaBtn');
+
+    const storageKey = 'truckbox-role-popup-state';
+    const roleKey = 'truckbox-selected-role';
+    const roleContent = {
+        dispatcher: {
+            title: 'Built for Dispatchers',
+            intro: 'Truck Box helps dispatchers move faster on DAT and save valuable time every day.',
+            benefits: [
+                'Send broker emails in 1 click from the DAT Search Truck page.',
+                'Use saved templates for fast and consistent outreach.',
+                'Navigate DAT Search Loads with keyboard shortcuts.',
+                'Open load locations instantly with built-in Google Maps links.',
+                'Hide short trips and focus on better loads (Beta).',
+                'Save hours on repetitive work and book loads faster.'
+            ],
+            cta: 'Install for Dispatching'
+        },
+        driver: {
+            title: 'Faster Dispatch Means Less Waiting',
+            intro: 'Drivers benefit when dispatch can reach brokers quickly and secure loads faster.',
+            benefits: [
+                'Faster communication between dispatchers and brokers.',
+                'Reduced waiting time for load confirmations.',
+                'Smoother coordination and fewer delays.'
+            ],
+            cta: 'See How It Works'
+        },
+        business_owner: {
+            title: 'Built for Efficient Carrier Teams',
+            intro: 'Truck Box helps owners streamline operations and maximize dispatcher productivity.',
+            benefits: [
+                'Reduce time spent on repetitive email outreach.',
+                'Standardize communication with reusable templates.',
+                'Help dispatchers focus on higher-quality loads.',
+                'Affordable solution with a strong return on investment.'
+            ],
+            cta: 'Start Free Trial'
+        },
+        other: {
+            title: 'A Faster Way to Work on DAT',
+            intro: 'Truck Box simplifies broker outreach and speeds up your workflow inside DAT.',
+            benefits: [
+                'Send emails directly from DAT load rows.',
+                'Use ready-made templates for consistent messaging.',
+                'Enjoy a cleaner and more efficient workflow.'
+            ],
+            cta: 'Explore Truck Box'
+        }
+    };
+    let selectedRole = '';
+    let openTimer = null;
+
+    function setStep(step) {
+        step1.classList.toggle('active', step === 1);
+        step2.classList.toggle('active', step === 2);
+    }
+
+    function openModal() {
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeModal(markDismissed = true) {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        if (markDismissed) localStorage.setItem(storageKey, 'done');
+    }
+
+    function renderRole(role) {
+        const content = roleContent[role] || roleContent.other;
+        titleEl.textContent = content.title;
+        introEl.textContent = content.intro;
+        benefitsEl.innerHTML = content.benefits.map((item) => `<div class="role-benefit">${item}</div>`).join('');
+        ctaBtn.textContent = content.cta;
+    }
+
+    function track(eventName, params = {}) {
+        if (typeof window.gtag === 'function') {
+            window.gtag('event', eventName, params);
+        }
+    }
+
+    if (localStorage.getItem(storageKey) === 'done') return;
+
+    openTimer = window.setTimeout(() => {
+        openModal();
+        track('role_popup_shown');
+    }, 3500);
+
+    roleInputs.forEach((input) => {
+        input.addEventListener('change', () => {
+            selectedRole = input.value;
+            nextBtn.disabled = !selectedRole;
+            localStorage.setItem(roleKey, selectedRole);
+            track('role_selected', { role: selectedRole });
+        });
+    });
+
+    nextBtn?.addEventListener('click', () => {
+        if (!selectedRole) return;
+        renderRole(selectedRole);
+        setStep(2);
+        track('role_popup_continue', { role: selectedRole });
+    });
+
+    backBtn?.addEventListener('click', () => setStep(1));
+    skipBtn?.addEventListener('click', () => {
+        closeModal(true);
+        track('role_popup_skipped');
+    });
+    closeBtn?.addEventListener('click', () => closeModal(true));
+    closeTargets.forEach((el) => el.addEventListener('click', () => closeModal(true)));
+
+    ctaBtn?.addEventListener('click', () => {
+        closeModal(true);
+        track('role_popup_cta_click', { role: selectedRole || 'unknown' });
+    });
+
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(true);
+    });
+}
+
 function initFaqAccordion() {
     document.querySelectorAll('.faq-item').forEach((item) => {
         const button = item.querySelector('.faq-question');
@@ -229,6 +370,7 @@ async function initPage() {
     initPrintButton();
     initCaptchaAndForm();
     initFaqAccordion();
+    initRolePopup();
 }
 
 document.addEventListener('DOMContentLoaded', initPage);

@@ -241,6 +241,57 @@
 </main>
 
 <div data-include="partials/footer.html"></div>
+
+<div class="role-modal" id="roleModal" aria-hidden="true">
+    <div class="role-modal-backdrop" data-role-close></div>
+    <div class="role-modal-card" role="dialog" aria-modal="true" aria-labelledby="roleModalTitle">
+        <button class="role-modal-close" id="roleModalClose" type="button" aria-label="Close popup">×</button>
+
+        <div class="role-step active" data-role-step="1">
+            <div class="role-kicker">Quick question</div>
+            <h3 id="roleModalTitle">What best describes you?</h3>
+            <p>Pick your role so Truck Box can show the most relevant value first.</p>
+
+            <div class="role-options" id="roleOptions">
+                <label class="role-option">
+                    <input type="radio" name="userRole" value="dispatcher">
+                    <span>Dispatcher</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="userRole" value="driver">
+                    <span>Driver</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="userRole" value="business_owner">
+                    <span>Business Owner</span>
+                </label>
+                <label class="role-option">
+                    <input type="radio" name="userRole" value="other">
+                    <span>Other</span>
+                </label>
+            </div>
+
+            <div class="role-modal-actions">
+                <button class="btn btn-secondary" id="roleSkipBtn" type="button">Skip</button>
+                <button class="btn btn-primary" id="roleNextBtn" type="button" disabled>Continue</button>
+            </div>
+        </div>
+
+        <div class="role-step" data-role-step="2">
+            <div class="role-kicker">Why people use Truck Box</div>
+            <h3 id="roleDynamicTitle">Built for dispatchers</h3>
+            <p id="roleDynamicIntro">Truck Box helps dispatchers move faster on DAT without adding more noise to the workflow.</p>
+
+            <div class="role-benefits" id="roleBenefits"></div>
+
+            <div class="role-modal-actions">
+                <button class="btn btn-secondary" id="roleBackBtn" type="button">Back</button>
+                <a class="btn btn-primary" id="roleCtaBtn" href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd" target="_blank">Start Free Trial</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="app.js"></script>
 </body>
 </html>
