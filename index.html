@@ -176,11 +176,12 @@
             gap: 18px;
         }
 
-        .hero-metrics {
-            grid-template-columns:repeat(3, minmax(0, 1fr));
-            max-width: 980px;
-            margin: 26px auto 0;
-        }
+.hero-metrics {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+    max-width: 980px;
+    margin: 26px auto 0;
+}
 
 .card-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -299,46 +300,60 @@
     transform: scale(1.1);
 }
 
-        @media (max-width: 900px) {
-            .hero-metrics {
-                grid-template-columns:1fr;
-                max-width: 520px;
-            }
-        }
+@media (max-width: 900px) {
+    .hero-metrics {
+        grid-template-columns: 1fr;
+        max-width: 400px;
+        margin: 26px auto 0;
+    }
+}
 
-        @media (max-width: 768px) {
-            .desktop-nav {
-                display: none
-            }
+@media (max-width: 768px) {
+    .desktop-nav {
+        display: none
+    }
 
-            .mobile-sidebar, .sidebar-overlay {
-                display: block
-            }
+    .mobile-sidebar, .sidebar-overlay {
+        display: block
+    }
 
-            .menu-btn {
-                display: flex
-            }
+    .menu-btn {
+        display: flex
+    }
 
-            .container {
-                padding: 0 16px
-            }
+    .container {
+        padding: 0 16px
+    }
 
-            .section {
-                padding: 24px
-            }
+    .section {
+        padding: 24px
+    }
 
-            .hero {
-                padding: 24px 0 42px
-            }
+    .hero {
+        padding: 24px 0 42px
+    }
 
-            .btn {
-                width: 100%
-            }
+    .btn {
+        width: 100%
+    }
 
-            .hero-actions .btn, .pricing-actions .btn, .toolbar .btn {
-                width: 100%
-            }
-        }
+    .hero-actions .btn, .pricing-actions .btn, .toolbar .btn {
+        width: 90%;
+        max-width: 340px;
+        margin: 0 auto;
+    }
+
+.hero-metrics {
+    grid-template-columns: 1fr;
+    width: 90%;
+    max-width: 340px;
+    margin: 26px auto 0;
+}
+
+.metric-pill {
+    width: 100%;
+}
+}
 
         @media (max-width: 900px) {
     .hero-metrics {
@@ -427,7 +442,7 @@
 <main class="container page-shell">
     <section class="hero hero-modern hero-luxe reveal">
         <h1>
-            A cleaner, faster way to send broker emails from <span>one.dat.com</span>.
+            A cleaner & faster way to send broker emails from <span>one.dat.com</span>.
         </h1>
         <p>
             Truck Box adds one-click outreach, saved templates, load filtering, route context,
