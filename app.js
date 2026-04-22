@@ -219,6 +219,7 @@ function initRolePopup() {
 
     const storageKey = 'truckbox-role-popup-state';
     const roleKey = 'truckbox-selected-role';
+
     const roleContent = {
         dispatcher: {
             title: 'Built for Dispatchers',
@@ -265,25 +266,14 @@ function initRolePopup() {
             cta: 'Explore Truck Box'
         }
     };
-    let selectedRole = '';
+
+    let selectedRole = localStorage.getItem(roleKey) || '';
     let openTimer = null;
+    let hasOpened = false;
 
     function setStep(step) {
         step1.classList.toggle('active', step === 1);
         step2.classList.toggle('active', step === 2);
-    }
-
-    function openModal() {
-        modal.classList.add('open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('modal-open');
-    }
-
-    function closeModal(markDismissed = true) {
-        modal.classList.remove('open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('modal-open');
-        if (markDismissed) localStorage.setItem(storageKey, 'done');
     }
 
     function renderRole(role) {
@@ -300,12 +290,56 @@ function initRolePopup() {
         }
     }
 
+    function cleanupOpenTriggers() {
+        if (openTimer) {
+            clearTimeout(openTimer);
+            openTimer = null;
+        }
+        window.removeEventListener('scroll', handleScrollOpen);
+    }
+
+    function openModal() {
+        if (hasOpened || localStorage.getItem(storageKey) === 'done') return;
+        hasOpened = true;
+        cleanupOpenTriggers();
+        modal.classList.add('open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+        track('role_popup_shown');
+    }
+
+    function closeModal(markDismissed = true) {
+        modal.classList.remove('open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+        cleanupOpenTriggers();
+
+        if (markDismissed) {
+            localStorage.setItem(storageKey, 'done');
+        }
+    }
+
+    function handleScrollOpen() {
+        const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+        const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollHeight > 0 ? scrollTop / scrollHeight : 0;
+
+        if (progress >= 0.35) {
+            openModal();
+        }
+    }
+
     if (localStorage.getItem(storageKey) === 'done') return;
 
-    openTimer = window.setTimeout(() => {
-        openModal();
-        track('role_popup_shown');
-    }, 2000);
+    if (selectedRole) {
+        const matchedInput = Array.from(roleInputs).find((input) => input.value === selectedRole);
+        if (matchedInput) {
+            matchedInput.checked = true;
+            nextBtn.disabled = false;
+        }
+    }
+
+    setStep(1);
 
     roleInputs.forEach((input) => {
         input.addEventListener('change', () => {
@@ -324,10 +358,12 @@ function initRolePopup() {
     });
 
     backBtn?.addEventListener('click', () => setStep(1));
+
     skipBtn?.addEventListener('click', () => {
         closeModal(true);
         track('role_popup_skipped');
     });
+
     closeBtn?.addEventListener('click', () => closeModal(true));
     closeTargets.forEach((el) => el.addEventListener('click', () => closeModal(true)));
 
@@ -337,8 +373,16 @@ function initRolePopup() {
     });
 
     document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(true);
+        if (e.key === 'Escape' && modal.classList.contains('open')) {
+            closeModal(true);
+        }
     });
+
+    window.addEventListener('scroll', handleScrollOpen, { passive: true });
+
+    openTimer = window.setTimeout(() => {
+        openModal();
+    }, 8000);
 }
 
 function initFaqAccordion() {
@@ -395,8 +439,32 @@ function initFaqAccordion() {
     });
 }
 
+function initPointerGlow() {
+    const hero = document.querySelector('.hero-luxe');
+    if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let rafId = null;
+    hero.addEventListener('pointermove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+        if (rafId) cancelAnimationFrame(rafId);
+
+        rafId = requestAnimationFrame(() => {
+            hero.style.setProperty('--mx', x.toFixed(2) + '%');
+            hero.style.setProperty('--my', y.toFixed(2) + '%');
+        });
+    });
+}
+
 async function initPage() {
-    try { await loadIncludes(); } catch (e) { console.warn('[Truck Box] includes skipped', e); }
+    try {
+        await loadIncludes();
+    } catch (e) {
+        console.warn('[Truck Box] includes skipped', e);
+    }
+
     initYears();
     initSidebar();
     initActiveNav();
@@ -407,24 +475,7 @@ async function initPage() {
     initCaptchaAndForm();
     initFaqAccordion();
     initRolePopup();
+    initPointerGlow();
 }
 
 document.addEventListener('DOMContentLoaded', initPage);
-
-
-function initPointerGlow() {
-    const hero = document.querySelector('.hero-luxe');
-    if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-    let rafId = null;
-    hero.addEventListener('pointermove', (e) => {
-        const rect = hero.getBoundingClientRect();
-        const x = ((e.clientX - rect.left) / rect.width) * 100;
-        const y = ((e.clientY - rect.top) / rect.height) * 100;
-        if (rafId) cancelAnimationFrame(rafId);
-        rafId = requestAnimationFrame(() => {
-            hero.style.setProperty('--mx', x.toFixed(2) + '%');
-            hero.style.setProperty('--my', y.toFixed(2) + '%');
-        });
-    });
-}
