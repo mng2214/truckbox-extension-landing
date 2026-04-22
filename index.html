@@ -182,13 +182,21 @@
             margin: 26px auto 0;
         }
 
-        .card-grid {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 28px;
-          max-width: 1100px;
-          margin: 0 auto;
-        }
+.card-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    max-width: 1080px;
+    margin: 0 auto;
+}
+
+.steps-grid,
+.preview-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.feature-card {
+    min-height: 220px;
+}
+
         .metric-pill, .feature-card, .step-card, .preview-card, .section, .pricing-card, .toc, .legal-section, .support-card, .faq-item, .center-card, .video-placeholder {
             background: #fff;
             border: 1px solid rgba(148, 163, 184, .16);
@@ -197,20 +205,7 @@
         }
 
         .metric-pill, .feature-card, .step-card, .preview-card {
-            padding: 28px
-        }
-
-        .feature-card {
-            transition: all 0.25s ease;
-        }
-
-        .feature-card:hover {
-          transform: translateY(-6px);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-        }
-
-        .feature-card {
-            min-height: 200px;
+            padding: 22px
         }
 
         .section {
@@ -284,6 +279,26 @@
             font-weight: 600
         }
 
+        .step-number {
+    font-size: 48px;
+    font-weight: 800;
+    background: linear-gradient(135deg, #2563eb, #3b82f6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    letter-spacing: -1px;
+    margin-bottom: 14px;
+       display: inline-block;
+    transform-origin: left;
+}
+
+.step-card {
+    transition: all 0.25s ease;
+}
+
+.step-card:hover .step-number {
+    transform: scale(1.1);
+}
+
         @media (max-width: 900px) {
             .hero-metrics {
                 grid-template-columns:1fr;
@@ -326,16 +341,21 @@
         }
 
         @media (max-width: 900px) {
-          .card-grid {
-             grid-template-columns: repeat(2, 1fr);
-            }
-        }
+    .hero-metrics {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+    }
 
-        @media (max-width: 600px) {
-          .card-grid {
-              grid-template-columns: 1fr;
-            }
-        }
+    .card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 600px) {
+    .card-grid {
+        grid-template-columns: 1fr;
+    }
+}
     </style>
 
     <script>
@@ -457,14 +477,9 @@
             </article>
 
             <article class="feature-card reveal">
-                <div class="icon-box">⌨️</div>
-                <h3>Keyboard Navigation on DAT</h3>
-                <p>
-                    Move through loads and take actions faster using simple keyboard shortcuts.
-                    Navigate with <strong>W/S</strong>, switch tabs with <strong>A/D</strong>,
-                    open maps with <strong>Q</strong>, send emails with <strong>E</strong>,
-                    and toggle load details with <strong>Space</strong>.
-                </p>
+                <div class="icon-box">📉</div>
+                <h3>Short-load filtering</h3>
+                <p>Hide loads under your preferred miles threshold and stay focused on better lanes.</p>
             </article>
 
             <article class="feature-card reveal">
@@ -474,17 +489,21 @@
             </article>
 
             <article class="feature-card reveal">
-                <div class="icon-box">📉</div>
-                <h3>Short-load filtering</h3>
-                <p>Hide loads under your preferred miles threshold and stay focused on better lanes.</p>
-            </article>
-
-            <article class="feature-card reveal">
                 <div class="icon-box">📊</div>
                 <h3>Simple activity stats</h3>
                 <p>See your total email activity inside the extension without extra dashboards.</p>
             </article>
 
+            <article class="feature-card reveal">
+                <div class="icon-box">⌨️</div>
+                <h3>Keyboard Navigation on DAT</h3>
+                <p>
+                    Move through loads and take actions faster using simple keyboard shortcuts.
+                    Navigate with <strong>W/S</strong>, switch tabs with <strong>A/D</strong>,
+                    open maps with <strong>Q</strong>, send emails with <strong>E</strong>,
+                    and toggle load details with <strong>Space</strong>.
+                </p>
+            </article>
         </div>
     </section>
 
@@ -496,19 +515,19 @@
 
         <div class="steps-grid">
             <div class="step-card reveal">
-                <div class="step-number">01</div>
+                <div class="step-number">1</div>
                 <h3>Install the extension</h3>
                 <p>Add Truck Box to Chrome and pin it for quick access.</p>
             </div>
 
             <div class="step-card reveal">
-                <div class="step-number">02</div>
+                <div class="step-number">2</div>
                 <h3>Sign in with Google</h3>
                 <p>Connect your Gmail account and activate the free trial.</p>
             </div>
 
             <div class="step-card reveal">
-                <div class="step-number">03</div>
+                <div class="step-number">3</div>
                 <h3>Work inside DAT</h3>
                 <p>Open DAT, use your templates, filter loads, and send with one click.</p>
             </div>
@@ -531,7 +550,6 @@
             </div>
 
             <div class="pricing-card reveal">
-                <div class="plan-pill">Truck Box Pro</div>
                 <h3>For active DAT work</h3>
 
                 <div class="price-row">
@@ -555,6 +573,32 @@
                     <a class="btn btn-secondary" href="learn.html">Open Learning Center</a>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="section reveal" id="learn-preview">
+        <div class="section-head center">
+            <h2>Ready for screenshots now, videos later</h2>
+            <p>Your learning page is already structured so you can drop in YouTube walkthroughs later.</p>
+        </div>
+
+        <div class="preview-grid">
+            <div class="preview-card reveal">
+                <h3>Login walkthrough</h3>
+                <p>Show the first-time sign-in flow and quick activation steps.</p>
+            </div>
+            <div class="preview-card reveal">
+                <h3>Template setup</h3>
+                <p>Explain where users save templates and how to update their details.</p>
+            </div>
+            <div class="preview-card reveal">
+                <h3>Working inside DAT - Search Loads</h3>
+                <p>Show the real workflow with rows, buttons, and the extension in action.</p>
+            </div>
+        </div>
+
+        <div class="toolbar center">
+            <a class="btn btn-secondary" href="learn.html">Open Learning Page</a>
         </div>
     </section>
 

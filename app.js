@@ -410,3 +410,21 @@ async function initPage() {
 }
 
 document.addEventListener('DOMContentLoaded', initPage);
+
+
+function initPointerGlow() {
+    const hero = document.querySelector('.hero-luxe');
+    if (!hero || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    let rafId = null;
+    hero.addEventListener('pointermove', (e) => {
+        const rect = hero.getBoundingClientRect();
+        const x = ((e.clientX - rect.left) / rect.width) * 100;
+        const y = ((e.clientY - rect.top) / rect.height) * 100;
+        if (rafId) cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(() => {
+            hero.style.setProperty('--mx', x.toFixed(2) + '%');
+            hero.style.setProperty('--my', y.toFixed(2) + '%');
+        });
+    });
+}
