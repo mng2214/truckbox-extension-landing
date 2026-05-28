@@ -181,3 +181,37 @@ img { max-width: 100%; height: auto; }
   margin: 14px 0;
   color: var(--ink);
 }
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.tb-container {
+  width: 100%;
+  max-width: 1120px;
+}
+
+@media (max-width: 640px) {
+  .tb-container {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .tb-card {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px;
+  }
+
+  .tb-prose {
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+}
