@@ -237,15 +237,6 @@ function Hero() {
   return (
     <section id="top" className="tb-section" style={{ paddingTop: 140 }}>
       <div className="tb-container text-center">
-        <Reveal>
-          <span className="tb-pill">
-            <span
-              className="h-2 w-2 rounded-full"
-              style={{ background: "#10b981", boxShadow: "0 0 10px #10b981" }}
-            />
-            Live on the Chrome Web Store
-          </span>
-        </Reveal>
 
         <Reveal delay={0.05}>
           <h1
