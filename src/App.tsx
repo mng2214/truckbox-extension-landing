@@ -13,8 +13,6 @@ import {
   MapPin,
   BarChart3,
   Play,
-  Menu,
-  X,
   Send,
   Instagram,
   Facebook,
@@ -86,7 +84,6 @@ export default function App() {
 
 export function Header() {
 
-  const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -95,10 +92,6 @@ export function Header() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-  }, [open]);
 
   return (
     <header
@@ -150,85 +143,7 @@ export function Header() {
             Install <ArrowRight className="h-4 w-4" />
           </a>
         </div>
-
-        <button
-          aria-label="Open menu"
-          className="md:hidden inline-flex h-10 w-10 items-center justify-center rounded-full border"
-          style={{ borderColor: "var(--hairline)" }}
-          onClick={() => setOpen(true)}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
       </div>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-50 md:hidden"
-            style={{ background: "rgba(11,30,51,0.55)" }}
-            onClick={() => setOpen(false)}
-          >
-            <motion.aside
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 26, stiffness: 240 }}
-              className="absolute top-0 right-0 h-full w-80 max-w-[85vw] bg-white p-6 flex flex-col"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div className="flex items-center justify-between mb-6">
-                <span className="font-extrabold">Truck Box</span>
-                <button
-                  aria-label="Close menu"
-                  onClick={() => setOpen(false)}
-                  className="h-9 w-9 rounded-full border inline-flex items-center justify-center"
-                  style={{ borderColor: "var(--hairline)" }}
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              <nav className="flex flex-col gap-1">
-                {NAV.map((n) =>
-                  n.route ? (
-                    <Link
-                      key={n.href}
-                      to={n.href}
-                      onClick={() => setOpen(false)}
-                      className="px-3 py-3 rounded-xl font-medium"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      {n.label}
-                    </Link>
-                  ) : (
-                    <a
-                      key={n.href}
-                      href={n.href}
-                      onClick={() => setOpen(false)}
-                      className="px-3 py-3 rounded-xl font-medium"
-                      style={{ color: "var(--ink)" }}
-                    >
-                      {n.label}
-                    </a>
-                  )
-                )}
-
-              </nav>
-              <a
-                className="tb-btn tb-btn-primary mt-6"
-                href={INSTALL_URL}
-                target="_blank"
-                rel="noreferrer"
-                onClick={() => setOpen(false)}
-              >
-                Install Extension
-              </a>
-            </motion.aside>
-          </motion.div>
-        )}
-      </AnimatePresence>
     </header>
   );
 }
