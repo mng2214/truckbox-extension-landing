@@ -1,19 +1,16 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import Lenis from "lenis";
 
 import {
   ArrowRight,
-  Check,
-  ChevronDown,
-  Mail,
-  Keyboard,
-  LayoutTemplate,
-  Filter,
-  MapPin,
-  BarChart3,
+  ArrowUpRight,
+  Plus,
+  Minus,
   Play,
-  Send,
+  Menu,
+  X,
   Instagram,
   Facebook,
 } from "lucide-react";
@@ -35,24 +32,126 @@ const CALENDLY_URL = "https://calendly.com/truckboxapp";
 const TELEGRAM_URL = "https://t.me/mngartur";
 const YOUTUBE_ID = "-_G0P-M1lCA";
 
+const EASE = [0.16, 1, 0.3, 1] as const;
+
 export { NAV, INSTALL_URL, CALENDLY_URL, TELEGRAM_URL };
 
+/* ============================================================
+   Global chrome: custom cursor + smooth scroll
+   (mounted once in main.tsx so every route gets them)
+   ============================================================ */
+
+export function Cursor() {
+  const ring = useRef<HTMLDivElement>(null);
+  const dot = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    const root = document.documentElement;
+    root.classList.add("has-cursor");
+
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight / 2;
+    let rx = mx;
+    let ry = my;
+    let active = false;
+    let raf = 0;
+
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      if (dot.current) dot.current.style.transform = `translate(${mx}px, ${my}px)`;
+      const t = (e.target as HTMLElement)?.closest?.("a, button, [data-cursor]");
+      active = !!t;
+    };
+    const loop = () => {
+      rx += (mx - rx) * 0.16;
+      ry += (my - ry) * 0.16;
+      if (ring.current)
+        ring.current.style.transform = `translate(${rx}px, ${ry}px) scale(${active ? 2.1 : 1})`;
+      raf = requestAnimationFrame(loop);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("mousemove", onMove);
+      root.classList.remove("has-cursor");
+    };
+  }, []);
+
+  return (
+    <>
+      <div ref={ring} className="ed-cursor" aria-hidden />
+      <div ref={dot} className="ed-cursor-dot" aria-hidden />
+    </>
+  );
+}
+
+export function SmoothScroll() {
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const lenis = new Lenis({
+      duration: 1.15,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    let raf = 0;
+    const loop = (time: number) => {
+      lenis.raf(time);
+      raf = requestAnimationFrame(loop);
+    };
+    raf = requestAnimationFrame(loop);
+
+    const onClick = (e: MouseEvent) => {
+      const a = (e.target as HTMLElement)?.closest?.("a");
+      if (!a) return;
+      const href = a.getAttribute("href") || "";
+      const hash = href.startsWith("#")
+        ? href
+        : href.startsWith("/#")
+        ? href.slice(1)
+        : "";
+      if (hash.length > 1) {
+        const el = document.querySelector(hash);
+        if (el) {
+          e.preventDefault();
+          lenis.scrollTo(el as HTMLElement, { offset: -90 });
+        }
+      }
+    };
+    document.addEventListener("click", onClick);
+    return () => {
+      cancelAnimationFrame(raf);
+      document.removeEventListener("click", onClick);
+      lenis.destroy();
+    };
+  }, []);
+  return null;
+}
+
+/* ============================================================
+   Motion primitives
+   ============================================================ */
 
 export function Reveal({
   children,
   delay = 0,
+  y = 26,
   className,
 }: {
   children: React.ReactNode;
   delay?: number;
+  y?: number;
   className?: string;
 }) {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 14 }}
+      initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, delay, ease: [0.22, 1, 0.36, 1] }}
+      viewport={{ once: true, margin: "-90px" }}
+      transition={{ duration: 0.9, delay, ease: EASE }}
       className={className}
     >
       {children}
@@ -60,14 +159,54 @@ export function Reveal({
   );
 }
 
+/** Headline whose lines slide up out of a clip mask.
+ *  `play` animates on mount (use for above-the-fold text that must show
+ *  immediately); otherwise it triggers when scrolled into view. */
+function MaskLines({
+  lines,
+  className,
+  delay = 0,
+  play = false,
+}: {
+  lines: React.ReactNode[];
+  className?: string;
+  delay?: number;
+  play?: boolean;
+}) {
+  const trigger = play
+    ? { animate: { y: 0 } }
+    : { whileInView: { y: 0 }, viewport: { once: true, margin: "-60px" } };
+  return (
+    <div className={className}>
+      {lines.map((ln, i) => (
+        <span className="ed-mask" key={i}>
+          <motion.span
+            style={{ display: "block", willChange: "transform", paddingBottom: "0.12em" }}
+            initial={{ y: "115%" }}
+            {...trigger}
+            transition={{ duration: 1, delay: delay + i * 0.09, ease: EASE }}
+          >
+            {ln}
+          </motion.span>
+        </span>
+      ))}
+    </div>
+  );
+}
+
+/* ============================================================
+   App shell
+   ============================================================ */
+
 export default function App() {
   return (
     <div className="min-h-screen">
-      <div className="tb-bg-grid" />
       <div className="tb-bg-blobs" aria-hidden />
+      <div className="tb-bg-vignette" aria-hidden />
       <Header />
       <main>
         <Hero />
+        <Marquee />
         <Features />
         <HowItWorks />
         <Pricing />
@@ -82,267 +221,419 @@ export default function App() {
   );
 }
 
-export function Header() {
+/* ============================================================
+   Header
+   ============================================================ */
 
+export function Header() {
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 8);
+    const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
   return (
-    <header
-      className="fixed top-0 left-0 right-0 z-50 transition-all duration-300"
-      style={{
-        background: scrolled ? "rgba(255,255,255,0.92)" : "rgba(255,255,255,0.7)",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        borderBottom: scrolled ? "1px solid var(--hairline)" : "1px solid transparent",
-      }}
-    >
-      <div className="tb-container flex items-center justify-between" style={{ minHeight: 64 }}>
-        <a href="#top" className="flex items-center gap-2 font-extrabold text-lg tracking-tight">
-          <span
-            className="inline-flex h-8 w-8 items-center justify-center rounded-xl text-white"
-            style={{ background: "var(--gradient)" }}
-            aria-hidden
-          >
-            <Send className="h-4 w-4" />
-          </span>
-          <span>Truck Box</span>
-        </a>
-
-        <nav className="hidden md:flex items-center gap-1">
-          {NAV.map((n) =>
-            n.route ? (
-              <Link
-                key={n.href}
-                to={n.href}
-                className="nav-link px-3 py-2 rounded-full text-sm font-medium"
-              >
-                {n.label}
-              </Link>
-            ) : (
-              <a
-                key={n.href}
-                href={n.href}
-                className="nav-link px-3 py-2 rounded-full text-sm font-medium"
-              >
-                {n.label}
-              </a>
-            )
-          )}
-
-        </nav>
-
-        <div className="hidden md:flex items-center gap-2">
-          <a className="tb-btn tb-btn-primary text-sm" href={INSTALL_URL} target="_blank" rel="noreferrer">
-            Install <ArrowRight className="h-4 w-4" />
+    <>
+      <header
+        className="fixed top-0 left-0 right-0 z-50 transition-colors duration-500"
+        style={{
+          background: scrolled ? "rgba(10,10,9,0.72)" : "transparent",
+          backdropFilter: scrolled ? "blur(14px)" : "none",
+          WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
+          borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
+        }}
+      >
+        <div
+          className="ed-container flex items-center justify-between"
+          style={{ minHeight: 76 }}
+        >
+          <a href="#top" className="flex items-center gap-3">
+            <span
+              className="inline-block h-2.5 w-2.5 rounded-full"
+              style={{ background: "var(--accent)" }}
+              aria-hidden
+            />
+            <span
+              className="font-extrabold tracking-tight text-[1.05rem] uppercase"
+              style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}
+            >
+              Truck&nbsp;Box
+            </span>
           </a>
+
+          <nav className="hidden md:flex items-center gap-8">
+            {NAV.map((n) =>
+              n.route ? (
+                <Link key={n.href} to={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
+                  {n.label}
+                </Link>
+              ) : (
+                <a key={n.href} href={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
+                  {n.label}
+                </a>
+              )
+            )}
+          </nav>
+
+          <div className="hidden md:block">
+            <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
+              <span>Install</span> <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open menu"
+            className="md:hidden ed-label flex items-center gap-2"
+          >
+            Menu <Menu className="h-5 w-5" />
+          </button>
         </div>
-      </div>
-    </header>
+      </header>
+
+      {/* Fullscreen overlay menu */}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.4, ease: EASE }}
+            className="fixed inset-0 z-[60] flex flex-col"
+            style={{ background: "var(--bg)" }}
+          >
+            <div className="ed-container flex items-center justify-between" style={{ minHeight: 76 }}>
+              <span className="ed-label">Menu</span>
+              <button type="button" onClick={() => setOpen(false)} aria-label="Close menu" className="ed-label flex items-center gap-2">
+                Close <X className="h-5 w-5" />
+              </button>
+            </div>
+            <div className="ed-container flex-1 flex flex-col justify-center gap-2">
+              {NAV.map((n, i) => {
+                const inner = (
+                  <motion.span
+                    initial={{ y: "110%" }}
+                    animate={{ y: 0 }}
+                    transition={{ delay: 0.08 + i * 0.05, duration: 0.7, ease: EASE }}
+                    style={{ display: "block" }}
+                    className="ed-display text-[14vw] md:text-[7rem] leading-[0.95]"
+                  >
+                    {n.label}
+                  </motion.span>
+                );
+                return (
+                  <span className="ed-mask" key={n.href} onClick={() => setOpen(false)}>
+                    {n.route ? <Link to={n.href}>{inner}</Link> : <a href={n.href}>{inner}</a>}
+                  </span>
+                );
+              })}
+            </div>
+            <div className="ed-container py-8 flex justify-between ed-label">
+              <a href={TELEGRAM_URL} target="_blank" rel="noreferrer">Telegram</a>
+              <a href={INSTALL_URL} target="_blank" rel="noreferrer">Install →</a>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
 
+/* ============================================================
+   Hero
+   ============================================================ */
+
 function Hero() {
+  const ref = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start start", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
+  const op = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+
   return (
-    <section id="top" className="tb-section" style={{ paddingTop: 140 }}>
-      <div className="tb-container text-center">
+    <section id="top" ref={ref} className="ed-section" style={{ paddingTop: 132, paddingBottom: 72 }}>
+      <motion.div style={{ y, opacity: op }} className="ed-container">
+        <div className="flex items-center justify-between gap-6 mb-6">
+          <span className="ed-label">[ 01 ] — Chrome Extension for DAT</span>
+          <span className="ed-label hidden sm:block">Est. 2026 — Chicago, USA</span>
+        </div>
 
-        <Reveal delay={0.05}>
-          <h1
-            className="mx-auto mt-6 max-w-4xl font-extrabold tracking-tight"
-            style={{
-              fontSize: "clamp(2.4rem, 6vw, 4.4rem)",
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-            }}
-          >
-            A cleaner & faster way to send broker emails from{" "}
-            <span className="tb-grad-text">one.dat.com</span>.
-          </h1>
-        </Reveal>
+        <MaskLines
+          play
+          className="ed-display text-[10vw] lg:text-[7rem]"
+          lines={[
+            "A cleaner &",
+            "faster way to",
+            "send broker",
+            "emails from",
+            <span className="ed-accent" key="dat">one.dat.com</span>,
+          ]}
+        />
 
-        <Reveal delay={0.12}>
-          <p
-            className="mx-auto mt-6 max-w-2xl text-lg"
-            style={{ color: "var(--muted)", lineHeight: 1.6 }}
-          >
-            Truck Box adds one-click outreach, saved templates, load filtering, route context, and
-            lightweight stats so your DAT workflow feels simpler, sharper, and faster every day.
-          </p>
-        </Reveal>
+        <div className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
+          <Reveal delay={0.2}>
+            <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
+              Truck Box adds one-click outreach, saved templates, load filtering, route
+              context, and lightweight stats so your DAT workflow feels simpler, sharper,
+              and faster every day.
+            </p>
+            <div className="mt-8 flex flex-wrap items-center gap-3">
+              <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
+                <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
+                <span>Free Demo</span>
+              </a>
+              <a className="ed-btn" href="#learning">
+                <span>Watch</span> <Play className="h-3.5 w-3.5" fill="currentColor" />
+              </a>
+            </div>
+            <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em" }}>
+              7-day free trial — no credit card required
+            </p>
+          </Reveal>
 
-        <Reveal delay={0.18}>
-          <div className="mt-9 flex flex-wrap items-center justify-center gap-3">
-            <a className="tb-btn tb-btn-primary" href={INSTALL_URL} target="_blank" rel="noreferrer">
-              Install Chrome Extension <ArrowRight className="h-4 w-4" />
-            </a>
-            <a className="tb-btn tb-btn-demo" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-              Schedule Free Demo
-            </a>
-            <a className="tb-btn tb-btn-secondary" href="#learning">
-              Watch how it works
-            </a>
-          </div>
-          <p className="mt-5 text-sm" style={{ color: "var(--muted)" }}>
-            Start with a <strong style={{ color: "var(--ink)" }}>7-day free trial</strong>. No
-            credit card required for the trial.
-          </p>
-        </Reveal>
-
-        <Reveal delay={0.25}>
-          <div className="mt-12 grid gap-4 sm:grid-cols-3 max-w-3xl mx-auto">
-            {[
-              { k: "1 click", v: "Email sending from DAT rows" },
-              { k: "$7/mo", v: "Simple flat subscription" },
-              { k: "Minimal setup", v: "Google login and ready templates" },
-            ].map((m) => (
-              <motion.div
-                key={m.k}
-                whileHover={{ y: -3 }}
-                className="tb-card p-5 text-left"
-              >
-                <div className="font-extrabold text-xl tb-grad-text">{m.k}</div>
-                <div className="text-sm mt-1" style={{ color: "var(--muted)" }}>
-                  {m.v}
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </Reveal>
-      </div>
+          <Reveal delay={0.28} className="flex md:justify-end">
+            <SpinBadge />
+          </Reveal>
+        </div>
+      </motion.div>
     </section>
   );
 }
 
+function SpinBadge() {
+  return (
+    <div className="relative h-44 w-44">
+      <svg viewBox="0 0 200 200" className="ed-badge h-full w-full">
+        <defs>
+          <path id="tb-circle" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+        </defs>
+        <text
+          fill="var(--muted)"
+          style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: 6, textTransform: "uppercase" }}
+        >
+          <textPath href="#tb-circle">
+            Truck Box · Send faster · Truck Box · Send faster ·
+          </textPath>
+        </text>
+      </svg>
+      <span className="absolute inset-0 flex items-center justify-center">
+        <ArrowRight className="h-7 w-7" style={{ color: "var(--accent)" }} />
+      </span>
+    </div>
+  );
+}
+
+/* ============================================================
+   Marquee
+   ============================================================ */
+
+function Marquee() {
+  const items = [
+    "One-click sending",
+    "Saved templates",
+    "Keyboard navigation",
+    "Short-load filtering",
+    "Google Maps context",
+    "Activity stats",
+  ];
+  const loop = [...items, ...items];
+  return (
+    <div
+      className="ed-marquee-wrap py-7"
+      style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
+    >
+      <motion.div
+        className="ed-marquee"
+        animate={{ x: ["0%", "-50%"] }}
+        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+      >
+        {loop.map((it, i) => (
+          <span key={i} className="ed-marquee-item">
+            {it} <span className="ed-marquee-star">✱</span>
+          </span>
+        ))}
+      </motion.div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Features — horizontal pinned track
+   ============================================================ */
+
 function Features() {
   const items = [
     {
-      icon: Mail,
       title: "One-click email sending",
       body: "Send professional broker emails directly from supported DAT load rows.",
     },
     {
-      icon: Keyboard,
       title: "Keyboard navigation on DAT",
       body: "Move through loads with W/S, switch tabs with A/D, open maps with Q, send emails with E, and toggle details with Space.",
     },
     {
-      icon: LayoutTemplate,
       title: "Reusable templates",
       body: "Keep your subject and body ready so outreach stays consistent and fast.",
     },
     {
-      icon: Filter,
       title: "Short-load filtering",
       body: "Hide loads under your preferred miles threshold and stay focused on better lanes.",
     },
     {
-      icon: MapPin,
       title: "Google Map context",
       body: "Open Google Maps support right from the workflow to evaluate lanes faster.",
     },
     {
-      icon: BarChart3,
       title: "Simple activity stats",
       body: "See your total email activity inside the extension without extra dashboards.",
     },
   ];
 
-  return (
-    <section id="features" className="tb-section">
-      <div className="tb-container">
-        <Reveal>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="tb-pill">Features</span>
-            <h2
-              className="mt-5 font-bold"
-              style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-            >
-              Minimal by design. Premium in feel.
-            </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              Everything is focused on helping carriers move faster without turning DAT into a
-              cluttered tool.
-            </p>
-          </div>
-        </Reveal>
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+  const [dist, setDist] = useState(0);
 
-        <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+  useEffect(() => {
+    const calc = () => {
+      if (trackRef.current) {
+        setDist(Math.max(0, trackRef.current.scrollWidth - window.innerWidth + 64));
+      }
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+  const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
+
+  return (
+    <section
+      id="features"
+      ref={sectionRef}
+      style={{ height: `calc(100vh + ${dist}px)` }}
+    >
+      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
+        <div className="ed-container w-full">
+          <div className="flex items-end justify-between gap-6 mb-10">
+            <div>
+              <span className="ed-label">[ 02 ] — Features</span>
+              <h2 className="ed-h2 mt-4">
+                Minimal by design.
+                <br />
+                <span className="ed-accent">Premium in feel.</span>
+              </h2>
+            </div>
+            <span className="ed-label hidden md:block max-w-[220px] text-right">
+              Move faster without turning DAT into a cluttered tool
+            </span>
+          </div>
+        </div>
+
+        <motion.div
+          ref={trackRef}
+          style={{ x }}
+          className="flex gap-6 pl-[max(32px,calc((100vw-1320px)/2+32px))] pr-8"
+        >
           {items.map((it, i) => (
-            <Reveal key={it.title} delay={i * 0.04}>
-              <motion.article
-                whileHover={{ y: -4 }}
-                transition={{ type: "spring", stiffness: 260, damping: 22 }}
-                className="tb-card p-6 h-full"
-              >
-                <div
-                  className="inline-flex h-12 w-12 items-center justify-center rounded-2xl mb-4"
-                  style={{ background: "var(--pri-soft)", color: "var(--pri)" }}
+            <article key={it.title} className="ed-fcard" data-cursor>
+              <div className="flex items-center justify-between">
+                <span className="ed-fcard-idx">
+                  {String(i + 1).padStart(2, "0")} / 06
+                </span>
+                <ArrowUpRight className="h-5 w-5" style={{ color: "var(--muted)" }} />
+              </div>
+              <div>
+                <h3
+                  className="ed-display text-3xl leading-[0.98]"
+                  style={{ textTransform: "none", letterSpacing: "-0.02em" }}
                 >
-                  <it.icon className="h-6 w-6" />
-                </div>
-                <h3 className="font-bold text-lg" style={{ color: "var(--ink)" }}>
                   {it.title}
                 </h3>
-                <p className="mt-2 text-sm" style={{ color: "var(--muted)", lineHeight: 1.6 }}>
+                <p className="mt-4 text-[0.97rem] leading-relaxed" style={{ color: "var(--muted)" }}>
                   {it.body}
                 </p>
-              </motion.article>
-            </Reveal>
+              </div>
+            </article>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
 }
+
+/* ============================================================
+   How it works
+   ============================================================ */
 
 function HowItWorks() {
   const steps = [
-    { n: "1", t: "Install the extension", d: "Add Truck Box to Chrome and pin it for quick access." },
-    { n: "2", t: "Sign in with Google", d: "Connect your Gmail account and activate the free trial." },
-    { n: "3", t: "Work inside DAT", d: "Open DAT, use your templates, filter loads, and send with one click." },
+    { t: "Install the extension", d: "Add Truck Box to Chrome and pin it for quick access." },
+    { t: "Sign in with Google", d: "Connect your Gmail account and activate the free trial." },
+    { t: "Work inside DAT", d: "Open DAT, use your templates, filter loads, and send with one click." },
   ];
   return (
-    <section className="tb-section" style={{ paddingTop: 0 }}>
-      <div className="tb-container">
-        <Reveal>
-          <div className="text-center max-w-xl mx-auto">
-            <h2 className="font-bold" style={{ fontSize: "clamp(1.7rem, 3.6vw, 2.3rem)" }}>
-              Start in 3 simple steps
-            </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              Fast onboarding, simple workflow, no heavy training needed.
-            </p>
+    <section className="ed-section">
+      <div className="ed-container">
+        <div className="flex items-end justify-between gap-6 mb-14">
+          <div>
+            <span className="ed-label">[ 03 ] — How it works</span>
+            <h2 className="ed-h2 mt-4">Start in 3 steps</h2>
           </div>
-        </Reveal>
-        <div className="mt-10 grid gap-5 md:grid-cols-3">
+          <span className="ed-label hidden md:block">No heavy training needed</span>
+        </div>
+
+        <div>
           {steps.map((s, i) => (
-            <Reveal key={s.n} delay={i * 0.06}>
-              <motion.div whileHover={{ y: -4 }} className="tb-card p-6 h-full">
-                <div
-                  className="text-5xl font-extrabold tb-grad-text leading-none"
-                  style={{ letterSpacing: "-0.04em" }}
+            <motion.div
+              key={s.t}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.8, ease: EASE }}
+              className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start py-10"
+              style={{ borderTop: "1px solid var(--line)" }}
+            >
+              <span
+                className="ed-display ed-outline text-[5rem] md:text-[8rem] leading-none"
+              >
+                {String(i + 1).padStart(2, "0")}
+              </span>
+              <div className="md:pt-6">
+                <h3
+                  className="ed-display text-4xl md:text-6xl"
+                  style={{ textTransform: "none", letterSpacing: "-0.025em" }}
                 >
-                  {s.n}
-                </div>
-                <h3 className="mt-4 font-bold text-lg">{s.t}</h3>
-                <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
+                  {s.t}
+                </h3>
+                <p className="mt-4 max-w-md text-lg" style={{ color: "var(--muted)" }}>
                   {s.d}
                 </p>
-              </motion.div>
-            </Reveal>
+              </div>
+            </motion.div>
           ))}
+          <div style={{ borderTop: "1px solid var(--line)" }} />
         </div>
       </div>
     </section>
   );
 }
+
+/* ============================================================
+   Pricing
+   ============================================================ */
 
 function Pricing() {
   const features = [
@@ -354,173 +645,142 @@ function Pricing() {
     "Learning center access",
   ];
   return (
-    <section id="pricing" className="tb-section">
-      <div className="tb-container">
-        <Reveal>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="tb-pill">Pricing</span>
-            <h2
-              className="mt-5 font-bold"
-              style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-            >
-              Simple subscription
-            </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              Start with a 7-day free trial, then continue with Truck Box Pro.
+    <section id="pricing" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-14">
+          <span className="ed-label">[ 04 ] — Pricing</span>
+          <h2 className="ed-h2 mt-4">Simple subscription</h2>
+        </div>
+
+        <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
+          <Reveal>
+            <div className="flex items-start gap-4">
+              <span className="ed-display text-[8rem] md:text-[12rem] leading-[0.8] ed-accent">$7</span>
+              <span className="ed-label mt-6">/ per<br />month</span>
+            </div>
+            <p className="mt-6 max-w-md text-lg" style={{ color: "var(--muted)" }}>
+              Start with the free 1-week trial first. No credit card required. Cancel anytime.
             </p>
-          </div>
-        </Reveal>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
+                <span>Start Free Trial</span> <ArrowUpRight className="h-4 w-4" />
+              </a>
+              <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
+                <span>Book Demo</span>
+              </a>
+            </div>
+          </Reveal>
 
-        <Reveal delay={0.08}>
-          <div className="mt-10 mx-auto max-w-xl">
-            <motion.div
-              whileHover={{ y: -3 }}
-              className="tb-card p-8 text-center relative overflow-hidden"
-              style={{ borderColor: "rgba(29,78,216,0.22)" }}
-            >
-              <div
-                aria-hidden
-                className="absolute -top-20 -right-20 h-56 w-56 rounded-full"
-                style={{ background: "var(--gradient)", opacity: 0.08 }}
-              />
-              <span className="tb-pill">For active DAT work</span>
-              <div className="mt-5 flex items-baseline justify-center gap-1">
-                <span
-                  className="font-extrabold tb-grad-text"
-                  style={{ fontSize: "4rem", letterSpacing: "-0.03em", lineHeight: 1 }}
+          <Reveal delay={0.1}>
+            <ul>
+              {features.map((f, i) => (
+                <motion.li
+                  key={f}
+                  initial={{ opacity: 0, x: 20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.06, duration: 0.6, ease: EASE }}
+                  className="flex items-center justify-between py-5"
+                  style={{ borderTop: "1px solid var(--line)" }}
                 >
-                  $7
-                </span>
-                <span style={{ color: "var(--muted)" }}>/ month</span>
-              </div>
-              <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-                Start with the free 1-week trial first. No credit card required. Cancel anytime.
-              </p>
-
-              <ul className="mt-6 text-left grid gap-2 mx-auto max-w-sm">
-                {features.map((f) => (
-                  <li key={f} className="flex items-center gap-2 text-sm">
-                    <span
-                      className="inline-flex h-5 w-5 items-center justify-center rounded-full"
-                      style={{ background: "var(--pri-soft)", color: "var(--pri)" }}
-                    >
-                      <Check className="h-3 w-3" strokeWidth={3} />
-                    </span>
-                    <span style={{ color: "var(--ink)" }}>{f}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-7 flex flex-wrap gap-2 justify-center">
-                <a className="tb-btn tb-btn-primary" href={INSTALL_URL} target="_blank" rel="noreferrer">
-                  Start Free Trial <ArrowRight className="h-4 w-4" />
-                </a>
-                <a className="tb-btn tb-btn-demo" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                  Book Free Demo
-                </a>
-              </div>
-            </motion.div>
-          </div>
-        </Reveal>
+                  <span className="text-lg">{f}</span>
+                  <span className="ed-label ed-accent">incl.</span>
+                </motion.li>
+              ))}
+              <li style={{ borderTop: "1px solid var(--line)" }} />
+            </ul>
+          </Reveal>
+        </div>
       </div>
     </section>
   );
 }
+
+/* ============================================================
+   Learning
+   ============================================================ */
 
 function Learning() {
   const [playing, setPlaying] = useState(false);
   const thumb = `https://i.ytimg.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
 
   return (
-    <section id="learning" className="tb-section">
-      <div className="tb-container">
+    <section id="learning" className="ed-section">
+      <div className="ed-container">
+        <div className="flex items-end justify-between gap-6 mb-12">
+          <div>
+            <span className="ed-label">[ 05 ] — Learning</span>
+            <h2 className="ed-h2 mt-4">Learn Truck Box</h2>
+          </div>
+          <span className="ed-label hidden md:block max-w-[260px] text-right">
+            A short walkthrough — from login to sending broker emails with one click
+          </span>
+        </div>
+
         <Reveal>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="tb-pill">Learning</span>
-            <h2
-              className="mt-5 font-bold"
-              style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-            >
-              Learn how to use Truck Box
-            </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              A short walkthrough of how Truck Box works inside DAT — from login to sending broker
-              emails with one click.
-            </p>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.08}>
-          <div className="mt-10 mx-auto max-w-4xl">
-            <div
-              className="tb-card overflow-hidden relative aspect-video"
-              style={{ background: "#0b1e33" }}
-            >
-              {playing ? (
-                <iframe
-                  className="absolute inset-0 h-full w-full"
-                  src={`https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0`}
-                  title="Truck Box walkthrough"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
-              ) : (
-                <button
-                  type="button"
-                  onClick={() => setPlaying(true)}
-                  className="absolute inset-0 group"
-                  aria-label="Play walkthrough video"
-                >
-                  <img
-                    src={thumb}
-                    alt="Truck Box walkthrough video preview"
-                    className="absolute inset-0 h-full w-full object-cover opacity-80 group-hover:opacity-95 transition-opacity"
-                    loading="lazy"
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <motion.span
-                      whileHover={{ scale: 1.06 }}
-                      whileTap={{ scale: 0.97 }}
-                      className="inline-flex h-20 w-20 items-center justify-center rounded-full text-white"
-                      style={{
-                        background: "var(--gradient)",
-                        boxShadow: "0 18px 40px rgba(29,78,216,0.45)",
-                      }}
-                    >
-                      <Play className="h-8 w-8 ml-1" fill="currentColor" />
-                    </motion.span>
-                  </div>
-                </button>
-              )}
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal delay={0.14}>
-          <div className="mt-10 grid gap-5 md:grid-cols-3">
-            {[
-              { t: "Login and first setup", d: "Google sign-in, extension setup, and first steps." },
-              { t: "Template configuration", d: "How to create a clean, reusable message template." },
-              { t: "Workflow inside DAT", d: "Real outreach flow from the DAT board." },
-            ].map((c, i) => (
-              <motion.div
-                key={c.t}
-                whileHover={{ y: -3 }}
-                className="tb-card p-5"
-                transition={{ delay: i * 0.05 }}
+          <div
+            className="relative overflow-hidden aspect-video"
+            style={{ border: "1px solid var(--line)", borderRadius: 6, background: "#000" }}
+            data-cursor
+          >
+            {playing ? (
+              <iframe
+                className="absolute inset-0 h-full w-full"
+                src={`https://www.youtube.com/embed/${YOUTUBE_ID}?autoplay=1&rel=0`}
+                title="Truck Box walkthrough"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            ) : (
+              <button
+                type="button"
+                onClick={() => setPlaying(true)}
+                className="absolute inset-0 group"
+                aria-label="Play walkthrough video"
               >
-                <h3 className="font-bold">{c.t}</h3>
-                <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-                  {c.d}
-                </p>
-              </motion.div>
-            ))}
+                <img
+                  src={thumb}
+                  alt="Truck Box walkthrough preview"
+                  className="absolute inset-0 h-full w-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
+                  loading="lazy"
+                />
+                <span className="absolute inset-0 flex items-center justify-center">
+                  <span
+                    className="inline-flex items-center gap-3 px-7 py-4 rounded-full"
+                    style={{ background: "var(--accent)", color: "#0a0a09" }}
+                  >
+                    <Play className="h-5 w-5" fill="currentColor" />
+                    <span className="ed-label" style={{ color: "#0a0a09" }}>Play walkthrough</span>
+                  </span>
+                </span>
+              </button>
+            )}
           </div>
         </Reveal>
+
+        <div className="mt-12 grid md:grid-cols-3 gap-0">
+          {[
+            { t: "Login & first setup", d: "Google sign-in, extension setup, and first steps." },
+            { t: "Template configuration", d: "How to create a clean, reusable message template." },
+            { t: "Workflow inside DAT", d: "Real outreach flow from the DAT board." },
+          ].map((c, i) => (
+            <Reveal key={c.t} delay={i * 0.08}>
+              <div className="py-8 md:px-8 md:py-0" style={{ borderTop: "1px solid var(--line)" }}>
+                <span className="ed-label ed-accent">{String(i + 1).padStart(2, "0")}</span>
+                <h3 className="mt-3 text-xl font-semibold" style={{ fontFamily: "var(--font-display)" }}>{c.t}</h3>
+                <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{c.d}</p>
+              </div>
+            </Reveal>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
+
+/* ============================================================
+   FAQ
+   ============================================================ */
 
 const FAQS = [
   {
@@ -528,8 +788,8 @@ const FAQS = [
     a: (
       <p>
         Install the Truck Box Chrome extension, open the popup, and click{" "}
-        <strong>Sign in with Google</strong>. After login, your account is ready and your free
-        trial can start.
+        <strong>Sign in with Google</strong>. After login, your account is ready and your
+        free trial can start.
       </p>
     ),
   },
@@ -547,9 +807,9 @@ const FAQS = [
     q: "How do I subscribe?",
     a: (
       <p>
-        First log in with Google and start the free 7 days trial. After the trial, you can continue
-        with the paid Truck Box subscription from the billing flow on the website or inside the
-        app.
+        First log in with Google and start the free 7 days trial. After the trial, you can
+        continue with the paid Truck Box subscription from the billing flow on the website
+        or inside the app.
       </p>
     ),
   },
@@ -557,8 +817,9 @@ const FAQS = [
     q: "How do I cancel my subscription?",
     a: (
       <p>
-        You can cancel anytime from your billing or subscription page. After cancelation, your
-        current paid period stays active until it ends, and you will not be charged again.
+        You can cancel anytime from your billing or subscription page. After cancelation,
+        your current paid period stays active until it ends, and you will not be charged
+        again.
       </p>
     ),
   },
@@ -566,9 +827,9 @@ const FAQS = [
     q: "How do I edit my email template?",
     a: (
       <p>
-        Open the Truck Box extension popup, go to the <strong>Email Template</strong> tab, and
-        update your subject or body. Save the template, and Truck Box will use it for future
-        emails.
+        Open the Truck Box extension popup, go to the <strong>Email Template</strong> tab,
+        and update your subject or body. Save the template, and Truck Box will use it for
+        future emails.
       </p>
     ),
   },
@@ -578,8 +839,9 @@ const FAQS = [
       <p>
         Yes. You can use placeholders like <code>{`{{origin}}`}</code>,{" "}
         <code>{`{{destination}}`}</code>, <code>{`{{pickupDate}}`}</code>,{" "}
-        <code>{`{{equipment}}`}</code>, <code>{`{{length}}`}</code>, <code>{`{{weight}}`}</code>,{" "}
-        <code>{`{{myName}}`}</code>, <code>{`{{myMc}}`}</code>, and <code>{`{{myPhone}}`}</code>.
+        <code>{`{{equipment}}`}</code>, <code>{`{{length}}`}</code>,{" "}
+        <code>{`{{weight}}`}</code>, <code>{`{{myName}}`}</code>,{" "}
+        <code>{`{{myMc}}`}</code>, and <code>{`{{myPhone}}`}</code>.
       </p>
     ),
   },
@@ -588,8 +850,8 @@ const FAQS = [
     a: (
       <div>
         <p>
-          Truck Box includes keyboard shortcuts that help dispatchers move through DAT loads faster
-          without using a mouse.
+          Truck Box includes keyboard shortcuts that help dispatchers move through DAT
+          loads faster without using a mouse.
         </p>
         <ul>
           <li><strong>W</strong> – Move up between loads</li>
@@ -607,9 +869,9 @@ const FAQS = [
     q: "Why is Google login not working?",
     a: (
       <p>
-        Usually this happens if the Google session expired, permissions were revoked, or Chrome
-        needs to refresh the extension auth state. Try logging out inside the extension, then sign
-        in again. If it still does not work, contact support.
+        Usually this happens if the Google session expired, permissions were revoked, or
+        Chrome needs to refresh the extension auth state. Try logging out inside the
+        extension, then sign in again. If it still does not work, contact support.
       </p>
     ),
   },
@@ -617,8 +879,8 @@ const FAQS = [
     q: "Where do I get help?",
     a: (
       <p>
-        For now, the fastest support channel is Telegram. Use the support button on this page to
-        message directly.
+        For now, the fastest support channel is Telegram. Use the support button on this
+        page to message directly.
       </p>
     ),
   },
@@ -627,106 +889,86 @@ const FAQS = [
 function FAQ() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   return (
-    <section id="faq" className="tb-section">
-      <div className="tb-container">
-        <Reveal>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="tb-pill">FAQ</span>
-            <h2
-              className="mt-5 font-bold"
-              style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-            >
-              Quick answers for common questions
-            </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              Open any question below to see the answer.
-            </p>
-          </div>
-        </Reveal>
+    <section id="faq" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-12">
+          <span className="ed-label">[ 06 ] — FAQ</span>
+          <h2 className="ed-h2 mt-4">Common questions</h2>
+        </div>
 
-        <div className="mt-10 grid gap-4 max-w-3xl mx-auto">
+        <div>
           {FAQS.map((f, i) => {
             const isOpen = openIdx === i;
             return (
-              <Reveal key={f.q} delay={i * 0.03}>
-                <article className="tb-card overflow-hidden">
-                  <button
-                    type="button"
-                    onClick={() => setOpenIdx(isOpen ? null : i)}
-                    aria-expanded={isOpen}
-                    className="w-full flex items-center justify-between gap-4 px-5 py-5 text-left"
-                  >
-                    <span className="font-bold" style={{ color: "var(--ink)" }}>
+              <div key={f.q} style={{ borderTop: "1px solid var(--line)" }}>
+                <button
+                  type="button"
+                  onClick={() => setOpenIdx(isOpen ? null : i)}
+                  aria-expanded={isOpen}
+                  className="w-full flex items-center justify-between gap-6 py-7 text-left group"
+                >
+                  <span className="flex items-center gap-5">
+                    <span className="ed-label ed-accent">{String(i + 1).padStart(2, "0")}</span>
+                    <span
+                      className="text-xl md:text-3xl transition-colors"
+                      style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em", color: isOpen ? "var(--ink)" : "var(--muted)" }}
+                    >
                       {f.q}
                     </span>
-                    <motion.span
-                      animate={{ rotate: isOpen ? 180 : 0 }}
-                      transition={{ duration: 0.25 }}
-                      className="inline-flex h-8 w-8 items-center justify-center rounded-full shrink-0"
-                      style={{
-                        background: isOpen ? "var(--gradient)" : "var(--pri-soft)",
-                        color: isOpen ? "#fff" : "var(--pri)",
-                      }}
+                  </span>
+                  <span className="shrink-0">
+                    {isOpen ? <Minus className="h-6 w-6" style={{ color: "var(--accent)" }} /> : <Plus className="h-6 w-6" />}
+                  </span>
+                </button>
+                <AnimatePresence initial={false}>
+                  {isOpen && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.4, ease: EASE }}
+                      className="overflow-hidden"
                     >
-                      <ChevronDown className="h-4 w-4" />
-                    </motion.span>
-                  </button>
-                  <AnimatePresence initial={false}>
-                    {isOpen && (
-                      <motion.div
-                        key="content"
-                        initial={{ height: 0, opacity: 0 }}
-                        animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
-                        className="overflow-hidden"
-                      >
-                        <div
-                          className="tb-prose px-5 pb-5 pt-1"
-                          style={{ borderTop: "1px solid var(--hairline)" }}
-                        >
-                          {f.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </article>
-              </Reveal>
+                      <div className="tb-prose pb-8 md:pl-16 max-w-2xl">{f.a}</div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
             );
           })}
+          <div style={{ borderTop: "1px solid var(--line)" }} />
         </div>
       </div>
     </section>
   );
 }
 
+/* ============================================================
+   Privacy (route: /privacy) — content unchanged
+   ============================================================ */
+
 export function Privacy() {
   return (
-    <section id="privacy" className="tb-section">
+    <section id="privacy" className="tb-section" style={{ paddingTop: 150 }}>
       <div className="tb-container">
         <Reveal>
-          <div className="text-center max-w-2xl mx-auto">
+          <div className="max-w-2xl">
             <span className="tb-pill">Legal</span>
-            <h2
-              className="mt-5 font-bold"
-              style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-            >
+            <h2 className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
               Privacy Policy &amp; Terms
             </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              This page explains what Truck Box does, what information it uses, how Google account
-              access is handled, and the rules for using the service.
+            <p className="mt-5 text-lg" style={{ color: "var(--muted)" }}>
+              This page explains what Truck Box does, what information it uses, how Google
+              account access is handled, and the rules for using the service.
             </p>
-            <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>
-              Last updated: <b>March 20, 2026</b>
-            </p>
+            <p className="mt-2 ed-label">Last updated — March 20, 2026</p>
           </div>
         </Reveal>
 
         <Reveal delay={0.08}>
-          <div className="mt-10 grid gap-6 max-w-3xl mx-auto">
+          <div className="mt-12 grid gap-6">
             <article className="tb-card p-6 sm:p-8 tb-prose">
-              <h3 style={{ fontSize: "1.4rem", margin: "0 0 12px" }}>Privacy Policy</h3>
+              <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Privacy Policy</h3>
               <p>
                 <b>Truck Box</b> is a Chrome extension that helps users prepare and send broker
                 outreach emails from supported DAT load board pages using the user's own Gmail
@@ -791,7 +1033,7 @@ export function Privacy() {
 
               <h3>Data deletion &amp; revoking access</h3>
               <ul>
-                <li>Users can revoke Google account access at <a style={{ color: "var(--pri)" }} href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">myaccount.google.com/permissions</a>.</li>
+                <li>Users can revoke Google account access at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">myaccount.google.com/permissions</a>.</li>
                 <li>Users can remove locally stored extension data by clearing extension storage, resetting the extension, or uninstalling the extension.</li>
                 <li>If account, subscription, or support data exists on our backend, users may request deletion by contacting us.</li>
                 <li>After Google access is revoked, Truck Box will no longer be able to send emails through Gmail until the user signs in again.</li>
@@ -820,7 +1062,7 @@ export function Privacy() {
             </article>
 
             <article className="tb-card p-6 sm:p-8 tb-prose">
-              <h3 style={{ fontSize: "1.4rem", margin: "0 0 12px" }}>
+              <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>
                 Google API Services User Data Policy
               </h3>
               <p>
@@ -841,7 +1083,7 @@ export function Privacy() {
             </article>
 
             <article id="terms" className="tb-card p-6 sm:p-8 tb-prose">
-              <h3 style={{ fontSize: "1.4rem", margin: "0 0 12px" }}>Terms &amp; Conditions</h3>
+              <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Terms &amp; Conditions</h3>
               <p style={{ fontSize: "0.9rem" }}>Last updated: <b>March 20, 2026</b></p>
 
               <h3>Acceptance</h3>
@@ -936,139 +1178,71 @@ export function Privacy() {
   );
 }
 
+/* ============================================================
+   Contact
+   ============================================================ */
+
 function Contact() {
   const channels = [
-    {
-      label: "Telegram",
-      handle: "@mngartur",
-      href: TELEGRAM_URL,
-      cta: "Fastest reply",
-    },
-    {
-      label: "Book a call",
-      handle: "calendly.com/truckboxapp",
-      href: CALENDLY_URL,
-      cta: "Free 15-min demo",
-    },
-    {
-      label: "Instagram",
-      handle: "@truckbox.app",
-      href: "https://instagram.com/truckbox.app",
-      cta: "Follow updates",
-    },
-    {
-      label: "Facebook",
-      handle: "/truckboxapp",
-      href: "https://facebook.com/truckboxapp",
-      cta: "Community",
-    },
+    { label: "Telegram", handle: "@mngartur", href: TELEGRAM_URL, cta: "Fastest reply" },
+    { label: "Book a call", handle: "calendly.com/truckboxapp", href: CALENDLY_URL, cta: "Free 15-min demo" },
+    { label: "Instagram", handle: "@truckbox.app", href: "https://instagram.com/truckbox.app", cta: "Follow updates" },
+    { label: "Facebook", handle: "/truckboxapp", href: "https://facebook.com/truckboxapp", cta: "Community" },
   ];
 
   return (
-    <section id="contact" className="tb-section">
-      <div className="tb-container">
-        <Reveal>
-          <div className="text-center max-w-2xl mx-auto">
-            <span className="tb-pill">Contact</span>
-            <h2
-              className="mt-5 font-bold"
-              style={{ fontSize: "clamp(1.9rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-            >
-              Talk to us
-            </h2>
-            <p className="mt-3" style={{ color: "var(--muted)" }}>
-              Login issues, billing, template setup, or product feedback — we reply fast.
-            </p>
-          </div>
-        </Reveal>
+    <section id="contact" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-12">
+          <span className="ed-label">[ 07 ] — Contact</span>
+          <h2 className="ed-h2 mt-4">
+            Talk <span className="ed-accent">to us</span>
+          </h2>
+          <p className="mt-5 max-w-md text-lg" style={{ color: "var(--muted)" }}>
+            Login issues, billing, template setup, or product feedback — we reply fast.
+          </p>
+        </div>
 
-        <Reveal delay={0.08}>
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 max-w-3xl mx-auto">
-            {channels.map((c) => (
-              <motion.a
-                key={c.label}
-                whileHover={{ y: -3 }}
-                href={c.href}
-                target="_blank"
-                rel="noreferrer"
-                className="tb-card p-5 flex items-center justify-between gap-4 group"
-              >
-                <div>
-                  <div className="text-xs uppercase tracking-wider" style={{ color: "var(--muted)" }}>
-                    {c.label}
-                  </div>
-                  <div className="font-bold mt-1" style={{ color: "var(--ink)" }}>
-                    {c.handle}
-                  </div>
-                  <div className="text-xs mt-1" style={{ color: "var(--muted)" }}>
-                    {c.cta}
-                  </div>
-                </div>
+        <div>
+          {channels.map((c) => (
+            <a key={c.label} href={c.href} target="_blank" rel="noreferrer" className="ed-row">
+              <div className="flex items-baseline gap-5">
+                <span className="ed-label hidden sm:block w-24">{c.label}</span>
                 <span
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full transition-colors"
-                  style={{ background: "var(--pri-soft)", color: "var(--pri)" }}
+                  className="ed-row-title ed-display text-3xl md:text-5xl"
+                  style={{ textTransform: "none", letterSpacing: "-0.02em" }}
                 >
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                  {c.handle}
                 </span>
-              </motion.a>
-            ))}
-          </div>
-        </Reveal>
+              </div>
+              <div className="flex items-center gap-5">
+                <span className="ed-label hidden md:block">{c.cta}</span>
+                <ArrowUpRight className="h-6 w-6 md:h-8 md:w-8" />
+              </div>
+            </a>
+          ))}
+        </div>
       </div>
     </section>
   );
 }
+
+/* ============================================================
+   Final CTA
+   ============================================================ */
 
 function FinalCTA() {
   return (
-    <section className="tb-section" style={{ paddingTop: 0 }}>
-      <div className="tb-container">
+    <section className="ed-section" style={{ paddingTop: 0 }}>
+      <div className="ed-container">
         <Reveal>
-          <div
-            className="rounded-3xl p-10 sm:p-14 text-center relative overflow-hidden"
-            style={{ background: "var(--gradient)", color: "#fff" }}
-          >
-            <div
-              aria-hidden
-              className="absolute inset-0 opacity-20"
-              style={{
-                backgroundImage:
-                  "radial-gradient(circle at 20% 30%, rgba(255,255,255,0.6), transparent 40%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.5), transparent 40%)",
-              }}
-            />
-            <div className="relative">
-              <h2
-                className="font-extrabold"
-                style={{ fontSize: "clamp(1.8rem, 4vw, 2.6rem)", letterSpacing: "-0.02em" }}
-              >
-                Install Truck Box. Make your DAT workflow lighter.
-              </h2>
-              <p className="mt-3 opacity-90 max-w-xl mx-auto">
-                Clean setup, simple pricing, and a more polished daily routine for outreach.
-              </p>
-              <div className="mt-7 flex flex-wrap justify-center gap-3">
-                <a
-                  className="tb-btn"
-                  style={{ background: "#fff", color: "var(--pri)" }}
-                  href={INSTALL_URL}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Install Extension <ArrowRight className="h-4 w-4" />
-                </a>
-                <a
-                  className="tb-btn"
-                  style={{
-                    background: "transparent",
-                    color: "#fff",
-                    borderColor: "rgba(255,255,255,0.5)",
-                  }}
-                  href="#faq"
-                >
-                  Read FAQ
-                </a>
-              </div>
-            </div>
+          <div className="flex flex-wrap justify-center gap-3">
+            <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
+              <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
+            </a>
+            <a className="ed-btn" href="#faq">
+              <span>Read FAQ</span>
+            </a>
           </div>
         </Reveal>
       </div>
@@ -1076,70 +1250,79 @@ function FinalCTA() {
   );
 }
 
+/* ============================================================
+   Footer
+   ============================================================ */
+
 export function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--hairline)" }}>
-      <div
-        className="tb-container py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm"
-        style={{ color: "var(--muted)" }}
-      >
-        <div>© {new Date().getFullYear()} Truck Box — All rights reserved.</div>
-        <div className="flex flex-wrap gap-4 items-center">
-          {NAV.map((n) =>
-            n.route ? (
-              <Link key={n.href} to={n.href} className="hover:text-[color:var(--ink)]">
-                {n.label}
-              </Link>
-            ) : (
-              <a key={n.href} href={n.href} className="hover:text-[color:var(--ink)]">
-                {n.label}
-              </a>
-            )
-          )}
+    <footer style={{ borderTop: "1px solid var(--line)" }}>
+      <div className="ed-container py-16">
 
+        <div className="mt-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
+          <div className="flex flex-wrap gap-x-8 gap-y-3">
+            {NAV.map((n) =>
+              n.route ? (
+                <Link key={n.href} to={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
+                  {n.label}
+                </Link>
+              ) : (
+                <a key={n.href} href={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
+                  {n.label}
+                </a>
+              )
+            )}
+          </div>
+          <div className="flex gap-3">
+            <a
+              className="ed-social group"
+              href="https://instagram.com/truckbox.app"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Instagram className="h-5 w-5" />
+              <span>Instagram</span>
+            </a>
+            <a
+              className="ed-social group"
+              href="https://facebook.com/truckboxapp"
+              target="_blank"
+              rel="noreferrer"
+            >
+              <Facebook className="h-5 w-5" />
+              <span>Facebook</span>
+            </a>
+          </div>
         </div>
-        <div className="flex items-center gap-3">
-          <a
-            href="https://instagram.com/truckbox.app"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Instagram"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full"
-            style={{ background: "var(--pri-soft)", color: "var(--pri)" }}
-          >
-            <Instagram className="h-4 w-4" />
-          </a>
-          <a
-            href="https://facebook.com/truckboxapp"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Facebook"
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full"
-            style={{ background: "var(--pri-soft)", color: "var(--pri)" }}
-          >
-            <Facebook className="h-4 w-4" />
-          </a>
+
+        <div className="mt-10 pt-6 flex flex-col sm:flex-row justify-between gap-3" style={{ borderTop: "1px solid var(--line)" }}>
+          <span className="ed-label">© {new Date().getFullYear()} Truck Box — All rights reserved</span>
+          <span className="ed-label">Chicago, USA</span>
         </div>
       </div>
     </footer>
   );
 }
 
+/* ============================================================
+   Floating Telegram button
+   ============================================================ */
+
 export function TelegramFloat() {
   return (
-    <a
+    <motion.a
       href={TELEGRAM_URL}
       target="_blank"
       rel="noreferrer"
       aria-label="Ask a question on Telegram"
-      className="fixed bottom-5 right-5 z-40 inline-flex items-center gap-2 rounded-full px-4 py-3 text-white font-medium text-sm shadow-lg hover:scale-[1.03] transition-transform"
-      style={{
-        background: "var(--gradient)",
-        boxShadow: "0 14px 30px rgba(29,78,216,0.35)",
-      }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 1, duration: 0.6, ease: EASE }}
+      className="ed-btn ed-btn-accent z-40"
+      style={{ position: "fixed", bottom: 20, right: 20 }}
     >
-      <Send className="h-4 w-4" />
       <span className="hidden sm:inline">Ask a question</span>
-    </a>
+      <ArrowUpRight className="h-4 w-4" />
+    </motion.a>
   );
 }

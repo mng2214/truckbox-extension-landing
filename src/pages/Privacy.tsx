@@ -8,8 +8,8 @@ export default function PrivacyPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="tb-bg-grid" />
       <div className="tb-bg-blobs" aria-hidden />
+      <div className="tb-bg-vignette" aria-hidden />
       <Header />
       <main style={{ paddingTop: 64 }}>
         <Privacy />
