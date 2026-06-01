@@ -547,11 +547,11 @@ function LoadBoardDemo() {
   return (
     <section className="ed-section" style={{ paddingTop: 0 }}>
       <div className="ed-container">
-        <div className="mb-8">
+        <div className="mb-8 text-center md:text-left">
           <h2 className="ed-h2">
             See it on the <span className="ed-accent">board</span>
           </h2>
-          <p className="mt-4 max-w-xl text-lg" style={{ color: "var(--muted)" }}>
+          <p className="mt-4 max-w-xl text-lg mx-auto md:mx-0" style={{ color: "var(--muted)" }}>
             The envelope and route icons are added by Truck Box. Click the envelope to
             send, or the route to open Google Maps. Try it.
           </p>
@@ -559,7 +559,7 @@ function LoadBoardDemo() {
 
         <Reveal>
           <div
-            className="relative overflow-hidden"
+            className="relative overflow-hidden mx-auto"
             style={{ borderRadius: 16, border: "1px solid var(--line)", boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
           >
             {/* browser chrome */}
@@ -581,8 +581,8 @@ function LoadBoardDemo() {
               <span className="ed-label hidden sm:block ed-accent">Truck Box · live demo</span>
             </div>
 
-            {/* load board */}
-            <div className="overflow-x-auto" style={{ background: "#ffffff", color: ink }}>
+            {/* load board — desktop table (web stays as-is) */}
+            <div className="hidden md:block overflow-x-auto" style={{ background: "#ffffff", color: ink }}>
               <table style={{ width: "100%", minWidth: 880, borderCollapse: "collapse", fontSize: 13 }}>
                 <thead>
                   <tr style={{ color: sub, textAlign: "left", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.04em" }}>
@@ -647,6 +647,53 @@ function LoadBoardDemo() {
               </table>
             </div>
 
+            {/* load board — mobile compact list (no side scroll, first 6 rows) */}
+            <div className="md:hidden" style={{ background: "#ffffff", color: ink }}>
+              {DEMO_LOADS.slice(0, 6).map((l, i) => (
+                <div key={i} style={{ borderTop: `1px solid ${line}`, padding: "13px 16px" }}>
+                  <div className="flex items-center justify-between">
+                    <span style={{ color: sub, fontSize: 12 }}>{l.age}</span>
+                    <span style={{ fontWeight: 700, fontSize: 15 }}>
+                      {l.rate}
+                      {l.rpm && (
+                        <span style={{ color: sub, fontWeight: 400, fontSize: 11, marginLeft: 6 }}>{l.rpm}</span>
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="mt-2 flex items-center gap-2" style={{ fontSize: 14 }}>
+                    <span className="truncate" style={{ flex: 1, minWidth: 0 }}>{l.origin}</span>
+                    <button
+                      type="button"
+                      onClick={() => openRoute(l)}
+                      title="Truck Box: open route in Google Maps"
+                      aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
+                      className="tb-demo-route"
+                      style={{ flex: "0 0 auto" }}
+                    >
+                      <MapPin style={{ width: 16, height: 16 }} />
+                    </button>
+                    <span className="truncate" style={{ flex: 1, minWidth: 0, textAlign: "right" }}>{l.dest}</span>
+                  </div>
+
+                  <div className="mt-2 flex items-center justify-between gap-3">
+                    <span className="truncate" style={{ color: link, fontSize: 13, minWidth: 0 }}>{l.email}</span>
+                    <button
+                      type="button"
+                      onClick={() => sendDemo(i, l.broker)}
+                      title="Truck Box: send email to broker"
+                      aria-label={`Send email to ${l.broker}`}
+                      className="tb-demo-send"
+                      data-sent={sentRow === i ? "1" : undefined}
+                      style={{ flex: "0 0 auto" }}
+                    >
+                      {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+
             {/* sent popup */}
             <AnimatePresence>
               {popup && (
@@ -689,7 +736,7 @@ function LoadBoardDemo() {
           </div>
         </Reveal>
 
-        <p className="mt-4 ed-label">Interactive demo · sample data. No real email is sent here.</p>
+        <p className="mt-4 ed-label text-center md:text-left">Interactive demo · sample data. No real email is sent here.</p>
       </div>
     </section>
   );
