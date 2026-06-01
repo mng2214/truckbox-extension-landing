@@ -373,6 +373,48 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   .tb-prose { overflow-wrap: anywhere; word-break: break-word; }
 }
 
+/* ------------------------------------------------------------ load-board demo: Truck Box injected buttons */
+.tb-demo-send,
+.tb-demo-route {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: transform .15s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease), border-color .2s var(--ease);
+}
+/* Email button (purple) */
+.tb-demo-send {
+  border: 1px solid #d8b4fe;
+  background: #faf5ff;
+  color: #7c3aed;
+}
+.tb-demo-send:hover {
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, .15);
+  transform: translateY(-1px);
+}
+.tb-demo-send[data-sent] {
+  border-color: #22c55e;
+  background: #f0fdf4;
+  color: #16a34a;
+}
+/* Map / route button (green pin) */
+.tb-demo-route {
+  border: 1px solid #bbe6c9;
+  background: #f0fdf4;
+  color: #16a34a;
+}
+.tb-demo-route:hover {
+  border-color: #22c55e;
+  box-shadow: 0 0 0 3px rgba(34, 197, 94, .15);
+  transform: translateY(-1px);
+}
+.tb-demo-send:active,
+.tb-demo-route:active { transform: scale(0.96); }
+
 /* ------------------------------------------------------------ reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: smooth; }

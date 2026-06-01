@@ -13,6 +13,9 @@ import {
   X,
   Instagram,
   Facebook,
+  Mail,
+  MapPin,
+  Check,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -206,7 +209,9 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <LoadBoardDemo />
         <Marquee />
+        <SocialProof />
         <Features />
         <HowItWorks />
         <Pricing />
@@ -362,7 +367,7 @@ function Hero() {
       <motion.div style={{ y, opacity: op }} className="ed-container">
         <div className="flex items-center justify-between gap-6 mb-6">
           <span className="ed-label">[ 01 ] — Chrome Extension for DAT</span>
-          <span className="ed-label hidden sm:block">Est. 2026 — Chicago, USA</span>
+          <span className="ed-label hidden sm:block">Est. 2025 — Chicago, USA</span>
         </div>
 
         <MaskLines
@@ -380,9 +385,8 @@ function Hero() {
         <div className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-              Truck Box adds one-click outreach, saved templates, load filtering, route
-              context, and lightweight stats so your DAT workflow feels simpler, sharper,
-              and faster every day.
+              No more copy-paste between DAT and Gmail. One click sends the broker a
+              ready email from your template, so you cover more loads in less time.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
@@ -395,8 +399,10 @@ function Hero() {
                 <span>Watch</span> <Play className="h-3.5 w-3.5" fill="currentColor" />
               </a>
             </div>
-            <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em" }}>
-              7-day free trial — no credit card required
+            <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em", lineHeight: 1.7 }}>
+              7-day free trial. No credit card required.
+              <br />
+              We only send email, we never read your inbox.
             </p>
           </Reveal>
 
@@ -467,34 +473,322 @@ function Marquee() {
 }
 
 /* ============================================================
+   Interactive demo — Truck Box buttons on a DAT-style load board
+   The ✉ (email) and route buttons are the Truck Box buttons. Clicking
+   the envelope simulates the one-click send; the route opens Google Maps.
+   Sample data only, no real email is sent here.
+   ============================================================ */
+
+type DemoLoad = {
+  age: string;
+  rate: string;
+  rpm?: string;
+  origin: string;
+  truck: string;
+  dest: string;
+  pickup: string;
+  equip: string;
+  weight: string;
+  length: string;
+  broker: string;
+  email: string;
+};
+
+const DEMO_LOADS: DemoLoad[] = [
+  { age: "5m", rate: "$846", origin: "University Pk, IL", truck: "Joliet, IL", dest: "Janesville, WI", pickup: "6/1", equip: "V", weight: "40,978 lbs", length: "53 ft - Full", broker: "Northway Freight LLC", email: "dispatch@northwayfreight.com" },
+  { age: "6m", rate: "$493", origin: "Carol Stream, IL", truck: "Elgin, IL", dest: "Menomonee Falls, WI", pickup: "6/1", equip: "V", weight: "4,506 lbs", length: "53 ft - Full", broker: "Great Lakes Carriers", email: "loads@greatlakescarriers.com" },
+  { age: "6m", rate: "—", origin: "Franksville, WI", truck: "Racine, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "20,000 lbs", length: "53 ft - Full", broker: "Summit Logistics Group", email: "ops@summitlogistics.com" },
+  { age: "7m", rate: "$1,900", rpm: "$4.94*/mi", origin: "Pleasant Prairie, WI", truck: "Kenosha, WI", dest: "Hopkins, MN", pickup: "6/1", equip: "V", weight: "43,000 lbs", length: "53 ft - Full", broker: "Redline Transport", email: "brokers@redlinetransport.com" },
+  { age: "8m", rate: "$850", origin: "Minooka, IL", truck: "Morris, IL", dest: "Baraboo, WI", pickup: "6/1", equip: "V", weight: "10,000 lbs", length: "53 ft - Full", broker: "Cornerstone Freight", email: "dispatch@cornerstonefreight.com" },
+  { age: "9m", rate: "$1,400", rpm: "$2.30*/mi", origin: "E Chicago, IN", truck: "Gary, IN", dest: "Yankton, SD", pickup: "6/1", equip: "VR", weight: "43,000 lbs", length: "53 ft - Full", broker: "Ironside Logistics", email: "loads@ironsidelogistics.com" },
+  { age: "9m", rate: "$1,200", rpm: "$3.57*/mi", origin: "Milwaukee, WI", truck: "Waukesha, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "44,000 lbs", length: "53 ft - Full", broker: "Polaris Freight Co", email: "ops@polarisfreight.com" },
+  { age: "10m", rate: "$700", rpm: "$1.14*/mi", origin: "Markham, IL", truck: "Harvey, IL", dest: "Chambersburg, PA", pickup: "6/1 - 6/2", equip: "V", weight: "3,000 lbs", length: "18 ft - Partial", broker: "Keystone Dispatch", email: "dispatch@keystonedispatch.com" },
+  { age: "11m", rate: "$2,700", rpm: "$6.25*/mi", origin: "Chicago Heights, IL", truck: "Hammond, IN", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "40,000 lbs", length: "53 ft - Full", broker: "Lakeshore Logistics", email: "brokers@lakeshorelogistics.com" },
+  { age: "12m", rate: "$3,500", rpm: "$4.28*/mi", origin: "Oak Creek, WI", truck: "Milwaukee, WI", dest: "Nazareth, PA", pickup: "6/1", equip: "VR", weight: "10,239 lbs", length: "53 ft - Full", broker: "Allied Lane Partners", email: "posting@alliedlane.com" },
+  { age: "13m", rate: "$1,050", origin: "Aurora, IL", truck: "Naperville, IL", dest: "Grand Rapids, MI", pickup: "6/1", equip: "V", weight: "38,500 lbs", length: "53 ft - Full", broker: "Midwest Haul Co", email: "dispatch@midwesthaul.com" },
+  { age: "14m", rate: "$2,150", rpm: "$3.10*/mi", origin: "Joliet, IL", truck: "Bolingbrook, IL", dest: "Nashville, TN", pickup: "6/1", equip: "R", weight: "42,000 lbs", length: "53 ft - Full", broker: "Greenline Freight", email: "loads@greenlinefreight.com" },
+];
+
+function LoadBoardDemo() {
+  const [popup, setPopup] = useState<string | null>(null);
+  const [sentRow, setSentRow] = useState<number | null>(null);
+  const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
+
+  const sendDemo = (i: number, broker: string) => {
+    setPopup(broker);
+    setSentRow(i);
+    if (timer.current) clearTimeout(timer.current);
+    timer.current = setTimeout(() => {
+      setPopup(null);
+      setSentRow(null);
+    }, 2600);
+  };
+
+  const openRoute = (l: DemoLoad) => {
+    // 3 points: truck (current) -> origin (pickup) -> destination
+    const p = new URLSearchParams({
+      api: "1",
+      origin: l.truck,
+      waypoints: l.origin,
+      destination: l.dest,
+      travelmode: "driving",
+    });
+    window.open(`https://www.google.com/maps/dir/?${p.toString()}`, "_blank", "noopener");
+  };
+
+  // Light, DAT-like palette (scoped to this demo window only)
+  const ink = "#1e293b";
+  const sub = "#64748b";
+  const link = "#2563eb";
+  const line = "#e9eef5";
+
+  return (
+    <section className="ed-section" style={{ paddingTop: 0 }}>
+      <div className="ed-container">
+        <div className="mb-8">
+          <h2 className="ed-h2">
+            See it on the <span className="ed-accent">board</span>
+          </h2>
+          <p className="mt-4 max-w-xl text-lg" style={{ color: "var(--muted)" }}>
+            The envelope and route icons are added by Truck Box. Click the envelope to
+            send, or the route to open Google Maps. Try it.
+          </p>
+        </div>
+
+        <Reveal>
+          <div
+            className="relative overflow-hidden"
+            style={{ borderRadius: 16, border: "1px solid var(--line)", boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
+          >
+            {/* browser chrome */}
+            <div
+              className="flex items-center gap-3 px-4"
+              style={{ height: 44, background: "#0c111d", borderBottom: "1px solid var(--line)" }}
+            >
+              <span className="flex gap-2" aria-hidden>
+                <span style={{ width: 11, height: 11, borderRadius: 999, background: "#ff5f57", display: "inline-block" }} />
+                <span style={{ width: 11, height: 11, borderRadius: 999, background: "#febc2e", display: "inline-block" }} />
+                <span style={{ width: 11, height: 11, borderRadius: 999, background: "#28c840", display: "inline-block" }} />
+              </span>
+              <span
+                className="ed-label flex-1 text-center truncate"
+                style={{ background: "rgba(255,255,255,0.06)", borderRadius: 999, padding: "5px 14px", letterSpacing: "0.04em" }}
+              >
+                one.dat.com/search-loads
+              </span>
+              <span className="ed-label hidden sm:block ed-accent">Truck Box · live demo</span>
+            </div>
+
+            {/* load board */}
+            <div className="overflow-x-auto" style={{ background: "#ffffff", color: ink }}>
+              <table style={{ width: "100%", minWidth: 880, borderCollapse: "collapse", fontSize: 13 }}>
+                <thead>
+                  <tr style={{ color: sub, textAlign: "left", fontSize: 11, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Age</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Rate</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Origin</th>
+                    <th style={{ padding: "12px 8px", fontWeight: 600 }} aria-label="Route" />
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Destination</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Pick Up</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Equip</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Weight</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Company</th>
+                    <th style={{ padding: "12px 14px", fontWeight: 600 }}>Contact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {DEMO_LOADS.map((l, i) => (
+                    <tr key={i} style={{ borderTop: `1px solid ${line}` }}>
+                      <td style={{ padding: "11px 14px", color: sub, whiteSpace: "nowrap" }}>{l.age}</td>
+                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap", fontWeight: 600 }}>
+                        {l.rate}
+                        {l.rpm && <div style={{ color: sub, fontSize: 11, fontWeight: 400 }}>{l.rpm}</div>}
+                      </td>
+                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>{l.origin}</td>
+                      <td style={{ padding: "11px 8px" }}>
+                        <button
+                          type="button"
+                          onClick={() => openRoute(l)}
+                          title="Truck Box: open route in Google Maps"
+                          aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
+                          className="tb-demo-route"
+                        >
+                          <MapPin style={{ width: 16, height: 16 }} />
+                        </button>
+                      </td>
+                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>{l.dest}</td>
+                      <td style={{ padding: "11px 14px", color: sub, whiteSpace: "nowrap" }}>{l.pickup}</td>
+                      <td style={{ padding: "11px 14px", color: sub }}>{l.equip}</td>
+                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap", color: sub }}>
+                        {l.weight}
+                        <div style={{ fontSize: 11 }}>{l.length}</div>
+                      </td>
+                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap", color: link, fontWeight: 600 }}>{l.broker}</td>
+                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>
+                        <span className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => sendDemo(i, l.broker)}
+                            title="Truck Box: send email to broker"
+                            aria-label={`Send email to ${l.broker}`}
+                            className="tb-demo-send"
+                            data-sent={sentRow === i ? "1" : undefined}
+                          >
+                            {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
+                          </button>
+                          <span style={{ color: link }}>{l.email}</span>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* sent popup */}
+            <AnimatePresence>
+              {popup && (
+                <motion.div
+                  initial={{ opacity: 0, y: 14, scale: 0.96 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: 10, scale: 0.98 }}
+                  transition={{ duration: 0.22, ease: EASE }}
+                  className="absolute left-1/2 -translate-x-1/2"
+                  style={{ bottom: 22, maxWidth: "92%" }}
+                >
+                  <div
+                    className="flex items-start gap-3"
+                    style={{
+                      background: "#0c111d",
+                      border: "1px solid var(--line-strong)",
+                      borderRadius: 14,
+                      padding: "14px 18px",
+                      boxShadow: "0 20px 50px rgba(0,0,0,0.5)",
+                    }}
+                  >
+                    <span
+                      style={{ width: 30, height: 30, borderRadius: 999, background: "rgba(34,197,94,0.16)", color: "#22c55e", display: "flex", alignItems: "center", justifyContent: "center", flex: "0 0 auto" }}
+                    >
+                      <Check style={{ width: 17, height: 17 }} />
+                    </span>
+                    <div>
+                      <div style={{ fontWeight: 700, color: "var(--ink)" }}>
+                        Email sent to {popup}
+                      </div>
+                      <div className="text-sm" style={{ color: "var(--muted)", marginTop: 2 }}>
+                        Demo only. In the extension this sends a real email from your Gmail,
+                        using your saved template.
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </Reveal>
+
+        <p className="mt-4 ed-label">Interactive demo · sample data. No real email is sent here.</p>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Social proof — real Chrome Web Store reviews
+   ============================================================ */
+
+function SocialProof() {
+  const reviews = [
+    {
+      name: "Stan",
+      text:
+        "The best application for using the DAT load board and booking freight without calling brokers.",
+    },
+    {
+      name: "Sofiya",
+      text:
+        "It now takes a couple of seconds to send emails that used to take much longer. I send a load request the moment a load appears on the board.",
+    },
+    {
+      name: "Adam",
+      text:
+        "Everything works smoothly and reliably. There is a built-in help button to reach the developer, and he ships fixes the same day.",
+    },
+  ];
+
+  return (
+    <section id="reviews" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-12 flex flex-wrap items-end justify-between gap-8">
+          <h2 className="ed-h2 max-w-2xl">
+            Saves a full-time dispatcher
+            <br />
+            <span className="ed-accent">about 2 hours a week.</span>
+          </h2>
+          <div className="text-left md:text-right">
+            <div
+              className="ed-display text-5xl leading-none"
+              style={{ textTransform: "none", letterSpacing: "-0.02em" }}
+            >
+              5.0 <span className="ed-accent">★</span>
+            </div>
+            <span className="ed-label mt-3 block">
+              98 dispatchers · Chrome Web Store
+            </span>
+          </div>
+        </div>
+
+        <div className="grid md:grid-cols-3">
+          {reviews.map((r, i) => (
+            <Reveal key={r.name} delay={i * 0.08}>
+              <figure
+                className="py-8 md:py-10 md:px-8 md:first:pl-0"
+                style={{ borderTop: "1px solid var(--line)" }}
+              >
+                <blockquote className="text-lg leading-relaxed">
+                  “{r.text}”
+                </blockquote>
+                <figcaption className="ed-label mt-6">{r.name}</figcaption>
+              </figure>
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
    Features — horizontal pinned track
    ============================================================ */
 
 function Features() {
   const items = [
     {
-      title: "One-click email sending",
-      body: "Send professional broker emails directly from supported DAT load rows.",
+      title: "One-click email",
+      body: "Email the broker straight from a DAT load row. No copy-paste, no Gmail tab.",
     },
     {
-      title: "Keyboard navigation on DAT",
-      body: "Move through loads with W/S, switch tabs with A/D, open maps with Q, send emails with E, and toggle details with Space.",
+      title: "Keyboard navigation",
+      body: "Hands stay on the keyboard. W/S move loads, A/D switch tabs, Q opens maps, E sends, Space expands.",
     },
     {
-      title: "Reusable templates",
-      body: "Keep your subject and body ready so outreach stays consistent and fast.",
+      title: "Saved templates",
+      body: "Write your subject and body once. Every email goes out filled in and consistent.",
     },
     {
       title: "Short-load filtering",
-      body: "Hide loads under your preferred miles threshold and stay focused on better lanes.",
+      body: "Dim loads under your minimum miles and focus on the lanes worth your time.",
     },
     {
-      title: "Google Map context",
-      body: "Open Google Maps support right from the workflow to evaluate lanes faster.",
+      title: "Route on the map",
+      body: "Open the load's route in Google Maps without leaving DAT.",
     },
     {
-      title: "Simple activity stats",
-      body: "See your total email activity inside the extension without extra dashboards.",
+      title: "Activity stats",
+      body: "See emails sent and time saved, right inside the extension.",
     },
   ];
 
@@ -656,7 +950,7 @@ function Pricing() {
           <Reveal>
             <div className="flex items-start gap-4">
               <span className="ed-display text-[8rem] md:text-[12rem] leading-[0.8] ed-accent">$7</span>
-              <span className="ed-label mt-6">/ per<br />month</span>
+              <span className="ed-label mt-6">/ per user<br />month</span>
             </div>
             <p className="mt-6 max-w-md text-lg" style={{ color: "var(--muted)" }}>
               Start with the free 1-week trial first. No credit card required. Cancel anytime.
@@ -669,6 +963,9 @@ function Pricing() {
                 <span>Book Demo</span>
               </a>
             </div>
+            <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em" }}>
+              We only send email, we never read your inbox.
+            </p>
           </Reveal>
 
           <Reveal delay={0.1}>
@@ -691,6 +988,30 @@ function Pricing() {
             </ul>
           </Reveal>
         </div>
+
+        <Reveal>
+          <div
+            className="mt-16 md:mt-20 flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
+            style={{ borderTop: "1px solid var(--line)", paddingTop: 40 }}
+          >
+            <div>
+              <span className="ed-label ed-accent">For teams</span>
+              <h3
+                className="ed-display text-3xl md:text-4xl mt-3"
+                style={{ textTransform: "none", letterSpacing: "-0.02em" }}
+              >
+                10 or more dispatchers?
+              </h3>
+              <p className="mt-3 max-w-lg text-lg" style={{ color: "var(--muted)" }}>
+                We set custom team pricing and add everyone by email. You get one bill,
+                your dispatchers get instant access.
+              </p>
+            </div>
+            <a className="ed-btn ed-btn-accent shrink-0" href="#contact">
+              <span>Contact us</span> <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -1257,7 +1578,7 @@ function FinalCTA() {
 export function Footer() {
   return (
     <footer style={{ borderTop: "1px solid var(--line)" }}>
-      <div className="ed-container py-16">
+      <div className="ed-container pt-16 pb-28">
 
         <div className="mt-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div className="flex flex-wrap gap-x-8 gap-y-3">
