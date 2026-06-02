@@ -21,6 +21,7 @@ import {
 type NavItem = { href: string; label: string; route?: boolean };
 
 const NAV: NavItem[] = [
+  { href: "/demo", label: "Live demo", route: true },
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#learning", label: "Learning" },
@@ -209,7 +210,6 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        <LoadBoardDemo />
         <Marquee />
         <SocialProof />
         <Features />
@@ -392,11 +392,11 @@ function Hero() {
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
                 <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
               </a>
+              <Link className="ed-btn" to="/demo">
+                <span>Live demo</span> <Play className="h-3.5 w-3.5" fill="currentColor" />
+              </Link>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Free Demo</span>
-              </a>
-              <a className="ed-btn" href="#learning">
-                <span>Watch</span> <Play className="h-3.5 w-3.5" fill="currentColor" />
+                <span>Book Call</span>
               </a>
             </div>
             <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em", lineHeight: 1.7 }}>
@@ -509,7 +509,7 @@ const DEMO_LOADS: DemoLoad[] = [
   { age: "14m", rate: "$2,150", rpm: "$3.10*/mi", origin: "Joliet, IL", truck: "Bolingbrook, IL", dest: "Nashville, TN", pickup: "6/1", equip: "R", weight: "42,000 lbs", length: "53 ft - Full", broker: "Greenline Freight", email: "loads@greenlinefreight.com" },
 ];
 
-function LoadBoardDemo() {
+export function LoadBoardDemo() {
   const [popup, setPopup] = useState<string | null>(null);
   const [sentRow, setSentRow] = useState<number | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -1007,7 +1007,7 @@ function Pricing() {
                 <span>Start Free Trial</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Book Demo</span>
+                <span>Book Call</span>
               </a>
             </div>
             <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em" }}>
