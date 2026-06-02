@@ -213,7 +213,6 @@ export default function App() {
         <Marquee />
         <SocialProof />
         <Features />
-        <RouteShowcase />
         <HowItWorks />
         <Pricing />
         <Learning />
@@ -338,7 +337,7 @@ function BrowserSupport() {
   );
 }
 
-function RouteShowcase() {
+export function RouteShowcase() {
   const ink = "#1e293b";
   const sub = "#64748b";
   const link = "#2563eb";
@@ -362,10 +361,10 @@ function RouteShowcase() {
   };
 
   return (
-    <section id="route" className="ed-section">
+    <section id="route" className="ed-section" style={{ paddingTop: 24 }}>
       <div className="ed-container">
         <div className="mb-8 text-center md:text-left">
-          <span className="ed-label">[ 03 ] — Built into the load</span>
+          <span className="ed-label">Inside the load</span>
           <h2 className="ed-h2 mt-4">
             Route, miles &amp; credit, <span className="ed-accent">right in DAT</span>
           </h2>
