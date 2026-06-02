@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
@@ -213,6 +213,7 @@ export default function App() {
         <Marquee />
         <SocialProof />
         <Features />
+        <RouteShowcase />
         <HowItWorks />
         <Pricing />
         <Learning />
@@ -223,6 +224,245 @@ export default function App() {
       <Footer />
       <TelegramFloat />
     </div>
+  );
+}
+
+/* ============================================================
+   Brand logos (inline SVG)
+   ============================================================ */
+
+function ChromeLogo({ size = 22 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden focusable="false">
+      <path d="M24 24 L4.95 13 A22 22 0 0 1 43.05 13 Z" fill="#ea4335" />
+      <path d="M24 24 L24 46 A22 22 0 0 1 4.95 13 Z" fill="#34a853" />
+      <path d="M24 24 L43.05 13 A22 22 0 0 1 24 46 Z" fill="#fbbc05" />
+      <circle cx="24" cy="24" r="10" fill="#fff" />
+      <circle cx="24" cy="24" r="7" fill="#4285f4" />
+    </svg>
+  );
+}
+
+function OperaLogo({ size = 22 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden focusable="false">
+      <ellipse cx="24" cy="24" rx="14" ry="20" fill="#ff1b2d" />
+      <ellipse cx="24" cy="24" rx="6.4" ry="12.4" fill="#fff" />
+    </svg>
+  );
+}
+
+function GoogleGLogo({ size = 20 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden focusable="false">
+      <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
+      <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
+      <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
+      <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
+    </svg>
+  );
+}
+
+/* ============================================================
+   Route showcase — in-DAT route panel (anonymized demo data)
+   + Chrome / Opera / Google support strip
+   ============================================================ */
+
+function RouteMapArt() {
+  return (
+    <div
+      style={{
+        position: "relative",
+        height: 200,
+        borderRadius: 12,
+        overflow: "hidden",
+        border: "1px solid #e2e8f0",
+      }}
+    >
+      <svg viewBox="0 0 400 200" width="100%" height="100%" preserveAspectRatio="xMidYMid slice" aria-hidden focusable="false">
+        <rect width="400" height="200" fill="#e9f1f7" />
+        <path d="M0 120 Q120 90 260 130 T400 120 V200 H0 Z" fill="#dfeede" />
+        <path d="M-20 60 Q80 40 180 70 T420 60 V0 H-20 Z" fill="#e7eef6" />
+        <g stroke="#cdd7e3" strokeWidth="2" fill="none">
+          <path d="M40 40 L360 60" />
+          <path d="M20 150 L380 120" />
+          <path d="M120 0 L150 200" />
+        </g>
+        <path d="M300 96 C250 110 180 96 96 104" stroke="#1a73e8" strokeWidth="5" fill="none" strokeLinecap="round" />
+        <circle cx="300" cy="96" r="6" fill="#1a73e8" stroke="#fff" strokeWidth="2.5" />
+        <g transform="translate(96,104)">
+          <path d="M0 -14 C7 -14 11 -9 11 -3 C11 5 0 14 0 14 C0 14 -11 5 -11 -3 C-11 -9 -7 -14 0 -14 Z" fill="#ea4335" stroke="#fff" strokeWidth="2" />
+          <circle cx="0" cy="-3" r="3.5" fill="#fff" />
+        </g>
+      </svg>
+      <span style={{ position: "absolute", left: 10, bottom: 8, fontSize: 10, color: "#64748b", background: "rgba(255,255,255,.78)", padding: "2px 6px", borderRadius: 4 }}>
+        Google
+      </span>
+    </div>
+  );
+}
+
+function RateRow({ k, v, big = false }: { k: string; v: string; big?: boolean }) {
+  return (
+    <div className="flex items-center justify-between" style={{ padding: "7px 0", borderBottom: "1px solid #eef2f7" }}>
+      <span style={{ color: "#64748b", fontSize: 13 }}>{k}</span>
+      <span style={{ fontWeight: 700, fontSize: big ? 18 : 14, color: "#1e293b" }}>{v}</span>
+    </div>
+  );
+}
+
+function BrowserSupport() {
+  const item: CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: 8,
+    color: "var(--ink)",
+    fontFamily: "var(--font-mono)",
+    fontSize: "0.8rem",
+    letterSpacing: "0.06em",
+  };
+  return (
+    <div className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-4">
+      <span className="ed-label">Works in</span>
+      <span style={item}>
+        <ChromeLogo /> Chrome
+      </span>
+      <span style={item}>
+        <OperaLogo /> Opera
+      </span>
+      <span aria-hidden className="hidden sm:block" style={{ width: 1, height: 18, background: "var(--line-strong)" }} />
+      <span style={item}>
+        <GoogleGLogo /> Sign in with Google
+      </span>
+    </div>
+  );
+}
+
+function RouteShowcase() {
+  const ink = "#1e293b";
+  const sub = "#64748b";
+  const link = "#2563eb";
+  const grey = "#f3f4f6";
+
+  const stats = [
+    { k: "Loaded", v: "199 mi", hi: false },
+    { k: "Deadhead", v: "40 mi", hi: false },
+    { k: "Total", v: "239 mi", hi: true },
+    { k: "RPM (w/DH)", v: "$3.45", hi: true },
+  ];
+
+  const headerBar: CSSProperties = {
+    background: grey,
+    color: "#636d78",
+    fontWeight: 600,
+    fontSize: 13,
+    padding: "9px 12px",
+    borderRadius: 4,
+    marginBottom: 14,
+  };
+
+  return (
+    <section id="route" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-8 text-center md:text-left">
+          <span className="ed-label">[ 03 ] — Built into the load</span>
+          <h2 className="ed-h2 mt-4">
+            Route, miles &amp; credit, <span className="ed-accent">right in DAT</span>
+          </h2>
+          <p className="mt-4 max-w-2xl text-lg mx-auto md:mx-0" style={{ color: "var(--muted)" }}>
+            Truck Box drops a live route map into the load details — loaded vs. deadhead
+            miles, a true rate-per-mile that counts the empty leg, and broker credit at a
+            glance. Works in Chrome and Opera.
+          </p>
+        </div>
+
+        <Reveal>
+          <div
+            className="relative overflow-hidden mx-auto"
+            style={{ borderRadius: 16, border: "1px solid var(--line)", boxShadow: "0 30px 80px rgba(0,0,0,0.45)" }}
+          >
+            {/* browser chrome */}
+            <div className="flex items-center gap-3 px-4" style={{ height: 44, background: "#0c111d", borderBottom: "1px solid var(--line)" }}>
+              <span className="flex gap-2" aria-hidden>
+                <span style={{ width: 11, height: 11, borderRadius: 999, background: "#ff5f57", display: "inline-block" }} />
+                <span style={{ width: 11, height: 11, borderRadius: 999, background: "#febc2e", display: "inline-block" }} />
+                <span style={{ width: 11, height: 11, borderRadius: 999, background: "#28c840", display: "inline-block" }} />
+              </span>
+              <span className="ed-label flex-1 text-center truncate" style={{ background: "rgba(255,255,255,0.06)", borderRadius: 999, padding: "5px 14px", letterSpacing: "0.04em" }}>
+                one.dat.com/search-loads
+              </span>
+              <span className="ed-label hidden sm:block ed-accent">Truck Box</span>
+            </div>
+
+            {/* panel body (light) */}
+            <div style={{ background: "#fff", color: ink, padding: 22 }}>
+              <div className="flex items-center flex-wrap" style={{ gap: 10, marginBottom: 20 }}>
+                <span style={{ fontWeight: 800, fontSize: 18 }}>Chicago, IL</span>
+                <span style={{ color: link }}>→</span>
+                <span style={{ fontWeight: 800, fontSize: 18 }}>Farley, IA</span>
+                <span style={{ color: sub, fontSize: 13, marginLeft: 4 }}>199 mi</span>
+              </div>
+
+              <div className="grid md:grid-cols-[1.35fr_1fr]" style={{ gap: 24 }}>
+                {/* LEFT — the route feature */}
+                <div>
+                  <div style={headerBar}>Route — Powered by TruckBox</div>
+
+                  <div className="flex flex-wrap" style={{ gap: 18, marginBottom: 14 }}>
+                    {stats.map((s) => (
+                      <div key={s.k} style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+                        <span style={{ fontSize: 10, letterSpacing: "0.4px", textTransform: "uppercase", color: sub, fontWeight: 600 }}>{s.k}</span>
+                        <span style={{ fontSize: 15, fontWeight: 700, color: s.hi ? "#0046E0" : ink }}>{s.v}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <RouteMapArt />
+
+                  <div style={{ textAlign: "right", marginTop: 8 }}>
+                    <span style={{ color: link, fontWeight: 600, fontSize: 12 }}>Open in Google Maps ↗</span>
+                  </div>
+
+                  <div style={{ marginTop: 14, display: "inline-flex", flexDirection: "column", gap: 7, padding: "9px 12px", borderRadius: 10, border: "1px solid #bcdcf3", background: "#eef6fd" }}>
+                    <div className="flex items-center" style={{ gap: 8 }}>
+                      <span style={{ fontWeight: 800, fontSize: 15, color: "#0a6cb8", letterSpacing: 0.5 }}>RTS</span>
+                      <span style={{ fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.3px" }}>Broker credit</span>
+                      <span style={{ fontSize: 10, fontWeight: 700, color: "#f59e0b", textTransform: "uppercase" }}>Soon</span>
+                    </div>
+                    <div className="flex items-center" style={{ gap: 9 }}>
+                      <span style={{ width: 24, height: 24, borderRadius: 999, background: "#94a3b8", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 13 }}>?</span>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: "#0a6cb8", background: "#fff", border: "1px solid #bcdcf3", borderRadius: 8, padding: "6px 10px" }}>Check credit</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RIGHT — rate + company (anonymized demo data) */}
+                <div>
+                  <div style={headerBar}>Rate</div>
+                  <RateRow k="Total" v="$824" big />
+                  <RateRow k="Trip" v="199 mi" />
+                  <RateRow k="Rate / mile" v="$4.14" />
+
+                  <div style={{ ...headerBar, marginTop: 22 }}>Company</div>
+                  <div style={{ fontWeight: 700, fontSize: 15 }}>Demo Logistics LLC</div>
+                  <div style={{ color: sub, fontSize: 13, marginTop: 6 }}>MC# 000000 · Chicago, IL</div>
+                  <div style={{ color: link, fontSize: 13, marginTop: 6 }}>dispatch@demologistics.co</div>
+                  <div style={{ color: sub, fontSize: 13, marginTop: 4 }}>(312) 555-0199</div>
+                  <div className="flex items-center flex-wrap" style={{ gap: 8, marginTop: 12 }}>
+                    <span style={{ fontSize: 12, fontWeight: 700, color: "#0a6cb8", background: "#eef6fd", border: "1px solid #bcdcf3", borderRadius: 8, padding: "6px 10px" }}>Factoring Eligible</span>
+                    <span style={{ color: "#f59e0b", fontSize: 14 }}>★★★★<span style={{ color: "#cbd5e1" }}>★</span></span>
+                    <span style={{ color: sub, fontSize: 12 }}>(189)</span>
+                  </div>
+                  <div style={{ fontSize: 11, color: sub, marginTop: 16 }}>Demo data — broker details are illustrative.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Reveal>
+
+        <BrowserSupport />
+      </div>
+    </section>
   );
 }
 
