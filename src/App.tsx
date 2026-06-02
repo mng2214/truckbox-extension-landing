@@ -483,6 +483,7 @@ type DemoLoad = {
   age: string;
   rate: string;
   rpm?: string;
+  trip: string;
   origin: string;
   truck: string;
   dest: string;
@@ -495,18 +496,18 @@ type DemoLoad = {
 };
 
 const DEMO_LOADS: DemoLoad[] = [
-  { age: "5m", rate: "$846", origin: "University Pk, IL", truck: "Joliet, IL", dest: "Janesville, WI", pickup: "6/1", equip: "V", weight: "40,978 lbs", length: "53 ft - Full", broker: "Northway Freight LLC", email: "dispatch@northwayfreight.com" },
-  { age: "6m", rate: "$493", origin: "Carol Stream, IL", truck: "Elgin, IL", dest: "Menomonee Falls, WI", pickup: "6/1", equip: "V", weight: "4,506 lbs", length: "53 ft - Full", broker: "Great Lakes Carriers", email: "loads@greatlakescarriers.com" },
-  { age: "6m", rate: "—", origin: "Franksville, WI", truck: "Racine, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "20,000 lbs", length: "53 ft - Full", broker: "Summit Logistics Group", email: "ops@summitlogistics.com" },
-  { age: "7m", rate: "$1,900", rpm: "$4.94*/mi", origin: "Pleasant Prairie, WI", truck: "Kenosha, WI", dest: "Hopkins, MN", pickup: "6/1", equip: "V", weight: "43,000 lbs", length: "53 ft - Full", broker: "Redline Transport", email: "brokers@redlinetransport.com" },
-  { age: "8m", rate: "$850", origin: "Minooka, IL", truck: "Morris, IL", dest: "Baraboo, WI", pickup: "6/1", equip: "V", weight: "10,000 lbs", length: "53 ft - Full", broker: "Cornerstone Freight", email: "dispatch@cornerstonefreight.com" },
-  { age: "9m", rate: "$1,400", rpm: "$2.30*/mi", origin: "E Chicago, IN", truck: "Gary, IN", dest: "Yankton, SD", pickup: "6/1", equip: "VR", weight: "43,000 lbs", length: "53 ft - Full", broker: "Ironside Logistics", email: "loads@ironsidelogistics.com" },
-  { age: "9m", rate: "$1,200", rpm: "$3.57*/mi", origin: "Milwaukee, WI", truck: "Waukesha, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "44,000 lbs", length: "53 ft - Full", broker: "Polaris Freight Co", email: "ops@polarisfreight.com" },
-  { age: "10m", rate: "$700", rpm: "$1.14*/mi", origin: "Markham, IL", truck: "Harvey, IL", dest: "Chambersburg, PA", pickup: "6/1 - 6/2", equip: "V", weight: "3,000 lbs", length: "18 ft - Partial", broker: "Keystone Dispatch", email: "dispatch@keystonedispatch.com" },
-  { age: "11m", rate: "$2,700", rpm: "$6.25*/mi", origin: "Chicago Heights, IL", truck: "Hammond, IN", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "40,000 lbs", length: "53 ft - Full", broker: "Lakeshore Logistics", email: "brokers@lakeshorelogistics.com" },
-  { age: "12m", rate: "$3,500", rpm: "$4.28*/mi", origin: "Oak Creek, WI", truck: "Milwaukee, WI", dest: "Nazareth, PA", pickup: "6/1", equip: "VR", weight: "10,239 lbs", length: "53 ft - Full", broker: "Allied Lane Partners", email: "posting@alliedlane.com" },
-  { age: "13m", rate: "$1,050", origin: "Aurora, IL", truck: "Naperville, IL", dest: "Grand Rapids, MI", pickup: "6/1", equip: "V", weight: "38,500 lbs", length: "53 ft - Full", broker: "Midwest Haul Co", email: "dispatch@midwesthaul.com" },
-  { age: "14m", rate: "$2,150", rpm: "$3.10*/mi", origin: "Joliet, IL", truck: "Bolingbrook, IL", dest: "Nashville, TN", pickup: "6/1", equip: "R", weight: "42,000 lbs", length: "53 ft - Full", broker: "Greenline Freight", email: "loads@greenlinefreight.com" },
+  { age: "5m", rate: "$846", trip: "139", origin: "University Pk, IL", truck: "Joliet, IL", dest: "Janesville, WI", pickup: "6/1", equip: "V", weight: "40,978 lbs", length: "53 ft - Full", broker: "Northway Freight LLC", email: "dispatch@northwayfreight.com" },
+  { age: "6m", rate: "$493", trip: "111", origin: "Carol Stream, IL", truck: "Elgin, IL", dest: "Menomonee Falls, WI", pickup: "6/1", equip: "V", weight: "4,506 lbs", length: "53 ft - Full", broker: "Great Lakes Carriers", email: "loads@greatlakescarriers.com" },
+  { age: "6m", rate: "—", trip: "355", origin: "Franksville, WI", truck: "Racine, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "20,000 lbs", length: "53 ft - Full", broker: "Summit Logistics Group", email: "ops@summitlogistics.com" },
+  { age: "7m", rate: "$1,900", rpm: "$4.94*/mi", trip: "385", origin: "Pleasant Prairie, WI", truck: "Kenosha, WI", dest: "Hopkins, MN", pickup: "6/1", equip: "V", weight: "43,000 lbs", length: "53 ft - Full", broker: "Redline Transport", email: "brokers@redlinetransport.com" },
+  { age: "8m", rate: "$850", trip: "199", origin: "Minooka, IL", truck: "Morris, IL", dest: "Baraboo, WI", pickup: "6/1", equip: "V", weight: "10,000 lbs", length: "53 ft - Full", broker: "Cornerstone Freight", email: "dispatch@cornerstonefreight.com" },
+  { age: "9m", rate: "$1,400", rpm: "$2.30*/mi", trip: "610", origin: "E Chicago, IN", truck: "Gary, IN", dest: "Yankton, SD", pickup: "6/1", equip: "VR", weight: "43,000 lbs", length: "53 ft - Full", broker: "Ironside Logistics", email: "loads@ironsidelogistics.com" },
+  { age: "9m", rate: "$1,200", rpm: "$3.57*/mi", trip: "336", origin: "Milwaukee, WI", truck: "Waukesha, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "44,000 lbs", length: "53 ft - Full", broker: "Polaris Freight Co", email: "ops@polarisfreight.com" },
+  { age: "10m", rate: "$700", rpm: "$1.14*/mi", trip: "613", origin: "Markham, IL", truck: "Harvey, IL", dest: "Chambersburg, PA", pickup: "6/1 - 6/2", equip: "V", weight: "3,000 lbs", length: "18 ft - Partial", broker: "Keystone Dispatch", email: "dispatch@keystonedispatch.com" },
+  { age: "11m", rate: "$2,700", rpm: "$6.25*/mi", trip: "432", origin: "Chicago Heights, IL", truck: "Hammond, IN", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "40,000 lbs", length: "53 ft - Full", broker: "Lakeshore Logistics", email: "brokers@lakeshorelogistics.com" },
+  { age: "12m", rate: "$3,500", rpm: "$4.28*/mi", trip: "817", origin: "Oak Creek, WI", truck: "Milwaukee, WI", dest: "Nazareth, PA", pickup: "6/1", equip: "VR", weight: "10,239 lbs", length: "53 ft - Full", broker: "Allied Lane Partners", email: "posting@alliedlane.com" },
+  { age: "13m", rate: "$1,050", trip: "247", origin: "Aurora, IL", truck: "Naperville, IL", dest: "Grand Rapids, MI", pickup: "6/1", equip: "V", weight: "38,500 lbs", length: "53 ft - Full", broker: "Midwest Haul Co", email: "dispatch@midwesthaul.com" },
+  { age: "14m", rate: "$2,150", rpm: "$3.10*/mi", trip: "694", origin: "Joliet, IL", truck: "Bolingbrook, IL", dest: "Nashville, TN", pickup: "6/1", equip: "R", weight: "42,000 lbs", length: "53 ft - Full", broker: "Greenline Freight", email: "loads@greenlinefreight.com" },
 ];
 
 export function LoadBoardDemo() {
@@ -663,21 +664,24 @@ export function LoadBoardDemo() {
 
                   <div className="mt-2 flex items-center gap-2" style={{ fontSize: 14 }}>
                     <span className="truncate" style={{ flex: 1, minWidth: 0 }}>{l.origin}</span>
-                    <button
-                      type="button"
-                      onClick={() => openRoute(l)}
-                      title="Truck Box: open route in Google Maps"
-                      aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
-                      className="tb-demo-route"
-                      style={{ flex: "0 0 auto" }}
-                    >
-                      <MapPin style={{ width: 16, height: 16 }} />
-                    </button>
+                    <span className="flex items-center gap-1.5" style={{ flex: "0 0 auto" }}>
+                      <span style={{ fontSize: 11, fontWeight: 600, color: sub, whiteSpace: "nowrap" }}>
+                        {l.trip} mi
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => openRoute(l)}
+                        title="Truck Box: open route in Google Maps"
+                        aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
+                        className="tb-demo-route"
+                      >
+                        <MapPin style={{ width: 16, height: 16 }} />
+                      </button>
+                    </span>
                     <span className="truncate" style={{ flex: 1, minWidth: 0, textAlign: "right" }}>{l.dest}</span>
                   </div>
 
-                  <div className="mt-2 flex items-center justify-between gap-3">
-                    <span className="truncate" style={{ color: link, fontSize: 13, minWidth: 0 }}>{l.email}</span>
+                  <div className="mt-2 flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => sendDemo(i, l.broker)}
@@ -689,6 +693,7 @@ export function LoadBoardDemo() {
                     >
                       {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
                     </button>
+                    <span className="truncate" style={{ color: link, fontSize: 13, minWidth: 0 }}>{l.email}</span>
                   </div>
                 </div>
               ))}
