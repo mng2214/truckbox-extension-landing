@@ -1,0 +1,43 @@
+# Truck Box
+
+> Truck Box is the DAT One broker emailer built for truck dispatchers, carriers, and owner-operators. It speeds up the DAT One load board (one.dat.com) across dry van, flatbed, and reefer loads, adding one-click broker emails, Google Maps routes, a deadhead-adjusted rate-per-mile, a miles filter, and keyboard navigation. Works in Google Chrome and Opera, with secure Google sign-in.
+
+## What it does
+
+- One-click broker email: a custom template auto-fills from the load's data on DAT and sends from your own Gmail. No copy-paste, no second tab. It only sends email you choose to send and never reads your inbox.
+- Google Maps in one click: open the load's route as three stops — your truck location, the pickup, and the destination.
+- RPM with deadhead: a true rate-per-mile that includes the empty miles to pickup, plus total miles including deadhead, so you see the real economics of a load.
+- Miles filter: hide loads shorter than the distance you set.
+- Keyboard navigation: move through the board and act without the mouse.
+- Broker / factoring credit check: vet who is posting before you call (coming soon).
+
+## Who it is for
+
+- Truck dispatchers, carriers, and owner-operators sourcing freight on DAT One.
+- Works across equipment types: dry van, flatbed, and reefer loads.
+
+## Compatibility
+
+- Browsers: Google Chrome and Opera (Chromium-based browsers).
+- Sign-in: secure Google sign-in.
+- Privacy: sends email only; never reads your inbox.
+
+## Pricing
+
+- 7-day free trial, no credit card required.
+
+## Links
+
+- Website: https://truckbox.app/
+- Live demo: https://truckbox.app/demo
+- Install (Chrome Web Store): https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd
+- Book a call: https://calendly.com/truckboxapp
+
+## FAQ
+
+- What does Truck Box do? It adds one-click broker emailing, route maps, deadhead-adjusted RPM, a miles filter, and keyboard navigation to the DAT One load board so dispatchers book loads faster.
+- Who is it for? Truck dispatchers, carriers, and owner-operators on DAT One.
+- What load types does it support? Any DAT One load, including dry van, flatbed, and reefer.
+- Which browsers are supported? Google Chrome and Opera.
+- How much does it cost? It starts with a 7-day free trial, no credit card required.
+- Does it read my email? No. It only sends emails you explicitly choose to send from your own Gmail.
