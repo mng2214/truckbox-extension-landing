@@ -618,42 +618,45 @@ function LoadDetailPanel({
 
 export function DemoFeatures() {
   const items = [
-    { icon: <Mail style={{ width: 20, height: 20 }} />, t: "One-click broker email", d: "A custom template that pulls the load's data straight from DAT and sends from your own Gmail — no copy-paste, no extra tab." },
-    { icon: <MapPin style={{ width: 20, height: 20 }} />, t: "Google Maps in one click", d: "Open the full route as 3 stops — your truck's location → pickup → destination — without leaving the board." },
-    { icon: <Gauge style={{ width: 20, height: 20 }} />, t: "RPM with deadhead", d: "A true rate-per-mile that counts the empty miles to pickup, plus total miles including deadhead." },
-    { icon: <Filter style={{ width: 20, height: 20 }} />, t: "Miles filter", d: "Hide loads shorter than the distance you set, so only the trips worth your time stay on the board." },
-    { icon: <Keyboard style={{ width: 20, height: 20 }} />, t: "Keyboard navigation", d: "Move through loads and fire off actions from the keyboard — book more lanes, touch the mouse less." },
-    { icon: <ShieldCheck style={{ width: 20, height: 20 }} />, t: "Broker credit check", soon: true, d: "Factoring & RTS broker credit right on the load, so you can vet who's posting before you call." },
+    { icon: <Mail style={{ width: 19, height: 19 }} />, t: "One-click broker email", d: "A custom template that fills itself from the load's data in DAT and sends from your own Gmail. No copy-paste, no second tab." },
+    { icon: <MapPin style={{ width: 19, height: 19 }} />, t: "Google Maps in one click", d: "Open the whole trip in Google Maps as three stops: your truck, the pickup, then the destination." },
+    { icon: <Gauge style={{ width: 19, height: 19 }} />, t: "RPM with deadhead", d: "A real rate-per-mile that counts the empty miles to pickup, plus total miles including deadhead." },
+    { icon: <Filter style={{ width: 19, height: 19 }} />, t: "Miles filter", d: "Hide loads shorter than the distance you set, so only the trips worth your time stay on the board." },
+    { icon: <Keyboard style={{ width: 19, height: 19 }} />, t: "Keyboard navigation", d: "Move through loads and fire actions from the keyboard. Book more lanes, reach for the mouse less." },
+    { icon: <ShieldCheck style={{ width: 19, height: 19 }} />, t: "Broker credit check", soon: true, d: "Factoring and RTS broker credit right on the load, so you can vet who is posting before you call." },
   ];
 
   return (
     <section id="features-list" className="ed-section" style={{ paddingTop: 24 }}>
       <div className="ed-container">
-        <div className="mb-10 text-center md:text-left">
+        <div className="mb-10 max-w-2xl">
           <span className="ed-label">What you get</span>
           <h2 className="ed-h2 mt-4">
-            Everything in <span className="ed-accent">one extension</span>
+            Built for dispatchers who <span className="ed-accent">move fast</span>
           </h2>
+          <p className="mt-4 text-lg" style={{ color: "var(--muted)" }}>
+            Six things Truck Box adds to the DAT board, so booking a load is a couple of
+            clicks instead of a dozen.
+          </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-          {items.map((f) => (
-            <div key={f.t} style={{ border: "1px solid var(--line)", borderRadius: 16, padding: 24, background: "var(--bg-2)" }}>
-              <div style={{ width: 42, height: 42, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(79,157,255,0.12)", color: "var(--accent)" }}>
-                {f.icon}
+        <Reveal>
+          <div className="tb-feature-grid">
+            {items.map((f, i) => (
+              <div className="tb-feature" key={f.t}>
+                <div className="tb-feature-top">
+                  <span className="tb-feature-index">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="tb-feature-icon">{f.icon}</span>
+                </div>
+                <div className="tb-feature-head">
+                  <h3>{f.t}</h3>
+                  {f.soon && <span className="tb-feature-soon">Soon</span>}
+                </div>
+                <p>{f.d}</p>
               </div>
-              <div className="flex items-center" style={{ gap: 8, marginTop: 16 }}>
-                <h3 style={{ fontWeight: 700, fontSize: 18 }}>{f.t}</h3>
-                {f.soon && (
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "#f59e0b", textTransform: "uppercase", letterSpacing: "0.4px", border: "1px solid rgba(245,158,11,.4)", borderRadius: 999, padding: "2px 7px" }}>
-                    Soon
-                  </span>
-                )}
-              </div>
-              <p style={{ color: "var(--muted)", marginTop: 8, lineHeight: 1.6 }}>{f.d}</p>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        </Reveal>
 
         <BrowserSupport />
       </div>
@@ -879,12 +882,14 @@ function SpinBadge() {
 
 function Marquee() {
   const items = [
-    "One-click sending",
-    "Saved templates",
+    "One-click broker emails",
+    "Works in Chrome & Opera",
+    "Sign in with Google",
+    "RPM with deadhead",
+    "3-stop Google Maps routes",
+    "Miles filter",
     "Keyboard navigation",
-    "Short-load filtering",
-    "Google Maps context",
-    "Activity stats",
+    "Broker credit · soon",
   ];
   const loop = [...items, ...items];
   return (
@@ -993,7 +998,7 @@ export function LoadBoardDemo() {
           </h2>
           <p className="mt-4 max-w-xl text-lg mx-auto md:mx-0" style={{ color: "var(--muted)" }}>
             A working preview of the DAT board. <b style={{ color: "var(--ink)" }}>Click any load</b> to
-            expand its details — the route map, deadhead-adjusted RPM and broker credit are
+            expand its details. The route map, deadhead-adjusted RPM and broker credit are
             added by Truck Box. Send the broker an email or open the route in Google Maps.
           </p>
         </div>
