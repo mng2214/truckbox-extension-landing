@@ -466,6 +466,20 @@ html.lenis, html.lenis body { height: auto; }
   flex-direction: column;
   flex: 1;
 }
+/* mobile: native horizontal swipe carousel for the features */
+.tb-feature-scroll {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 0 18px 14px;
+  scroll-padding-left: 18px;
+  scrollbar-width: none;
+}
+.tb-feature-scroll::-webkit-scrollbar { display: none; }
+.tb-feature-scroll > .ed-fcard { scroll-snap-align: start; }
+
 .ed-fcard-idx {
   position: absolute;
   top: 12px;

@@ -1488,6 +1488,19 @@ function Features() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [dist, setDist] = useState(0);
+  const [isMobile, setIsMobile] = useState(
+    () =>
+      typeof window !== "undefined" &&
+      window.matchMedia("(max-width: 1023px)").matches
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 1023px)");
+    const onMq = () => setIsMobile(mq.matches);
+    onMq();
+    mq.addEventListener("change", onMq);
+    return () => mq.removeEventListener("change", onMq);
+  }, []);
 
   useEffect(() => {
     const calc = () => {
@@ -1506,6 +1519,40 @@ function Features() {
   });
   const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
 
+  const header = (
+    <div className="flex items-end justify-between gap-6 mb-10">
+      <div>
+        <span className="ed-label">[ 02 ] — Features</span>
+        <h2 className="ed-h2 mt-4">
+          Minimal by design.
+          <br />
+          <span className="ed-accent">Premium in feel.</span>
+        </h2>
+      </div>
+      <span className="ed-label hidden md:block max-w-[220px] text-right">
+        Move faster without turning DAT into a cluttered tool
+      </span>
+    </div>
+  );
+
+  // Mobile: native horizontal swipe (scroll-snap), no scroll-jacking.
+  if (isMobile) {
+    return (
+      <section id="features" className="ed-section">
+        <div className="ed-container">{header}</div>
+        <div className="tb-feature-scroll">
+          {items.map((it, i) => (
+            <FeatureCard key={it.slug} item={it} index={i} />
+          ))}
+        </div>
+        <div className="ed-container mt-5">
+          <span className="ed-label">Swipe to explore →</span>
+        </div>
+      </section>
+    );
+  }
+
+  // Desktop: pinned, scroll-driven horizontal track.
   return (
     <section
       id="features"
@@ -1513,21 +1560,7 @@ function Features() {
       style={{ height: `calc(100vh + ${dist}px)` }}
     >
       <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-        <div className="ed-container w-full">
-          <div className="flex items-end justify-between gap-6 mb-10">
-            <div>
-              <span className="ed-label">[ 02 ] — Features</span>
-              <h2 className="ed-h2 mt-4">
-                Minimal by design.
-                <br />
-                <span className="ed-accent">Premium in feel.</span>
-              </h2>
-            </div>
-            <span className="ed-label hidden md:block max-w-[220px] text-right">
-              Move faster without turning DAT into a cluttered tool
-            </span>
-          </div>
-        </div>
+        <div className="ed-container w-full">{header}</div>
 
         <motion.div
           ref={trackRef}
