@@ -21,6 +21,7 @@ import {
   Keyboard,
   ShieldCheck,
   ChevronDown,
+  RotateCw,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -513,6 +514,26 @@ function LoadDetailPanel({
   const ratePerMile = rateN && tripN ? "$" + (rateN / tripN).toFixed(2) : "—";
   const truckType = l.equip === "VR" ? "Van/Reefer" : l.equip === "R" ? "Reefer" : "Van";
 
+  const [copied, setCopied] = useState(false);
+  const onCopy = () => {
+    const lines = [
+      `${l.origin} -> ${l.dest}`,
+      "",
+      `Pickup: ${l.pickup}`,
+      `Origin: ${l.origin}`,
+      `Destination: ${l.dest}`,
+      dh ? `Deadhead: ${fmtMi(dh)}` : "",
+      `Loaded: ${fmtMi(tripN)}`,
+      dh ? `Total: ${fmtMi(totalMi)}` : "",
+      `Weight: ${l.weight}`,
+    ].filter((x) => x !== "");
+    navigator.clipboard?.writeText(lines.join("\n")).catch(() => {});
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1600);
+  };
+  const openFmcsa = () =>
+    window.open("https://safer.fmcsa.dot.gov/CompanySnapshot.aspx", "_blank", "noopener");
+
   const headerBar: CSSProperties = { background: grey, color: "#636d78", fontWeight: 600, fontSize: 13, padding: "9px 12px", borderRadius: 4, marginBottom: 14 };
 
   return (
@@ -524,7 +545,7 @@ function LoadDetailPanel({
         <span style={{ color: sub, fontSize: 13, marginLeft: 4 }}>{l.trip} mi</span>
       </div>
 
-      <div className="grid gap-7" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))" }}>
+      <div className="tb-demo-detail-grid">
         {/* Trip */}
         <div>
           <div style={headerBar}>Trip</div>
@@ -543,7 +564,7 @@ function LoadDetailPanel({
           <div style={{ marginTop: 16 }}>
             <span style={{ fontSize: 11, fontWeight: 600, color: sub, textTransform: "uppercase", letterSpacing: "0.4px" }}>Contact</span>
             <div className="flex items-center" style={{ gap: 8, marginTop: 6 }}>
-              <button type="button" onClick={onSend} className="tb-demo-send" data-sent={sent ? "1" : undefined} title="Truck Box: send email to broker" aria-label={`Send email to ${l.broker}`}>
+              <button type="button" onClick={onSend} className="tb-demo-send tb-pulse" data-sent={sent ? "1" : undefined} title="Truck Box: send email to broker" aria-label={`Send email to ${l.broker}`}>
                 {sent ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
               </button>
               <span style={{ color: link, fontSize: 13 }}>{l.email}</span>
@@ -561,11 +582,19 @@ function LoadDetailPanel({
         {/* Route — Powered by TruckBox */}
         <div>
           <div style={headerBar}>Route — Powered by TruckBox</div>
-          <div className="flex flex-wrap" style={{ gap: 16, marginBottom: 14 }}>
+          <div className="flex flex-wrap items-center" style={{ gap: 16, marginBottom: 14 }}>
             <Stat k="Loaded" v={fmtMi(tripN)} />
             {dh ? <Stat k="Deadhead" v={fmtMi(dh)} /> : null}
             {dh ? <Stat k="Total" v={fmtMi(totalMi)} hi /> : null}
             {dh && rateN ? <Stat k="RPM (w/DH)" v={rpmDh} hi /> : null}
+            <button
+              type="button"
+              onClick={onCopy}
+              className={copied ? "" : "tb-pulse"}
+              style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 6, cursor: "pointer", fontWeight: 600, fontSize: 12, color: copied ? "#16a34a" : "#0a6cb8", background: copied ? "#f0fdf4" : "#fff", border: `1.5px solid ${copied ? "#16a34a" : "#bcdcf3"}`, borderRadius: 9, padding: "8px 11px", whiteSpace: "nowrap" }}
+            >
+              {copied ? "Copied!" : "Copy"}
+            </button>
           </div>
           <RouteMapArt />
           <button
@@ -576,17 +605,14 @@ function LoadDetailPanel({
             Open in Google Maps ↗
           </button>
 
-          <div style={{ marginTop: 14, display: "inline-flex", flexDirection: "column", gap: 7, padding: "9px 12px", borderRadius: 10, border: "1px solid #bcdcf3", background: "#eef6fd" }}>
-            <div className="flex items-center" style={{ gap: 8 }}>
-              <span style={{ fontWeight: 800, fontSize: 15, color: "#0a6cb8", letterSpacing: 0.5 }}>RTS</span>
-              <span style={{ fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.3px" }}>Broker credit</span>
-              <span style={{ fontSize: 10, fontWeight: 700, color: "#f59e0b", textTransform: "uppercase" }}>Soon</span>
-            </div>
-            <div className="flex items-center" style={{ gap: 9 }}>
-              <span style={{ width: 24, height: 24, borderRadius: 999, background: "#94a3b8", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 13 }}>?</span>
-              <span style={{ fontSize: 11, fontWeight: 600, color: "#0a6cb8", background: "#fff", border: "1px solid #bcdcf3", borderRadius: 8, padding: "6px 10px" }}>Check credit</span>
-            </div>
-          </div>
+          <button
+            type="button"
+            onClick={openFmcsa}
+            className="tb-pulse"
+            style={{ marginTop: 14, display: "inline-flex", alignItems: "center", gap: 7, cursor: "pointer", fontWeight: 600, fontSize: 12, color: "#0a6cb8", background: "#fff", border: "1.5px solid #bcdcf3", borderRadius: 9, padding: "8px 12px" }}
+          >
+            FMCSA Broker Report ↗
+          </button>
         </div>
 
         {/* Rate */}
@@ -880,31 +906,37 @@ function SpinBadge() {
    Marquee
    ============================================================ */
 
+/* National freight-market ticker.
+ * Update MARKET + MARKET_AS_OF when you refresh the numbers (DAT Trendlines for
+ * the per-mile rates, EIA/AAA for diesel). To make it live, swap MARKET for a
+ * fetch from your backend that scrapes DAT Trendlines + the EIA diesel API. */
+const MARKET_AS_OF = "May 2026";
+const MARKET: { label: string; value: string; unit: string; muted?: boolean }[] = [
+  { label: "US Diesel", value: "$5.64", unit: "/gal" },
+  { label: "Van", value: "$2.79", unit: "/mi" },
+  { label: "Reefer", value: "$3.26", unit: "/mi" },
+  { label: "Flatbed", value: "$3.60", unit: "/mi" },
+  { label: "DAT spot avg", value: MARKET_AS_OF, unit: "", muted: true },
+];
+
 function Marquee() {
-  const items = [
-    "One-click broker emails",
-    "Works in Chrome & Opera",
-    "Sign in with Google",
-    "RPM with deadhead",
-    "3-stop Google Maps routes",
-    "Miles filter",
-    "Keyboard navigation",
-    "Broker credit · soon",
-  ];
-  const loop = [...items, ...items];
+  const base = [...MARKET, ...MARKET, ...MARKET];
+  const loop = [...base, ...base];
   return (
     <div
-      className="ed-marquee-wrap py-7"
+      className="ed-marquee-wrap tb-ticker py-6"
       style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
     >
       <motion.div
         className="ed-marquee"
         animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 26, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
       >
-        {loop.map((it, i) => (
-          <span key={i} className="ed-marquee-item">
-            {it} <span className="ed-marquee-star">✱</span>
+        {loop.map((m, i) => (
+          <span key={i} className={"tb-ticker-item" + (m.muted ? " is-muted" : "")}>
+            <span className="lbl">{m.label}</span>
+            {m.value && <span className="val">{m.value}</span>}
+            {m.unit && <span className="unit">{m.unit}</span>}
           </span>
         ))}
       </motion.div>
@@ -957,6 +989,12 @@ export function LoadBoardDemo() {
   const [sentRow, setSentRow] = useState<number | null>(null);
   const [expandedRow, setExpandedRow] = useState<number | null>(0);
   const toggleRow = (i: number) => setExpandedRow((cur) => (cur === i ? null : i));
+  const [refreshing, setRefreshing] = useState(false);
+  const doRefresh = () => {
+    if (refreshing) return;
+    setRefreshing(true);
+    setTimeout(() => setRefreshing(false), 900);
+  };
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
@@ -992,16 +1030,9 @@ export function LoadBoardDemo() {
   return (
     <section className="ed-section" style={{ paddingTop: 0 }}>
       <div className="ed-container">
-        <div className="mb-8 text-center md:text-left">
-          <h2 className="ed-h2">
-            See it on the <span className="ed-accent">board</span>
-          </h2>
-          <p className="mt-4 max-w-xl text-lg mx-auto md:mx-0" style={{ color: "var(--muted)" }}>
-            A working preview of the DAT board. <b style={{ color: "var(--ink)" }}>Click any load</b> to
-            expand its details. The route map, deadhead-adjusted RPM and broker credit are
-            added by Truck Box. Send the broker an email or open the route in Google Maps.
-          </p>
-        </div>
+        <p className="mb-5 ed-label text-center md:text-left">
+          Click any load to expand · try the buttons
+        </p>
 
         <Reveal>
           <div
@@ -1025,6 +1056,29 @@ export function LoadBoardDemo() {
                 one.dat.com/search-loads
               </span>
               <span className="ed-label hidden sm:block ed-accent">Truck Box · live demo</span>
+            </div>
+
+            {/* results header (demo) with Refresh Loads */}
+            <div
+              className="hidden md:flex items-center gap-4"
+              style={{ background: "#fff", color: ink, borderBottom: `1px solid ${line}`, padding: "10px 16px" }}
+            >
+              <span style={{ fontWeight: 800, fontSize: 15 }}>
+                369 <span style={{ color: sub, fontWeight: 600, fontSize: 13 }}>Results</span>
+              </span>
+              <span style={{ color: sub, fontSize: 13 }}>
+                Sort by <b style={{ color: link }}>Age</b>
+              </span>
+              <button
+                type="button"
+                onClick={doRefresh}
+                disabled={refreshing}
+                className={refreshing ? "" : "tb-pulse"}
+                style={{ marginLeft: "auto", display: "inline-flex", alignItems: "center", gap: 7, cursor: refreshing ? "default" : "pointer", fontWeight: 700, fontSize: 12.5, color: "#fff", background: "#0046E0", border: 0, borderRadius: 8, padding: "9px 16px" }}
+              >
+                <RotateCw className={refreshing ? "tb-spin" : ""} style={{ width: 14, height: 14 }} />
+                {refreshing ? "Refreshing…" : "Refresh Loads"}
+              </button>
             </div>
 
             {/* load board — desktop table (web stays as-is) */}
@@ -1070,7 +1124,7 @@ export function LoadBoardDemo() {
                               onClick={(e) => { e.stopPropagation(); openRoute(l); }}
                               title="Truck Box: open route in Google Maps"
                               aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
-                              className="tb-demo-route"
+                              className="tb-demo-route tb-pulse"
                             >
                               <MapPin style={{ width: 16, height: 16 }} />
                             </button>
@@ -1090,7 +1144,7 @@ export function LoadBoardDemo() {
                                 onClick={(e) => { e.stopPropagation(); sendDemo(i, l.broker); }}
                                 title="Truck Box: send email to broker"
                                 aria-label={`Send email to ${l.broker}`}
-                                className="tb-demo-send"
+                                className="tb-demo-send tb-pulse"
                                 data-sent={sentRow === i ? "1" : undefined}
                               >
                                 {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
@@ -1149,7 +1203,7 @@ export function LoadBoardDemo() {
                             onClick={(e) => { e.stopPropagation(); openRoute(l); }}
                             title="Truck Box: open route in Google Maps"
                             aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
-                            className="tb-demo-route"
+                            className="tb-demo-route tb-pulse"
                           >
                             <MapPin style={{ width: 16, height: 16 }} />
                           </button>
@@ -1163,7 +1217,7 @@ export function LoadBoardDemo() {
                           onClick={(e) => { e.stopPropagation(); sendDemo(i, l.broker); }}
                           title="Truck Box: send email to broker"
                           aria-label={`Send email to ${l.broker}`}
-                          className="tb-demo-send"
+                          className="tb-demo-send tb-pulse"
                           data-sent={sentRow === i ? "1" : undefined}
                           style={{ flex: "0 0 auto" }}
                         >
@@ -1266,7 +1320,7 @@ function SocialProof() {
           <h2 className="ed-h2 max-w-2xl">
             Saves a full-time dispatcher
             <br />
-            <span className="ed-accent">about 2 hours a week.</span>
+            <span className="ed-accent">about 2-3 hours a week.</span>
           </h2>
           <div className="text-left md:text-right">
             <div
@@ -1275,9 +1329,15 @@ function SocialProof() {
             >
               5.0 <span className="ed-accent">★</span>
             </div>
-            <span className="ed-label mt-3 block">
+            <a
+              href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
+              target="_blank"
+              rel="noreferrer"
+              className="ed-label tb-reviews-link mt-3 inline-flex items-center gap-1.5 md:justify-end"
+            >
               98 dispatchers · Chrome Web Store
-            </span>
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </a>
           </div>
         </div>
 
@@ -1305,31 +1365,98 @@ function SocialProof() {
    Features — horizontal pinned track
    ============================================================ */
 
+type FeatureItem = { slug: string; title: string; body: string };
+
+function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
+  const vid = useRef<HTMLVideoElement>(null);
+  const [failed, setFailed] = useState(false);
+
+  const onEnter = () => {
+    vid.current?.play().catch(() => {});
+  };
+  const onLeave = () => {
+    const v = vid.current;
+    if (v) {
+      v.pause();
+      v.currentTime = 0;
+    }
+  };
+
+  return (
+    <article
+      className="ed-fcard"
+      data-cursor
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      <div className="ed-fcard-media-wrap">
+        {failed ? (
+          <div className="ed-fcard-ph">
+            <span className="ed-fcard-ph-play">▶</span>
+            <span className="ed-fcard-ph-note">Demo coming</span>
+          </div>
+        ) : (
+          <video
+            ref={vid}
+            className="ed-fcard-media"
+            src={`/demos/${item.slug}.mp4`}
+            poster={`/demos/${item.slug}.jpg`}
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onError={() => setFailed(true)}
+          />
+        )}
+        <span className="ed-fcard-idx">{String(index + 1).padStart(2, "0")} / 06</span>
+      </div>
+
+      <div className="ed-fcard-body">
+        <h3
+          className="ed-display text-2xl leading-[0.98]"
+          style={{ textTransform: "none", letterSpacing: "-0.02em" }}
+        >
+          {item.title}
+        </h3>
+        <p className="mt-3 text-[0.95rem] leading-relaxed" style={{ color: "var(--muted)" }}>
+          {item.body}
+        </p>
+      </div>
+    </article>
+  );
+}
+
 function Features() {
-  const items = [
+  const items: FeatureItem[] = [
     {
+      slug: "email",
       title: "One-click email",
       body: "Email the broker straight from a DAT load row. No copy-paste, no Gmail tab.",
     },
     {
+      slug: "keyboard",
       title: "Keyboard navigation",
-      body: "Hands stay on the keyboard. W/S move loads, A/D switch tabs, Q opens maps, E sends, Space expands.",
+      body: "Hands stay on the keyboard. W/S move loads, A/D switch tabs, C copies, E sends, R refreshes.",
     },
     {
-      title: "Saved templates",
-      body: "Write your subject and body once. Every email goes out filled in and consistent.",
+      slug: "copy",
+      title: "Copy & share load",
+      body: "Copy the whole load — pickup, miles, deadhead, weight, map link — to text your driver in one click.",
     },
     {
-      title: "Short-load filtering",
+      slug: "route",
+      title: "Route & deadhead RPM",
+      body: "A live route map plus a true rate-per-mile that counts the empty miles to pickup.",
+    },
+    {
+      slug: "filter",
+      title: "Miles filter",
       body: "Dim loads under your minimum miles and focus on the lanes worth your time.",
     },
     {
-      title: "Route on the map",
-      body: "Open the load's route in Google Maps without leaving DAT.",
-    },
-    {
-      title: "Activity stats",
-      body: "See emails sent and time saved, right inside the extension.",
+      slug: "fmcsa",
+      title: "FMCSA & rate calc",
+      body: "Open the broker's FMCSA report and price a load on the phone, right on the board.",
     },
   ];
 
@@ -1383,25 +1510,7 @@ function Features() {
           className="flex gap-6 pl-[max(32px,calc((100vw-1320px)/2+32px))] pr-8"
         >
           {items.map((it, i) => (
-            <article key={it.title} className="ed-fcard" data-cursor>
-              <div className="flex items-center justify-between">
-                <span className="ed-fcard-idx">
-                  {String(i + 1).padStart(2, "0")} / 06
-                </span>
-                <ArrowUpRight className="h-5 w-5" style={{ color: "var(--muted)" }} />
-              </div>
-              <div>
-                <h3
-                  className="ed-display text-3xl leading-[0.98]"
-                  style={{ textTransform: "none", letterSpacing: "-0.02em" }}
-                >
-                  {it.title}
-                </h3>
-                <p className="mt-4 text-[0.97rem] leading-relaxed" style={{ color: "var(--muted)" }}>
-                  {it.body}
-                </p>
-              </div>
-            </article>
+            <FeatureCard key={it.slug} item={it} index={i} />
           ))}
         </motion.div>
       </div>

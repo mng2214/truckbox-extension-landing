@@ -16,10 +16,8 @@ export default function DemoPage() {
             <h1 className="ed-h2 mt-4">
               Try Truck Box <span className="ed-accent">live</span>
             </h1>
-            <p className="mt-4 max-w-xl text-lg" style={{ color: "var(--muted)" }}>
-              A working preview of the DAT board with Truck Box buttons. Click the
-              envelope to send, the route to open Google Maps. Sample data, no real
-              email is sent.
+            <p className="mt-4 max-w-md text-lg" style={{ color: "var(--muted)" }}>
+              A working preview of the DAT board. Sample data, nothing is sent.
             </p>
             <div className="mt-6">
               <a
