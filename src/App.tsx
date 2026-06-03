@@ -19,9 +19,9 @@ import {
   Gauge,
   Filter,
   Keyboard,
-  ShieldCheck,
   ChevronDown,
   RotateCw,
+  FileText,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -643,13 +643,13 @@ function LoadDetailPanel({
    ============================================================ */
 
 export function DemoFeatures() {
-  const items = [
+  const items: { icon: React.ReactNode; t: string; d: string; soon?: boolean }[] = [
     { icon: <Mail style={{ width: 19, height: 19 }} />, t: "One-click broker email", d: "A custom template that fills itself from the load's data in DAT and sends from your own Gmail. No copy-paste, no second tab." },
     { icon: <MapPin style={{ width: 19, height: 19 }} />, t: "Google Maps in one click", d: "Open the whole trip in Google Maps as three stops: your truck, the pickup, then the destination." },
     { icon: <Gauge style={{ width: 19, height: 19 }} />, t: "RPM with deadhead", d: "A real rate-per-mile that counts the empty miles to pickup, plus total miles including deadhead." },
     { icon: <Filter style={{ width: 19, height: 19 }} />, t: "Miles filter", d: "Hide loads shorter than the distance you set, so only the trips worth your time stay on the board." },
     { icon: <Keyboard style={{ width: 19, height: 19 }} />, t: "Keyboard navigation", d: "Move through loads and fire actions from the keyboard. Book more lanes, reach for the mouse less." },
-    { icon: <ShieldCheck style={{ width: 19, height: 19 }} />, t: "Broker credit check", soon: true, d: "Factoring and RTS broker credit right on the load, so you can vet who is posting before you call." },
+    { icon: <FileText style={{ width: 19, height: 19 }} />, t: "Saved email templates", d: "Write your subject and body once. Every email goes out auto-filled from the load and consistent." },
   ];
 
   return (
@@ -1649,6 +1649,7 @@ function Pricing() {
     "Saved templates",
     "Built-in Google Maps route",
     "Copy & share load info",
+    "Click-to-call broker numbers",
     "FMCSA broker report",
     "Refresh-loads button",
     "Short-load filtering",
