@@ -740,7 +740,15 @@ export function Header() {
                 width={30}
                 height={30}
                 onError={() => setLogoFailed(true)}
-                style={{ display: "block", borderRadius: "50%", flex: "0 0 auto" }}
+                style={{
+                  display: "block",
+                  width: 30,
+                  height: 30,
+                  flex: "0 0 auto",
+                  WebkitMaskImage: "radial-gradient(circle, #000 74%, transparent 100%)",
+                  maskImage: "radial-gradient(circle, #000 74%, transparent 100%)",
+                  filter: "drop-shadow(0 0 8px rgba(124,92,246,0.45))",
+                }}
               />
             )}
             <span
