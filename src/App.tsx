@@ -1343,7 +1343,7 @@ function SocialProof() {
       <div className="ed-container">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-8">
           <h2 className="ed-h2 max-w-2xl">
-            Saves a full-time dispatcher
+            Saves a fulltime dispatcher
             <br />
             <span className="ed-accent">about 2-3 hours a week.</span>
           </h2>
@@ -1392,7 +1392,7 @@ function SocialProof() {
 
 type FeatureItem = { slug: string; title: string; body: string };
 
-function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
+function FeatureCard({ item, index, total }: { item: FeatureItem; index: number; total: number }) {
   const vid = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
 
@@ -1433,7 +1433,7 @@ function FeatureCard({ item, index }: { item: FeatureItem; index: number }) {
             onError={() => setFailed(true)}
           />
         )}
-        <span className="ed-fcard-idx">{String(index + 1).padStart(2, "0")} / 06</span>
+        <span className="ed-fcard-idx">{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
       </div>
 
       <div className="ed-fcard-body">
@@ -1457,6 +1457,11 @@ function Features() {
       slug: "email",
       title: "One-click email",
       body: "Email the broker straight from a DAT load row. No copy-paste, no Gmail tab.",
+    },
+    {
+      slug: "templates",
+      title: "Saved email templates",
+      body: "Write your subject and body once. Every email goes out auto-filled from the load and consistent.",
     },
     {
       slug: "keyboard",
@@ -1542,7 +1547,7 @@ function Features() {
         <div className="ed-container">{header}</div>
         <div className="tb-feature-scroll">
           {items.map((it, i) => (
-            <FeatureCard key={it.slug} item={it} index={i} />
+            <FeatureCard key={it.slug} item={it} index={i} total={items.length} />
           ))}
         </div>
         <div className="ed-container mt-5">
@@ -1568,7 +1573,7 @@ function Features() {
           className="flex gap-6 pl-[max(32px,calc((100vw-1320px)/2+32px))] pr-8"
         >
           {items.map((it, i) => (
-            <FeatureCard key={it.slug} item={it} index={i} />
+            <FeatureCard key={it.slug} item={it} index={i} total={items.length} />
           ))}
         </motion.div>
       </div>
