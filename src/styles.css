@@ -144,6 +144,78 @@ html.lenis, html.lenis body { height: auto; }
   100% { box-shadow: 0 0 0 0 rgba(100, 116, 139, 0); }
 }
 .tb-pulse-grey { animation: tb-pulse-grey 2.2s ease-out infinite; }
+
+/* feature flipbook (pricing) — 3D page-flip carousel */
+.tb-flip { width: 100%; }
+.tb-flip-stage {
+  position: relative;
+  perspective: 1600px;
+  height: 168px;
+}
+.tb-flip-page {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 10px;
+  padding: 26px 30px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);   /* spine */
+  border-radius: 12px;
+  background: linear-gradient(135deg, var(--bg-2), #0b1322);
+  transform-origin: left center;
+  transform-style: preserve-3d;
+  backface-visibility: hidden;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+  cursor: grab;
+}
+.tb-flip-page:active { cursor: grabbing; }
+.tb-flip-idx {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.2em;
+  color: var(--muted);
+}
+.tb-flip-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+}
+.tb-flip-controls {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 22px;
+}
+.tb-flip-controls > button {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease);
+}
+.tb-flip-controls > button:hover { border-color: var(--accent); color: var(--accent); }
+.tb-flip-dots { display: flex; align-items: center; gap: 8px; flex: 1; flex-wrap: wrap; }
+.tb-flip-dots button {
+  width: 8px;
+  height: 8px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--line-strong);
+  cursor: pointer;
+  transition: background 0.3s var(--ease), transform 0.3s var(--ease);
+}
+.tb-flip-dots button.is-active { background: var(--accent); transform: scale(1.35); }
 .ed-accent {
   background: var(--accent-grad);
   background-size: 220% auto;

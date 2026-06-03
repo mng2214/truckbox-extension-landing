@@ -863,26 +863,26 @@ function Hero() {
           play
           className="ed-display text-[10vw] lg:text-[7rem]"
           lines={[
-            "A cleaner &",
-            "faster way to",
-            "send broker",
-            "emails from",
-            <span className="ed-accent" key="dat">one.dat.com</span>,
+            "Email",
+            "brokers in",
+            <span key="oc">
+              <span className="ed-accent">one click.</span>
+            </span>,
           ]}
         />
 
         <div className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-              No more copy-paste between DAT and Gmail. One click sends the broker a
-              ready email from your template, so you cover more loads in less time.
+              No more copy-paste between DAT and Gmail. Send the broker a ready
+              email from your saved template, so you cover more loads in less time.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
                 <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <Link className="ed-btn" to="/demo">
-                <span>Live demo</span> <Play className="h-3.5 w-3.5" fill="currentColor" />
+                <span>Live demo</span> <Play className="h-3.5 w-3.5" fill="#ef4444" style={{ color: "#ef4444" }} />
               </Link>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
                 <span>Book Call</span>
@@ -1609,9 +1609,12 @@ function Pricing() {
     "7-day free trial",
     "One-click email sending",
     "Saved templates",
+    "Built-in Google Maps route",
+    "Copy & share load info",
+    "FMCSA broker report",
+    "Refresh-loads button",
     "Short-load filtering",
     "Keyboard navigation",
-    "Learning center access",
   ];
   return (
     <section id="pricing" className="ed-section">
@@ -1675,10 +1678,10 @@ function Pricing() {
                 className="ed-display text-3xl md:text-4xl mt-3"
                 style={{ textTransform: "none", letterSpacing: "-0.02em" }}
               >
-                10 or more dispatchers?
+                COMPANY OR DISPATCH TEAM?
               </h3>
               <p className="mt-3 max-w-lg text-lg" style={{ color: "var(--muted)" }}>
-                We set custom team pricing and add everyone by email. You get one bill,
+                Get custom team setup and add everyone by email. You get one bill,
                 your dispatchers get instant access.
               </p>
             </div>
