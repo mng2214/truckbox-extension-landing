@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react";
 import { Link } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
@@ -16,6 +16,11 @@ import {
   Mail,
   MapPin,
   Check,
+  Gauge,
+  Filter,
+  Keyboard,
+  ShieldCheck,
+  ChevronDown,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -466,6 +471,197 @@ export function RouteShowcase() {
 }
 
 /* ============================================================
+   Expandable load detail (mimics DAT's load-details panel)
+   ============================================================ */
+
+function parseMoney(s: string): number | null {
+  const m = String(s).replace(/[, ]/g, "").match(/([\d.]+)/);
+  return m ? parseFloat(m[1]) : null;
+}
+
+function Stat({ k, v, hi = false }: { k: string; v: string; hi?: boolean }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+      <span style={{ fontSize: 10, letterSpacing: "0.4px", textTransform: "uppercase", color: "#64748b", fontWeight: 600 }}>{k}</span>
+      <span style={{ fontSize: 15, fontWeight: 700, color: hi ? "#0046E0" : "#1e293b" }}>{v}</span>
+    </div>
+  );
+}
+
+function LoadDetailPanel({
+  l,
+  sent,
+  onSend,
+  onRoute,
+}: {
+  l: DemoLoad;
+  sent: boolean;
+  onSend: () => void;
+  onRoute: () => void;
+}) {
+  const ink = "#1e293b";
+  const sub = "#64748b";
+  const link = "#2563eb";
+  const grey = "#f3f4f6";
+
+  const tripN = parseMoney(l.trip) ?? 0;
+  const dh = l.dh ?? 0;
+  const totalMi = tripN + dh;
+  const rateN = parseMoney(l.rate);
+  const fmtMi = (n: number) => n.toLocaleString("en-US") + " mi";
+  const rpmDh = rateN && totalMi ? "$" + (rateN / totalMi).toFixed(2) : "—";
+  const ratePerMile = rateN && tripN ? "$" + (rateN / tripN).toFixed(2) : "—";
+  const truckType = l.equip === "VR" ? "Van/Reefer" : l.equip === "R" ? "Reefer" : "Van";
+
+  const headerBar: CSSProperties = { background: grey, color: "#636d78", fontWeight: 600, fontSize: 13, padding: "9px 12px", borderRadius: 4, marginBottom: 14 };
+
+  return (
+    <div style={{ padding: "10px 4px 20px", color: ink }}>
+      <div className="flex items-center flex-wrap" style={{ gap: 10, marginBottom: 18 }}>
+        <span style={{ fontWeight: 800, fontSize: 18 }}>{l.origin}</span>
+        <span style={{ color: link }}>→</span>
+        <span style={{ fontWeight: 800, fontSize: 18 }}>{l.dest}</span>
+        <span style={{ color: sub, fontSize: 13, marginLeft: 4 }}>{l.trip} mi</span>
+      </div>
+
+      <div className="grid gap-7" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))" }}>
+        {/* Trip */}
+        <div>
+          <div style={headerBar}>Trip</div>
+          <div style={{ fontWeight: 700 }}>{l.origin}{dh ? ` (${dh})` : ""}</div>
+          <div style={{ color: sub, fontSize: 13, margin: "2px 0 12px" }}>Pickup {l.pickup}</div>
+          <div style={{ fontWeight: 700 }}>{l.dest}</div>
+
+          <div style={{ marginTop: 16, fontSize: 13, color: sub, lineHeight: 1.9 }}>
+            <div style={{ fontWeight: 700, color: ink, marginBottom: 2 }}>Equipment</div>
+            <div>Load — Full</div>
+            <div>Truck — {truckType}</div>
+            <div>Length — {l.length}</div>
+            <div>Weight — {l.weight}</div>
+          </div>
+
+          <div style={{ marginTop: 16 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: sub, textTransform: "uppercase", letterSpacing: "0.4px" }}>Contact</span>
+            <div className="flex items-center" style={{ gap: 8, marginTop: 6 }}>
+              <button type="button" onClick={onSend} className="tb-demo-send" data-sent={sent ? "1" : undefined} title="Truck Box: send email to broker" aria-label={`Send email to ${l.broker}`}>
+                {sent ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
+              </button>
+              <span style={{ color: link, fontSize: 13 }}>{l.email}</span>
+            </div>
+          </div>
+
+          {l.comments && (
+            <div style={{ marginTop: 16 }}>
+              <span style={{ fontSize: 11, fontWeight: 600, color: sub, textTransform: "uppercase", letterSpacing: "0.4px" }}>Comments</span>
+              <div style={{ fontSize: 13, marginTop: 4 }}>{l.comments}</div>
+            </div>
+          )}
+        </div>
+
+        {/* Route — Powered by TruckBox */}
+        <div>
+          <div style={headerBar}>Route — Powered by TruckBox</div>
+          <div className="flex flex-wrap" style={{ gap: 16, marginBottom: 14 }}>
+            <Stat k="Loaded" v={fmtMi(tripN)} />
+            {dh ? <Stat k="Deadhead" v={fmtMi(dh)} /> : null}
+            {dh ? <Stat k="Total" v={fmtMi(totalMi)} hi /> : null}
+            {dh && rateN ? <Stat k="RPM (w/DH)" v={rpmDh} hi /> : null}
+          </div>
+          <RouteMapArt />
+          <button
+            type="button"
+            onClick={onRoute}
+            style={{ marginTop: 8, marginLeft: "auto", display: "block", color: link, fontWeight: 600, fontSize: 12, background: "none", border: 0, cursor: "pointer", padding: 0 }}
+          >
+            Open in Google Maps ↗
+          </button>
+
+          <div style={{ marginTop: 14, display: "inline-flex", flexDirection: "column", gap: 7, padding: "9px 12px", borderRadius: 10, border: "1px solid #bcdcf3", background: "#eef6fd" }}>
+            <div className="flex items-center" style={{ gap: 8 }}>
+              <span style={{ fontWeight: 800, fontSize: 15, color: "#0a6cb8", letterSpacing: 0.5 }}>RTS</span>
+              <span style={{ fontSize: 11, fontWeight: 700, color: "#64748b", textTransform: "uppercase", letterSpacing: "0.3px" }}>Broker credit</span>
+              <span style={{ fontSize: 10, fontWeight: 700, color: "#f59e0b", textTransform: "uppercase" }}>Soon</span>
+            </div>
+            <div className="flex items-center" style={{ gap: 9 }}>
+              <span style={{ width: 24, height: 24, borderRadius: 999, background: "#94a3b8", color: "#fff", display: "inline-flex", alignItems: "center", justifyContent: "center", fontWeight: 800, fontSize: 13 }}>?</span>
+              <span style={{ fontSize: 11, fontWeight: 600, color: "#0a6cb8", background: "#fff", border: "1px solid #bcdcf3", borderRadius: 8, padding: "6px 10px" }}>Check credit</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Rate */}
+        <div>
+          <div style={headerBar}>Rate</div>
+          <RateRow k="Total" v={l.rate} big />
+          <RateRow k="Trip" v={`${l.trip} mi`} />
+          <RateRow k="Rate / mile" v={ratePerMile} />
+        </div>
+
+        {/* Company */}
+        <div>
+          <div style={headerBar}>Company</div>
+          <div style={{ fontWeight: 700, fontSize: 15 }}>{l.broker}</div>
+          <div style={{ color: link, fontSize: 13, marginTop: 6 }}>{l.email}</div>
+          <div className="flex items-center flex-wrap" style={{ gap: 8, marginTop: 12 }}>
+            <span style={{ fontSize: 12, fontWeight: 700, color: "#0a6cb8", background: "#eef6fd", border: "1px solid #bcdcf3", borderRadius: 8, padding: "6px 10px" }}>Factoring Eligible</span>
+            <span style={{ color: "#f59e0b", fontSize: 14 }}>★★★★<span style={{ color: "#cbd5e1" }}>★</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Demo feature list
+   ============================================================ */
+
+export function DemoFeatures() {
+  const items = [
+    { icon: <Mail style={{ width: 20, height: 20 }} />, t: "One-click broker email", d: "A custom template that pulls the load's data straight from DAT and sends from your own Gmail — no copy-paste, no extra tab." },
+    { icon: <MapPin style={{ width: 20, height: 20 }} />, t: "Google Maps in one click", d: "Open the full route as 3 stops — your truck's location → pickup → destination — without leaving the board." },
+    { icon: <Gauge style={{ width: 20, height: 20 }} />, t: "RPM with deadhead", d: "A true rate-per-mile that counts the empty miles to pickup, plus total miles including deadhead." },
+    { icon: <Filter style={{ width: 20, height: 20 }} />, t: "Miles filter", d: "Hide loads shorter than the distance you set, so only the trips worth your time stay on the board." },
+    { icon: <Keyboard style={{ width: 20, height: 20 }} />, t: "Keyboard navigation", d: "Move through loads and fire off actions from the keyboard — book more lanes, touch the mouse less." },
+    { icon: <ShieldCheck style={{ width: 20, height: 20 }} />, t: "Broker credit check", soon: true, d: "Factoring & RTS broker credit right on the load, so you can vet who's posting before you call." },
+  ];
+
+  return (
+    <section id="features-list" className="ed-section" style={{ paddingTop: 24 }}>
+      <div className="ed-container">
+        <div className="mb-10 text-center md:text-left">
+          <span className="ed-label">What you get</span>
+          <h2 className="ed-h2 mt-4">
+            Everything in <span className="ed-accent">one extension</span>
+          </h2>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {items.map((f) => (
+            <div key={f.t} style={{ border: "1px solid var(--line)", borderRadius: 16, padding: 24, background: "var(--bg-2)" }}>
+              <div style={{ width: 42, height: 42, borderRadius: 12, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(79,157,255,0.12)", color: "var(--accent)" }}>
+                {f.icon}
+              </div>
+              <div className="flex items-center" style={{ gap: 8, marginTop: 16 }}>
+                <h3 style={{ fontWeight: 700, fontSize: 18 }}>{f.t}</h3>
+                {f.soon && (
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#f59e0b", textTransform: "uppercase", letterSpacing: "0.4px", border: "1px solid rgba(245,158,11,.4)", borderRadius: 999, padding: "2px 7px" }}>
+                    Soon
+                  </span>
+                )}
+              </div>
+              <p style={{ color: "var(--muted)", marginTop: 8, lineHeight: 1.6 }}>{f.d}</p>
+            </div>
+          ))}
+        </div>
+
+        <BrowserSupport />
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
    Header
    ============================================================ */
 
@@ -723,6 +919,7 @@ type DemoLoad = {
   rate: string;
   rpm?: string;
   trip: string;
+  dh: number;
   origin: string;
   truck: string;
   dest: string;
@@ -732,26 +929,29 @@ type DemoLoad = {
   length: string;
   broker: string;
   email: string;
+  comments?: string;
 };
 
 const DEMO_LOADS: DemoLoad[] = [
-  { age: "5m", rate: "$846", trip: "139", origin: "University Pk, IL", truck: "Joliet, IL", dest: "Janesville, WI", pickup: "6/1", equip: "V", weight: "40,978 lbs", length: "53 ft - Full", broker: "Northway Freight LLC", email: "dispatch@northwayfreight.com" },
-  { age: "6m", rate: "$493", trip: "111", origin: "Carol Stream, IL", truck: "Elgin, IL", dest: "Menomonee Falls, WI", pickup: "6/1", equip: "V", weight: "4,506 lbs", length: "53 ft - Full", broker: "Great Lakes Carriers", email: "loads@greatlakescarriers.com" },
-  { age: "6m", rate: "—", trip: "355", origin: "Franksville, WI", truck: "Racine, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "20,000 lbs", length: "53 ft - Full", broker: "Summit Logistics Group", email: "ops@summitlogistics.com" },
-  { age: "7m", rate: "$1,900", rpm: "$4.94*/mi", trip: "385", origin: "Pleasant Prairie, WI", truck: "Kenosha, WI", dest: "Hopkins, MN", pickup: "6/1", equip: "V", weight: "43,000 lbs", length: "53 ft - Full", broker: "Redline Transport", email: "brokers@redlinetransport.com" },
-  { age: "8m", rate: "$850", trip: "199", origin: "Minooka, IL", truck: "Morris, IL", dest: "Baraboo, WI", pickup: "6/1", equip: "V", weight: "10,000 lbs", length: "53 ft - Full", broker: "Cornerstone Freight", email: "dispatch@cornerstonefreight.com" },
-  { age: "9m", rate: "$1,400", rpm: "$2.30*/mi", trip: "610", origin: "E Chicago, IN", truck: "Gary, IN", dest: "Yankton, SD", pickup: "6/1", equip: "VR", weight: "43,000 lbs", length: "53 ft - Full", broker: "Ironside Logistics", email: "loads@ironsidelogistics.com" },
-  { age: "9m", rate: "$1,200", rpm: "$3.57*/mi", trip: "336", origin: "Milwaukee, WI", truck: "Waukesha, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "44,000 lbs", length: "53 ft - Full", broker: "Polaris Freight Co", email: "ops@polarisfreight.com" },
-  { age: "10m", rate: "$700", rpm: "$1.14*/mi", trip: "613", origin: "Markham, IL", truck: "Harvey, IL", dest: "Chambersburg, PA", pickup: "6/1 - 6/2", equip: "V", weight: "3,000 lbs", length: "18 ft - Partial", broker: "Keystone Dispatch", email: "dispatch@keystonedispatch.com" },
-  { age: "11m", rate: "$2,700", rpm: "$6.25*/mi", trip: "432", origin: "Chicago Heights, IL", truck: "Hammond, IN", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "40,000 lbs", length: "53 ft - Full", broker: "Lakeshore Logistics", email: "brokers@lakeshorelogistics.com" },
-  { age: "12m", rate: "$3,500", rpm: "$4.28*/mi", trip: "817", origin: "Oak Creek, WI", truck: "Milwaukee, WI", dest: "Nazareth, PA", pickup: "6/1", equip: "VR", weight: "10,239 lbs", length: "53 ft - Full", broker: "Allied Lane Partners", email: "posting@alliedlane.com" },
-  { age: "13m", rate: "$1,050", trip: "247", origin: "Aurora, IL", truck: "Naperville, IL", dest: "Grand Rapids, MI", pickup: "6/1", equip: "V", weight: "38,500 lbs", length: "53 ft - Full", broker: "Midwest Haul Co", email: "dispatch@midwesthaul.com" },
-  { age: "14m", rate: "$2,150", rpm: "$3.10*/mi", trip: "694", origin: "Joliet, IL", truck: "Bolingbrook, IL", dest: "Nashville, TN", pickup: "6/1", equip: "R", weight: "42,000 lbs", length: "53 ft - Full", broker: "Greenline Freight", email: "loads@greenlinefreight.com" },
+  { age: "5m", rate: "$846", trip: "139", dh: 20, origin: "University Pk, IL", truck: "Joliet, IL", dest: "Janesville, WI", pickup: "6/1", equip: "V", weight: "40,978 lbs", length: "53 ft - Full", broker: "Northway Freight LLC", email: "dispatch@northwayfreight.com", comments: "No touch freight. Drop & hook available." },
+  { age: "6m", rate: "$493", trip: "111", dh: 18, origin: "Carol Stream, IL", truck: "Elgin, IL", dest: "Menomonee Falls, WI", pickup: "6/1", equip: "V", weight: "4,506 lbs", length: "53 ft - Full", broker: "Great Lakes Carriers", email: "loads@greatlakescarriers.com" },
+  { age: "6m", rate: "—", trip: "355", dh: 12, origin: "Franksville, WI", truck: "Racine, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "20,000 lbs", length: "53 ft - Full", broker: "Summit Logistics Group", email: "ops@summitlogistics.com" },
+  { age: "7m", rate: "$1,900", rpm: "$4.94*/mi", trip: "385", dh: 10, origin: "Pleasant Prairie, WI", truck: "Kenosha, WI", dest: "Hopkins, MN", pickup: "6/1", equip: "V", weight: "43,000 lbs", length: "53 ft - Full", broker: "Redline Transport", email: "brokers@redlinetransport.com" },
+  { age: "8m", rate: "$850", trip: "199", dh: 14, origin: "Minooka, IL", truck: "Morris, IL", dest: "Baraboo, WI", pickup: "6/1", equip: "V", weight: "10,000 lbs", length: "53 ft - Full", broker: "Cornerstone Freight", email: "dispatch@cornerstonefreight.com" },
+  { age: "9m", rate: "$1,400", rpm: "$2.30*/mi", trip: "610", dh: 8, origin: "E Chicago, IN", truck: "Gary, IN", dest: "Yankton, SD", pickup: "6/1", equip: "VR", weight: "43,000 lbs", length: "53 ft - Full", broker: "Ironside Logistics", email: "loads@ironsidelogistics.com" },
+  { age: "9m", rate: "$1,200", rpm: "$3.57*/mi", trip: "336", dh: 17, origin: "Milwaukee, WI", truck: "Waukesha, WI", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "44,000 lbs", length: "53 ft - Full", broker: "Polaris Freight Co", email: "ops@polarisfreight.com" },
+  { age: "10m", rate: "$700", rpm: "$1.14*/mi", trip: "613", dh: 6, origin: "Markham, IL", truck: "Harvey, IL", dest: "Chambersburg, PA", pickup: "6/1 - 6/2", equip: "V", weight: "3,000 lbs", length: "18 ft - Partial", broker: "Keystone Dispatch", email: "dispatch@keystonedispatch.com" },
+  { age: "11m", rate: "$2,700", rpm: "$6.25*/mi", trip: "432", dh: 12, origin: "Chicago Heights, IL", truck: "Hammond, IN", dest: "Minneapolis, MN", pickup: "6/1", equip: "V", weight: "40,000 lbs", length: "53 ft - Full", broker: "Lakeshore Logistics", email: "brokers@lakeshorelogistics.com" },
+  { age: "12m", rate: "$3,500", rpm: "$4.28*/mi", trip: "817", dh: 11, origin: "Oak Creek, WI", truck: "Milwaukee, WI", dest: "Nazareth, PA", pickup: "6/1", equip: "VR", weight: "10,239 lbs", length: "53 ft - Full", broker: "Allied Lane Partners", email: "posting@alliedlane.com" },
+  { age: "13m", rate: "$1,050", trip: "247", dh: 13, origin: "Aurora, IL", truck: "Naperville, IL", dest: "Grand Rapids, MI", pickup: "6/1", equip: "V", weight: "38,500 lbs", length: "53 ft - Full", broker: "Midwest Haul Co", email: "dispatch@midwesthaul.com" },
+  { age: "14m", rate: "$2,150", rpm: "$3.10*/mi", trip: "694", dh: 12, origin: "Joliet, IL", truck: "Bolingbrook, IL", dest: "Nashville, TN", pickup: "6/1", equip: "R", weight: "42,000 lbs", length: "53 ft - Full", broker: "Greenline Freight", email: "loads@greenlinefreight.com" },
 ];
 
 export function LoadBoardDemo() {
   const [popup, setPopup] = useState<string | null>(null);
   const [sentRow, setSentRow] = useState<number | null>(null);
+  const [expandedRow, setExpandedRow] = useState<number | null>(0);
+  const toggleRow = (i: number) => setExpandedRow((cur) => (cur === i ? null : i));
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   useEffect(() => () => { if (timer.current) clearTimeout(timer.current); }, []);
@@ -792,8 +992,9 @@ export function LoadBoardDemo() {
             See it on the <span className="ed-accent">board</span>
           </h2>
           <p className="mt-4 max-w-xl text-lg mx-auto md:mx-0" style={{ color: "var(--muted)" }}>
-            The envelope and route icons are added by Truck Box. Click the envelope to
-            send, or the route to open Google Maps. Try it.
+            A working preview of the DAT board. <b style={{ color: "var(--ink)" }}>Click any load</b> to
+            expand its details — the route map, deadhead-adjusted RPM and broker credit are
+            added by Truck Box. Send the broker an email or open the route in Google Maps.
           </p>
         </div>
 
@@ -839,103 +1040,147 @@ export function LoadBoardDemo() {
                   </tr>
                 </thead>
                 <tbody>
-                  {DEMO_LOADS.map((l, i) => (
-                    <tr key={i} style={{ borderTop: `1px solid ${line}` }}>
-                      <td style={{ padding: "11px 14px", color: sub, whiteSpace: "nowrap" }}>{l.age}</td>
-                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap", fontWeight: 600 }}>
-                        {l.rate}
-                        {l.rpm && <div style={{ color: sub, fontSize: 11, fontWeight: 400 }}>{l.rpm}</div>}
-                      </td>
-                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>{l.origin}</td>
-                      <td style={{ padding: "11px 8px" }}>
-                        <button
-                          type="button"
-                          onClick={() => openRoute(l)}
-                          title="Truck Box: open route in Google Maps"
-                          aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
-                          className="tb-demo-route"
+                  {DEMO_LOADS.map((l, i) => {
+                    const open = expandedRow === i;
+                    return (
+                      <Fragment key={i}>
+                        <tr
+                          onClick={() => toggleRow(i)}
+                          style={{ borderTop: `1px solid ${line}`, cursor: "pointer", background: open ? "#eef4ff" : undefined }}
                         >
-                          <MapPin style={{ width: 16, height: 16 }} />
-                        </button>
-                      </td>
-                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>{l.dest}</td>
-                      <td style={{ padding: "11px 14px", color: sub, whiteSpace: "nowrap" }}>{l.pickup}</td>
-                      <td style={{ padding: "11px 14px", color: sub }}>{l.equip}</td>
-                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap", color: sub }}>
-                        {l.weight}
-                        <div style={{ fontSize: 11 }}>{l.length}</div>
-                      </td>
-                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap", color: link, fontWeight: 600 }}>{l.broker}</td>
-                      <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>
-                        <span className="flex items-center gap-2">
-                          <button
-                            type="button"
-                            onClick={() => sendDemo(i, l.broker)}
-                            title="Truck Box: send email to broker"
-                            aria-label={`Send email to ${l.broker}`}
-                            className="tb-demo-send"
-                            data-sent={sentRow === i ? "1" : undefined}
-                          >
-                            {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
-                          </button>
-                          <span style={{ color: link }}>{l.email}</span>
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
+                          <td style={{ padding: "11px 14px", color: sub, whiteSpace: "nowrap" }}>
+                            <span className="flex items-center" style={{ gap: 7 }}>
+                              <ChevronDown style={{ width: 13, height: 13, transition: "transform .2s", transform: open ? "rotate(0deg)" : "rotate(-90deg)", color: link }} />
+                              {l.age}
+                            </span>
+                          </td>
+                          <td style={{ padding: "11px 14px", whiteSpace: "nowrap", fontWeight: 600 }}>
+                            {l.rate}
+                            {l.rpm && <div style={{ color: sub, fontSize: 11, fontWeight: 400 }}>{l.rpm}</div>}
+                          </td>
+                          <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>{l.origin}</td>
+                          <td style={{ padding: "11px 8px" }}>
+                            <button
+                              type="button"
+                              onClick={(e) => { e.stopPropagation(); openRoute(l); }}
+                              title="Truck Box: open route in Google Maps"
+                              aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
+                              className="tb-demo-route"
+                            >
+                              <MapPin style={{ width: 16, height: 16 }} />
+                            </button>
+                          </td>
+                          <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>{l.dest}</td>
+                          <td style={{ padding: "11px 14px", color: sub, whiteSpace: "nowrap" }}>{l.pickup}</td>
+                          <td style={{ padding: "11px 14px", color: sub }}>{l.equip}</td>
+                          <td style={{ padding: "11px 14px", whiteSpace: "nowrap", color: sub }}>
+                            {l.weight}
+                            <div style={{ fontSize: 11 }}>{l.length}</div>
+                          </td>
+                          <td style={{ padding: "11px 14px", whiteSpace: "nowrap", color: link, fontWeight: 600 }}>{l.broker}</td>
+                          <td style={{ padding: "11px 14px", whiteSpace: "nowrap" }}>
+                            <span className="flex items-center gap-2">
+                              <button
+                                type="button"
+                                onClick={(e) => { e.stopPropagation(); sendDemo(i, l.broker); }}
+                                title="Truck Box: send email to broker"
+                                aria-label={`Send email to ${l.broker}`}
+                                className="tb-demo-send"
+                                data-sent={sentRow === i ? "1" : undefined}
+                              >
+                                {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
+                              </button>
+                              <span style={{ color: link }}>{l.email}</span>
+                            </span>
+                          </td>
+                        </tr>
+                        {open && (
+                          <tr style={{ background: "#fff" }}>
+                            <td colSpan={10} style={{ padding: "0 16px", borderLeft: "3px solid #0046E0", borderBottom: `1px solid ${line}` }}>
+                              <LoadDetailPanel
+                                l={l}
+                                sent={sentRow === i}
+                                onSend={() => sendDemo(i, l.broker)}
+                                onRoute={() => openRoute(l)}
+                              />
+                            </td>
+                          </tr>
+                        )}
+                      </Fragment>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>
 
             {/* load board — mobile compact list (no side scroll, first 6 rows) */}
             <div className="md:hidden" style={{ background: "#ffffff", color: ink }}>
-              {DEMO_LOADS.slice(0, 6).map((l, i) => (
-                <div key={i} style={{ borderTop: `1px solid ${line}`, padding: "13px 16px" }}>
-                  <div className="flex items-center justify-between">
-                    <span style={{ color: sub, fontSize: 12 }}>{l.age}</span>
-                    <span style={{ fontWeight: 700, fontSize: 15 }}>
-                      {l.rate}
-                      {l.rpm && (
-                        <span style={{ color: sub, fontWeight: 400, fontSize: 11, marginLeft: 6 }}>{l.rpm}</span>
-                      )}
-                    </span>
-                  </div>
+              {DEMO_LOADS.slice(0, 6).map((l, i) => {
+                const open = expandedRow === i;
+                return (
+                  <div key={i} style={{ borderTop: `1px solid ${line}`, background: open ? "#eef4ff" : undefined }}>
+                    <div onClick={() => toggleRow(i)} style={{ padding: "13px 16px", cursor: "pointer" }}>
+                      <div className="flex items-center justify-between">
+                        <span className="flex items-center" style={{ gap: 6, color: sub, fontSize: 12 }}>
+                          <ChevronDown style={{ width: 13, height: 13, transition: "transform .2s", transform: open ? "rotate(0deg)" : "rotate(-90deg)", color: link }} />
+                          {l.age}
+                        </span>
+                        <span style={{ fontWeight: 700, fontSize: 15 }}>
+                          {l.rate}
+                          {l.rpm && (
+                            <span style={{ color: sub, fontWeight: 400, fontSize: 11, marginLeft: 6 }}>{l.rpm}</span>
+                          )}
+                        </span>
+                      </div>
 
-                  <div className="mt-2 flex items-center gap-2" style={{ fontSize: 14 }}>
-                    <span className="truncate" style={{ flex: 1, minWidth: 0 }}>{l.origin}</span>
-                    <span className="flex items-center gap-1.5" style={{ flex: "0 0 auto" }}>
-                      <span style={{ fontSize: 11, fontWeight: 600, color: sub, whiteSpace: "nowrap" }}>
-                        {l.trip} mi
-                      </span>
-                      <button
-                        type="button"
-                        onClick={() => openRoute(l)}
-                        title="Truck Box: open route in Google Maps"
-                        aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
-                        className="tb-demo-route"
-                      >
-                        <MapPin style={{ width: 16, height: 16 }} />
-                      </button>
-                    </span>
-                    <span className="truncate" style={{ flex: 1, minWidth: 0, textAlign: "right" }}>{l.dest}</span>
-                  </div>
+                      <div className="mt-2 flex items-center gap-2" style={{ fontSize: 14 }}>
+                        <span className="truncate" style={{ flex: 1, minWidth: 0 }}>{l.origin}</span>
+                        <span className="flex items-center gap-1.5" style={{ flex: "0 0 auto" }}>
+                          <span style={{ fontSize: 11, fontWeight: 600, color: sub, whiteSpace: "nowrap" }}>
+                            {l.trip} mi
+                          </span>
+                          <button
+                            type="button"
+                            onClick={(e) => { e.stopPropagation(); openRoute(l); }}
+                            title="Truck Box: open route in Google Maps"
+                            aria-label={`Open route ${l.origin} to ${l.dest} in Google Maps`}
+                            className="tb-demo-route"
+                          >
+                            <MapPin style={{ width: 16, height: 16 }} />
+                          </button>
+                        </span>
+                        <span className="truncate" style={{ flex: 1, minWidth: 0, textAlign: "right" }}>{l.dest}</span>
+                      </div>
 
-                  <div className="mt-2 flex items-center gap-2">
-                    <button
-                      type="button"
-                      onClick={() => sendDemo(i, l.broker)}
-                      title="Truck Box: send email to broker"
-                      aria-label={`Send email to ${l.broker}`}
-                      className="tb-demo-send"
-                      data-sent={sentRow === i ? "1" : undefined}
-                      style={{ flex: "0 0 auto" }}
-                    >
-                      {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
-                    </button>
-                    <span className="truncate" style={{ color: link, fontSize: 13, minWidth: 0 }}>{l.email}</span>
+                      <div className="mt-2 flex items-center gap-2">
+                        <button
+                          type="button"
+                          onClick={(e) => { e.stopPropagation(); sendDemo(i, l.broker); }}
+                          title="Truck Box: send email to broker"
+                          aria-label={`Send email to ${l.broker}`}
+                          className="tb-demo-send"
+                          data-sent={sentRow === i ? "1" : undefined}
+                          style={{ flex: "0 0 auto" }}
+                        >
+                          {sentRow === i ? <Check style={{ width: 15, height: 15 }} /> : <Mail style={{ width: 15, height: 15 }} />}
+                        </button>
+                        <span className="truncate" style={{ color: link, fontSize: 13, minWidth: 0 }}>{l.email}</span>
+                      </div>
+                    </div>
+
+                    {open && (
+                      <div style={{ padding: "0 12px", borderLeft: "3px solid #0046E0" }}>
+                        <LoadDetailPanel
+                          l={l}
+                          sent={sentRow === i}
+                          onSend={() => sendDemo(i, l.broker)}
+                          onRoute={() => openRoute(l)}
+                        />
+                      </div>
+                    )}
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
 
             {/* sent popup */}

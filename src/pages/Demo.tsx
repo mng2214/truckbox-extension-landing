@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight, ArrowLeft } from "lucide-react";
-import { Header, Footer, TelegramFloat, LoadBoardDemo, RouteShowcase, INSTALL_URL } from "../App";
+import { Header, Footer, TelegramFloat, LoadBoardDemo, DemoFeatures, INSTALL_URL } from "../App";
 
 export default function DemoPage() {
   return (
@@ -36,7 +36,7 @@ export default function DemoPage() {
 
         <LoadBoardDemo />
 
-        <RouteShowcase />
+        <DemoFeatures />
 
         <section className="ed-section" style={{ paddingTop: 8 }}>
           <div className="ed-container">
