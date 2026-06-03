@@ -581,7 +581,7 @@ function LoadDetailPanel({
 
         {/* Route — Powered by TruckBox */}
         <div>
-          <div style={headerBar}>Route — Powered by TruckBox</div>
+          <div className="tb-pulse-grey" style={headerBar}>Route — Powered by TruckBox</div>
           <div className="flex flex-wrap items-center" style={{ gap: 16, marginBottom: 14 }}>
             <Stat k="Loaded" v={fmtMi(tripN)} />
             {dh ? <Stat k="Deadhead" v={fmtMi(dh)} /> : null}
@@ -697,6 +697,7 @@ export function DemoFeatures() {
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const [logoFailed, setLogoFailed] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -720,19 +721,35 @@ export function Header() {
           className="ed-container flex items-center justify-between"
           style={{ minHeight: 76 }}
         >
-          <a href="#top" className="flex items-center gap-3">
-            <span
-              className="inline-block h-2.5 w-2.5 rounded-full"
-              style={{ background: "var(--accent)" }}
-              aria-hidden
-            />
+          <Link
+            to="/"
+            onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+            className="flex items-center gap-3"
+            aria-label="Truck Box — home"
+          >
+            {logoFailed ? (
+              <span
+                className="inline-block h-2.5 w-2.5 rounded-full"
+                style={{ background: "var(--accent)" }}
+                aria-hidden
+              />
+            ) : (
+              <img
+                src="/logo.png"
+                alt=""
+                width={30}
+                height={30}
+                onError={() => setLogoFailed(true)}
+                style={{ display: "block", borderRadius: "50%", flex: "0 0 auto" }}
+              />
+            )}
             <span
               className="font-extrabold tracking-tight text-[1.05rem] uppercase"
               style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}
             >
               Truck&nbsp;Box
             </span>
-          </a>
+          </Link>
 
           <nav className="hidden md:flex items-center gap-8">
             {NAV.map((n) =>
