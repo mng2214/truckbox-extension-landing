@@ -1999,7 +1999,7 @@ export function Privacy() {
               This page explains what Truck Box does, what information it uses, how Google
               account access is handled, and the rules for using the service.
             </p>
-            <p className="mt-2 ed-label">Last updated — March 20, 2026</p>
+            <p className="mt-2 ed-label">Last updated — June 3, 2026</p>
           </div>
         </Reveal>
 
@@ -2059,6 +2059,19 @@ export function Privacy() {
                 to read inbox messages, read Gmail conversations, access attachments, or manage
                 Gmail settings.
               </div>
+
+              <h3>Third-party factoring connections (RTS Pro)</h3>
+              <p>
+                Truck Box includes an optional feature that displays a broker's factoring
+                credit rating using your own factoring provider account (for example, RTS Pro).
+                This connection is entirely optional and is only used if you choose to enable it.
+              </p>
+              <ul>
+                <li><b>We never collect or store your factoring login.</b> You log in directly on the provider's own website (for example, <code>rtspro.com</code>). Truck Box never sees, receives, or stores your factoring username or password.</li>
+                <li><b>We reuse your own browser session.</b> After you log in on the provider's site, Truck Box reads the session token from your own authenticated requests to that provider and stores it locally in your browser (<code>chrome.storage.local</code>) on your device.</li>
+                <li><b>The token stays on your device and goes only to the provider.</b> The session token is sent solely to the factoring provider's own API to look up the broker credit rating you request. It is not transmitted to Truck Box's servers.</li>
+                <li><b>You stay in control.</b> You can disconnect at any time in the extension, which immediately clears the stored session token from your browser. Tokens also expire on their own, after which you must log in again.</li>
+              </ul>
 
               <h3>Storage &amp; Security</h3>
               <ul>
@@ -2122,7 +2135,7 @@ export function Privacy() {
 
             <article id="terms" className="tb-card p-6 sm:p-8 tb-prose">
               <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Terms &amp; Conditions</h3>
-              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>March 20, 2026</b></p>
+              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>June 3, 2026</b></p>
 
               <h3>Acceptance</h3>
               <p>
