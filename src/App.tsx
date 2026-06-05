@@ -2609,77 +2609,87 @@ function FinalCTA() {
 
 export function Footer() {
   return (
-    <footer style={{ borderTop: "1px solid var(--line)" }}>
-      <div
-        className="ed-container pt-16"
-        style={{ paddingBottom: "max(8rem, calc(env(safe-area-inset-bottom) + 4rem))" }}
-      >
-
-        <div className="mt-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
-          <div className="flex flex-wrap gap-x-8 gap-y-3">
-            {NAV.map((n) =>
-              n.route ? (
-                <Link key={n.href} to={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
-                  {n.label}
-                </Link>
-              ) : (
-                <a key={n.href} href={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
-                  {n.label}
-                </a>
-              )
-            )}
-          </div>
-          <div className="flex gap-3">
-            <a
-              className="ed-social group"
-              href="https://instagram.com/truckbox.app"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Instagram className="h-5 w-5" />
-              <span>Instagram</span>
-            </a>
-            <a
-              className="ed-social group"
-              href="https://facebook.com/truckboxapp"
-              target="_blank"
-              rel="noreferrer"
-            >
-              <Facebook className="h-5 w-5" />
-              <span>Facebook</span>
-            </a>
-          </div>
-        </div>
-
+      <footer style={{ borderTop: "1px solid var(--line)" }}>
         <div
-            className="mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4"
-            style={{ borderTop: "1px solid var(--line)" }}
+            className="ed-container pt-12"
+            style={{
+              paddingBottom: "max(2.5rem, calc(env(safe-area-inset-bottom) + 1rem))",
+            }}
         >
-          <div className="flex flex-col">
-    <span className="ed-label">
-      © {new Date().getFullYear()} Truck Box
-    </span>
+          <div className="mt-8 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
+            <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3">
+              {NAV.map((n) =>
+                  n.route ? (
+                      <Link
+                          key={n.href}
+                          to={n.href}
+                          className="ed-label hover:text-[color:var(--ink)] transition-colors"
+                      >
+                        {n.label}
+                      </Link>
+                  ) : (
+                      <a
+                          key={n.href}
+                          href={n.href}
+                          className="ed-label hover:text-[color:var(--ink)] transition-colors"
+                      >
+                        {n.label}
+                      </a>
+                  )
+              )}
+            </div>
 
-            <span className="ed-label flex items-center gap-1 mt-1">
-      Crafted with coffee and java
-<img
-    src="/java-logo.png"
-    alt="Java"
-    className="inline-block"
-    style={{
-      width: "30px",
-      height: "25px",
-      objectFit: "contain",
-      verticalAlign: "middle"
-    }}
-/>
-    </span>
+            <div className="flex justify-center md:justify-end gap-3">
+              <a
+                  className="ed-social group"
+                  href="https://instagram.com/truckbox.app"
+                  target="_blank"
+                  rel="noreferrer"
+              >
+                <Instagram className="h-5 w-5" />
+                <span>Instagram</span>
+              </a>
+
+              <a
+                  className="ed-social group"
+                  href="https://facebook.com/truckboxapp"
+                  target="_blank"
+                  rel="noreferrer"
+              >
+                <Facebook className="h-5 w-5" />
+                <span>Facebook</span>
+              </a>
+            </div>
           </div>
 
-          <span className="ed-label">Chicago, USA</span>
+          <div
+              className="mt-8 pt-5 flex flex-col items-center text-center gap-2 md:flex-row md:justify-between md:text-left"
+              style={{ borderTop: "1px solid var(--line)" }}
+          >
+            <div className="flex flex-col items-center md:items-start">
+            <span className="ed-label">
+              {new Date().getFullYear()} Truck Box
+            </span>
+
+              <span className="ed-label mt-1 flex items-center justify-center md:justify-start gap-1">
+              Crafted with coffee and java
+              <img
+                  src="/java-logo.png"
+                  alt="Java"
+                  width={18}
+                  height={18}
+                  className="inline-block shrink-0"
+                  style={{
+                    objectFit: "contain",
+                    verticalAlign: "middle",
+                  }}
+              />
+            </span>
+            </div>
+
+            <span className="ed-label">Chicago, USA</span>
+          </div>
         </div>
-      </div>
-    </footer>
+      </footer>
   );
 }
-
