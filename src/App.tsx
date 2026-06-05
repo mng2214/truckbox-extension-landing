@@ -872,7 +872,7 @@ function Hero() {
     <section id="top" ref={ref} className="ed-section" style={{ paddingTop: 132, paddingBottom: 72 }}>
       <motion.div style={{ y, opacity: op }} className="ed-container">
         <div className="flex items-center justify-between gap-6 mb-6">
-          <span className="ed-label">[ 01 ] — Chrome Extension for DAT ONE</span>
+          <span className="ed-label">[ 01 ] — Chrome Extension - DAT - Ultimate tool for truck dispatchers</span>
           <span className="ed-label hidden sm:block">Est. 2025 — Chicago, USA</span>
         </div>
 
