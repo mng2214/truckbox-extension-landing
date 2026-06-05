@@ -852,7 +852,7 @@ function Hero() {
     <section id="top" ref={ref} className="ed-section" style={{ paddingTop: 132, paddingBottom: 72 }}>
       <motion.div style={{ y, opacity: op }} className="ed-container">
         <div className="flex items-center justify-between gap-6 mb-6">
-          <span className="ed-label">[ 01 ] — Chrome Extension for DAT</span>
+          <span className="ed-label">[ 01 ] — Chrome Extension for DAT ONE</span>
           <span className="ed-label hidden sm:block">Est. 2025 — Chicago, USA</span>
         </div>
 
@@ -884,8 +884,6 @@ function Hero() {
             </div>
             <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em", lineHeight: 1.7 }}>
               7-day free trial. No credit card required.
-              <br />
-              We only send email, we never read your inbox.
             </p>
           </Reveal>
         </div>
@@ -1716,8 +1714,24 @@ function Features() {
     },
   ];
 
+  const n = items.length;
   const [active, setActive] = useState(0);
+  const stripRef = useRef<HTMLDivElement>(null);
   const cur = items[active];
+
+  // Select a feature (wraps) and scroll it to the centre of the strip.
+  const select = (i: number) => {
+    const ni = ((i % n) + n) % n;
+    setActive(ni);
+    const strip = stripRef.current;
+    const el = strip?.children[ni] as HTMLElement | undefined;
+    if (strip && el) {
+      strip.scrollTo({
+        left: el.offsetLeft - (strip.clientWidth - el.clientWidth) / 2,
+        behavior: "smooth",
+      });
+    }
+  };
 
   return (
     <section id="features" className="ed-section">
@@ -1736,27 +1750,45 @@ function Features() {
           </span>
         </div>
 
-        {/* Tabs (left) + video (right): centred, thin divider, mobile-friendly. */}
-        <div className="mx-auto max-w-[860px] grid items-stretch gap-6 md:gap-0 md:grid-cols-[220px_1fr]">
-          <div className="grid grid-cols-2 gap-2 md:flex md:flex-col md:gap-0.5 md:pr-7">
+
+
+        {/* Video — centred */}
+        <div className="mx-auto w-full max-w-[760px]">
+          <FeatureVideo key={cur.slug} slug={cur.slug} title={cur.title} />
+        </div>
+
+        {/* Feature selector — manual scroll strip below the video.
+            Swipe on touch; arrows for prev/next on desktop. No auto-scroll. */}
+        <div className="tb-fstrip-wrap mt-10 md:mt-12">
+          <button
+            type="button"
+            aria-label="Previous feature"
+            className="tb-fstrip-arrow"
+            onClick={() => select(active - 1)}
+          >
+            ‹
+          </button>
+          <div className="tb-fstrip" ref={stripRef}>
             {items.map((it, i) => (
               <button
                 key={it.slug}
                 type="button"
-                onClick={() => setActive(i)}
-                className={"tb-ftab" + (i === active ? " is-active" : "")}
+                onClick={() => select(i)}
+                className={"tb-fstrip-item" + (i === active ? " is-active" : "")}
               >
+                <span className="num">{String(i + 1).padStart(2, "0")}</span>
                 {it.title}
               </button>
             ))}
           </div>
-
-          <div
-            className="border-t pt-6 md:border-t-0 md:pt-0 md:border-l md:pl-7 md:flex md:items-center mx-auto w-full max-w-[560px] md:max-w-none"
-            style={{ borderColor: "var(--line)" }}
+          <button
+            type="button"
+            aria-label="Next feature"
+            className="tb-fstrip-arrow"
+            onClick={() => select(active + 1)}
           >
-            <FeatureVideo key={cur.slug} slug={cur.slug} title={cur.title} />
-          </div>
+            ›
+          </button>
         </div>
       </div>
     </section>
