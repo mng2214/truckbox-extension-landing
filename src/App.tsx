@@ -38,12 +38,11 @@ const NAV: NavItem[] = [
 const INSTALL_URL =
   "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd";
 const CALENDLY_URL = "https://calendly.com/truckboxapp";
-const TELEGRAM_URL = "https://t.me/mngartur";
 const YOUTUBE_ID = "-_G0P-M1lCA";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-export { NAV, INSTALL_URL, CALENDLY_URL, TELEGRAM_URL };
+export { NAV, INSTALL_URL, CALENDLY_URL };
 
 /* ============================================================
    Global chrome: custom cursor + smooth scroll
@@ -826,8 +825,7 @@ export function Header() {
                 );
               })}
             </div>
-            <div className="ed-container py-8 flex justify-between ed-label">
-              <a href={TELEGRAM_URL} target="_blank" rel="noreferrer">Telegram</a>
+            <div className="ed-container py-8 flex justify-end ed-label">
               <a href={INSTALL_URL} target="_blank" rel="noreferrer">Install →</a>
             </div>
           </motion.div>
@@ -873,8 +871,8 @@ function Hero() {
         <div className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-              No more copy-paste between DAT and Gmail. Send the broker a ready
-              email from your saved template, so you cover more loads in less time.
+              Turn DAT ONE into a faster, smarter workspace with tools designed to save time,
+              simplify daily tasks, and help dispatchers move through loads more efficiently.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
@@ -1569,7 +1567,7 @@ function BeforeAfter() {
 
           <div
             ref={wrapRef}
-            className="-mx-[14px] sm:mx-0"
+            className="mx-auto"
             onPointerDown={(e) => {
               dragging.current = true;
               setAnim(false);
@@ -1577,7 +1575,7 @@ function BeforeAfter() {
             }}
             style={{
               position: "relative",
-              width: "auto",
+              width: "100%",
               aspectRatio: cur.ratio,
               overflow: "hidden",
               borderRadius: 18,
@@ -1687,9 +1685,19 @@ function Features() {
       body: "Email the broker straight from a DAT load row. No copy-paste, no Gmail tab.",
     },
     {
-      slug: "templates",
-      title: "Saved email templates",
-      body: "Write your subject and body once. Every email goes out auto-filled from the load and consistent.",
+      slug: "rts",
+      title: "RTS Credit Check",
+      body: "See a broker's RTS factoring credit rating and days-to-pay on the load — for carriers who factor with RTS.",
+    },
+    {
+      slug: "calculator",
+      title: "Rate calculator",
+      body: "Price a load on the spot — rate-per-mile and deadhead-adjusted RPM right on the board.",
+    },
+    {
+      slug: "filter",
+      title: "Load filter",
+      body: "Dim loads under your minimum miles and focus on the lanes worth your time.",
     },
     {
       slug: "keyboard",
@@ -1697,120 +1705,107 @@ function Features() {
       body: "Hands stay on the keyboard. W/S move loads, A/D switch tabs, C copies, E sends, R refreshes.",
     },
     {
-      slug: "copy",
-      title: "Copy & share load",
-      body: "Copy the whole load — pickup, miles, deadhead, weight, map link — to text your driver in one click.",
-    },
-    {
-      slug: "route",
-      title: "Route & deadhead RPM",
-      body: "A live route map plus a true rate-per-mile that counts the empty miles to pickup.",
-    },
-    {
-      slug: "filter",
-      title: "Miles filter",
-      body: "Dim loads under your minimum miles and focus on the lanes worth your time.",
-    },
-    {
       slug: "fmcsa",
-      title: "FMCSA & rate calc",
-      body: "Open the broker's FMCSA report and price a load on the phone, right on the board.",
+      title: "FMCSA Report",
+      body: "Open the broker's official FMCSA SAFER report in one click.",
     },
     {
-      slug: "rts",
-      title: "RTS broker credit",
-      body: "See a broker's RTS factoring credit rating and days-to-pay on the load — for carriers who factor with RTS.",
+      slug: "map",
+      title: "Inbuilt Map",
+      body: "A live Google Maps route for every load — truck, pickup and destination.",
     },
   ];
 
-  const sectionRef = useRef<HTMLDivElement>(null);
-  const trackRef = useRef<HTMLDivElement>(null);
-  const [dist, setDist] = useState(0);
-  const [isMobile, setIsMobile] = useState(
-    () =>
-      typeof window !== "undefined" &&
-      window.matchMedia("(max-width: 1023px)").matches
-  );
+  const [active, setActive] = useState(0);
+  const cur = items[active];
 
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 1023px)");
-    const onMq = () => setIsMobile(mq.matches);
-    onMq();
-    mq.addEventListener("change", onMq);
-    return () => mq.removeEventListener("change", onMq);
-  }, []);
-
-  useEffect(() => {
-    const calc = () => {
-      if (trackRef.current) {
-        setDist(Math.max(0, trackRef.current.scrollWidth - window.innerWidth + 64));
-      }
-    };
-    calc();
-    window.addEventListener("resize", calc);
-    return () => window.removeEventListener("resize", calc);
-  }, []);
-
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end end"],
-  });
-  const x = useTransform(scrollYProgress, [0, 1], [0, -dist]);
-
-  const header = (
-    <div className="flex items-end justify-between gap-6 mb-10">
-      <div>
-        <span className="ed-label">[ 02 ] — Features</span>
-        <h2 className="ed-h2 mt-4">
-          Minimal by design.
-          <br />
-          <span className="ed-accent">Premium in feel.</span>
-        </h2>
-      </div>
-      <span className="ed-label hidden md:block max-w-[220px] text-right">
-        Move faster without turning DAT into a cluttered tool
-      </span>
-    </div>
-  );
-
-  // Mobile: native horizontal swipe (scroll-snap), no scroll-jacking.
-  if (isMobile) {
-    return (
-      <section id="features" className="ed-section">
-        <div className="ed-container">{header}</div>
-        <div className="tb-feature-scroll">
-          {items.map((it, i) => (
-            <FeatureCard key={it.slug} item={it} index={i} total={items.length} />
-          ))}
-        </div>
-        <div className="ed-container mt-5">
-          <span className="ed-label">Swipe to explore →</span>
-        </div>
-      </section>
-    );
-  }
-
-  // Desktop: pinned, scroll-driven horizontal track.
   return (
-    <section
-      id="features"
-      ref={sectionRef}
-      style={{ height: `calc(100vh + ${dist}px)` }}
-    >
-      <div className="sticky top-0 h-screen flex flex-col justify-center overflow-hidden">
-        <div className="ed-container w-full">{header}</div>
+    <section id="features" className="ed-section">
+      <div className="ed-container">
+        <div className="flex items-end justify-between gap-6 mb-12">
+          <div>
+            <span className="ed-label">[ 02 ] — Features</span>
+            <h2 className="ed-h2 mt-4">
+              Minimal by design.
+              <br />
+              <span className="ed-accent">Premium in feel.</span>
+            </h2>
+          </div>
+          <span className="ed-label hidden md:block max-w-[220px] text-right">
+            Move faster without turning DAT into a cluttered tool
+          </span>
+        </div>
 
-        <motion.div
-          ref={trackRef}
-          style={{ x }}
-          className="flex gap-6 pl-[max(32px,calc((100vw-1320px)/2+32px))] pr-8"
-        >
-          {items.map((it, i) => (
-            <FeatureCard key={it.slug} item={it} index={i} total={items.length} />
-          ))}
-        </motion.div>
+        {/* Tabs (left) + video (right): centred, thin divider, mobile-friendly. */}
+        <div className="mx-auto max-w-[860px] grid items-stretch gap-6 md:gap-0 md:grid-cols-[220px_1fr]">
+          <div className="grid grid-cols-2 gap-2 md:flex md:flex-col md:gap-0.5 md:pr-7">
+            {items.map((it, i) => (
+              <button
+                key={it.slug}
+                type="button"
+                onClick={() => setActive(i)}
+                className={"tb-ftab" + (i === active ? " is-active" : "")}
+              >
+                {it.title}
+              </button>
+            ))}
+          </div>
+
+          <div
+            className="border-t pt-6 md:border-t-0 md:pt-0 md:border-l md:pl-7 md:flex md:items-center mx-auto w-full max-w-[560px] md:max-w-none"
+            style={{ borderColor: "var(--line)" }}
+          >
+            <FeatureVideo key={cur.slug} slug={cur.slug} title={cur.title} />
+          </div>
+        </div>
       </div>
     </section>
+  );
+}
+
+// Large video panel for the active feature (placeholder until a clip is added).
+function FeatureVideo({ slug, title }: { slug: string; title: string }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        aspectRatio: "16 / 10",
+        borderRadius: 16,
+        overflow: "hidden",
+        border: "1px solid var(--line)",
+        background: "#0b1322",
+        boxShadow: "0 10px 30px rgba(16,32,58,.12)",
+      }}
+    >
+      {failed ? (
+        <div className="ed-fcard-ph" style={{ position: "absolute", inset: 0 }}>
+          <span className="ed-fcard-ph-play">▶</span>
+          <span className="ed-fcard-ph-note">Video coming</span>
+        </div>
+      ) : (
+        <video
+          src={`/demos/${slug}.mp4`}
+          poster={`/demos/${slug}.jpg`}
+          aria-label={title}
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          onError={() => setFailed(true)}
+          style={{
+            position: "absolute",
+            inset: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            display: "block",
+          }}
+        />
+      )}
+    </div>
   );
 }
 
@@ -1877,15 +1872,17 @@ function HowItWorks() {
 
 function Pricing() {
   const features = [
-    "7-day free trial",
+    "7-day free trial (No Credit Card)",
+    "Cancel anytime (1 click)",
     "One-click email sending",
-    "Saved templates",
+    "RTS factoring credit check",
+    "Dynamic email templates",
+    "Rate calculator",
     "Built-in Google Maps route",
     "Rate-per-mile calculator",
     "Copy & share load info",
     "Click-to-call broker numbers",
     "FMCSA broker report",
-    "RTS factoring credit check",
     "Refresh-loads button",
     "Short-load filtering",
     "Keyboard navigation",
@@ -2152,8 +2149,8 @@ const FAQS = [
     q: "Where do I get help?",
     a: (
       <p>
-        For now, the fastest support channel is Telegram. Use the support button on this
-        page to message directly.
+        Use the chat button in the corner of this page to message us directly — it's
+        the fastest way to reach support.
       </p>
     ),
   },
@@ -2470,7 +2467,6 @@ export function Privacy() {
 
 function Contact() {
   const channels = [
-    { label: "Telegram", handle: "@mngartur", href: TELEGRAM_URL, cta: "Fastest reply" },
     { label: "Book a call", handle: "calendly.com/truckboxapp", href: CALENDLY_URL, cta: "Free 15-min demo" },
     { label: "Instagram", handle: "@truckbox.app", href: "https://instagram.com/truckbox.app", cta: "Follow updates" },
     { label: "Facebook", handle: "/truckboxapp", href: "https://facebook.com/truckboxapp", cta: "Community" },
@@ -2590,25 +2586,3 @@ export function Footer() {
   );
 }
 
-/* ============================================================
-   Floating Telegram button
-   ============================================================ */
-
-export function TelegramFloat() {
-  return (
-    <motion.a
-      href={TELEGRAM_URL}
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Ask a question on Telegram"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 1, duration: 0.6, ease: EASE }}
-      className="ed-btn ed-btn-accent z-40"
-      style={{ position: "fixed", bottom: 20, right: 20 }}
-    >
-      <span className="hidden sm:inline">Ask a question</span>
-      <ArrowUpRight className="h-4 w-4" />
-    </motion.a>
-  );
-}
