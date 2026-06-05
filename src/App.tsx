@@ -1470,7 +1470,6 @@ function BeforeAfter() {
   const [pos, setPos] = useState(50); // % revealed of the "before" image
   const [view, setView] = useState<BaView>("list");
   const [anim, setAnim] = useState(false); // smooth transition during auto-hint
-  const [zoom, setZoom] = useState(false); // fullscreen zoom (handy on mobile)
   const cur = BA_VIEWS[view];
 
   const setFromClientX = (clientX: number) => {
@@ -1570,6 +1569,7 @@ function BeforeAfter() {
 
           <div
             ref={wrapRef}
+            className="-mx-[14px] sm:mx-0"
             onPointerDown={(e) => {
               dragging.current = true;
               setAnim(false);
@@ -1577,7 +1577,7 @@ function BeforeAfter() {
             }}
             style={{
               position: "relative",
-              width: "100%",
+              width: "auto",
               aspectRatio: cur.ratio,
               overflow: "hidden",
               borderRadius: 18,
@@ -1662,36 +1662,6 @@ function BeforeAfter() {
                 ‹ ›
               </span>
             </div>
-
-            {/* Zoom button — open the full image (handy on mobile) */}
-            <button
-              type="button"
-              aria-label="Zoom image"
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => {
-                e.stopPropagation();
-                setZoom(true);
-              }}
-              style={{
-                position: "absolute",
-                bottom: 12,
-                right: 12,
-                zIndex: 7,
-                width: 38,
-                height: 38,
-                borderRadius: 10,
-                border: "1px solid rgba(255,255,255,.5)",
-                background: "rgba(16,32,58,.78)",
-                color: "#fff",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                fontSize: 18,
-              }}
-            >
-              ⤢
-            </button>
           </div>
 
           {/* Before / After labels — OUTSIDE (below the image) */}
@@ -1705,64 +1675,6 @@ function BeforeAfter() {
           </div>
         </Reveal>
       </div>
-
-      {/* Fullscreen zoom — scroll/pinch to inspect the full-size screenshot */}
-      {zoom && (
-        <div
-          onClick={() => setZoom(false)}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 9999,
-            background: "rgba(8,12,20,.94)",
-            overflow: "auto",
-            WebkitOverflowScrolling: "touch",
-            touchAction: "pinch-zoom",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "flex-start",
-            padding: 0,
-          }}
-        >
-          <button
-            type="button"
-            aria-label="Close"
-            onClick={(e) => {
-              e.stopPropagation();
-              setZoom(false);
-            }}
-            style={{
-              position: "fixed",
-              top: 14,
-              right: 14,
-              zIndex: 2,
-              width: 44,
-              height: 44,
-              borderRadius: 999,
-              border: 0,
-              background: "rgba(255,255,255,.92)",
-              color: "#0a0a09",
-              fontSize: 22,
-              fontWeight: 800,
-              cursor: "pointer",
-            }}
-          >
-            ✕
-          </button>
-          <img
-            src={cur.after}
-            alt="With TruckBox — full size"
-            onClick={(e) => e.stopPropagation()}
-            style={{
-              minWidth: "min(1500px, 220%)",
-              width: "auto",
-              maxWidth: "none",
-              height: "auto",
-              display: "block",
-            }}
-          />
-        </div>
-      )}
     </section>
   );
 }
