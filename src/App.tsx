@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
 
@@ -98,6 +98,9 @@ export function Cursor() {
 }
 
 export function SmoothScroll() {
+  const location = useLocation();
+  const lenisRef = useRef<Lenis | null>(null);
+
   useEffect(() => {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     const lenis = new Lenis({
@@ -105,6 +108,7 @@ export function SmoothScroll() {
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
+    lenisRef.current = lenis;
     let raf = 0;
     const loop = (time: number) => {
       lenis.raf(time);
@@ -129,13 +133,35 @@ export function SmoothScroll() {
         }
       }
     };
-    document.addEventListener("click", onClick);
+    document.addEventListener("click", onClick, true);
     return () => {
       cancelAnimationFrame(raf);
-      document.removeEventListener("click", onClick);
+      document.removeEventListener("click", onClick, true);
       lenis.destroy();
+      lenisRef.current = null;
     };
   }, []);
+
+  // Scroll to a #section after the route renders (e.g. clicking "FAQ" from the
+  // Privacy page navigates home AND lands on the section in one click). Retries
+  // until the target element exists.
+  useEffect(() => {
+    if (!location.hash) return;
+    let tries = 0;
+    let timer: ReturnType<typeof setTimeout>;
+    const go = () => {
+      const el = document.querySelector(location.hash);
+      if (el) {
+        if (lenisRef.current) lenisRef.current.scrollTo(el as HTMLElement, { offset: -90 });
+        else (el as HTMLElement).scrollIntoView({ behavior: "smooth" });
+      } else if (tries++ < 40) {
+        timer = setTimeout(go, 40);
+      }
+    };
+    timer = setTimeout(go, 60);
+    return () => clearTimeout(timer);
+  }, [location.pathname, location.hash]);
+
   return null;
 }
 
@@ -758,17 +784,11 @@ export function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            {NAV.map((n) =>
-              n.route ? (
-                <Link key={n.href} to={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
-                  {n.label}
-                </Link>
-              ) : (
-                <a key={n.href} href={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
-                  {n.label}
-                </a>
-              )
-            )}
+            {NAV.map((n) => (
+              <Link key={n.href} to={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
+                {n.label}
+              </Link>
+            ))}
           </nav>
 
           <div className="hidden md:block">
@@ -820,7 +840,7 @@ export function Header() {
                 );
                 return (
                   <span className="ed-mask" key={n.href} onClick={() => setOpen(false)}>
-                    {n.route ? <Link to={n.href}>{inner}</Link> : <a href={n.href}>{inner}</a>}
+                    <Link to={n.href}>{inner}</Link>
                   </span>
                 );
               })}
