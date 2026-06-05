@@ -2651,8 +2651,31 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 flex flex-col sm:flex-row justify-between gap-3" style={{ borderTop: "1px solid var(--line)" }}>
-          <span className="ed-label">© {new Date().getFullYear()} Truck Box — All rights reserved</span>
+        <div
+            className="mt-10 pt-6 flex flex-col sm:flex-row justify-between items-center gap-4"
+            style={{ borderTop: "1px solid var(--line)" }}
+        >
+          <div className="flex flex-col">
+    <span className="ed-label">
+      © {new Date().getFullYear()} Truck Box
+    </span>
+
+            <span className="ed-label flex items-center gap-1 mt-1">
+      Crafted with coffee and java
+<img
+    src="/java-logo.png"
+    alt="Java"
+    className="inline-block"
+    style={{
+      width: "30px",
+      height: "25px",
+      objectFit: "contain",
+      verticalAlign: "middle"
+    }}
+/>
+    </span>
+          </div>
+
           <span className="ed-label">Chicago, USA</span>
         </div>
       </div>
