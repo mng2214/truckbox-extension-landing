@@ -27,7 +27,6 @@ import {
 type NavItem = { href: string; label: string; route?: boolean };
 
 const NAV: NavItem[] = [
-  { href: "/demo", label: "Live demo", route: true },
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/#learning", label: "Learning" },
@@ -217,8 +216,9 @@ export default function App() {
       <main>
         <Hero />
         <Marquee />
-        <SocialProof />
         <Features />
+        <BeforeAfter />
+        <SocialProof />
         <HowItWorks />
         <Pricing />
         <Learning />
@@ -227,7 +227,6 @@ export default function App() {
         <FinalCTA />
       </main>
       <Footer />
-      <TelegramFloat />
     </div>
   );
 }
@@ -863,10 +862,10 @@ function Hero() {
           play
           className="ed-display text-[10vw] lg:text-[7rem]"
           lines={[
-            "Email",
-            "brokers in",
+            "One click.",
+            "More loads",
             <span key="oc">
-              <span className="ed-accent">one click.</span>
+              <span className="ed-accent">booked.</span>
             </span>,
           ]}
         />
@@ -881,9 +880,6 @@ function Hero() {
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
                 <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
               </a>
-              <Link className="ed-btn" to="/demo">
-                <span>Live demo</span> <Play className="h-3.5 w-3.5" fill="#ef4444" style={{ color: "#ef4444" }} />
-              </Link>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
                 <span>Book Call</span>
               </a>
@@ -893,10 +889,6 @@ function Hero() {
               <br />
               We only send email, we never read your inbox.
             </p>
-          </Reveal>
-
-          <Reveal delay={0.28} className="flex md:justify-end">
-            <SpinBadge />
           </Reveal>
         </div>
       </motion.div>
@@ -1345,7 +1337,7 @@ function SocialProof() {
           <h2 className="ed-h2 max-w-2xl">
             Saves a fulltime dispatcher
             <br />
-            <span className="ed-accent">about 2-3 hours a week.</span>
+            <span className="ed-accent">about 3 hours a week.</span>
           </h2>
           <div className="text-left md:text-right">
             <div
@@ -1451,6 +1443,330 @@ function FeatureCard({ item, index, total }: { item: FeatureItem; index: number;
   );
 }
 
+/* ============================================================
+   Before / After comparison slider
+   ============================================================ */
+
+const BA_VIEWS = {
+  list: {
+    label: "Loads list",
+    before: "/compare/before-list.png",
+    after: "/compare/after-list.png",
+    ratio: "2422 / 1314",
+  },
+  details: {
+    label: "Load details",
+    before: "/compare/before.png",
+    after: "/compare/after.png",
+    ratio: "2047 / 906",
+  },
+} as const;
+type BaView = keyof typeof BA_VIEWS;
+
+function BeforeAfter() {
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const dragging = useRef(false);
+  const hinted = useRef(false);
+  const [pos, setPos] = useState(50); // % revealed of the "before" image
+  const [view, setView] = useState<BaView>("list");
+  const [anim, setAnim] = useState(false); // smooth transition during auto-hint
+  const [zoom, setZoom] = useState(false); // fullscreen zoom (handy on mobile)
+  const cur = BA_VIEWS[view];
+
+  const setFromClientX = (clientX: number) => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const p = ((clientX - rect.left) / rect.width) * 100;
+    setPos(Math.max(0, Math.min(100, p)));
+  };
+
+  useEffect(() => {
+    const move = (e: PointerEvent) => {
+      if (dragging.current) setFromClientX(e.clientX);
+    };
+    const up = () => {
+      dragging.current = false;
+    };
+    window.addEventListener("pointermove", move);
+    window.addEventListener("pointerup", up);
+    return () => {
+      window.removeEventListener("pointermove", move);
+      window.removeEventListener("pointerup", up);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Auto-hint: when the slider scrolls into view, sweep the handle once so the
+  // user sees it's draggable.
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        if (!e?.isIntersecting || hinted.current) return;
+        hinted.current = true;
+        setAnim(true);
+        const seq = [30, 70, 50];
+        seq.forEach((p, i) => setTimeout(() => setPos(p), 350 + i * 550));
+        setTimeout(() => setAnim(false), 350 + seq.length * 550 + 200);
+      },
+      { threshold: 0.45 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  const ease = "cubic-bezier(.16,1,.3,1)";
+
+  return (
+    <section id="compare" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-8">
+          <span className="ed-label">[ 03 ] — Before / After</span>
+          <h2 className="ed-h2 mt-4">Drag to see the difference</h2>
+        </div>
+
+        <Reveal>
+          {/* View switch — directly above the photo */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
+            <div
+              style={{
+                display: "inline-flex",
+                gap: 4,
+                padding: 4,
+                background: "var(--bg-2, #fff)",
+                border: "1px solid var(--line)",
+                borderRadius: 999,
+              }}
+            >
+              {(Object.keys(BA_VIEWS) as BaView[]).map((k) => {
+                const active = k === view;
+                return (
+                  <button
+                    key={k}
+                    type="button"
+                    onClick={() => setView(k)}
+                    style={{
+                      border: 0,
+                      cursor: "pointer",
+                      borderRadius: 999,
+                      padding: "9px 18px",
+                      font: "700 11px/1 'Space Mono', monospace",
+                      letterSpacing: ".1em",
+                      textTransform: "uppercase",
+                      color: active ? "#0a0a09" : "var(--ink)",
+                      background: active ? "var(--accent)" : "transparent",
+                      transition: "background .2s, color .2s",
+                    }}
+                  >
+                    {BA_VIEWS[k].label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div
+            ref={wrapRef}
+            onPointerDown={(e) => {
+              dragging.current = true;
+              setAnim(false);
+              setFromClientX(e.clientX);
+            }}
+            style={{
+              position: "relative",
+              width: "100%",
+              aspectRatio: cur.ratio,
+              overflow: "hidden",
+              borderRadius: 18,
+              border: "1px solid var(--line)",
+              background: "#eef1f6",
+              userSelect: "none",
+              touchAction: "none",
+              cursor: "ew-resize",
+            }}
+          >
+            {/* AFTER — full base layer (with TruckBox) */}
+            <img
+              src={cur.after}
+              alt="With TruckBox"
+              draggable={false}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                display: "block",
+              }}
+            />
+
+            {/* BEFORE — clipped to the left of the handle (without TruckBox) */}
+            <img
+              src={cur.before}
+              alt="Without TruckBox"
+              draggable={false}
+              style={{
+                position: "absolute",
+                inset: 0,
+                width: "100%",
+                height: "100%",
+                objectFit: "cover",
+                objectPosition: "center",
+                display: "block",
+                clipPath: `inset(0 ${100 - pos}% 0 0)`,
+                transition: anim ? `clip-path .55s ${ease}` : "none",
+              }}
+            />
+
+            {/* Divider + handle — bold and obvious */}
+            <div
+              style={{
+                position: "absolute",
+                top: 0,
+                bottom: 0,
+                left: `${pos}%`,
+                width: 4,
+                marginLeft: -2,
+                background: "var(--accent)",
+                boxShadow:
+                  "0 0 0 1.5px rgba(255,255,255,.85), 0 0 22px rgba(111,139,255,.6)",
+                pointerEvents: "none",
+                transition: anim ? `left .55s ${ease}` : "none",
+              }}
+            >
+              <span
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%,-50%)",
+                  width: 48,
+                  height: 48,
+                  borderRadius: 999,
+                  background: "var(--accent)",
+                  boxShadow:
+                    "0 6px 18px rgba(111,139,255,.55), 0 0 0 4px #fff",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "#fff",
+                  fontWeight: 900,
+                  fontSize: 18,
+                  letterSpacing: "1px",
+                }}
+              >
+                ‹ ›
+              </span>
+            </div>
+
+            {/* Zoom button — open the full image (handy on mobile) */}
+            <button
+              type="button"
+              aria-label="Zoom image"
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => {
+                e.stopPropagation();
+                setZoom(true);
+              }}
+              style={{
+                position: "absolute",
+                bottom: 12,
+                right: 12,
+                zIndex: 7,
+                width: 38,
+                height: 38,
+                borderRadius: 10,
+                border: "1px solid rgba(255,255,255,.5)",
+                background: "rgba(16,32,58,.78)",
+                color: "#fff",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                fontSize: 18,
+              }}
+            >
+              ⤢
+            </button>
+          </div>
+
+          {/* Before / After labels — OUTSIDE (below the image) */}
+          <div className="mt-4 flex items-center justify-between">
+            <span className="ed-label" style={{ color: "var(--muted)" }}>
+              Before
+            </span>
+            <span className="ed-label ed-accent">
+              After
+            </span>
+          </div>
+        </Reveal>
+      </div>
+
+      {/* Fullscreen zoom — scroll/pinch to inspect the full-size screenshot */}
+      {zoom && (
+        <div
+          onClick={() => setZoom(false)}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            background: "rgba(8,12,20,.94)",
+            overflow: "auto",
+            WebkitOverflowScrolling: "touch",
+            touchAction: "pinch-zoom",
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "flex-start",
+            padding: 0,
+          }}
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={(e) => {
+              e.stopPropagation();
+              setZoom(false);
+            }}
+            style={{
+              position: "fixed",
+              top: 14,
+              right: 14,
+              zIndex: 2,
+              width: 44,
+              height: 44,
+              borderRadius: 999,
+              border: 0,
+              background: "rgba(255,255,255,.92)",
+              color: "#0a0a09",
+              fontSize: 22,
+              fontWeight: 800,
+              cursor: "pointer",
+            }}
+          >
+            ✕
+          </button>
+          <img
+            src={cur.after}
+            alt="With TruckBox — full size"
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              minWidth: "min(1500px, 220%)",
+              width: "auto",
+              maxWidth: "none",
+              height: "auto",
+              display: "block",
+            }}
+          />
+        </div>
+      )}
+    </section>
+  );
+}
+
 function Features() {
   const items: FeatureItem[] = [
     {
@@ -1487,6 +1803,11 @@ function Features() {
       slug: "fmcsa",
       title: "FMCSA & rate calc",
       body: "Open the broker's FMCSA report and price a load on the phone, right on the board.",
+    },
+    {
+      slug: "rts",
+      title: "RTS broker credit",
+      body: "See a broker's RTS factoring credit rating and days-to-pay on the load — for carriers who factor with RTS.",
     },
   ];
 
@@ -1648,9 +1969,11 @@ function Pricing() {
     "One-click email sending",
     "Saved templates",
     "Built-in Google Maps route",
+    "Rate-per-mile calculator",
     "Copy & share load info",
     "Click-to-call broker numbers",
     "FMCSA broker report",
+    "RTS factoring credit check",
     "Refresh-loads button",
     "Short-load filtering",
     "Keyboard navigation",

@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { Header, Footer, TelegramFloat, Privacy } from "../App";
+import { Header, Footer, Privacy } from "../App";
 
 export default function PrivacyPage() {
   useEffect(() => {
@@ -15,7 +15,6 @@ export default function PrivacyPage() {
         <Privacy />
       </main>
       <Footer />
-      <TelegramFloat />
     </div>
   );
 }

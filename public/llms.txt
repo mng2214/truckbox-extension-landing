@@ -29,7 +29,6 @@
 ## Links
 
 - Website: https://truckbox.app/
-- Live demo: https://truckbox.app/demo
 - Install (Chrome Web Store): https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd
 - Book a call: https://calendly.com/truckboxapp
 
