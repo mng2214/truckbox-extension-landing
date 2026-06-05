@@ -2188,6 +2188,25 @@ const FAQS = [
     ),
   },
   {
+    q: "How do I set up RTS Credit Checks?",
+    a: (
+        <p>
+          Open the TruckBox extension, go to the <strong>Factoring</strong> tab, select <strong>RTS</strong>,
+          and click <strong>Login</strong>. After signing in to your RTS account,
+          you'll be able to use RTS Credit Checks directly from the DAT load board.
+        </p>
+    ),
+  },
+  {
+    q: "Can I use RTS if I'm not set up with them?",
+    a: (
+        <p>
+          No. To use this feature, you must already have an active account with RTS Financial.
+          If you're not currently set up with RTS, you'll need to contact them first.
+        </p>
+    ),
+  },
+  {
     q: "Why is Google login not working?",
     a: (
       <p>
@@ -2591,7 +2610,10 @@ function FinalCTA() {
 export function Footer() {
   return (
     <footer style={{ borderTop: "1px solid var(--line)" }}>
-      <div className="ed-container pt-16 pb-28">
+      <div
+        className="ed-container pt-16"
+        style={{ paddingBottom: "max(8rem, calc(env(safe-area-inset-bottom) + 4rem))" }}
+      >
 
         <div className="mt-12 grid gap-8 md:grid-cols-[1fr_auto] md:items-end">
           <div className="flex flex-wrap gap-x-8 gap-y-3">
