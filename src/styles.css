@@ -123,31 +123,6 @@ html.lenis, html.lenis body { height: auto; }
 .tb-spin { animation: tb-spin360 0.8s linear infinite; }
 @keyframes tb-spin360 { to { transform: rotate(360deg); } }
 
-/* demo detail panel: stacks on mobile, 4 columns on desktop with a wider
-   Route column and a shorter Rate column */
-.tb-demo-detail-grid { display: grid; gap: 26px; grid-template-columns: 1fr; }
-@media (min-width: 760px) {
-  .tb-demo-detail-grid {
-    grid-template-columns: 0.95fr 1.45fr 0.7fr 0.95fr;
-    gap: 32px;
-  }
-}
-
-/* attention pulse on the custom Truck Box buttons */
-@keyframes tb-pulse-ring {
-  0%   { box-shadow: 0 0 0 0 rgba(0, 70, 224, 0.4); }
-  70%  { box-shadow: 0 0 0 7px rgba(0, 70, 224, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(0, 70, 224, 0); }
-}
-.tb-pulse { animation: tb-pulse-ring 2.2s ease-out infinite; }
-
-/* grey attention pulse — highlights the Route section header */
-@keyframes tb-pulse-grey {
-  0%   { box-shadow: 0 0 0 0 rgba(100, 116, 139, 0.38); }
-  70%  { box-shadow: 0 0 0 9px rgba(100, 116, 139, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(100, 116, 139, 0); }
-}
-.tb-pulse-grey { animation: tb-pulse-grey 2.2s ease-out infinite; }
 
 /* feature flipbook (pricing) — 3D page-flip carousel */
 .tb-flip { width: 100%; }
@@ -713,47 +688,6 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   .tb-prose { overflow-wrap: anywhere; word-break: break-word; }
 }
 
-/* ------------------------------------------------------------ load-board demo: Truck Box injected buttons */
-.tb-demo-send,
-.tb-demo-route {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  cursor: pointer;
-  border-radius: 8px;
-  transition: transform .15s var(--ease), box-shadow .2s var(--ease), background-color .2s var(--ease), border-color .2s var(--ease);
-}
-/* Email button (purple) */
-.tb-demo-send {
-  border: 1px solid #d8b4fe;
-  background: #faf5ff;
-  color: #7c3aed;
-}
-.tb-demo-send:hover {
-  border-color: #a855f7;
-  box-shadow: 0 0 0 3px rgba(168, 85, 247, .15);
-  transform: translateY(-1px);
-}
-.tb-demo-send[data-sent] {
-  border-color: #22c55e;
-  background: #f0fdf4;
-  color: #16a34a;
-}
-/* Map / route button (green pin) */
-.tb-demo-route {
-  border: 1px solid #bbe6c9;
-  background: #f0fdf4;
-  color: #16a34a;
-}
-.tb-demo-route:hover {
-  border-color: #22c55e;
-  box-shadow: 0 0 0 3px rgba(34, 197, 94, .15);
-  transform: translateY(-1px);
-}
-.tb-demo-send:active,
-.tb-demo-route:active { transform: scale(0.96); }
 
 /* ------------------------------------------------------------ feature grid (demo) */
 /* Editorial hairline grid: cells sit on a 1px line-colored background with a
