@@ -701,13 +701,19 @@ const BA_VIEWS = {
     label: "Loads list",
     before: "/compare/before-list.png",
     after: "/compare/after-list.png",
-    ratio: "2422 / 1314",
+    ratio: "1230 / 899",
   },
   details: {
     label: "Load details",
     before: "/compare/before.png",
     after: "/compare/after.png",
-    ratio: "2047 / 906",
+    ratio: "1447 / 982",
+  },
+  darkmode: {
+    label: "Day / Night",
+    before: "/compare/day.png",
+    after: "/compare/night.png",
+    ratio: "1347 / 909",
   },
 } as const;
 type BaView = keyof typeof BA_VIEWS;
