@@ -965,9 +965,19 @@ function Features() {
       body: "Email the broker straight from a DAT load row. No copy-paste, no Gmail tab.",
     },
     {
+      slug: "template",
+      title: "Email Template",
+      body: "Create custom dynamic email template",
+    },
+    {
       slug: "rts",
       title: "RTS Credit Check",
       body: "See a broker's RTS factoring credit rating and days-to-pay on the load — for carriers who factor with RTS.",
+    },
+    {
+      slug: "map",
+      title: "Inbuilt Map",
+      body: "A live Google Maps route for every load — truck, pickup and destination.",
     },
     {
       slug: "calculator",
@@ -985,24 +995,27 @@ function Features() {
       body: "Hands stay on the keyboard. W/S move loads, A/D switch tabs, C copies, E sends, R refreshes.",
     },
     {
-      slug: "fmcsa",
-      title: "FMCSA Report",
-      body: "Open the broker's official FMCSA SAFER report in one click.",
+      slug: "refresh",
+      title: "Load Refresh",
+      body: "Refresh load list not all DAT page",
     },
     {
-      slug: "map",
-      title: "Inbuilt Map",
-      body: "A live Google Maps route for every load — truck, pickup and destination.",
+      slug: "night",
+      title: "Night Mode",
+      body: "Enable Night Mode in DAT load board",
     },
+
   ];
 
   const n = items.length;
   const [active, setActive] = useState(0);
+  // Auto-advance runs until the user interacts; then it stops for good.
+  const [engaged, setEngaged] = useState(false);
   const stripRef = useRef<HTMLDivElement>(null);
   const cur = items[active];
 
-  // Select a feature (wraps) and scroll it to the centre of the strip.
-  const select = (i: number) => {
+  // Move to feature `i` (wraps) and scroll it to the centre of the strip.
+  const goTo = (i: number) => {
     const ni = ((i % n) + n) % n;
     setActive(ni);
     const strip = stripRef.current;
@@ -1014,6 +1027,21 @@ function Features() {
       });
     }
   };
+
+  // User-initiated selection — also stops the auto-advance.
+  const select = (i: number) => {
+    setEngaged(true);
+    goTo(i);
+  };
+
+  // Auto-advance to the next feature every 2s while the user hasn't engaged.
+  // The timer re-arms on each `active` change, giving a full 2s per slide.
+  useEffect(() => {
+    if (engaged) return;
+    const id = setTimeout(() => goTo(active + 1), 2000);
+    return () => clearTimeout(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [active, engaged, n]);
 
   return (
     <section id="features" className="ed-section">
@@ -1034,8 +1062,13 @@ function Features() {
 
 
 
-        {/* Video — centred */}
-        <div className="mx-auto w-full max-w-[760px]">
+        {/* Video — centred. Hovering or tapping the media stops auto-advance
+            (so it won't switch out from under the user / the lightbox). */}
+        <div
+          className="mx-auto w-full max-w-[760px]"
+          onMouseEnter={() => setEngaged(true)}
+          onPointerDown={() => setEngaged(true)}
+        >
           <FeatureVideo key={cur.slug} slug={cur.slug} title={cur.title} />
         </div>
 
@@ -1083,6 +1116,9 @@ function FeatureVideo({ slug, title }: { slug: string; title: string }) {
   // only show the "coming" placeholder if neither asset exists.
   const [videoFailed, setVideoFailed] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
+  const [zoom, setZoom] = useState(false);
+  const isImage = videoFailed && !imgFailed;
+  const isPlaceholder = videoFailed && imgFailed;
   const cover: CSSProperties = {
     position: "absolute",
     inset: 0,
@@ -1091,46 +1127,165 @@ function FeatureVideo({ slug, title }: { slug: string; title: string }) {
     objectFit: "cover",
     display: "block",
   };
+
+  // While zoomed: close on Escape and lock background scroll.
+  useEffect(() => {
+    if (!zoom) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setZoom(false);
+    };
+    document.addEventListener("keydown", onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [zoom]);
+
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        aspectRatio: "16 / 10",
-        borderRadius: 16,
-        overflow: "hidden",
-        border: "1px solid var(--line)",
-        background: "#0b1322",
-        boxShadow: "0 10px 30px rgba(16,32,58,.12)",
-      }}
-    >
-      {!videoFailed ? (
-        <video
-          src={`/demos/${slug}.mp4`}
-          poster={`/demos/${slug}.jpg`}
-          aria-label={title}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          onError={() => setVideoFailed(true)}
-          style={cover}
-        />
-      ) : !imgFailed ? (
-        <img
-          src={`/demos/${slug}.jpg`}
-          alt={title}
-          onError={() => setImgFailed(true)}
-          style={cover}
-        />
-      ) : (
-        <div className="ed-fcard-ph" style={{ position: "absolute", inset: 0 }}>
-          <span className="ed-fcard-ph-play">▶</span>
-          <span className="ed-fcard-ph-note">Coming soon</span>
+    <>
+      <div
+        onClick={() => { if (!isPlaceholder) setZoom(true); }}
+        style={{
+          position: "relative",
+          width: "100%",
+          aspectRatio: "16 / 10",
+          borderRadius: 16,
+          overflow: "hidden",
+          border: "1px solid var(--line)",
+          background: "#0b1322",
+          boxShadow: "0 10px 30px rgba(16,32,58,.12)",
+          cursor: isPlaceholder ? "default" : "zoom-in",
+        }}
+      >
+        {!videoFailed ? (
+          <video
+            src={`/demos/${slug}.mp4`}
+            poster={`/demos/${slug}.jpg`}
+            aria-label={title}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            onError={() => setVideoFailed(true)}
+            style={cover}
+          />
+        ) : !imgFailed ? (
+          <img
+            src={`/demos/${slug}.jpg`}
+            alt={title}
+            onError={() => setImgFailed(true)}
+            style={cover}
+          />
+        ) : (
+          <div className="ed-fcard-ph" style={{ position: "absolute", inset: 0 }}>
+            <span className="ed-fcard-ph-play">▶</span>
+            <span className="ed-fcard-ph-note">Coming soon</span>
+          </div>
+        )}
+
+        {!isPlaceholder && (
+          <span
+            aria-hidden
+            style={{
+              position: "absolute",
+              bottom: 10,
+              right: 10,
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 5,
+              padding: "5px 9px",
+              borderRadius: 999,
+              background: "rgba(10,12,20,.62)",
+              color: "#fff",
+              font: "700 10px/1 'Space Mono', monospace",
+              letterSpacing: ".08em",
+              textTransform: "uppercase",
+              backdropFilter: "blur(4px)",
+              pointerEvents: "none",
+            }}
+          >
+            ⤢ Click to enlarge
+          </span>
+        )}
+      </div>
+
+      {zoom && (
+        <div
+          onClick={() => setZoom(false)}
+          role="dialog"
+          aria-modal="true"
+          aria-label={`${title} — enlarged`}
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 9999,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "max(16px, env(safe-area-inset-top)) 16px",
+            background: "rgba(6,8,15,.86)",
+            backdropFilter: "blur(6px)",
+            cursor: "zoom-out",
+          }}
+        >
+          <button
+            type="button"
+            aria-label="Close"
+            onClick={() => setZoom(false)}
+            style={{
+              position: "fixed",
+              top: 14,
+              right: 16,
+              width: 44,
+              height: 44,
+              borderRadius: 999,
+              border: "0",
+              background: "rgba(255,255,255,.14)",
+              color: "#fff",
+              font: "400 26px/1 Arial, sans-serif",
+              cursor: "pointer",
+            }}
+          >
+            ×
+          </button>
+          {isImage ? (
+            <img
+              src={`/demos/${slug}.jpg`}
+              alt={title}
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                maxWidth: "95vw",
+                maxHeight: "90vh",
+                objectFit: "contain",
+                borderRadius: 12,
+                boxShadow: "0 20px 60px rgba(0,0,0,.5)",
+              }}
+            />
+          ) : (
+            <video
+              src={`/demos/${slug}.mp4`}
+              poster={`/demos/${slug}.jpg`}
+              aria-label={title}
+              controls
+              autoPlay
+              loop
+              playsInline
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                maxWidth: "95vw",
+                maxHeight: "90vh",
+                objectFit: "contain",
+                borderRadius: 12,
+                boxShadow: "0 20px 60px rgba(0,0,0,.5)",
+              }}
+            />
+          )}
         </div>
       )}
-    </div>
+    </>
   );
 }
 
