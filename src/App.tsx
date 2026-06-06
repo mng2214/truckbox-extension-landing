@@ -631,7 +631,7 @@ function SocialProof() {
    Features — horizontal pinned track
    ============================================================ */
 
-type FeatureItem = { slug: string; title: string; body: string };
+type FeatureItem = { slug: string; title: string; body: string; video?: boolean };
 
 function FeatureCard({ item, index, total }: { item: FeatureItem; index: number; total: number }) {
   const vid = useRef<HTMLVideoElement>(null);
@@ -1019,16 +1019,38 @@ function Features() {
   const [active, setActive] = useState(0);
   // Slide direction for the media transition (+1 next, -1 previous).
   const [dir, setDir] = useState(1);
-  // Auto-advance runs until the user interacts; then it stops for good.
-  const [engaged, setEngaged] = useState(false);
+  // Slow glide while the swipe-hint demo plays; manual swipes stay snappy.
+  const [slow, setSlow] = useState(false);
+  // The hint demo runs once until the user interacts; then it stops for good.
+  const engagedRef = useRef(false);
+  const activeRef = useRef(0);
+  const demoTimers = useRef<number[]>([]);
   const stripRef = useRef<HTMLDivElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
   const cur = items[active];
+
+  useEffect(() => {
+    activeRef.current = active;
+  }, [active]);
+
+  // A real navigation stops the swipe-hint demo permanently: cancel any pending
+  // demo steps and restore the snappy manual transition speed. (Hover alone does
+  // NOT cancel — the next-and-back demo always plays out as one gesture.)
+  const engage = () => {
+    engagedRef.current = true;
+    demoTimers.current.forEach(clearTimeout);
+    demoTimers.current = [];
+    setSlow(false);
+  };
 
   // Move to feature `i` (wraps) and scroll it to the centre of the strip.
   const goTo = (i: number) => {
     const ni = ((i % n) + n) % n;
-    // Use the pre-wrap index so wrap-around (last→first) still reads as "next".
-    setDir(i > active ? 1 : i < active ? -1 : dir);
+    // Compare against the live active (ref) so directional slides are correct
+    // even from delayed/programmatic callers (e.g. the swipe-hint demo).
+    const a = activeRef.current;
+    setDir(i > a ? 1 : i < a ? -1 : dir);
+    activeRef.current = ni;
     setActive(ni);
     const strip = stripRef.current;
     const el = strip?.children[ni] as HTMLElement | undefined;
@@ -1040,23 +1062,78 @@ function Features() {
     }
   };
 
-  // User-initiated selection — also stops the auto-advance.
+  // User-initiated selection — also stops the hint demo.
   const select = (i: number) => {
-    setEngaged(true);
+    engage();
     goTo(i);
   };
 
-  // Auto-advance to the next feature every 2s while the user hasn't engaged.
-  // The timer re-arms on each `active` change, giving a full 2s per slide.
+  // Preload every feature image once so swapping is instant (no blink / reload).
   useEffect(() => {
-    if (engaged) return;
-    const id = setTimeout(() => goTo(active + 1), 2000);
-    return () => clearTimeout(id);
+    items.forEach((it) => {
+      const img = new Image();
+      img.src = `/demos/${it.slug}.jpg`;
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [active, engaged, n]);
+  }, []);
+
+  // Swipe-hint demo: the first time the section scrolls into view, glide to the
+  // next feature and back so the user can see the panel is swipeable. Runs once
+  // and never if the user has already interacted.
+  useEffect(() => {
+    const el = sectionRef.current;
+    if (!el || engagedRef.current) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        const e = entries[0];
+        if (!e.isIntersecting || engagedRef.current) return;
+        io.disconnect();
+        // Slow, deliberate "next … and back" so the swipe is easy to follow.
+        // Runs as one gesture; only a real navigation (engage) cancels it.
+        setSlow(true);
+        demoTimers.current = [
+          window.setTimeout(() => { if (!engagedRef.current) goTo(1); }, 900),
+          window.setTimeout(() => { if (!engagedRef.current) goTo(0); }, 2900),
+          window.setTimeout(() => setSlow(false), 4600),
+        ];
+      },
+      { threshold: 0.45 }
+    );
+    io.observe(el);
+    return () => {
+      io.disconnect();
+      demoTimers.current.forEach(clearTimeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Touch swipe on the media panel itself (mobile) — not just the name strip.
+  const touchX = useRef<number | null>(null);
+  const swiped = useRef(false);
+  const onTouchStart = (e: React.TouchEvent) => {
+    touchX.current = e.touches[0].clientX;
+    swiped.current = false;
+  };
+  const onTouchEnd = (e: React.TouchEvent) => {
+    if (touchX.current == null) return;
+    const dx = e.changedTouches[0].clientX - touchX.current;
+    touchX.current = null;
+    if (Math.abs(dx) > 40) {
+      swiped.current = true;
+      select(dx < 0 ? active + 1 : active - 1);
+    }
+  };
+  // Swallow the click that follows a swipe so it doesn't open the lightbox.
+  const onClickCapture = (e: React.MouseEvent) => {
+    if (swiped.current) {
+      e.preventDefault();
+      e.stopPropagation();
+      swiped.current = false;
+    }
+  };
 
   return (
-    <section id="features" className="ed-section">
+    <section id="features" className="ed-section" ref={sectionRef}>
       <div className="ed-container">
         <div className="flex items-end justify-between gap-6 mb-12">
           <div>
@@ -1074,14 +1151,16 @@ function Features() {
 
 
 
-        {/* Video — centred. Hovering or tapping the media stops auto-advance
-            (so it won't switch out from under the user / the lightbox). */}
+        {/* Media — centred. Swipe left/right on touch to switch features;
+            hovering / tapping stops the swipe-hint demo. */}
         <div
-          className="mx-auto w-full max-w-[760px]"
-          onMouseEnter={() => setEngaged(true)}
-          onPointerDown={() => setEngaged(true)}
+          className="relative mx-auto w-full max-w-[760px]"
+          style={{ touchAction: "pan-y" }}
+          onTouchStart={onTouchStart}
+          onTouchEnd={onTouchEnd}
+          onClickCapture={onClickCapture}
         >
-          <AnimatePresence mode="wait" custom={dir} initial={false}>
+          <AnimatePresence mode="popLayout" custom={dir} initial={false}>
             <motion.div
               key={cur.slug}
               custom={dir}
@@ -1089,9 +1168,10 @@ function Features() {
               initial="enter"
               animate="center"
               exit="exit"
-              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: slow ? 1.05 : 0.32, ease: [0.22, 1, 0.36, 1] }}
+              style={{ width: "100%" }}
             >
-              <FeatureVideo slug={cur.slug} title={cur.title} />
+              <FeatureVideo slug={cur.slug} title={cur.title} video={cur.video} />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -1134,15 +1214,16 @@ function Features() {
   );
 }
 
-// Large video panel for the active feature (placeholder until a clip is added).
-function FeatureVideo({ slug, title }: { slug: string; title: string }) {
-  // Try the video first; if there's no .mp4 yet, fall back to a still .jpg;
-  // only show the "coming" placeholder if neither asset exists.
+// Large media panel for the active feature. Defaults to a still image (.jpg);
+// pass `video` only for features that actually have a .mp4 clip. Showing the
+// image directly avoids a failed-video round-trip (and its blink) on each swap.
+function FeatureVideo({ slug, title, video = false }: { slug: string; title: string; video?: boolean }) {
   const [videoFailed, setVideoFailed] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
   const [zoom, setZoom] = useState(false);
-  const isImage = videoFailed && !imgFailed;
-  const isPlaceholder = videoFailed && imgFailed;
+  const showVideo = video && !videoFailed;
+  const isImage = !showVideo && !imgFailed;
+  const isPlaceholder = !showVideo && imgFailed;
   const cover: CSSProperties = {
     position: "absolute",
     inset: 0,
@@ -1183,7 +1264,7 @@ function FeatureVideo({ slug, title }: { slug: string; title: string }) {
           cursor: isPlaceholder ? "default" : "zoom-in",
         }}
       >
-        {!videoFailed ? (
+        {showVideo ? (
           <video
             src={`/demos/${slug}.mp4`}
             poster={`/demos/${slug}.jpg`}
@@ -1200,6 +1281,8 @@ function FeatureVideo({ slug, title }: { slug: string; title: string }) {
           <img
             src={`/demos/${slug}.jpg`}
             alt={title}
+            decoding="async"
+            draggable={false}
             onError={() => setImgFailed(true)}
             style={cover}
           />
