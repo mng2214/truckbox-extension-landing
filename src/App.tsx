@@ -697,17 +697,17 @@ function FeatureCard({ item, index, total }: { item: FeatureItem; index: number;
    ============================================================ */
 
 const BA_VIEWS = {
-  list: {
-    label: "Loads list",
-    before: "/compare/before-list.png",
-    after: "/compare/after-list.png",
-    ratio: "1230 / 899",
-  },
   details: {
     label: "Load details",
     before: "/compare/before.png",
     after: "/compare/after.png",
     ratio: "1447 / 982",
+  },
+  list: {
+    label: "Loads list",
+    before: "/compare/before-list.png",
+    after: "/compare/after-list.png",
+    ratio: "1230 / 899",
   },
   darkmode: {
     label: "Day / Night",
@@ -723,7 +723,7 @@ function BeforeAfter() {
   const dragging = useRef(false);
   const hinted = useRef(false);
   const [pos, setPos] = useState(50); // % revealed of the "before" image
-  const [view, setView] = useState<BaView>("list");
+  const [view, setView] = useState<BaView>("details");
   const [anim, setAnim] = useState(false); // smooth transition during auto-hint
   const cur = BA_VIEWS[view];
 
@@ -1079,7 +1079,18 @@ function Features() {
 
 // Large video panel for the active feature (placeholder until a clip is added).
 function FeatureVideo({ slug, title }: { slug: string; title: string }) {
-  const [failed, setFailed] = useState(false);
+  // Try the video first; if there's no .mp4 yet, fall back to a still .jpg;
+  // only show the "coming" placeholder if neither asset exists.
+  const [videoFailed, setVideoFailed] = useState(false);
+  const [imgFailed, setImgFailed] = useState(false);
+  const cover: CSSProperties = {
+    position: "absolute",
+    inset: 0,
+    width: "100%",
+    height: "100%",
+    objectFit: "cover",
+    display: "block",
+  };
   return (
     <div
       style={{
@@ -1093,12 +1104,7 @@ function FeatureVideo({ slug, title }: { slug: string; title: string }) {
         boxShadow: "0 10px 30px rgba(16,32,58,.12)",
       }}
     >
-      {failed ? (
-        <div className="ed-fcard-ph" style={{ position: "absolute", inset: 0 }}>
-          <span className="ed-fcard-ph-play">▶</span>
-          <span className="ed-fcard-ph-note">Video coming</span>
-        </div>
-      ) : (
+      {!videoFailed ? (
         <video
           src={`/demos/${slug}.mp4`}
           poster={`/demos/${slug}.jpg`}
@@ -1108,16 +1114,21 @@ function FeatureVideo({ slug, title }: { slug: string; title: string }) {
           loop
           playsInline
           preload="metadata"
-          onError={() => setFailed(true)}
-          style={{
-            position: "absolute",
-            inset: 0,
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block",
-          }}
+          onError={() => setVideoFailed(true)}
+          style={cover}
         />
+      ) : !imgFailed ? (
+        <img
+          src={`/demos/${slug}.jpg`}
+          alt={title}
+          onError={() => setImgFailed(true)}
+          style={cover}
+        />
+      ) : (
+        <div className="ed-fcard-ph" style={{ position: "absolute", inset: 0 }}>
+          <span className="ed-fcard-ph-play">▶</span>
+          <span className="ed-fcard-ph-note">Coming soon</span>
+        </div>
       )}
     </div>
   );
