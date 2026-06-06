@@ -957,6 +957,14 @@ function BeforeAfter() {
   );
 }
 
+// Directional slide + fade for the feature media. `dir` is +1 for "next"
+// (incoming slides in from the right) and -1 for "previous".
+const featureSlide = {
+  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 64 : -64, scale: 0.97 }),
+  center: { opacity: 1, x: 0, scale: 1 },
+  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -64 : 64, scale: 0.97 }),
+};
+
 function Features() {
   const items: FeatureItem[] = [
     {
@@ -1009,6 +1017,8 @@ function Features() {
 
   const n = items.length;
   const [active, setActive] = useState(0);
+  // Slide direction for the media transition (+1 next, -1 previous).
+  const [dir, setDir] = useState(1);
   // Auto-advance runs until the user interacts; then it stops for good.
   const [engaged, setEngaged] = useState(false);
   const stripRef = useRef<HTMLDivElement>(null);
@@ -1017,6 +1027,8 @@ function Features() {
   // Move to feature `i` (wraps) and scroll it to the centre of the strip.
   const goTo = (i: number) => {
     const ni = ((i % n) + n) % n;
+    // Use the pre-wrap index so wrap-around (last→first) still reads as "next".
+    setDir(i > active ? 1 : i < active ? -1 : dir);
     setActive(ni);
     const strip = stripRef.current;
     const el = strip?.children[ni] as HTMLElement | undefined;
@@ -1069,7 +1081,19 @@ function Features() {
           onMouseEnter={() => setEngaged(true)}
           onPointerDown={() => setEngaged(true)}
         >
-          <FeatureVideo key={cur.slug} slug={cur.slug} title={cur.title} />
+          <AnimatePresence mode="wait" custom={dir} initial={false}>
+            <motion.div
+              key={cur.slug}
+              custom={dir}
+              variants={featureSlide}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <FeatureVideo slug={cur.slug} title={cur.title} />
+            </motion.div>
+          </AnimatePresence>
         </div>
 
         {/* Feature selector — manual scroll strip below the video.
