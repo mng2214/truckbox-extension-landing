@@ -822,6 +822,39 @@ function BeforeAfter() {
             </div>
           </div>
 
+          {/* Before / After labels — above the image */}
+          <div className="flex items-center justify-between" style={{ marginBottom: 12 }}>
+            <span
+              style={{
+                font: "700 11px/1 'Space Mono', monospace",
+                letterSpacing: ".12em",
+                textTransform: "uppercase",
+                color: "var(--muted)",
+                background: "var(--bg-2, #fff)",
+                border: "1px solid var(--line)",
+                borderRadius: 999,
+                padding: "6px 13px",
+              }}
+            >
+              Before
+            </span>
+            <span
+              style={{
+                font: "800 12.5px/1 'Space Mono', monospace",
+                letterSpacing: ".12em",
+                textTransform: "uppercase",
+                color: "#0a0a09",
+                background: "var(--accent)",
+                border: "1px solid var(--accent)",
+                borderRadius: 999,
+                padding: "8px 17px",
+                boxShadow: "0 6px 20px rgba(111,139,255,.55)",
+              }}
+            >
+              ★ After
+            </span>
+          </div>
+
           <div
             ref={wrapRef}
             className="mx-auto"
@@ -917,16 +950,6 @@ function BeforeAfter() {
                 ‹ ›
               </span>
             </div>
-          </div>
-
-          {/* Before / After labels — OUTSIDE (below the image) */}
-          <div className="mt-4 flex items-center justify-between">
-            <span className="ed-label" style={{ color: "var(--muted)" }}>
-              Before
-            </span>
-            <span className="ed-label ed-accent">
-              After
-            </span>
           </div>
         </Reveal>
       </div>
