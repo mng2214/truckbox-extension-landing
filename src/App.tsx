@@ -1169,6 +1169,7 @@ function Pricing() {
     "Click-to-call broker numbers",
     "FMCSA broker report",
     "Refresh-loads button",
+    "DAT Dark mode",
     "Short-load filtering",
     "Keyboard navigation",
   ];
