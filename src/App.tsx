@@ -957,14 +957,6 @@ function BeforeAfter() {
   );
 }
 
-// Directional slide + fade for the feature media. `dir` is +1 for "next"
-// (incoming slides in from the right) and -1 for "previous".
-const featureSlide = {
-  enter: (dir: number) => ({ opacity: 0, x: dir > 0 ? 64 : -64, scale: 0.97 }),
-  center: { opacity: 1, x: 0, scale: 1 },
-  exit: (dir: number) => ({ opacity: 0, x: dir > 0 ? -64 : 64, scale: 0.97 }),
-};
-
 function Features() {
   const items: FeatureItem[] = [
     {
@@ -1015,60 +1007,13 @@ function Features() {
 
   ];
 
-  const n = items.length;
-  const [active, setActive] = useState(0);
-  // Slide direction for the media transition (+1 next, -1 previous).
-  const [dir, setDir] = useState(1);
-  // Slow glide while the swipe-hint demo plays; manual swipes stay snappy.
-  const [slow, setSlow] = useState(false);
-  // The hint demo runs once until the user interacts; then it stops for good.
-  const engagedRef = useRef(false);
-  const activeRef = useRef(0);
-  const demoTimers = useRef<number[]>([]);
-  const stripRef = useRef<HTMLDivElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const cur = items[active];
+  const total = items.length;
+  // Lightbox: index of the enlarged feature, or null when closed.
+  const [lb, setLb] = useState<number | null>(null);
+  const lbStep = (delta: number) =>
+    setLb((v) => (v == null ? v : (((v + delta) % total) + total) % total));
 
-  useEffect(() => {
-    activeRef.current = active;
-  }, [active]);
-
-  // A real navigation stops the swipe-hint demo permanently: cancel any pending
-  // demo steps and restore the snappy manual transition speed. (Hover alone does
-  // NOT cancel — the next-and-back demo always plays out as one gesture.)
-  const engage = () => {
-    engagedRef.current = true;
-    demoTimers.current.forEach(clearTimeout);
-    demoTimers.current = [];
-    setSlow(false);
-  };
-
-  // Move to feature `i` (wraps) and scroll it to the centre of the strip.
-  const goTo = (i: number) => {
-    const ni = ((i % n) + n) % n;
-    // Compare against the live active (ref) so directional slides are correct
-    // even from delayed/programmatic callers (e.g. the swipe-hint demo).
-    const a = activeRef.current;
-    setDir(i > a ? 1 : i < a ? -1 : dir);
-    activeRef.current = ni;
-    setActive(ni);
-    const strip = stripRef.current;
-    const el = strip?.children[ni] as HTMLElement | undefined;
-    if (strip && el) {
-      strip.scrollTo({
-        left: el.offsetLeft - (strip.clientWidth - el.clientWidth) / 2,
-        behavior: "smooth",
-      });
-    }
-  };
-
-  // User-initiated selection — also stops the hint demo.
-  const select = (i: number) => {
-    engage();
-    goTo(i);
-  };
-
-  // Preload every feature image once so swapping is instant (no blink / reload).
+  // Preload every feature image so the grid and the lightbox feel instant.
   useEffect(() => {
     items.forEach((it) => {
       const img = new Image();
@@ -1077,63 +1022,92 @@ function Features() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Swipe-hint demo: the first time the section scrolls into view, glide to the
-  // next feature and back so the user can see the panel is swipeable. Runs once
-  // and never if the user has already interacted.
+  // Lightbox: arrow-key nav + Escape, and lock background scroll while open.
   useEffect(() => {
-    const el = sectionRef.current;
-    if (!el || engagedRef.current) return;
-    const io = new IntersectionObserver(
-      (entries) => {
-        const e = entries[0];
-        if (!e.isIntersecting || engagedRef.current) return;
-        io.disconnect();
-        // Slow, deliberate "next … and back" so the swipe is easy to follow.
-        // Runs as one gesture; only a real navigation (engage) cancels it.
-        setSlow(true);
-        demoTimers.current = [
-          window.setTimeout(() => { if (!engagedRef.current) goTo(1); }, 900),
-          window.setTimeout(() => { if (!engagedRef.current) goTo(0); }, 2900),
-          window.setTimeout(() => setSlow(false), 4600),
-        ];
-      },
-      { threshold: 0.45 }
-    );
-    io.observe(el);
+    if (lb == null) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setLb(null);
+      else if (e.key === "ArrowRight") lbStep(1);
+      else if (e.key === "ArrowLeft") lbStep(-1);
+    };
+    document.addEventListener("keydown", onKey);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
     return () => {
-      io.disconnect();
-      demoTimers.current.forEach(clearTimeout);
+      document.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [lb]);
 
-  // Touch swipe on the media panel itself (mobile) — not just the name strip.
+  // Lightbox touch swipe (mobile) to move between features.
   const touchX = useRef<number | null>(null);
-  const swiped = useRef(false);
-  const onTouchStart = (e: React.TouchEvent) => {
+  const onLbTouchStart = (e: React.TouchEvent) => {
     touchX.current = e.touches[0].clientX;
-    swiped.current = false;
   };
-  const onTouchEnd = (e: React.TouchEvent) => {
+  const onLbTouchEnd = (e: React.TouchEvent) => {
     if (touchX.current == null) return;
     const dx = e.changedTouches[0].clientX - touchX.current;
     touchX.current = null;
-    if (Math.abs(dx) > 40) {
-      swiped.current = true;
-      select(dx < 0 ? active + 1 : active - 1);
-    }
+    if (Math.abs(dx) > 40) lbStep(dx < 0 ? 1 : -1);
   };
-  // Swallow the click that follows a swipe so it doesn't open the lightbox.
-  const onClickCapture = (e: React.MouseEvent) => {
-    if (swiped.current) {
-      e.preventDefault();
-      e.stopPropagation();
-      swiped.current = false;
-    }
+
+  // Carousel: page-based so arrows/dots stay correct at any number of visible
+  // cards (1 on mobile, ~3 on desktop). A "page" = one card-stride of scroll.
+  const caroRef = useRef<HTMLDivElement>(null);
+  const [page, setPage] = useState(0);
+  const [pages, setPages] = useState(total);
+
+  // One card's stride (width + gap) — read live so it works at any breakpoint.
+  const cardStride = () => {
+    const track = caroRef.current;
+    if (!track || track.children.length < 2) return track?.clientWidth || 1;
+    const a = track.children[0] as HTMLElement;
+    const b = track.children[1] as HTMLElement;
+    return b.offsetLeft - a.offsetLeft || a.offsetWidth;
+  };
+
+  // Recompute the page count from the layout (and on resize).
+  useEffect(() => {
+    const update = () => {
+      const track = caroRef.current;
+      if (!track) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      setPages(Math.max(1, Math.round(maxScroll / cardStride()) + 1));
+    };
+    update();
+    window.addEventListener("resize", update);
+    return () => window.removeEventListener("resize", update);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const scrollToPage = (i: number) => {
+    const track = caroRef.current;
+    if (!track) return;
+    const maxScroll = track.scrollWidth - track.clientWidth;
+    const np = Math.max(0, Math.min(i, pages - 1));
+    track.scrollTo({ left: Math.min(np * cardStride(), maxScroll), behavior: "smooth" });
+    setPage(np);
+  };
+
+  // Keep the active page in sync while the user swipes/scrolls the track.
+  const rafRef = useRef(0);
+  const onCaroScroll = () => {
+    cancelAnimationFrame(rafRef.current);
+    rafRef.current = requestAnimationFrame(() => {
+      const track = caroRef.current;
+      if (!track) return;
+      const maxScroll = track.scrollWidth - track.clientWidth;
+      const p =
+        track.scrollLeft >= maxScroll - 2
+          ? pages - 1
+          : Math.min(pages - 1, Math.round(track.scrollLeft / cardStride()));
+      setPage(p);
+    });
   };
 
   return (
-    <section id="features" className="ed-section" ref={sectionRef}>
+    <section id="features" className="ed-section">
       <div className="ed-container">
         <div className="flex items-end justify-between gap-6 mb-12">
           <div>
@@ -1145,254 +1119,128 @@ function Features() {
             </h2>
           </div>
           <span className="ed-label hidden md:block max-w-[220px] text-right">
-            Move faster without turning DAT into a cluttered tool
+            Swipe through — tap a card to enlarge
           </span>
         </div>
 
-
-
-        {/* Media — centred. Swipe left/right on touch to switch features;
-            hovering / tapping stops the swipe-hint demo. */}
-        <div
-          className="relative mx-auto w-full max-w-[760px]"
-          style={{ touchAction: "pan-y" }}
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-          onClickCapture={onClickCapture}
-        >
-          <AnimatePresence mode="popLayout" custom={dir} initial={false}>
-            <motion.div
-              key={cur.slug}
-              custom={dir}
-              variants={featureSlide}
-              initial="enter"
-              animate="center"
-              exit="exit"
-              transition={{ duration: slow ? 1.05 : 0.32, ease: [0.22, 1, 0.36, 1] }}
-              style={{ width: "100%" }}
-            >
-              <FeatureVideo slug={cur.slug} title={cur.title} video={cur.video} />
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/* Feature selector — manual scroll strip below the video.
-            Swipe on touch; arrows for prev/next on desktop. No auto-scroll. */}
-        <div className="tb-fstrip-wrap mt-10 md:mt-12">
+        {/* Carousel — swipe on touch, arrows / drag on desktop. The next card
+            peeks at the edge so it always reads as scrollable. */}
+        <div className="tb-caro-wrap">
           <button
             type="button"
-            aria-label="Previous feature"
-            className="tb-fstrip-arrow"
-            onClick={() => select(active - 1)}
+            aria-label="Previous"
+            className="tb-caro-arrow tb-caro-prev"
+            onClick={() => scrollToPage(page - 1)}
+            disabled={page <= 0}
           >
             ‹
           </button>
-          <div className="tb-fstrip" ref={stripRef}>
+
+          <div className="tb-caro" ref={caroRef} onScroll={onCaroScroll}>
             {items.map((it, i) => (
               <button
                 key={it.slug}
                 type="button"
-                onClick={() => select(i)}
-                className={"tb-fstrip-item" + (i === active ? " is-active" : "")}
+                onClick={() => setLb(i)}
+                className="tb-bento-card tb-caro-card"
               >
-                <span className="num">{String(i + 1).padStart(2, "0")}</span>
-                {it.title}
+                <span className="tb-bento-media">
+                  <img
+                    src={`/demos/${it.slug}.jpg`}
+                    alt={it.title}
+                    loading="lazy"
+                    decoding="async"
+                    draggable={false}
+                  />
+                  <span className="tb-bento-zoom" aria-hidden>⤢</span>
+                </span>
+                <span className="tb-bento-text">
+                  <span className="tb-bento-idx">{String(i + 1).padStart(2, "0")}</span>
+                  <span className="tb-bento-title">{it.title}</span>
+                  <span className="tb-bento-body">{it.body}</span>
+                </span>
               </button>
             ))}
           </div>
+
           <button
             type="button"
-            aria-label="Next feature"
-            className="tb-fstrip-arrow"
-            onClick={() => select(active + 1)}
+            aria-label="Next"
+            className="tb-caro-arrow tb-caro-next"
+            onClick={() => scrollToPage(page + 1)}
+            disabled={page >= pages - 1}
           >
             ›
           </button>
         </div>
-      </div>
-    </section>
-  );
-}
 
-// Large media panel for the active feature. Defaults to a still image (.jpg);
-// pass `video` only for features that actually have a .mp4 clip. Showing the
-// image directly avoids a failed-video round-trip (and its blink) on each swap.
-function FeatureVideo({ slug, title, video = false }: { slug: string; title: string; video?: boolean }) {
-  const [videoFailed, setVideoFailed] = useState(false);
-  const [imgFailed, setImgFailed] = useState(false);
-  const [zoom, setZoom] = useState(false);
-  const showVideo = video && !videoFailed;
-  const isImage = !showVideo && !imgFailed;
-  const isPlaceholder = !showVideo && imgFailed;
-  const cover: CSSProperties = {
-    position: "absolute",
-    inset: 0,
-    width: "100%",
-    height: "100%",
-    objectFit: "cover",
-    display: "block",
-  };
-
-  // While zoomed: close on Escape and lock background scroll.
-  useEffect(() => {
-    if (!zoom) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setZoom(false);
-    };
-    document.addEventListener("keydown", onKey);
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    return () => {
-      document.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prev;
-    };
-  }, [zoom]);
-
-  return (
-    <>
-      <div
-        onClick={() => { if (!isPlaceholder) setZoom(true); }}
-        style={{
-          position: "relative",
-          width: "100%",
-          aspectRatio: "16 / 10",
-          borderRadius: 16,
-          overflow: "hidden",
-          border: "1px solid var(--line)",
-          background: "#0b1322",
-          boxShadow: "0 10px 30px rgba(16,32,58,.12)",
-          cursor: isPlaceholder ? "default" : "zoom-in",
-        }}
-      >
-        {showVideo ? (
-          <video
-            src={`/demos/${slug}.mp4`}
-            poster={`/demos/${slug}.jpg`}
-            aria-label={title}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            onError={() => setVideoFailed(true)}
-            style={cover}
-          />
-        ) : !imgFailed ? (
-          <img
-            src={`/demos/${slug}.jpg`}
-            alt={title}
-            decoding="async"
-            draggable={false}
-            onError={() => setImgFailed(true)}
-            style={cover}
-          />
-        ) : (
-          <div className="ed-fcard-ph" style={{ position: "absolute", inset: 0 }}>
-            <span className="ed-fcard-ph-play">▶</span>
-            <span className="ed-fcard-ph-note">Coming soon</span>
-          </div>
-        )}
-
-        {!isPlaceholder && (
-          <span
-            aria-hidden
-            style={{
-              position: "absolute",
-              bottom: 10,
-              right: 10,
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 5,
-              padding: "5px 9px",
-              borderRadius: 999,
-              background: "rgba(10,12,20,.62)",
-              color: "#fff",
-              font: "700 10px/1 'Space Mono', monospace",
-              letterSpacing: ".08em",
-              textTransform: "uppercase",
-              backdropFilter: "blur(4px)",
-              pointerEvents: "none",
-            }}
-          >
-            ⤢ Click to enlarge
-          </span>
-        )}
-      </div>
-
-      {zoom && (
-        <div
-          onClick={() => setZoom(false)}
-          role="dialog"
-          aria-modal="true"
-          aria-label={`${title} — enlarged`}
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 9999,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            padding: "max(16px, env(safe-area-inset-top)) 16px",
-            background: "rgba(6,8,15,.86)",
-            backdropFilter: "blur(6px)",
-            cursor: "zoom-out",
-          }}
-        >
-          <button
-            type="button"
-            aria-label="Close"
-            onClick={() => setZoom(false)}
-            style={{
-              position: "fixed",
-              top: 14,
-              right: 16,
-              width: 44,
-              height: 44,
-              borderRadius: 999,
-              border: "0",
-              background: "rgba(255,255,255,.14)",
-              color: "#fff",
-              font: "400 26px/1 Arial, sans-serif",
-              cursor: "pointer",
-            }}
-          >
-            ×
-          </button>
-          {isImage ? (
-            <img
-              src={`/demos/${slug}.jpg`}
-              alt={title}
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                maxWidth: "95vw",
-                maxHeight: "90vh",
-                objectFit: "contain",
-                borderRadius: 12,
-                boxShadow: "0 20px 60px rgba(0,0,0,.5)",
-              }}
+        <div className="tb-caro-dots">
+          {Array.from({ length: pages }).map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`Go to page ${i + 1}`}
+              className={"tb-caro-dot" + (i === page ? " is-active" : "")}
+              onClick={() => scrollToPage(i)}
             />
-          ) : (
-            <video
-              src={`/demos/${slug}.mp4`}
-              poster={`/demos/${slug}.jpg`}
-              aria-label={title}
-              controls
-              autoPlay
-              loop
-              playsInline
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                maxWidth: "95vw",
-                maxHeight: "90vh",
-                objectFit: "contain",
-                borderRadius: 12,
-                boxShadow: "0 20px 60px rgba(0,0,0,.5)",
-              }}
-            />
-          )}
+          ))}
         </div>
-      )}
-    </>
+      </div>
+
+      {/* Lightbox — enlarged preview with prev/next (keys, buttons, swipe). */}
+      <AnimatePresence>
+        {lb != null && (
+          <motion.div
+            className="tb-lb"
+            role="dialog"
+            aria-modal="true"
+            aria-label={`${items[lb].title} — enlarged`}
+            onClick={() => setLb(null)}
+            onTouchStart={onLbTouchStart}
+            onTouchEnd={onLbTouchEnd}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <button type="button" aria-label="Close" className="tb-lb-x" onClick={() => setLb(null)}>
+              ×
+            </button>
+            <button
+              type="button"
+              aria-label="Previous feature"
+              className="tb-lb-nav tb-lb-prev"
+              onClick={(e) => { e.stopPropagation(); lbStep(-1); }}
+            >
+              ‹
+            </button>
+            <motion.figure
+              key={items[lb].slug}
+              className="tb-lb-fig"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0, scale: 0.96 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <img src={`/demos/${items[lb].slug}.jpg`} alt={items[lb].title} />
+              <figcaption>
+                <span className="tb-bento-idx">{String(lb + 1).padStart(2, "0")}</span>
+                <span className="tb-lb-title">{items[lb].title}</span>
+                <span className="tb-lb-body">{items[lb].body}</span>
+              </figcaption>
+            </motion.figure>
+            <button
+              type="button"
+              aria-label="Next feature"
+              className="tb-lb-nav tb-lb-next"
+              onClick={(e) => { e.stopPropagation(); lbStep(1); }}
+            >
+              ›
+            </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </section>
   );
 }
 
