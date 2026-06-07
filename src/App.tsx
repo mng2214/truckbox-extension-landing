@@ -1040,16 +1040,43 @@ function Features() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lb]);
 
-  // Lightbox touch swipe (mobile) to move between features.
+  // Lightbox touch swipe (mobile) to move between features. Ignores pinch-zoom
+  // and any multi-touch gesture so zooming the image never flips the slide.
   const touchX = useRef<number | null>(null);
+  const touchY = useRef<number | null>(null);
+  const lbMulti = useRef(false);
   const onLbTouchStart = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) {
+      // a second finger → pinch/zoom, not a swipe
+      lbMulti.current = true;
+      touchX.current = null;
+      touchY.current = null;
+      return;
+    }
+    lbMulti.current = false;
     touchX.current = e.touches[0].clientX;
+    touchY.current = e.touches[0].clientY;
+  };
+  const onLbTouchMove = (e: React.TouchEvent) => {
+    if (e.touches.length > 1) lbMulti.current = true;
   };
   const onLbTouchEnd = (e: React.TouchEvent) => {
-    if (touchX.current == null) return;
+    const fingersLeft = e.touches.length;
+    // Skip while it was a pinch, while fingers are still down, or with no start.
+    if (lbMulti.current || fingersLeft > 0 || touchX.current == null) {
+      if (fingersLeft === 0) lbMulti.current = false;
+      touchX.current = null;
+      touchY.current = null;
+      return;
+    }
     const dx = e.changedTouches[0].clientX - touchX.current;
+    const dy = touchY.current == null ? 0 : e.changedTouches[0].clientY - touchY.current;
     touchX.current = null;
-    if (Math.abs(dx) > 40) lbStep(dx < 0 ? 1 : -1);
+    touchY.current = null;
+    // Only a clearly horizontal one-finger swipe counts.
+    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+      lbStep(dx < 0 ? 1 : -1);
+    }
   };
 
   // Carousel: page-based so arrows/dots stay correct at any number of visible
@@ -1197,6 +1224,7 @@ function Features() {
             aria-label={`${items[lb].title} — enlarged`}
             onClick={() => setLb(null)}
             onTouchStart={onLbTouchStart}
+            onTouchMove={onLbTouchMove}
             onTouchEnd={onLbTouchEnd}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
