@@ -1066,11 +1066,44 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   }
 }
 
-/* Crisp chat launcher — gentle neon pulse (brighter ↔ dimmer), site colour */
-.crisp-client a[role="button"] {
-  animation: tbCrispGlow 2.6s ease-in-out infinite !important;
+/* Crisp chat launcher — attention-grabbing neon pulse: a steady two-colour glow
+   plus an expanding "radar" ring. Both ride on the bubble's own box-shadow, so
+   nothing clips them. Site colours (accent blue + violet).
+   NOTE: current Crisp renders the launcher as a <div role="button"> (not an <a>)
+   with data-maximized="false" while closed — so we scope to that (pulse only
+   while the chat is closed; language-independent, no class-hash reliance). */
+.crisp-client [role="button"][data-maximized="false"] {
+  position: relative !important;
+  overflow: visible !important;
+  border-radius: 50% !important;
+  /* neon glow via filter (Crisp resets box-shadow !important, but not filter) */
+  animation: tbCrispGlow 2.8s ease-in-out infinite !important;
+}
+/* single soft "radar" ring — pseudo-element driven by transform + opacity +
+   border (no box-shadow, which Crisp wipes). Radiates gently outward. */
+.crisp-client [role="button"][data-maximized="false"]::after {
+  content: "" !important;
+  position: absolute !important;
+  inset: -1px !important;
+  border-radius: 50% !important;
+  border: 1.5px solid rgba(111, 139, 255, 0.55) !important;
+  pointer-events: none !important;
+  background: transparent !important;
+  box-sizing: border-box !important;
+  animation: tbCrispRing 2.8s ease-out infinite !important;
 }
 @keyframes tbCrispGlow {
-  0%, 100% { box-shadow: 0 4px 16px rgba(111, 139, 255, 0.35); }
-  50%      { box-shadow: 0 0 26px 7px rgba(111, 139, 255, 0.65); }
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(111, 139, 255, 0.4)); }
+  50%      { filter: drop-shadow(0 0 7px rgba(111, 139, 255, 0.7))
+                     drop-shadow(0 0 4px rgba(167, 139, 250, 0.5)); }
+}
+@keyframes tbCrispRing {
+  0%   { transform: scale(0.9); opacity: 0.6; }
+  70%  { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .crisp-client [role="button"][data-maximized="false"],
+  .crisp-client [role="button"][data-maximized="false"]::before,
+  .crisp-client [role="button"][data-maximized="false"]::after { animation: none !important; }
 }
