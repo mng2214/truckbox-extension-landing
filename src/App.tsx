@@ -1408,7 +1408,10 @@ function Pricing() {
 
 function Learning() {
   const [playing, setPlaying] = useState(false);
-  const thumb = `https://i.ytimg.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
+  // Use the hi-res cover (1280×720) — it reflects a custom thumbnail and looks
+  // crisp on the large player. Fall back to hqdefault if a video has no maxres.
+  const thumb = `https://i.ytimg.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`;
+  const thumbFallback = `https://i.ytimg.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
 
   return (
     <section id="learning" className="ed-section">
@@ -1449,6 +1452,9 @@ function Learning() {
                   alt="Truck Box walkthrough preview"
                   className="absolute inset-0 h-full w-full object-cover opacity-40 group-hover:opacity-60 transition-opacity duration-500"
                   loading="lazy"
+                  onError={(e) => {
+                    if (e.currentTarget.src !== thumbFallback) e.currentTarget.src = thumbFallback;
+                  }}
                 />
                 <span className="absolute inset-0 flex items-center justify-center">
                   <span
