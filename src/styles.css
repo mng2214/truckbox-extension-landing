@@ -977,6 +977,9 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   background: rgba(4, 6, 13, 0.88);
   backdrop-filter: blur(8px);
   cursor: zoom-out;
+  /* mobile: block one-finger scroll-through to the page behind, keep pinch-zoom */
+  touch-action: pinch-zoom;
+  overscroll-behavior: contain;
 }
 .tb-lb-fig {
   margin: 0;
@@ -986,6 +989,7 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   flex-direction: column;
   gap: 14px;
   cursor: default;
+  touch-action: pinch-zoom;
 }
 .tb-lb-fig img {
   width: 100%;
