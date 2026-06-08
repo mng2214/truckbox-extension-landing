@@ -240,8 +240,8 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        <Features />
         <BeforeAfter />
+        <Features />
         <SocialProof />
         <HowItWorks />
         <Pricing />
@@ -455,11 +455,11 @@ function Hero() {
 
         <MaskLines
           play
-          className="ed-display text-[10vw] lg:text-[7rem]"
+          className="ed-display text-[7vw] lg:text-[5.25rem] whitespace-nowrap"
           lines={[
-            "First to the broker. ",
+            "First to the broker",
             <span key="oc">
-              <span className="ed-accent">First to the load.</span>
+              <span className="ed-accent">First to the load</span>
             </span>,
           ]}
         />
@@ -472,7 +472,7 @@ function Hero() {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
-                <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
+                <span>TRY FREE</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
                 <span>Book Call</span>
@@ -539,10 +539,13 @@ function SocialProof() {
     <section id="reviews" className="ed-section">
       <div className="ed-container">
         <div className="mb-12 flex flex-wrap items-end justify-between gap-8">
-          <h2 className="ed-h2 max-w-2xl">
+          <h2
+            className="ed-h2"
+            style={{ fontSize: "clamp(1.3rem, 4vw, 3rem)", whiteSpace: "nowrap" }}
+          >
             Saves a fulltime dispatcher
             <br />
-            <span className="ed-accent">about 3 hours a week.</span>
+            <span className="ed-accent">about 3 hours a week</span>
           </h2>
           <div className="text-left md:text-right">
             <div
@@ -734,7 +737,7 @@ function BeforeAfter() {
     <section id="compare" className="ed-section">
       <div className="ed-container">
         <div className="mb-8">
-          <span className="ed-label">[ 03 ] — Before / After</span>
+          <span className="ed-label">[ 02 ] — Before / After</span>
           <h2 className="ed-h2 mt-4">Drag to see the difference</h2>
         </div>
 
@@ -1094,11 +1097,11 @@ function Features() {
       <div className="ed-container">
         <div className="flex items-end justify-between gap-6 mb-12">
           <div>
-            <span className="ed-label">[ 02 ] — Features</span>
+            <span className="ed-label">[ 03 ] — Features</span>
             <h2 className="ed-h2 mt-4">
-              Minimal by design.
+              Minimal by design
               <br />
-              <span className="ed-accent">Premium in feel.</span>
+              <span className="ed-accent">Premium in feel</span>
             </h2>
           </div>
           <span className="ed-label hidden md:block max-w-[220px] text-right">
@@ -1243,7 +1246,7 @@ function HowItWorks() {
       <div className="ed-container">
         <div className="flex items-end justify-between gap-6 mb-14">
           <div>
-            <span className="ed-label">[ 03 ] — How it works</span>
+            <span className="ed-label">[ 04 ] — How it works</span>
             <h2 className="ed-h2 mt-4">Start in 3 steps</h2>
           </div>
           <span className="ed-label hidden md:block">No heavy training needed</span>
@@ -1311,7 +1314,7 @@ function Pricing() {
     <section id="pricing" className="ed-section">
       <div className="ed-container">
         <div className="mb-14">
-          <span className="ed-label">[ 04 ] — Pricing</span>
+          <span className="ed-label">[ 05 ] — Pricing</span>
           <h2 className="ed-h2 mt-4">Simple subscription</h2>
         </div>
 
@@ -1402,7 +1405,7 @@ function Learning() {
       <div className="ed-container">
         <div className="flex items-end justify-between gap-6 mb-12">
           <div>
-            <span className="ed-label">[ 05 ] — Learning</span>
+            <span className="ed-label">[ 06 ] — Learning</span>
             <h2 className="ed-h2 mt-4">Learn Truck Box</h2>
           </div>
           <span className="ed-label hidden md:block max-w-[260px] text-right">
@@ -1454,21 +1457,6 @@ function Learning() {
           </div>
         </Reveal>
 
-        <div className="mt-12 grid md:grid-cols-3 gap-0">
-          {[
-            { t: "Login & first setup", d: "Google sign-in, extension setup, and first steps." },
-            { t: "Template configuration", d: "How to create a clean, reusable message template." },
-            { t: "Workflow inside DAT", d: "Real outreach flow from the DAT board." },
-          ].map((c, i) => (
-            <Reveal key={c.t} delay={i * 0.08}>
-              <div className="py-8 md:px-8 md:py-0" style={{ borderTop: "1px solid var(--line)" }}>
-                <span className="ed-label ed-accent">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-3 text-xl font-semibold" style={{ fontFamily: "var(--font-display)" }}>{c.t}</h3>
-                <p className="mt-2 text-sm" style={{ color: "var(--muted)" }}>{c.d}</p>
-              </div>
-            </Reveal>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -1607,7 +1595,7 @@ function FAQ() {
     <section id="faq" className="ed-section">
       <div className="ed-container">
         <div className="mb-12">
-          <span className="ed-label">[ 06 ] — FAQ</span>
+          <span className="ed-label">[ 07 ] — FAQ</span>
           <h2 className="ed-h2 mt-4">Common questions</h2>
         </div>
 
@@ -1921,7 +1909,7 @@ function Contact() {
     <section id="contact" className="ed-section">
       <div className="ed-container">
         <div className="mb-12">
-          <span className="ed-label">[ 07 ] — Contact</span>
+          <span className="ed-label">[ 08 ] — Contact</span>
           <h2 className="ed-h2 mt-4">
             Talk <span className="ed-accent">to us</span>
           </h2>
