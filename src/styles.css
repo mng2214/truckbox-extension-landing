@@ -279,6 +279,51 @@ html.lenis, html.lenis body { height: auto; }
 .ed-row:hover .ed-row-title { color: var(--accent); }
 .ed-row-title { transition: color .4s var(--ease); }
 
+/* ------------------------------------------------------------ contact form */
+.ed-form { display: flex; flex-direction: column; gap: 20px; }
+.ed-field { display: flex; flex-direction: column; gap: 9px; }
+.ed-input {
+  width: 100%;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1rem;
+  transition: border-color .3s var(--ease), box-shadow .3s var(--ease);
+}
+.ed-input::placeholder { color: var(--muted); opacity: .65; }
+.ed-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(111, 139, 255, .18);
+}
+.ed-textarea { resize: vertical; min-height: 132px; line-height: 1.55; }
+.ed-error {
+  color: #f87171;
+  font-family: var(--font-mono);
+  font-size: .72rem;
+  letter-spacing: .04em;
+}
+.ed-error:empty { display: none; }
+.ed-honeypot {
+  position: absolute !important;
+  left: -9999px;
+  width: 1px; height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+.ed-form .ed-btn { align-self: flex-start; cursor: pointer; margin-top: 4px; }
+.ed-form .ed-btn:disabled { opacity: .6; cursor: not-allowed; }
+.ed-form-done {
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  border-radius: 14px;
+  background: linear-gradient(135deg, var(--bg-2), #0b1322);
+  padding: 32px;
+}
+
 /* ------------------------------------------------------------ pill / mono chip (legacy tb-pill too) */
 .ed-pill, .tb-pill {
   display: inline-flex;

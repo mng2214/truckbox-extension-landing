@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
 import Lenis from "lenis";
+import { useForm, ValidationError } from "@formspree/react";
 
 import {
   ArrowRight,
@@ -1929,6 +1930,103 @@ export function Privacy() {
    Contact
    ============================================================ */
 
+function ContactForm() {
+  const [state, handleSubmit] = useForm("xnjyvqjv");
+
+  if (state.succeeded) {
+    return (
+      <div className="ed-form-done">
+        <span className="ed-label ed-accent">Message sent</span>
+        <h3
+          className="ed-display text-3xl md:text-4xl mt-3"
+          style={{ textTransform: "none", letterSpacing: "-0.02em" }}
+        >
+          Thanks — we&rsquo;ll reply fast.
+        </h3>
+        <p className="mt-3 text-lg" style={{ color: "var(--muted)" }}>
+          Your message is in. We&rsquo;ll get back to you at the email you provided.
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="ed-form" noValidate>
+      {/* Honeypot — bots fill it, humans never see it. Formspree drops these. */}
+      <input
+        type="text"
+        name="_gotcha"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="ed-honeypot"
+      />
+
+      <div className="ed-field">
+        <label htmlFor="cf-email" className="ed-label">Email</label>
+        <input
+          id="cf-email"
+          type="email"
+          name="email"
+          required
+          autoComplete="email"
+          placeholder="you@company.com"
+          className="ed-input"
+        />
+        <ValidationError prefix="Email" field="email" errors={state.errors} className="ed-error" />
+      </div>
+
+      <div className="ed-field">
+        <label htmlFor="cf-phone" className="ed-label">
+          Phone <span style={{ textTransform: "none", opacity: 0.7 }}>(optional)</span>
+        </label>
+        <input
+          id="cf-phone"
+          type="tel"
+          name="phone"
+          autoComplete="tel"
+          placeholder="+1 (555) 000-0000"
+          className="ed-input"
+        />
+        <ValidationError prefix="Phone" field="phone" errors={state.errors} className="ed-error" />
+      </div>
+
+      <div className="ed-field">
+        <label htmlFor="cf-subject" className="ed-label">Subject</label>
+        <input
+          id="cf-subject"
+          type="text"
+          name="_subject"
+          required
+          placeholder="What's this about?"
+          className="ed-input"
+        />
+        <ValidationError prefix="Subject" field="_subject" errors={state.errors} className="ed-error" />
+      </div>
+
+      <div className="ed-field">
+        <label htmlFor="cf-message" className="ed-label">Message</label>
+        <textarea
+          id="cf-message"
+          name="message"
+          required
+          rows={5}
+          placeholder="Tell us what you need…"
+          className="ed-input ed-textarea"
+        />
+        <ValidationError prefix="Message" field="message" errors={state.errors} className="ed-error" />
+      </div>
+
+      <ValidationError errors={state.errors} className="ed-error" />
+
+      <button type="submit" className="ed-btn ed-btn-accent" disabled={state.submitting}>
+        <span>{state.submitting ? "Sending…" : "Send message"}</span>
+        <ArrowUpRight className="h-4 w-4" />
+      </button>
+    </form>
+  );
+}
+
 function Contact() {
   const channels = [
     { label: "Book a call", handle: "calendly.com/truckboxapp", href: CALENDLY_URL, cta: "Free 15-min demo" },
@@ -1949,24 +2047,35 @@ function Contact() {
           </p>
         </div>
 
-        <div>
-          {channels.map((c) => (
-            <a key={c.label} href={c.href} target="_blank" rel="noreferrer" className="ed-row">
-              <div className="flex items-baseline gap-5">
-                <span className="ed-label hidden sm:block w-24">{c.label}</span>
-                <span
-                  className="ed-row-title ed-display text-3xl md:text-5xl"
-                  style={{ textTransform: "none", letterSpacing: "-0.02em" }}
-                >
-                  {c.handle}
-                </span>
+        <div className="grid lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-start">
+          <Reveal>
+            <ContactForm />
+          </Reveal>
+
+          <Reveal delay={0.1}>
+            <div>
+              <span className="ed-label">Or reach us directly</span>
+              <div className="mt-4">
+                {channels.map((c) => (
+                  <a key={c.label} href={c.href} target="_blank" rel="noreferrer" className="ed-row">
+                    <div className="flex items-baseline gap-5">
+                      <span className="ed-label hidden sm:block w-24">{c.label}</span>
+                      <span
+                        className="ed-row-title ed-display text-2xl md:text-3xl"
+                        style={{ textTransform: "none", letterSpacing: "-0.02em" }}
+                      >
+                        {c.handle}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-5">
+                      <span className="ed-label hidden md:block">{c.cta}</span>
+                      <ArrowUpRight className="h-5 w-5 md:h-6 md:w-6" />
+                    </div>
+                  </a>
+                ))}
               </div>
-              <div className="flex items-center gap-5">
-                <span className="ed-label hidden md:block">{c.cta}</span>
-                <ArrowUpRight className="h-6 w-6 md:h-8 md:w-8" />
-              </div>
-            </a>
-          ))}
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
