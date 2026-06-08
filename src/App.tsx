@@ -1607,6 +1607,17 @@ const FAQS = [
       </p>
     ),
   },
+  {
+    q: "I'm logged in but get an error when sending email. How do I fix it?",
+    a: (
+        <p>
+          This happens when Gmail's "Send email on your behalf" permission wasn't
+          granted during sign-in. To fix it: log out, log back in with Google, and
+          on the permissions screen make sure the <strong>"Send email"</strong>{" "}
+          checkbox is checked before continuing.
+        </p>
+    ),
+  },
 ];
 
 function FAQ() {
