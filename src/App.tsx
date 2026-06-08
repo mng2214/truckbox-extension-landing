@@ -738,8 +738,19 @@ function BeforeAfter() {
       <div className="ed-container">
         <div className="mb-8">
           <span className="ed-label">[ 02 ] — Before / After</span>
-          <h2 className="ed-h2 mt-4">Drag to see the difference</h2>
+          <MaskLines
+              play
+              className="ed-display text-[7vw] lg:text-[5.25rem] whitespace-nowrap"
+              lines={[
+                "Drag to see the",
+                <span key="oc">
+              <span className="ed-accent">difference</span>
+            </span>,
+              ]}
+          />
         </div>
+
+
 
         <Reveal>
           {/* View switch — directly above the photo */}
