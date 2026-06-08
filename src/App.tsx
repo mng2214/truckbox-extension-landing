@@ -2054,7 +2054,7 @@ export function Footer() {
             </span>
 
               <span className="ed-label mt-1 flex items-center justify-center md:justify-start gap-1">
-              App crafted with coffee and java
+              Crafted with coffee and java
               <img
                   src="/java-logo.png"
                   alt="Java"
