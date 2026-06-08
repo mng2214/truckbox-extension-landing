@@ -478,9 +478,18 @@ function Hero() {
                 <span>Book Call</span>
               </a>
             </div>
-            <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em", lineHeight: 1.7 }}>
-              7-day free trial. No credit card required.
-            </p>
+            <div className="mt-7 inline-flex items-center gap-2.5">
+              <span
+                className="inline-flex items-center justify-center rounded-full"
+                style={{ width: 26, height: 26, background: "rgba(52,211,153,0.18)", color: "#34d399" }}
+              >
+                <Check className="h-3.5 w-3.5" strokeWidth={3} />
+              </span>
+              <span className="ed-label" style={{ letterSpacing: "0.08em" }}>
+                <span style={{ color: "var(--ink)", fontWeight: 700 }}>7-day free trial</span>
+                <span style={{ color: "var(--muted)" }}> — no credit card required</span>
+              </span>
+            </div>
           </Reveal>
         </div>
       </motion.div>
