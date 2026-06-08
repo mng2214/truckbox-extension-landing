@@ -240,7 +240,6 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        <Marquee />
         <Features />
         <BeforeAfter />
         <SocialProof />
@@ -458,10 +457,9 @@ function Hero() {
           play
           className="ed-display text-[10vw] lg:text-[7rem]"
           lines={[
-            "One click.",
-            "More loads",
+            "First to the broker. ",
             <span key="oc">
-              <span className="ed-accent">booked.</span>
+              <span className="ed-accent">First to the load.</span>
             </span>,
           ]}
         />
@@ -469,8 +467,8 @@ function Hero() {
         <div className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-              Turn DAT ONE into a faster, smarter workspace with tools designed to save time,
-              simplify daily tasks, and help dispatchers move through loads more efficiently.
+              Truck Box helps DAT dispatchers send broker emails in one click with ready templates, maps, filters,
+              shortcuts, and live stats — so you can reach the broker before other dispatchers.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
@@ -509,48 +507,6 @@ function SpinBadge() {
       <span className="absolute inset-0 flex items-center justify-center">
         <ArrowRight className="h-7 w-7" style={{ color: "var(--accent)" }} />
       </span>
-    </div>
-  );
-}
-
-/* ============================================================
-   Marquee
-   ============================================================ */
-
-/* National freight-market ticker.
- * Update MARKET + MARKET_AS_OF when you refresh the numbers (DAT Trendlines for
- * the per-mile rates, EIA/AAA for diesel). To make it live, swap MARKET for a
- * fetch from your backend that scrapes DAT Trendlines + the EIA diesel API. */
-const MARKET_AS_OF = "May 2026";
-const MARKET: { label: string; value: string; unit: string; muted?: boolean }[] = [
-  { label: "US Diesel", value: "$5.64", unit: "/gal" },
-  { label: "Van", value: "$2.79", unit: "/mi" },
-  { label: "Reefer", value: "$3.26", unit: "/mi" },
-  { label: "Flatbed", value: "$3.60", unit: "/mi" },
-  { label: "DAT spot avg", value: MARKET_AS_OF, unit: "", muted: true },
-];
-
-function Marquee() {
-  const base = [...MARKET, ...MARKET, ...MARKET];
-  const loop = [...base, ...base];
-  return (
-    <div
-      className="ed-marquee-wrap tb-ticker py-6"
-      style={{ borderTop: "1px solid var(--line)", borderBottom: "1px solid var(--line)" }}
-    >
-      <motion.div
-        className="ed-marquee"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{ duration: 34, repeat: Infinity, ease: "linear" }}
-      >
-        {loop.map((m, i) => (
-          <span key={i} className={"tb-ticker-item" + (m.muted ? " is-muted" : "")}>
-            <span className="lbl">{m.label}</span>
-            {m.value && <span className="val">{m.value}</span>}
-            {m.unit && <span className="unit">{m.unit}</span>}
-          </span>
-        ))}
-      </motion.div>
     </div>
   );
 }
