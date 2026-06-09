@@ -570,7 +570,7 @@ function SocialProof() {
               rel="noreferrer"
               className="ed-label tb-reviews-link mt-3 inline-flex items-center gap-1.5 md:justify-end"
             >
-              98 dispatchers · Chrome Web Store
+              Over 100 dispatchers · Chrome Web Store
               <ArrowUpRight className="h-3.5 w-3.5" />
             </a>
           </div>
