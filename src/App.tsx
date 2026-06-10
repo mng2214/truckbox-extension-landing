@@ -2419,27 +2419,17 @@ export function Guide() {
         </div>
 
         {/* ---------- final CTA ---------- */}
+
         <Reveal>
-          <div className="tb-guide-cta mt-24">
-            <h2
-              className="ed-h2"
-              style={{ textTransform: "none", fontSize: "clamp(2rem, 6vw, 3.6rem)" }}
-            >
-              Ready when you are
-            </h2>
-            <p className="mt-4" style={{ color: "var(--muted)", lineHeight: 1.6, maxWidth: "52ch" }}>
-              Install Truck Box and run through the steps above. Stuck on any step? Open the
-              chat in the bottom corner — a real person will help you get going.
-            </p>
-            <a
-              className="ed-btn ed-btn-accent mt-7"
+          <a
               href={INSTALL_URL}
               target="_blank"
               rel="noreferrer"
-            >
-              <span>Install Truck Box — Free</span> <ArrowUpRight className="h-4 w-4" />
-            </a>
-          </div>
+              className="ed-btn ed-btn-accent mt-7 inline-flex items-center gap-2"
+          >
+            <span>Install Truck Box — Free</span>
+            <ArrowUpRight className="h-4 w-4" />
+          </a>
         </Reveal>
       </div>
     </section>
