@@ -2148,11 +2148,6 @@ export function Guide() {
     <section id="guide" className="ed-section" style={{ paddingTop: 150 }}>
       <div className="ed-container">
         {/* ---------- hero ---------- */}
-        <Reveal>
-          {/*<div className="flex items-center justify-between gap-6">*/}
-          {/*  <span className="ed-label ed-accent">[ Get Started ] — Install to first email</span>*/}
-          {/*</div>*/}
-        </Reveal>
         <Reveal delay={0.2}>
           <div className="max-w-3xl">
             <p className="mt-6 text-lg" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
