@@ -34,6 +34,7 @@ import {
   Clock,
   Map,
   Calculator,
+  ZoomIn,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -1949,21 +1950,167 @@ export function Privacy() {
 /** Screenshot slot. Shows the image once it's dropped into /public/guide;
  *  until then (or if it fails to load) it renders a calm labeled placeholder
  *  with the exact filename to upload — see /public/guide/IMAGES.txt. */
+/** True while the viewport is phone-sized. Used to gate the tap-to-zoom
+ *  lightbox to mobile only. */
+function useIsMobile(query = "(max-width: 767px)") {
+  const [isMobile, setIsMobile] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia(query);
+    const update = () => setIsMobile(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, [query]);
+  return isMobile;
+}
+
+/** Fullscreen image viewer with pinch-to-zoom, drag-to-pan and double-tap.
+ *  Background is frozen while open (fixed overlay + touch-action:none + body
+ *  scroll lock). Mobile only — opened from GuideShot. */
+function ImageZoom({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
+  const [scale, setScale] = useState(1);
+  const [tx, setTx] = useState(0);
+  const [ty, setTy] = useState(0);
+  const g = useRef({
+    mode: "none" as "none" | "pan" | "pinch",
+    startDist: 0,
+    startScale: 1,
+    startX: 0,
+    startY: 0,
+    startTx: 0,
+    startTy: 0,
+    lastTap: 0,
+  });
+
+  // freeze the page behind the overlay
+  useEffect(() => {
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [onClose]);
+
+  const clamp = (v: number, lo: number, hi: number) => Math.min(hi, Math.max(lo, v));
+  const dist = (t: React.TouchList) =>
+    Math.hypot(t[0].clientX - t[1].clientX, t[0].clientY - t[1].clientY);
+
+  const reset = () => {
+    setScale(1);
+    setTx(0);
+    setTy(0);
+  };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    const s = g.current;
+    if (e.touches.length === 2) {
+      s.mode = "pinch";
+      s.startDist = dist(e.touches);
+      s.startScale = scale;
+      s.startTx = tx;
+      s.startTy = ty;
+    } else if (e.touches.length === 1) {
+      const now = Date.now();
+      if (now - s.lastTap < 300) {
+        scale > 1 ? reset() : setScale(2.5);
+        s.lastTap = 0;
+        s.mode = "none";
+        return;
+      }
+      s.lastTap = now;
+      s.mode = scale > 1 ? "pan" : "none";
+      s.startX = e.touches[0].clientX;
+      s.startY = e.touches[0].clientY;
+      s.startTx = tx;
+      s.startTy = ty;
+    }
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    const s = g.current;
+    if (s.mode === "pinch" && e.touches.length === 2) {
+      const next = clamp(s.startScale * (dist(e.touches) / s.startDist), 1, 5);
+      setScale(next);
+      if (next === 1) {
+        setTx(0);
+        setTy(0);
+      }
+    } else if (s.mode === "pan" && e.touches.length === 1 && scale > 1) {
+      setTx(s.startTx + (e.touches[0].clientX - s.startX));
+      setTy(s.startTy + (e.touches[0].clientY - s.startY));
+    }
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const s = g.current;
+    if (e.touches.length === 0) {
+      s.mode = "none";
+    } else if (e.touches.length === 1 && scale > 1) {
+      s.mode = "pan";
+      s.startX = e.touches[0].clientX;
+      s.startY = e.touches[0].clientY;
+      s.startTx = tx;
+      s.startTy = ty;
+    }
+  };
+
+  return (
+    <div className="tb-zoom" role="dialog" aria-modal="true" onClick={onClose}>
+      <button className="tb-zoom-close" onClick={onClose} aria-label="Close image">
+        <X className="h-6 w-6" />
+      </button>
+      <img
+        src={src}
+        alt={alt}
+        className="tb-zoom-img"
+        style={{ transform: `translate(${tx}px, ${ty}px) scale(${scale})` }}
+        onClick={(e) => e.stopPropagation()}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        draggable={false}
+      />
+    </div>
+  );
+}
+
 function GuideShot({ src, alt }: { src: string; alt: string }) {
   const [failed, setFailed] = useState(false);
+  const [open, setOpen] = useState(false);
+  const isMobile = useIsMobile();
   const file = src.split("/").pop();
+  const zoomable = isMobile && !failed;
   return (
-    <figure className="tb-shot">
-      {!failed ? (
-        <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
-      ) : (
-        <div className="tb-shot-ph">
-          <ImageIcon className="h-6 w-6" style={{ color: "var(--accent)" }} aria-hidden />
-          <span className="ed-fcard-ph-note">Screenshot coming soon</span>
-          <span className="tb-shot-file">{file}</span>
-        </div>
-      )}
-    </figure>
+    <>
+      <figure className={`tb-shot${zoomable ? " tb-shot--zoomable" : ""}`}>
+        {!failed ? (
+          <>
+            <img
+              src={src}
+              alt={alt}
+              loading="lazy"
+              onError={() => setFailed(true)}
+              onClick={zoomable ? () => setOpen(true) : undefined}
+            />
+            {zoomable && (
+              <span className="tb-shot-zoom" aria-hidden>
+                <ZoomIn className="h-4 w-4" />
+              </span>
+            )}
+          </>
+        ) : (
+          <div className="tb-shot-ph">
+            <ImageIcon className="h-6 w-6" style={{ color: "var(--accent)" }} aria-hidden />
+            <span className="ed-fcard-ph-note">Screenshot coming soon</span>
+            <span className="tb-shot-file">{file}</span>
+          </div>
+        )}
+      </figure>
+      {open && zoomable && <ImageZoom src={src} alt={alt} onClose={() => setOpen(false)} />}
+    </>
   );
 }
 
