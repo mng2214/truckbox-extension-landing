@@ -308,6 +308,16 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Lock background scroll while the mobile menu is open.
+  useEffect(() => {
+    if (!open) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [open]);
+
   return (
     <>
       <header
@@ -423,7 +433,7 @@ export function Header() {
                 );
               })}
             </div>
-            <div className="ed-container py-8 flex justify-end ed-label">
+            <div className="ed-container py-8 flex justify-start ed-label">
               <a href={INSTALL_URL} target="_blank" rel="noreferrer">Install →</a>
             </div>
           </motion.div>
