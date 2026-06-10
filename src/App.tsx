@@ -23,6 +23,15 @@ import {
   ChevronDown,
   RotateCw,
   FileText,
+  Image as ImageIcon,
+  Download,
+  Pin,
+  MousePointerClick,
+  LogIn,
+  Send,
+  DollarSign,
+  ShieldCheck,
+  Clock,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -30,6 +39,8 @@ type NavItem = { href: string; label: string; route?: boolean };
 const NAV: NavItem[] = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
+  // Hidden until screenshots are added — route still lives at /guide for preview.
+  // { href: "/guide", label: "Get Started", route: true },
   { href: "/#learning", label: "Learning" },
   { href: "/#faq", label: "FAQ" },
   { href: "/privacy", label: "Privacy", route: true },
@@ -1929,6 +1940,299 @@ export function Privacy() {
                 conflict of law principles, except where applicable law requires otherwise.
               </p>
             </article>
+          </div>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Get Started guide (route: /guide)
+   Standalone onboarding walkthrough — NOT part of the homepage scroll.
+   Reachable only via the shared NAV (header / sidebar / footer).
+   ============================================================ */
+
+/** Screenshot slot. Shows the image once it's dropped into /public/guide;
+ *  until then (or if it fails to load) it renders a calm labeled placeholder
+ *  with the exact filename to upload — see /public/guide/IMAGES.txt. */
+function GuideShot({ src, alt }: { src: string; alt: string }) {
+  const [failed, setFailed] = useState(false);
+  const file = src.split("/").pop();
+  return (
+    <figure className="tb-shot">
+      {!failed ? (
+        <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} />
+      ) : (
+        <div className="tb-shot-ph">
+          <ImageIcon className="h-6 w-6" style={{ color: "var(--accent)" }} aria-hidden />
+          <span className="ed-fcard-ph-note">Screenshot coming soon</span>
+          <span className="tb-shot-file">{file}</span>
+        </div>
+      )}
+    </figure>
+  );
+}
+
+type GuideStep = {
+  icon: typeof Download;
+  title: string;
+  desc: string;
+  shots: string[];
+  note?: { tone: "info" | "warn" | "calm"; text: React.ReactNode };
+  cta?: boolean;
+};
+
+const GUIDE_STEPS: GuideStep[] = [
+  {
+    icon: Download,
+    title: "Install Truck Box",
+    desc: "Open the Chrome Web Store and click “Add to Chrome.” It’s free to start — no credit card needed.",
+    shots: ["/guide/01-install.png"],
+    cta: true,
+  },
+  {
+    icon: Pin,
+    title: "Pin it to your toolbar",
+    desc: "Click the puzzle-piece (extensions) icon in Chrome, then the little pin next to Truck Box. Now the icon is always one click away.",
+    shots: ["/guide/02-pin.png"],
+  },
+  {
+    icon: MapPin,
+    title: "Open DAT → Search Loads",
+    desc: "Log in to DAT One and open the Search Loads page. That’s where Truck Box lives and does its thing.",
+    shots: ["/guide/03-dat-search-loads.png"],
+    note: {
+      tone: "info",
+      text: (
+        <>
+          <b>Good to know:</b> Truck Box only works on the DAT <b>Search Loads</b> page.
+          You won’t see it on other pages — that’s completely normal.
+        </>
+      ),
+    },
+  },
+  {
+    icon: MousePointerClick,
+    title: "Open the Truck Box popup",
+    desc: "Click the Truck Box icon in your toolbar to open the panel. You’ll see tabs for Login, Email Template, Map & Filter, Factoring, and Stats.",
+    shots: ["/guide/04-open-popup.png"],
+  },
+  {
+    icon: LogIn,
+    title: "Log in & connect Gmail",
+    desc: "On the Login tab, click “Sign in with Google” and pick your account. This lets Truck Box send emails from your own Gmail — one click, every time.",
+    shots: ["/guide/05-login-connect-gmail.png", "/guide/05b-consent-send-email-checkbox.png"],
+    note: {
+      tone: "warn",
+      text: (
+        <>
+          <b>Don’t miss this:</b> on the Google permission screen, check the box that lets
+          Truck Box <b>send email on your behalf</b>. If you skip it, sending won’t work —
+          no harm done, just sign in again and check it.
+        </>
+      ),
+    },
+  },
+  {
+    icon: RotateCw,
+    title: "Refresh the DAT page",
+    desc: "Head back to your DAT Search Loads tab and refresh it (F5, or the reload button). This switches Truck Box on for that page.",
+    shots: ["/guide/06-refresh-dat.png"],
+    note: {
+      tone: "calm",
+      text: (
+        <>
+          This is the step people forget. If Truck Box isn’t showing up yet, a quick
+          refresh is almost always the fix. You’ve got this.
+        </>
+      ),
+    },
+  },
+  {
+    icon: FileText,
+    title: "Set up your email template",
+    desc: "Open the Email Template tab and add your details and message once. Truck Box fills in the load and broker info for you, so every email looks sharp and personal.",
+    shots: ["/guide/07-email-template.png"],
+  },
+  {
+    icon: Send,
+    title: "Send your first email",
+    desc: "Find a load, hit send, and your email is on its way from your Gmail — before the other dispatchers. That’s it. You’re ready to roll.",
+    shots: ["/guide/08-send-email.png"],
+  },
+];
+
+const GUIDE_FEATURES = [
+  {
+    icon: FileText,
+    name: "Email Template",
+    body: "Save your message once. Truck Box auto-fills the load and broker details, so every email is ready in a single click.",
+  },
+  {
+    icon: Filter,
+    name: "Map & Filter",
+    body: "See routes on a map and filter loads fast — so you spend your time only on the loads worth chasing.",
+  },
+  {
+    icon: DollarSign,
+    name: "Factoring",
+    body: "Check a broker’s factoring credit rating right inside DAT, using your own RTS Pro account.",
+    isNew: true,
+  },
+  {
+    icon: Gauge,
+    name: "Stats",
+    body: "Track how many emails you’ve sent and stay on top of your outreach at a glance.",
+  },
+];
+
+export function Guide() {
+  return (
+    <section id="guide" className="ed-section" style={{ paddingTop: 150 }}>
+      <div className="ed-container">
+        {/* ---------- hero ---------- */}
+        <Reveal>
+          <div className="max-w-3xl">
+            <span className="tb-pill">Get Started</span>
+            <h1
+              className="ed-h2 mt-6"
+              style={{ textTransform: "none", fontSize: "clamp(2.6rem, 8vw, 5.5rem)" }}
+            >
+              From install to your<br />first email
+            </h1>
+            <p className="mt-6 text-lg" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
+              A calm, step-by-step walkthrough. Follow along and you’ll be sending broker
+              emails from your own Gmail in a few minutes. Nothing here can break anything —
+              if you get stuck, you can always start a step over.
+            </p>
+            <div className="tb-guide-chips mt-7">
+              <span className="tb-guide-chip"><Clock className="h-4 w-4" /> ~3 minutes</span>
+              <span className="tb-guide-chip"><ShieldCheck className="h-4 w-4" /> Your inbox stays private</span>
+              <span className="tb-guide-chip"><Check className="h-4 w-4" /> No credit card to start</span>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* ---------- steps ---------- */}
+        <div className="tb-steps mt-16 md:mt-24">
+          {GUIDE_STEPS.map((s, i) => {
+            const Icon = s.icon;
+            return (
+              <Reveal key={s.title} delay={0.04} className="tb-step">
+                <div className="tb-step-num">{i + 1}</div>
+                <div className="tb-step-body">
+                  <div className="tb-step-head">
+                    <Icon className="h-5 w-5 tb-step-icon" aria-hidden />
+                    <h2 className="tb-step-title">{s.title}</h2>
+                  </div>
+                  <p className="tb-step-desc">{s.desc}</p>
+
+                  {s.note && (
+                    <div className={`tb-note tb-note--${s.note.tone}`}>{s.note.text}</div>
+                  )}
+
+                  {s.cta && (
+                    <a
+                      className="ed-btn ed-btn-accent mt-5"
+                      href={INSTALL_URL}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
+                      <span>Add to Chrome</span> <ArrowUpRight className="h-4 w-4" />
+                    </a>
+                  )}
+
+                  <div className="tb-step-shots">
+                    {s.shots.map((src) => (
+                      <GuideShot key={src} src={src} alt={s.title} />
+                    ))}
+                  </div>
+                </div>
+              </Reveal>
+            );
+          })}
+        </div>
+
+        {/* ---------- reassurance ---------- */}
+        <Reveal>
+          <div className="tb-guide-calm mt-20">
+            <ShieldCheck className="h-7 w-7" style={{ color: "var(--accent)", flex: "0 0 auto" }} aria-hidden />
+            <div>
+              <h2
+                className="ed-display"
+                style={{ textTransform: "none", fontSize: "clamp(1.5rem, 4vw, 2.2rem)", letterSpacing: "-0.02em" }}
+              >
+                It’s all good — you’ve got this.
+              </h2>
+              <p className="mt-2" style={{ color: "var(--muted)", lineHeight: 1.6 }}>
+                Truck Box never reads your inbox. It only sends the emails you click to send,
+                from your own Gmail. Take it one step at a time — and if anything looks off,
+                tap the chat in the corner and we’ll walk you through it.
+              </p>
+            </div>
+          </div>
+        </Reveal>
+
+        {/* ---------- features ---------- */}
+        <div className="mt-24">
+          <Reveal>
+            <span className="ed-label">What you get</span>
+            <h2
+              className="ed-h2 mt-4"
+              style={{ textTransform: "none", fontSize: "clamp(2rem, 6vw, 4rem)" }}
+            >
+              Built to get you<br />to the broker first
+            </h2>
+          </Reveal>
+
+          <Reveal delay={0.06}>
+            <div className="tb-feature-grid mt-10">
+              {GUIDE_FEATURES.map((f, i) => {
+                const Icon = f.icon;
+                return (
+                  <div className="tb-feature" key={f.name}>
+                    <div className="tb-feature-top">
+                      <span className="tb-feature-index">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span className="tb-feature-icon">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                    </div>
+                    <div className="tb-feature-head">
+                      <h3>{f.name}</h3>
+                      {f.isNew && <span className="tb-feature-new">New</span>}
+                    </div>
+                    <p>{f.body}</p>
+                  </div>
+                );
+              })}
+            </div>
+          </Reveal>
+        </div>
+
+        {/* ---------- final CTA ---------- */}
+        <Reveal>
+          <div className="tb-guide-cta mt-24">
+            <h2
+              className="ed-h2"
+              style={{ textTransform: "none", fontSize: "clamp(2rem, 6vw, 3.6rem)" }}
+            >
+              Ready when you are
+            </h2>
+            <p className="mt-4" style={{ color: "var(--muted)", lineHeight: 1.6, maxWidth: "52ch" }}>
+              Install Truck Box and run through the steps above. Stuck on any step? Open the
+              chat in the bottom corner — a real person will help you get going.
+            </p>
+            <a
+              className="ed-btn ed-btn-accent mt-7"
+              href={INSTALL_URL}
+              target="_blank"
+              rel="noreferrer"
+            >
+              <span>Install Truck Box — Free</span> <ArrowUpRight className="h-4 w-4" />
+            </a>
           </div>
         </Reveal>
       </div>
