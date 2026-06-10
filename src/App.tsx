@@ -39,8 +39,7 @@ type NavItem = { href: string; label: string; route?: boolean };
 const NAV: NavItem[] = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
-  // Hidden until screenshots are added — route still lives at /guide for preview.
-  // { href: "/guide", label: "Get Started", route: true },
+  { href: "/guide", label: "Get Started", route: true },
   { href: "/#learning", label: "Learning" },
   { href: "/#faq", label: "FAQ" },
   { href: "/privacy", label: "Privacy", route: true },
@@ -186,14 +185,17 @@ export function Reveal({
   delay = 0,
   y = 26,
   className,
+  id,
 }: {
   children: React.ReactNode;
   delay?: number;
   y?: number;
   className?: string;
+  id?: string;
 }) {
   return (
     <motion.div
+      id={id}
       initial={{ opacity: 0, y }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-90px" }}
@@ -1974,7 +1976,11 @@ function GuideShot({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+type Phase = "Set up" | "Connect" | "Send";
+
 type GuideStep = {
+  phase: Phase;
+  short: string;
   icon: typeof Download;
   title: string;
   desc: string;
@@ -1985,6 +1991,8 @@ type GuideStep = {
 
 const GUIDE_STEPS: GuideStep[] = [
   {
+    phase: "Set up",
+    short: "Install",
     icon: Download,
     title: "Install Truck Box",
     desc: "Open the Chrome Web Store and click “Add to Chrome.” It’s free to start — no credit card needed.",
@@ -1992,12 +2000,16 @@ const GUIDE_STEPS: GuideStep[] = [
     cta: true,
   },
   {
+    phase: "Set up",
+    short: "Pin it",
     icon: Pin,
     title: "Pin it to your toolbar",
     desc: "Click the puzzle-piece (extensions) icon in Chrome, then the little pin next to Truck Box. Now the icon is always one click away.",
     shots: ["/guide/02-pin.png"],
   },
   {
+    phase: "Connect",
+    short: "Open DAT",
     icon: MapPin,
     title: "Open DAT → Search Loads",
     desc: "Log in to DAT One and open the Search Loads page. That’s where Truck Box lives and does its thing.",
@@ -2013,12 +2025,16 @@ const GUIDE_STEPS: GuideStep[] = [
     },
   },
   {
+    phase: "Connect",
+    short: "Open popup",
     icon: MousePointerClick,
     title: "Open the Truck Box popup",
     desc: "Click the Truck Box icon in your toolbar to open the panel. You’ll see tabs for Login, Email Template, Map & Filter, Factoring, and Stats.",
     shots: ["/guide/04-open-popup.png"],
   },
   {
+    phase: "Connect",
+    short: "Connect Gmail",
     icon: LogIn,
     title: "Log in & connect Gmail",
     desc: "On the Login tab, click “Sign in with Google” and pick your account. This lets Truck Box send emails from your own Gmail — one click, every time.",
@@ -2035,6 +2051,8 @@ const GUIDE_STEPS: GuideStep[] = [
     },
   },
   {
+    phase: "Connect",
+    short: "Refresh",
     icon: RotateCw,
     title: "Refresh the DAT page",
     desc: "Head back to your DAT Search Loads tab and refresh it (F5, or the reload button). This switches Truck Box on for that page.",
@@ -2050,12 +2068,16 @@ const GUIDE_STEPS: GuideStep[] = [
     },
   },
   {
+    phase: "Send",
+    short: "Template",
     icon: FileText,
     title: "Set up your email template",
     desc: "Open the Email Template tab and add your details and message once. Truck Box fills in the load and broker info for you, so every email looks sharp and personal.",
     shots: ["/guide/07-email-template.png"],
   },
   {
+    phase: "Send",
+    short: "Send it",
     icon: Send,
     title: "Send your first email",
     desc: "Find a load, hit send, and your email is on its way from your Gmail — before the other dispatchers. That’s it. You’re ready to roll.",
@@ -2087,20 +2109,66 @@ const GUIDE_FEATURES = [
   },
 ];
 
+const PHASE_ORDER: Phase[] = ["Set up", "Connect", "Send"];
+
+/** At-a-glance end-to-end flow: the whole journey on one line, grouped by
+ *  phase, so a new user can see exactly where they're headed before reading
+ *  the detailed steps below. */
+function JourneyMap() {
+  return (
+    <Reveal delay={0.05}>
+      <div className="tb-journey">
+        {PHASE_ORDER.map((phase, pi) => {
+          const steps = GUIDE_STEPS.map((s, i) => ({ ...s, n: i + 1 })).filter(
+            (s) => s.phase === phase
+          );
+          return (
+            <Fragment key={phase}>
+              {pi > 0 && <span className="tb-journey-sep" aria-hidden><ArrowRight className="h-4 w-4" /></span>}
+              <div className="tb-journey-phase">
+                <span className="tb-journey-phase-label">{phase}</span>
+                <div className="tb-journey-nodes">
+                  {steps.map((s) => {
+                    const Icon = s.icon;
+                    return (
+                      <a key={s.n} href={`#step-${s.n}`} className="tb-journey-node">
+                        <span className="tb-journey-node-num">{s.n}</span>
+                        <Icon className="h-4 w-4" aria-hidden />
+                        <span className="tb-journey-node-label">{s.short}</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              </div>
+            </Fragment>
+          );
+        })}
+      </div>
+    </Reveal>
+  );
+}
+
 export function Guide() {
   return (
     <section id="guide" className="ed-section" style={{ paddingTop: 150 }}>
       <div className="ed-container">
         {/* ---------- hero ---------- */}
         <Reveal>
+          <div className="flex items-center justify-between gap-6">
+            <span className="ed-label ed-accent">[ Get Started ] — Install to first email</span>
+            <span className="ed-label hidden sm:block">~3 min · 8 steps</span>
+          </div>
+        </Reveal>
+        <MaskLines
+          play
+          className="ed-display mt-6"
+          lines={[
+            "From install to your",
+            <span key="fe"><span className="ed-accent">first email</span></span>,
+          ]}
+        />
+        <Reveal delay={0.2}>
           <div className="max-w-3xl">
-            <span className="tb-pill">Get Started</span>
-            <h1
-              className="ed-h2 mt-6"
-              style={{ textTransform: "none", fontSize: "clamp(2.6rem, 8vw, 5.5rem)" }}
-            >
-              From install to your<br />first email
-            </h1>
             <p className="mt-6 text-lg" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
               A calm, step-by-step walkthrough. Follow along and you’ll be sending broker
               emails from your own Gmail in a few minutes. Nothing here can break anything —
@@ -2114,12 +2182,27 @@ export function Guide() {
           </div>
         </Reveal>
 
+        {/* ---------- journey overview (the whole flow at a glance) ---------- */}
+        <div className="mt-12 md:mt-16">
+          <JourneyMap />
+        </div>
+
         {/* ---------- steps ---------- */}
         <div className="tb-steps mt-16 md:mt-24">
           {GUIDE_STEPS.map((s, i) => {
             const Icon = s.icon;
+            const newPhase = i === 0 || GUIDE_STEPS[i - 1].phase !== s.phase;
+            const phaseIndex = PHASE_ORDER.indexOf(s.phase) + 1;
             return (
-              <Reveal key={s.title} delay={0.04} className="tb-step">
+              <Fragment key={s.title}>
+                {newPhase && (
+                  <Reveal className="tb-phase">
+                    <span className="tb-phase-index">{String(phaseIndex).padStart(2, "0")}</span>
+                    <span className="tb-phase-name">{s.phase}</span>
+                    <span className="tb-phase-rule" aria-hidden />
+                  </Reveal>
+                )}
+                <Reveal id={`step-${i + 1}`} delay={0.04} className="tb-step">
                 <div className="tb-step-num">{i + 1}</div>
                 <div className="tb-step-body">
                   <div className="tb-step-head">
@@ -2149,7 +2232,8 @@ export function Guide() {
                     ))}
                   </div>
                 </div>
-              </Reveal>
+                </Reveal>
+              </Fragment>
             );
           })}
         </div>
