@@ -43,7 +43,7 @@ const NAV: NavItem[] = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/guide", label: "Guide", route: true },
-  { href: "/#faq", label: "FAQ" },
+  { href: "/faq", label: "FAQ", route: true },
   { href: "/privacy", label: "Privacy", route: true },
   { href: "/#contact", label: "Contact" },
 ];
@@ -262,7 +262,6 @@ export default function App() {
         <HowItWorks />
         <Pricing />
         <Walkthrough />
-        <FAQ />
         <Contact />
         <FinalCTA />
       </main>
@@ -1636,7 +1635,7 @@ const FAQS = [
   },
 ];
 
-function FAQ() {
+export function FAQ() {
   const [openIdx, setOpenIdx] = useState<number | null>(0);
   return (
     <section id="faq" className="ed-section">
@@ -2605,9 +2604,9 @@ function FinalCTA() {
             <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
               <span>Install Extension</span> <ArrowUpRight className="h-4 w-4" />
             </a>
-            <a className="ed-btn" href="#faq">
+            <Link className="ed-btn" to="/faq">
               <span>Read FAQ</span>
-            </a>
+            </Link>
           </div>
         </Reveal>
       </div>
