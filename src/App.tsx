@@ -1986,7 +1986,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Install",
     icon: Download,
     title: "Install Truck Box",
-    desc: "Open the Chrome Web Store and click “Add to Chrome.” It’s free to start — no credit card needed.",
+    // desc: "Open the Chrome Web Store and click “Add to Chrome.” It’s free to start — no credit card needed.",
     shots: ["/guide/01-install.png"],
     cta: true,
   },
@@ -1995,7 +1995,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Pin it",
     icon: Pin,
     title: "Pin it to your toolbar",
-    desc: "Click the puzzle-piece (extensions) icon in Chrome, then the little pin next to Truck Box. Now the icon is always one click away.",
+    // desc: "Click the puzzle-piece (extensions) icon in Chrome, then the little pin next to Truck Box. Now the icon is always one click away.",
     shots: ["/guide/02-pin.png"],
   },
   {
@@ -2003,7 +2003,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Open DAT",
     icon: MapPin,
     title: "Open DAT → Search Loads",
-    desc: "Log in to DAT One and open the Search Loads page. That’s where Truck Box lives and does its thing.",
+    // desc: "Log in to DAT One and open the Search Loads page. That’s where Truck Box lives and does its thing.",
     shots: ["/guide/03-dat-search-loads.png"],
     note: {
       tone: "info",
@@ -2020,7 +2020,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Open popup",
     icon: MousePointerClick,
     title: "Open the Truck Box popup",
-    desc: "Click the Truck Box icon in your toolbar to open the panel. You’ll see tabs for Login, Email Template, Map & Filter, Factoring, and Stats.",
+    // desc: "Click the Truck Box icon in your toolbar to open the panel. You’ll see tabs for Login, Email Template, Map & Filter, Factoring, and Stats.",
     shots: ["/guide/04-open-popup.png"],
   },
   {
@@ -2028,7 +2028,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Connect Gmail",
     icon: LogIn,
     title: "Log in & connect Gmail",
-    desc: "On the Login tab, click “Sign in with Google” and pick your account. This lets Truck Box send emails from your own Gmail — one click, every time.",
+    // desc: "On the Login tab, click “Sign in with Google” and pick your account. This lets Truck Box send emails from your own Gmail — one click, every time.",
     shots: ["/guide/05-login-connect-gmail.png", "/guide/05b-consent-send-email-checkbox.png"],
     note: {
       tone: "warn",
@@ -2046,7 +2046,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Refresh",
     icon: RotateCw,
     title: "Refresh the DAT page",
-    desc: "Head back to your DAT Search Loads tab and refresh it (F5, or the reload button). This switches Truck Box on for that page.",
+    // desc: "Head back to your DAT Search Loads tab and refresh it (F5, or the reload button). This switches Truck Box on for that page.",
     shots: ["/guide/06-refresh-dat.png"],
     note: {
       tone: "calm",
@@ -2160,17 +2160,8 @@ export function Guide() {
         <Reveal>
           <div className="flex items-center justify-between gap-6">
             <span className="ed-label ed-accent">[ Get Started ] — Install to first email</span>
-            <span className="ed-label hidden sm:block">~3 min · 8 steps</span>
           </div>
         </Reveal>
-        <MaskLines
-          play
-          className="ed-display mt-6"
-          lines={[
-            "From install to your",
-            <span key="fe"><span className="ed-accent">first email</span></span>,
-          ]}
-        />
         <Reveal delay={0.2}>
           <div className="max-w-3xl">
             <p className="mt-6 text-lg" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
@@ -2178,11 +2169,6 @@ export function Guide() {
               emails from your own Gmail in a few minutes. Nothing here can break anything —
               if you get stuck, you can always start a step over.
             </p>
-            <div className="tb-guide-chips mt-7">
-              <span className="tb-guide-chip"><Clock className="h-4 w-4" /> ~3 minutes</span>
-              <span className="tb-guide-chip"><ShieldCheck className="h-4 w-4" /> Your inbox stays private</span>
-              <span className="tb-guide-chip"><Check className="h-4 w-4" /> No credit card to start</span>
-            </div>
           </div>
         </Reveal>
 
