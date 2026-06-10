@@ -1173,13 +1173,6 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   line-height: 1.05;
   font-size: clamp(1.3rem, 3.2vw, 1.95rem);
 }
-.tb-step-desc {
-  color: var(--muted);
-  margin-top: 12px;
-  line-height: 1.65;
-  font-size: 1rem;
-  max-width: 62ch;
-}
 
 /* screenshot slot + placeholder */
 .tb-step-shots { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }

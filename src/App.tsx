@@ -1974,7 +1974,6 @@ type GuideStep = {
   short: string;
   icon: typeof Download;
   title: string;
-  desc: string;
   shots: string[];
   note?: { tone: "info" | "warn" | "calm"; text: React.ReactNode };
   cta?: boolean;
@@ -1986,7 +1985,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Install",
     icon: Download,
     title: "Install Truck Box",
-    // desc: "Open the Chrome Web Store and click “Add to Chrome.” It’s free to start — no credit card needed.",
     shots: ["/guide/01-install.png"],
     cta: true,
   },
@@ -1995,7 +1993,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Pin it",
     icon: Pin,
     title: "Pin it to your toolbar",
-    // desc: "Click the puzzle-piece (extensions) icon in Chrome, then the little pin next to Truck Box. Now the icon is always one click away.",
     shots: ["/guide/02-pin.png"],
   },
   {
@@ -2003,7 +2000,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Open DAT",
     icon: MapPin,
     title: "Open DAT → Search Loads",
-    // desc: "Log in to DAT One and open the Search Loads page. That’s where Truck Box lives and does its thing.",
     shots: ["/guide/03-dat-search-loads.png"],
     note: {
       tone: "info",
@@ -2020,7 +2016,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Open popup",
     icon: MousePointerClick,
     title: "Open the Truck Box popup",
-    // desc: "Click the Truck Box icon in your toolbar to open the panel. You’ll see tabs for Login, Email Template, Map & Filter, Factoring, and Stats.",
     shots: ["/guide/04-open-popup.png"],
   },
   {
@@ -2028,7 +2023,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Connect Gmail",
     icon: LogIn,
     title: "Log in & connect Gmail",
-    // desc: "On the Login tab, click “Sign in with Google” and pick your account. This lets Truck Box send emails from your own Gmail — one click, every time.",
     shots: ["/guide/05-login-connect-gmail.png", "/guide/05b-consent-send-email-checkbox.png"],
     note: {
       tone: "warn",
@@ -2046,7 +2040,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Refresh",
     icon: RotateCw,
     title: "Refresh the DAT page",
-    // desc: "Head back to your DAT Search Loads tab and refresh it (F5, or the reload button). This switches Truck Box on for that page.",
     shots: ["/guide/06-refresh-dat.png"],
     note: {
       tone: "calm",
@@ -2063,7 +2056,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Template",
     icon: FileText,
     title: "Set up your email template",
-    desc: "Open the Email Template tab and add your details and message once. Truck Box fills in the load and broker info for you, so every email looks sharp and personal.",
     shots: ["/guide/07-email-template.png"],
   },
   {
@@ -2071,7 +2063,6 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Send it",
     icon: Send,
     title: "Send your first email",
-    desc: "Find a load, hit send, and your email is on its way from your Gmail — before the other dispatchers. That’s it. You’re ready to roll.",
     shots: ["/guide/08-send-email.png"],
   },
 ];
@@ -2158,9 +2149,9 @@ export function Guide() {
       <div className="ed-container">
         {/* ---------- hero ---------- */}
         <Reveal>
-          <div className="flex items-center justify-between gap-6">
-            <span className="ed-label ed-accent">[ Get Started ] — Install to first email</span>
-          </div>
+          {/*<div className="flex items-center justify-between gap-6">*/}
+          {/*  <span className="ed-label ed-accent">[ Get Started ] — Install to first email</span>*/}
+          {/*</div>*/}
         </Reveal>
         <Reveal delay={0.2}>
           <div className="max-w-3xl">
@@ -2199,7 +2190,6 @@ export function Guide() {
                     <Icon className="h-5 w-5 tb-step-icon" aria-hidden />
                     <h2 className="tb-step-title">{s.title}</h2>
                   </div>
-                  <p className="tb-step-desc">{s.desc}</p>
 
                   {s.note && (
                     <div className={`tb-note tb-note--${s.note.tone}`}>{s.note.text}</div>
