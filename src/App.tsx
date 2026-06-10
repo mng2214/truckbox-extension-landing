@@ -433,7 +433,7 @@ export function Header() {
                 );
               })}
             </div>
-            <div className="ed-container py-8 flex justify-start ed-label">
+            <div className="ed-container flex justify-start ed-label" style={{ paddingTop: 32, paddingBottom: 88 }}>
               <a href={INSTALL_URL} target="_blank" rel="noreferrer">Install →</a>
             </div>
           </motion.div>
