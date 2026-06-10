@@ -1,6 +1,7 @@
 {
   "rewrites": [
     { "source": "/dat", "destination": "/dat-example.png" },
+    { "source": "/update", "destination": "/update.png" },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
