@@ -1257,77 +1257,82 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
     linear-gradient(135deg, var(--bg-2), #0a0f1b);
 }
 
-/* ------------------------------------------------------------ journey overview
-   The whole flow on one panel, grouped by phase — so a new user sees where
-   they're headed before reading the detailed steps. */
-.tb-journey {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: stretch;
-  gap: 16px 14px;
-  padding: 24px;
-  border: 1px solid var(--line);
-  border-radius: 18px;
-  background:
-    radial-gradient(120% 140% at 0% 0%, rgba(111, 139, 255, 0.08), transparent 55%),
-    linear-gradient(135deg, var(--bg-2), #0b1322);
-}
-.tb-journey-phase {
-  flex: 1 1 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-.tb-journey-phase-label {
+/* ------------------------------------------------------------ journey rail
+   One continuous line with the 8 steps as numbered dots; phase names sit
+   above their segment. No card boxes — reads as a single path. */
+.tb-rail { overflow-x: auto; scrollbar-width: none; }
+.tb-rail::-webkit-scrollbar { display: none; }
+.tb-rail-inner { min-width: 660px; }
+
+/* phase labels above the rail */
+.tb-rail-phases { display: flex; }
+.tb-rail-phase {
+  flex: 1 1 0;
   font-family: var(--font-mono);
   font-size: 0.66rem;
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
+  /* nudge each label to sit over its segment's first dot */
+  padding-left: calc(100% / 16);
 }
-.tb-journey-nodes { display: flex; flex-wrap: wrap; gap: 8px; }
-.tb-journey-node {
-  display: inline-flex;
+
+/* the line + dots */
+.tb-rail-track {
+  position: relative;
+  display: flex;
+  margin-top: 18px;
+}
+.tb-rail-track::before {
+  content: "";
+  position: absolute;
+  top: 18px;            /* vertical center of the 36px dots */
+  left: calc(100% / 16);
+  right: calc(100% / 16);
+  height: 2px;
+  background: linear-gradient(90deg, var(--line-strong), var(--accent) 50%, var(--line-strong));
+  opacity: 0.55;
+}
+.tb-rail-node {
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 8px;
-  padding: 9px 13px 9px 9px;
-  border-radius: 11px;
-  border: 1px solid var(--line-strong);
-  background: var(--bg);
-  color: var(--muted);
-  font-family: var(--font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  transition: border-color .2s ease, color .2s ease, transform .2s ease, background .2s ease;
+  gap: 12px;
+  text-decoration: none;
 }
-.tb-journey-node:hover {
-  border-color: var(--accent);
-  color: var(--ink);
+.tb-rail-dot {
+  position: relative;
+  z-index: 1;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--accent);
   background: var(--bg-2);
+  border: 1px solid var(--line-strong);
+  box-shadow: 0 0 0 5px var(--bg);   /* cuts the line behind the dot */
+  transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.tb-rail-label {
+  font-family: var(--font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+.tb-rail-node:hover .tb-rail-dot {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 5px var(--bg), 0 0 22px rgba(111, 139, 255, 0.45);
   transform: translateY(-2px);
 }
-.tb-journey-node > svg { color: var(--accent); flex: 0 0 auto; }
-.tb-journey-node-num {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 21px; height: 21px;
-  border-radius: 999px;
-  background: rgba(111, 139, 255, 0.16);
-  color: var(--accent);
-  font-weight: 700;
-  font-size: 0.66rem;
-  flex: 0 0 auto;
-}
-.tb-journey-node-label { white-space: nowrap; }
-.tb-journey-sep {
-  display: flex;
-  align-items: center;
-  align-self: center;
-  color: var(--accent);
-  opacity: 0.6;
-}
+.tb-rail-node:hover .tb-rail-label { color: var(--ink); }
 
 /* ------------------------------------------------------------ phase divider
    Splits the vertical step rail into Set up / Connect / Send. */
@@ -1367,8 +1372,6 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   .tb-step-num { width: 44px; height: 44px; font-size: 1.15rem; }
   .tb-guide-calm { padding: 22px; }
   .tb-guide-cta { padding: 32px 22px; }
-  .tb-journey { padding: 18px; }
-  .tb-journey-sep { display: none; }
 }
 
 /* ------------------------------------------------------------ reduced motion */

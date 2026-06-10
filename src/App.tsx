@@ -32,6 +32,8 @@ import {
   DollarSign,
   ShieldCheck,
   Clock,
+  Map,
+  Calculator,
 } from "lucide-react";
 
 type NavItem = { href: string; label: string; route?: boolean };
@@ -39,8 +41,7 @@ type NavItem = { href: string; label: string; route?: boolean };
 const NAV: NavItem[] = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
-  { href: "/guide", label: "Get Started", route: true },
-  { href: "/#learning", label: "Learning" },
+  { href: "/guide", label: "Guide", route: true },
   { href: "/#faq", label: "FAQ" },
   { href: "/privacy", label: "Privacy", route: true },
   { href: "/#contact", label: "Contact" },
@@ -259,7 +260,7 @@ export default function App() {
         <SocialProof />
         <HowItWorks />
         <Pricing />
-        <Learning />
+        <Walkthrough />
         <FAQ />
         <Contact />
         <FinalCTA />
@@ -1434,10 +1435,10 @@ function Pricing() {
 }
 
 /* ============================================================
-   Learning
+   Walkthrough video
    ============================================================ */
 
-function Learning() {
+function Walkthrough() {
   const [playing, setPlaying] = useState(false);
   // Use the hi-res cover (1280×720) — it reflects a custom thumbnail and looks
   // crisp on the large player. Fall back to hqdefault if a video has no maxres.
@@ -1445,18 +1446,8 @@ function Learning() {
   const thumbFallback = `https://i.ytimg.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
 
   return (
-    <section id="learning" className="ed-section">
+    <section id="walkthrough" className="ed-section">
       <div className="ed-container">
-        <div className="flex items-end justify-between gap-6 mb-12">
-          <div>
-            <span className="ed-label">[ 06 ] — Learning</span>
-            <h2 className="ed-h2 mt-4">Learn Truck Box</h2>
-          </div>
-          <span className="ed-label hidden md:block max-w-[260px] text-right">
-            A short walkthrough — from login to sending broker emails with one click
-          </span>
-        </div>
-
         <Reveal>
           <div
             className="relative overflow-hidden aspect-video"
@@ -2098,7 +2089,7 @@ const GUIDE_FEATURES = [
   },
   {
     icon: DollarSign,
-    name: "Factoring",
+    name: "RTS Credit Check",
     body: "Check a broker’s factoring credit rating right inside DAT, using your own RTS Pro account.",
     isNew: true,
   },
@@ -2107,42 +2098,55 @@ const GUIDE_FEATURES = [
     name: "Stats",
     body: "Track how many emails you’ve sent and stay on top of your outreach at a glance.",
   },
+  {
+    icon: Map,
+    name: "Google Maps Built In",
+    body: "See each load’s route on a real Google map without leaving DAT — no extra tabs, no copy-pasting addresses.",
+    isNew: true,
+  },
+  {
+    icon: Calculator,
+    name: "RPM Calculator",
+    body: "Get the rate-per-mile on every load instantly, so the best-paying runs stand out at a glance.",
+    isNew: true,
+  },
 ];
 
 const PHASE_ORDER: Phase[] = ["Set up", "Connect", "Send"];
 
-/** At-a-glance end-to-end flow: the whole journey on one line, grouped by
- *  phase, so a new user can see exactly where they're headed before reading
- *  the detailed steps below. */
+/** At-a-glance end-to-end flow: one continuous rail with the 8 steps as
+ *  numbered dots, phase names sitting above their segment — so a new user
+ *  sees the whole path before reading the detailed steps below. */
 function JourneyMap() {
+  const steps = GUIDE_STEPS.map((s, i) => ({ ...s, n: i + 1 }));
   return (
     <Reveal delay={0.05}>
-      <div className="tb-journey">
-        {PHASE_ORDER.map((phase, pi) => {
-          const steps = GUIDE_STEPS.map((s, i) => ({ ...s, n: i + 1 })).filter(
-            (s) => s.phase === phase
-          );
-          return (
-            <Fragment key={phase}>
-              {pi > 0 && <span className="tb-journey-sep" aria-hidden><ArrowRight className="h-4 w-4" /></span>}
-              <div className="tb-journey-phase">
-                <span className="tb-journey-phase-label">{phase}</span>
-                <div className="tb-journey-nodes">
-                  {steps.map((s) => {
-                    const Icon = s.icon;
-                    return (
-                      <a key={s.n} href={`#step-${s.n}`} className="tb-journey-node">
-                        <span className="tb-journey-node-num">{s.n}</span>
-                        <Icon className="h-4 w-4" aria-hidden />
-                        <span className="tb-journey-node-label">{s.short}</span>
-                      </a>
-                    );
-                  })}
-                </div>
-              </div>
-            </Fragment>
-          );
-        })}
+      <div className="tb-rail">
+        <div className="tb-rail-inner">
+          {/* phase labels — flex-grow proportional to each phase's step count,
+              so each label sits above its segment of the rail */}
+          <div className="tb-rail-phases">
+            {PHASE_ORDER.map((phase) => (
+              <span
+                key={phase}
+                className="tb-rail-phase"
+                style={{ flexGrow: steps.filter((s) => s.phase === phase).length }}
+              >
+                {phase}
+              </span>
+            ))}
+          </div>
+
+          {/* the rail itself: continuous line + numbered dots */}
+          <div className="tb-rail-track">
+            {steps.map((s) => (
+              <a key={s.n} href={`#step-${s.n}`} className="tb-rail-node">
+                <span className="tb-rail-dot">{s.n}</span>
+                <span className="tb-rail-label">{s.short}</span>
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </Reveal>
   );
