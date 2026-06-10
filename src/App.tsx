@@ -1508,7 +1508,14 @@ const FAQS = [
       <p>
         Install the Truck Box Chrome extension, open the popup, and click{" "}
         <strong>Sign in with Google</strong>. After login, your account is ready and your
-        free trial can start.
+        free trial can start.{" "}
+        <Link
+          to="/guide"
+          className="ed-accent"
+          style={{ textDecoration: "underline", textUnderlineOffset: 3 }}
+        >
+          See the full step-by-step guide →
+        </Link>
       </p>
     ),
   },
@@ -1601,6 +1608,30 @@ const FAQS = [
           No. To use this feature, you must already have an active account with RTS Financial.
           If you're not currently set up with RTS, you'll need to contact them first.
         </p>
+    ),
+  },
+  {
+    q: "Something isn't working — what should I try first?",
+    a: (
+      <div>
+        <p>Before anything else, run these three quick fixes in order:</p>
+        <ol>
+          <li>
+            <strong>Update the extension</strong> if you haven't yet — open{" "}
+            <strong>chrome://extensions</strong>, turn on Developer Mode, and press{" "}
+            <strong>Update</strong>.
+          </li>
+          <li>
+            <strong>Log out and log back in</strong> from the Truck Box popup.
+          </li>
+          <li>
+            <strong>Refresh your DAT Search Loads page</strong> (F5) so Truck Box reloads on it.
+          </li>
+        </ol>
+        <p>
+          That clears up most issues. Still stuck? Use the chat button in the corner and we'll help.
+        </p>
+      </div>
     ),
   },
   {
