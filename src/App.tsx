@@ -139,7 +139,8 @@ export function SmoothScroll() {
         ? href.slice(1)
         : "";
       if (hash.length > 1) {
-        const el = document.querySelector(hash);
+        // getElementById (not querySelector) so numeric ids like #1 work
+        const el = document.getElementById(hash.slice(1));
         if (el) {
           e.preventDefault();
           lenis.scrollTo(el as HTMLElement, { offset: -90 });
@@ -163,7 +164,8 @@ export function SmoothScroll() {
     let tries = 0;
     let timer: ReturnType<typeof setTimeout>;
     const go = () => {
-      const el = document.querySelector(location.hash);
+      // getElementById (not querySelector) so numeric ids like #1 work
+      const el = document.getElementById(location.hash.slice(1));
       if (el) {
         if (lenisRef.current) lenisRef.current.scrollTo(el as HTMLElement, { offset: -90 });
         else (el as HTMLElement).scrollIntoView({ behavior: "smooth" });
@@ -2308,7 +2310,7 @@ function JourneyMap() {
           {/* the rail itself: continuous line + numbered dots */}
           <div className="tb-rail-track">
             {steps.map((s) => (
-              <a key={s.n} href={`#step-${s.n}`} className="tb-rail-node">
+              <a key={s.n} href={`#${s.n}`} className="tb-rail-node">
                 <span className="tb-rail-dot">{s.n}</span>
                 <span className="tb-rail-label">{s.short}</span>
               </a>
@@ -2355,7 +2357,7 @@ export function Guide() {
                     <span className="tb-phase-rule" aria-hidden />
                   </Reveal>
                 )}
-                <Reveal id={`step-${i + 1}`} delay={0.04} className="tb-step">
+                <Reveal id={`${i + 1}`} delay={0.04} className="tb-step">
                 <div className="tb-step-num">{i + 1}</div>
                 <div className="tb-step-body">
                   <div className="tb-step-head">

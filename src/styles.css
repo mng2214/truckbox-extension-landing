@@ -1132,6 +1132,7 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   grid-template-columns: 56px 1fr;
   gap: 22px;
   padding-bottom: 60px;
+  scroll-margin-top: 90px;
 }
 .tb-step:last-child { padding-bottom: 0; }
 /* connecting line down the rail */
