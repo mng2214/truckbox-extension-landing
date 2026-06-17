@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import Lenis from "lenis";
 import { useForm, ValidationError } from "@formspree/react";
 
@@ -246,6 +246,118 @@ function MaskLines({
   );
 }
 
+/* Magnetic hover: element leans toward the cursor, springs back on leave.
+   Pointer-fine devices only; respects reduced motion. */
+function useMagnetic<T extends HTMLElement>(strength = 0.38) {
+  const ref = useRef<T>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const onEnter = () => {
+      el.style.transition = "transform .18s cubic-bezier(.16,1,.3,1)";
+    };
+    const onMove = (e: MouseEvent) => {
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - (r.left + r.width / 2)) * strength;
+      const y = (e.clientY - (r.top + r.height / 2)) * strength;
+      el.style.transform = `translate(${x}px, ${y}px)`;
+    };
+    const onLeave = () => {
+      el.style.transition = "transform .45s cubic-bezier(.16,1,.3,1)";
+      el.style.transform = "translate(0,0)";
+    };
+    el.addEventListener("mouseenter", onEnter);
+    el.addEventListener("mousemove", onMove);
+    el.addEventListener("mouseleave", onLeave);
+    return () => {
+      el.removeEventListener("mouseenter", onEnter);
+      el.removeEventListener("mousemove", onMove);
+      el.removeEventListener("mouseleave", onLeave);
+    };
+  }, [strength]);
+  return ref;
+}
+
+/* Soft light glow that follows the cursor (lerped). Pointer-fine devices
+   only; on touch / reduced-motion it stays hidden so the orbs are the base. */
+function Spotlight() {
+  const ref = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let mx = window.innerWidth / 2;
+    let my = window.innerHeight * 0.3;
+    let cx = mx;
+    let cy = my;
+    let raf = 0;
+    let seen = false;
+    const onMove = (e: MouseEvent) => {
+      mx = e.clientX;
+      my = e.clientY;
+      if (!seen) {
+        seen = true;
+        el.style.opacity = "1";
+      }
+    };
+    const loop = () => {
+      cx += (mx - cx) * 0.12;
+      cy += (my - cy) * 0.12;
+      el.style.setProperty("--mx", `${cx}px`);
+      el.style.setProperty("--my", `${cy}px`);
+      raf = requestAnimationFrame(loop);
+    };
+    window.addEventListener("mousemove", onMove, { passive: true });
+    raf = requestAnimationFrame(loop);
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener("mousemove", onMove);
+    };
+  }, []);
+  return <div ref={ref} className="tb-spotlight" style={{ opacity: 0 }} aria-hidden />;
+}
+
+/* Thin top scroll-progress bar (accent gradient). */
+function ScrollProgress() {
+  const { scrollYProgress } = useScroll();
+  const scaleX = useSpring(scrollYProgress, { stiffness: 130, damping: 30, mass: 0.3 });
+  return <motion.div className="tb-progress" style={{ scaleX }} aria-hidden />;
+}
+
+/* Slim conversion pill that appears once the hero scrolls away. */
+function StickyCTA() {
+  const [show, setShow] = useState(false);
+  useEffect(() => {
+    const onScroll = () => setShow(window.scrollY > window.innerHeight * 0.92);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+  return (
+    <AnimatePresence>
+      {show && (
+        <motion.div
+          className="tb-sticky-cta"
+          initial={{ y: 90, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 90, opacity: 0 }}
+          transition={{ duration: 0.5, ease: EASE }}
+        >
+          <span className="tb-sticky-txt">
+            Beat other dispatchers — <b>start free</b>
+          </span>
+          <a className="tb-sticky-pill-btn" href={INSTALL_URL} target="_blank" rel="noreferrer">
+            Try free <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}
+
 /* ============================================================
    App shell
    ============================================================ */
@@ -253,8 +365,9 @@ function MaskLines({
 export default function App() {
   return (
     <div className="min-h-screen">
-      <div className="tb-bg-blobs" aria-hidden />
+      <Spotlight />
       <div className="tb-bg-vignette" aria-hidden />
+      <ScrollProgress />
       <Header />
       <main>
         <Hero />
@@ -268,6 +381,7 @@ export default function App() {
         <FinalCTA />
       </main>
       <Footer />
+      <StickyCTA />
     </div>
   );
 }
@@ -460,6 +574,261 @@ export function Header() {
 }
 
 /* ============================================================
+   Hero mockup — stylized DAT board + TruckBox compose loop.
+   A scripted, looping sequence: a load is selected, the email
+   auto-fills, sends, and the deadhead RPM / route / RTS credit
+   flourishes resolve. Reduced motion renders the resolved frame.
+   ============================================================ */
+
+const HM_ROWS = [
+  { o: "Bolingbrook, IL", d: "Allentown, PA", rate: "$2,850", age: "2m", pin: "#6f8bff" },
+  { o: "Chicago, IL", d: "Columbus, OH", rate: "$1,420", age: "5m", pin: "#a78bfa" },
+  { o: "Joliet, IL", d: "Nashville, TN", rate: "$2,100", age: "8m", pin: "#34d399" },
+  { o: "Gary, IN", d: "Atlanta, GA", rate: "$2,640", age: "11m", pin: "#f59e0b" },
+];
+
+function HeroMockup() {
+  const reduced =
+    typeof window !== "undefined" &&
+    !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+  const [phase, setPhase] = useState(reduced ? 5 : 0);
+  const [rpm, setRpm] = useState(1.78);
+
+  // Scripted loop — dwell (ms) per phase 0..5, then repeat.
+  useEffect(() => {
+    if (reduced) return;
+    const SEQ = [850, 1000, 1650, 950, 650, 2050];
+    let i = 0;
+    let t: ReturnType<typeof setTimeout>;
+    const run = () => {
+      setPhase(i);
+      t = setTimeout(() => {
+        i = (i + 1) % SEQ.length;
+        run();
+      }, SEQ[i]);
+    };
+    run();
+    return () => clearTimeout(t);
+  }, [reduced]);
+
+  // Count the deadhead-adjusted RPM up once the email is composed.
+  useEffect(() => {
+    if (phase < 3) {
+      setRpm(1.78);
+      return;
+    }
+    let v = 1.78;
+    const id = setInterval(() => {
+      v = Math.min(2.64, v + 0.055);
+      setRpm(v);
+      if (v >= 2.64) clearInterval(id);
+    }, 26);
+    return () => clearInterval(id);
+  }, [phase]);
+
+  const panelOpen = phase >= 2 && phase <= 5;
+  const composed = phase >= 2;
+  const sending = phase === 4;
+  const sent = phase === 5;
+
+  const cursorPos =
+    phase <= 0
+      ? { left: "82%", top: "88%" }
+      : phase === 1
+      ? { left: "33%", top: "33%" }
+      : { left: "27%", top: "83%" };
+
+  const lineWidths = ["86%", "62%", "92%", "46%"];
+
+  return (
+    <div className="hm-wrap" data-cursor>
+      <div className="hm-glow" aria-hidden />
+      <div className="hm-board">
+        <div className="hm-chrome">
+          <div className="hm-dots">
+            <i style={{ background: "#ff5f57" }} />
+            <i style={{ background: "#febc2e" }} />
+            <i style={{ background: "#28c840" }} />
+          </div>
+          <div className="hm-url">one.dat.com/search</div>
+          <span className="hm-badge">★ Truck&nbsp;Box</span>
+        </div>
+
+        <div className="hm-grid">
+          <div className="hm-rowhead">
+            <span>Origin</span>
+            <span>Destination</span>
+            <span style={{ textAlign: "right" }}>Rate</span>
+            <span style={{ textAlign: "right" }}>Age</span>
+          </div>
+          {HM_ROWS.map((r, idx) => (
+            <div key={idx} className={`hm-row${idx === 0 && phase >= 1 ? " is-active" : ""}`}>
+              <span className="hm-lane">
+                <i className="hm-pin" style={{ background: r.pin }} />
+                {r.o}
+              </span>
+              <span className="hm-dest">{r.d}</span>
+              <span className="hm-rate">{r.rate}</span>
+              <span className="hm-age">{r.age}</span>
+            </div>
+          ))}
+
+          <AnimatePresence>
+            {panelOpen && (
+              <motion.div
+                className="hm-panel"
+                initial={{ y: 28, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: 28, opacity: 0 }}
+                transition={{ duration: 0.5, ease: EASE }}
+              >
+                <div className="hm-panel-head">
+                  <span className="hm-panel-to">
+                    To <b>broker@pumpcargo.com</b>
+                  </span>
+                  <span className="hm-tb-tag">Auto-filled</span>
+                </div>
+                {lineWidths.map((w, li) => (
+                  <motion.div
+                    key={li}
+                    className={`hm-line${li === 2 ? " hm-line-accent" : ""}`}
+                    style={{ width: w }}
+                    initial={{ scaleX: 0 }}
+                    animate={{ scaleX: composed ? 1 : 0 }}
+                    transition={{ duration: 0.45, delay: 0.15 + li * 0.12, ease: EASE }}
+                  />
+                ))}
+                <div className={`hm-send${sent ? " is-sent" : ""}`}>
+                  {sent ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" strokeWidth={3} /> Sent
+                    </>
+                  ) : sending ? (
+                    <>
+                      <RotateCw className="h-3.5 w-3.5 tb-spin" /> Sending
+                    </>
+                  ) : (
+                    <>
+                      <Send className="h-3.5 w-3.5" /> Send email
+                    </>
+                  )}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+
+        {!reduced && (
+          <div
+            className={`hm-cursor${sending ? " is-click" : ""}`}
+            style={{
+              ...cursorPos,
+              transition:
+                "left .6s cubic-bezier(.16,1,.3,1), top .6s cubic-bezier(.16,1,.3,1)",
+            }}
+            aria-hidden
+          >
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" stroke="#0a0e18" strokeWidth="1.5">
+              <path d="M5 3l14 8-6 1.6L9.4 19z" strokeLinejoin="round" />
+            </svg>
+          </div>
+        )}
+
+        <AnimatePresence>
+          {sent && !reduced && (
+            <motion.div
+              className="hm-plane"
+              style={{ position: "absolute" }}
+              initial={{ left: "27%", top: "78%", opacity: 0, scale: 0.6 }}
+              animate={{ left: "92%", top: "8%", opacity: [0, 1, 1, 0], scale: 1, rotate: -18 }}
+              transition={{ duration: 1.3, ease: EASE }}
+              aria-hidden
+            >
+              <Send className="h-5 w-5" />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      <div className="hm-chip hm-chip-rpm">
+        <div className="hm-chip-label">RPM · deadhead-adj.</div>
+        <div className="hm-rpm-val">
+          ${rpm.toFixed(2)}
+          <small>/mi</small>
+        </div>
+      </div>
+
+      <AnimatePresence>
+        {composed && (
+          <motion.div
+            className="hm-chip hm-chip-map"
+            initial={{ opacity: 0, x: -16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -16 }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
+            <div className="hm-chip-label">Route</div>
+            <div className="hm-map-canvas">
+              <svg viewBox="0 0 120 60" width="100%" height="100%">
+                <motion.path
+                  d="M14 44 C 40 30, 60 50, 104 16"
+                  fill="none"
+                  stroke="#6f8bff"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeDasharray="4 5"
+                  initial={{ pathLength: 0 }}
+                  animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.1, ease: EASE }}
+                />
+                <circle cx="14" cy="44" r="4" fill="#a78bfa" />
+                <circle cx="104" cy="16" r="4" fill="#6f8bff" />
+              </svg>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {composed && (
+          <motion.div
+            className="hm-chip hm-chip-rts"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.85 }}
+            transition={{ duration: 0.45, ease: EASE, delay: 0.1 }}
+          >
+            <div className="hm-rts-grade">A</div>
+            <div className="hm-rts-meta">
+              RTS credit
+              <br />
+              <span>pays in 22 days</span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {sent && (
+          <motion.div
+            className="hm-chip hm-chip-speed"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 14 }}
+            transition={{ duration: 0.5, ease: EASE }}
+          >
+            <span className="hm-speed-old">~2 min</span>
+            <span className="hm-speed-new">
+              0.8s <small>to send</small>
+            </span>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ============================================================
    Hero
    ============================================================ */
 
@@ -471,6 +840,8 @@ function Hero() {
   });
   const y = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const op = useTransform(scrollYProgress, [0, 0.85], [1, 0]);
+  const mockY = useTransform(scrollYProgress, [0, 1], [0, -54]);
+  const tryRef = useMagnetic<HTMLAnchorElement>();
 
   return (
     <section id="top" ref={ref} className="ed-section" style={{ paddingTop: 132, paddingBottom: 72 }}>
@@ -491,32 +862,51 @@ function Hero() {
           ]}
         />
 
-        <div className="mt-10 grid md:grid-cols-[1.4fr_1fr] gap-10 items-end">
+        <div className="mt-12 grid lg:grid-cols-[1.04fr_1fr] gap-12 lg:gap-10 items-center">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
               Truck Box helps DAT dispatchers send broker emails in one click with ready templates, maps, filters,
               shortcuts, and live stats — so you can reach the broker before other dispatchers.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
-              <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
+              <a ref={tryRef} className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
                 <span>TRY FREE</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
                 <span>Book Call</span>
               </a>
             </div>
-            <div className="mt-7 inline-flex items-center gap-2.5">
-              <span
-                className="inline-flex items-center justify-center rounded-full"
-                style={{ width: 26, height: 26, background: "rgba(52,211,153,0.18)", color: "#34d399" }}
+            <div className="mt-7 flex flex-col gap-3.5">
+              <div className="inline-flex items-center gap-2.5">
+                <span
+                  className="inline-flex items-center justify-center rounded-full"
+                  style={{ width: 26, height: 26, background: "rgba(52,211,153,0.18)", color: "#34d399" }}
+                >
+                  <Check className="h-3.5 w-3.5" strokeWidth={3} />
+                </span>
+                <span className="ed-label" style={{ letterSpacing: "0.08em" }}>
+                  <span style={{ color: "var(--ink)", fontWeight: 700 }}>7-day free trial</span>
+                  <span style={{ color: "var(--muted)" }}> — no credit card required</span>
+                </span>
+              </div>
+              <a
+                href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
+                target="_blank"
+                rel="noreferrer"
+                className="hm-trust tb-reviews-link"
               >
-                <Check className="h-3.5 w-3.5" strokeWidth={3} />
-              </span>
-              <span className="ed-label" style={{ letterSpacing: "0.08em" }}>
-                <span style={{ color: "var(--ink)", fontWeight: 700 }}>7-day free trial</span>
-                <span style={{ color: "var(--muted)" }}> — no credit card required</span>
-              </span>
+                <span className="hm-stars">★★★★★</span>
+                <span>
+                  <b>5.0</b> · 100+ dispatchers · Chrome Web Store
+                </span>
+              </a>
             </div>
+          </Reveal>
+
+          <Reveal delay={0.35}>
+            <motion.div style={{ y: mockY }}>
+              <HeroMockup />
+            </motion.div>
           </Reveal>
         </div>
       </motion.div>
