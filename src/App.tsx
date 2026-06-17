@@ -630,6 +630,7 @@ function HeroMockup() {
   const composed = phase >= 2;
   const sending = phase === 4;
   const sent = phase === 5;
+  const filtersOn = reduced || phase >= 3;
 
   const cursorPos =
     phase <= 0
@@ -767,7 +768,7 @@ function HeroMockup() {
             exit={{ opacity: 0, x: -16 }}
             transition={{ duration: 0.5, ease: EASE }}
           >
-            <div className="hm-chip-label">Route</div>
+            <div className="hm-chip-label">Google Map</div>
             <div className="hm-map-canvas">
               <svg viewBox="0 0 120 60" width="100%" height="100%">
                 <motion.path
@@ -809,6 +810,32 @@ function HeroMockup() {
       </AnimatePresence>
 
       <AnimatePresence>
+        {composed && (
+          <motion.div
+            className="hm-chip hm-chip-filter"
+            initial={{ opacity: 0, x: 16 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 16 }}
+            transition={{ duration: 0.45, ease: EASE, delay: 0.18 }}
+          >
+            <div className="hm-chip-label">Load filter</div>
+            <div className="hm-filter-row">
+              <span>Duplicate loads</span>
+              <span className={`hm-switch${filtersOn ? " is-on" : ""}`} aria-hidden>
+                <i />
+              </span>
+            </div>
+            <div className="hm-filter-row">
+              <span>Short loads</span>
+              <span className={`hm-switch${filtersOn ? " is-on" : ""}`} aria-hidden>
+                <i />
+              </span>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
         {sent && (
           <motion.div
             className="hm-chip hm-chip-speed"
@@ -817,9 +844,9 @@ function HeroMockup() {
             exit={{ opacity: 0, y: 14 }}
             transition={{ duration: 0.5, ease: EASE }}
           >
-            <span className="hm-speed-old">~2 min</span>
+            <span className="hm-speed-old">~30 sec</span>
             <span className="hm-speed-new">
-              0.8s <small>to send</small>
+              0.2s <small>to send</small>
             </span>
           </motion.div>
         )}
