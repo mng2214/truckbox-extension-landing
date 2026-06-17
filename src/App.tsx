@@ -770,20 +770,51 @@ function HeroMockup() {
           >
             <div className="hm-chip-label">Google Map</div>
             <div className="hm-map-canvas">
-              <svg viewBox="0 0 120 60" width="100%" height="100%">
+              <svg viewBox="0 0 160 92" preserveAspectRatio="xMidYMid slice">
+                {/* terrain base */}
+                <rect width="160" height="92" fill="#e7ecdf" />
+                {/* parks / national forests */}
+                <ellipse cx="92" cy="20" rx="44" ry="15" fill="#c7e0ae" />
+                <ellipse cx="66" cy="70" rx="34" ry="16" fill="#cbe3b4" />
+                <ellipse cx="138" cy="64" rx="20" ry="12" fill="#c7e0ae" />
+                {/* ocean + lake (water) */}
+                <path d="M0 78 Q10 86 18 92 L0 92 Z" fill="#a9d6f5" />
+                <ellipse cx="132" cy="48" rx="6" ry="3.2" fill="#a9d6f5" />
+                {/* faint road network */}
+                <g stroke="#ffffff" strokeWidth="1.1" fill="none" opacity="0.9">
+                  <path d="M40 0 L50 42 L42 92" />
+                  <path d="M104 0 L98 44 L116 92" />
+                  <path d="M0 60 L70 52 L160 40" />
+                </g>
+                {/* highway */}
+                <path d="M0 84 L70 74 L120 82 L160 70" stroke="#f7c95b" strokeWidth="1.6" fill="none" opacity="0.85" />
+                {/* selected route — white casing + google blue, draws in */}
                 <motion.path
-                  d="M14 44 C 40 30, 60 50, 104 16"
-                  fill="none"
-                  stroke="#6f8bff"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeDasharray="4 5"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: 1 }}
+                  d="M28 70 C 66 64, 78 44, 108 40 C 130 37, 144 30, 150 24"
+                  fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round"
+                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 1.1, ease: EASE }}
                 />
-                <circle cx="14" cy="44" r="4" fill="#a78bfa" />
-                <circle cx="104" cy="16" r="4" fill="#6f8bff" />
+                <motion.path
+                  d="M28 70 C 66 64, 78 44, 108 40 C 130 37, 144 30, 150 24"
+                  fill="none" stroke="#4285f4" strokeWidth="2.6" strokeLinecap="round"
+                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+                  transition={{ duration: 1.1, ease: EASE }}
+                />
+                {/* A / B markers */}
+                <g>
+                  <path d="M28 71 C24.6 66.8 23 64.6 23 62 a5 5 0 1 1 10 0 c0 2.6 -1.6 4.8 -5 9 z" fill="#ea4335" />
+                  <circle cx="28" cy="62" r="2.3" fill="#fff" />
+                  <text x="28" y="63.9" textAnchor="middle" fontSize="4.2" fontWeight="700" fontFamily="Inter, sans-serif" fill="#ea4335">A</text>
+                </g>
+                <g>
+                  <path d="M150 25 C146.6 20.8 145 18.6 145 16 a5 5 0 1 1 10 0 c0 2.6 -1.6 4.8 -5 9 z" fill="#ea4335" />
+                  <circle cx="150" cy="16" r="2.3" fill="#fff" />
+                  <text x="150" y="17.9" textAnchor="middle" fontSize="4.2" fontWeight="700" fontFamily="Inter, sans-serif" fill="#ea4335">B</text>
+                </g>
+                {/* labels */}
+                <text x="20" y="83" fontSize="4.6" fontFamily="Inter, sans-serif" fill="#5f6368">Los Angeles</text>
+                <text x="120" y="14" fontSize="4.6" fontFamily="Inter, sans-serif" fill="#5f6368">Kingman</text>
               </svg>
             </div>
           </motion.div>
