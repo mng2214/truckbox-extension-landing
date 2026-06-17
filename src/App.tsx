@@ -637,7 +637,7 @@ function HeroMockup() {
       ? { left: "82%", top: "88%" }
       : phase === 1
       ? { left: "33%", top: "33%" }
-      : { left: "27%", top: "83%" };
+      : { left: "12%", top: "83%" };
 
   const lineWidths = ["86%", "62%", "92%", "46%"];
 

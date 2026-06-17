@@ -1724,7 +1724,7 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   bottom: -20px; left: 50%; transform: translateX(-50%);
   display: flex; align-items: center; gap: 10px; white-space: nowrap;
 }
-.hm-speed-old { font-family: var(--font-mono); font-size: .66rem; color: var(--faint); text-decoration: line-through; }
+.hm-speed-old { font-family: var(--font-mono); font-size: .99rem; color: var(--faint); text-decoration: line-through; }
 .hm-speed-new { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--accent-2); letter-spacing: -.01em; }
 .hm-speed-new small { font-size: .6rem; color: var(--muted); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 
