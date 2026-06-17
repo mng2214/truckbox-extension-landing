@@ -347,7 +347,7 @@ function StickyCTA() {
           transition={{ duration: 0.5, ease: EASE }}
         >
           <span className="tb-sticky-txt">
-            Beat other dispatchers — <b>start free</b>
+            Beat other dispatchers
           </span>
           <a className="tb-sticky-pill-btn" href={INSTALL_URL} target="_blank" rel="noreferrer">
             Try free <ArrowUpRight className="h-3.5 w-3.5" />
