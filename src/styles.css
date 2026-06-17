@@ -1763,9 +1763,9 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
 /* trust strip under CTAs */
 .hm-trust {
   display: inline-flex; align-items: center; gap: 10px;
-  font-family: var(--font-mono); font-size: .68rem; letter-spacing: .08em; color: var(--muted);
+  font-family: var(--font-mono); font-size: .88rem; letter-spacing: .08em; color: var(--muted);
 }
-.hm-trust .hm-stars { color: #fbbf24; letter-spacing: .05em; }
+.hm-trust .hm-stars { color: #fbbf24; letter-spacing: .1em; }
 .hm-trust b { color: var(--ink); font-weight: 700; }
 
 @media (max-width: 900px) {
