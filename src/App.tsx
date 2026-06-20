@@ -905,7 +905,7 @@ function Hero() {
     <section id="top" ref={ref} className="ed-section" style={{ paddingTop: 132, paddingBottom: 72 }}>
       <motion.div style={{ y, opacity: op }} className="ed-container">
         <div className="flex items-center justify-between gap-6 mb-6">
-          <span className="ed-label">[ 01 ] — Chrome Extension - DAT - Ultimate tool for truck dispatchers</span>
+          <span className="ed-label">[ 01 ] — Chrome Extension · DAT + Truckstop — for truck dispatchers</span>
           <span className="ed-label hidden sm:block">Est. 2025 — Chicago, USA</span>
         </div>
 
@@ -923,8 +923,8 @@ function Hero() {
         <div className="mt-12 grid lg:grid-cols-[1.04fr_1fr] gap-12 lg:gap-10 items-center">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-              Truck Box helps DAT dispatchers send broker emails in one click with ready templates, maps, filters,
-              shortcuts, and live stats — so you can reach the broker before other dispatchers.
+              Truck Box helps DAT and Truckstop dispatchers send broker emails in one click with ready templates,
+              maps, filters, shortcuts, lane analytics and live stats — so you reach the broker before everyone else.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a ref={tryRef} className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
@@ -958,6 +958,17 @@ function Hero() {
                   <b>5.0</b> · 100+ dispatchers · Chrome Web Store
                 </span>
               </a>
+              <div className="inline-flex items-center gap-2.5 mt-1">
+                <span className="ed-label" style={{ color: "var(--muted)", letterSpacing: "0.08em" }}>
+                  Works with
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", background: "#fff", borderRadius: 8, padding: "5px 9px" }}>
+                  <img src="/dat.png" alt="DAT" style={{ height: 18, width: "auto", display: "block" }} />
+                </span>
+                <span style={{ display: "inline-flex", alignItems: "center", background: "#fff", borderRadius: 8, padding: "5px 9px" }}>
+                  <img src="/truckstop.png" alt="Truckstop" style={{ height: 18, width: "auto", display: "block" }} />
+                </span>
+              </div>
             </div>
           </Reveal>
 
@@ -1416,12 +1427,12 @@ function Features() {
     {
       slug: "email",
       title: "One-click email",
-      body: "Email the broker straight from a DAT load row. No copy-paste, no Gmail tab.",
+      body: "Email the broker straight from a DAT or Truckstop load — no copy-paste, no Gmail tab.",
     },
     {
       slug: "template",
-      title: "Email Template",
-      body: "Create custom dynamic email template",
+      title: "Multiple email templates",
+      body: "Up to 3 saved templates with dynamic fields — switch per broker or company.",
     },
     {
       slug: "rts",
@@ -1787,21 +1798,88 @@ function HowItWorks() {
    Pricing
    ============================================================ */
 
+function PlatformsBand() {
+  const chip: CSSProperties = {
+    display: "inline-flex", alignItems: "center", background: "#fff", borderRadius: 9, padding: "6px 11px",
+  };
+  const logo: CSSProperties = { height: 20, width: "auto", display: "block" };
+  const news = [
+    {
+      t: "Truckstop support",
+      d: "Everything you use on DAT now works on Truckstop too — one-click email, route map, FMCSA & RTS, the rate board.",
+    },
+    {
+      t: "Posted load price analytics",
+      d: "See how a broker moved the price through the day and across the lane — negotiate from data, not guesses.",
+    },
+    {
+      t: "Dedicated loads finder",
+      d: "Spot brokers who keep running the same lane and surface potential recurring & contract leads.",
+    },
+    {
+      t: "Multiple email templates",
+      d: "Save up to 3 templates — each with its own signature — and switch per broker or company.",
+    },
+  ];
+  return (
+    <section id="platforms" className="ed-section">
+      <div className="ed-container">
+        <div className="mb-10">
+          <span className="ed-label">[ NEW ] — Two load boards, one tool</span>
+          <h2 className="ed-h2 mt-4">
+            Now on <span className="ed-accent">DAT</span>{" "}
+            <span style={{ color: "var(--muted)" }}>&amp;</span>{" "}
+            <span className="ed-accent">Truckstop</span>
+          </h2>
+          <div className="mt-6 flex items-center gap-3 flex-wrap">
+            <span className="ed-label" style={{ color: "var(--muted)" }}>Works with</span>
+            <span style={chip}><img style={logo} src="/dat.png" alt="DAT" /></span>
+            <span style={chip}><img style={logo} src="/truckstop.png" alt="Truckstop" /></span>
+          </div>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-5">
+          {news.map((n) => (
+            <div
+              key={n.t}
+              style={{
+                border: "1px solid var(--line)",
+                borderRadius: 14,
+                padding: "20px 22px",
+                background: "var(--bg-2)",
+                height: "100%",
+              }}
+            >
+              <h3 className="ed-display text-xl" style={{ textTransform: "none", letterSpacing: "-0.01em" }}>
+                {n.t}
+              </h3>
+              <p className="mt-2 text-[0.95rem] leading-relaxed" style={{ color: "var(--muted)" }}>
+                {n.d}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
 function Pricing() {
   const features = [
     "7-day free trial (No Credit Card)",
     "Cancel anytime (1 click)",
+    "Works on DAT + Truckstop",
     "One-click email sending",
+    "Multiple email templates (up to 3)",
+    "Posted load price analytics",
+    "Dedicated loads finder",
     "RTS factoring credit check",
-    "Dynamic email templates",
-    "Rate calculator",
     "Built-in Google Maps route",
     "Rate-per-mile calculator",
     "Copy & share load info",
     "Click-to-call broker numbers",
     "FMCSA broker report",
     "Refresh-loads button",
-    "DAT Dark mode",
+    "Dark mode",
     "Short-load filtering",
     "Keyboard navigation",
   ];
