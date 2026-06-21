@@ -1169,6 +1169,12 @@ const BA_VIEWS = {
     after: "/compare/night.png",
     ratio: "1347 / 909",
   },
+  truckstop: {
+    label: "Truckstop",
+    // Single pre-composed before/after image (labels baked in) — shown static.
+    single: "/compare/truckstop.png",
+    ratio: "1450 / 950",
+  },
 } as const;
 type BaView = keyof typeof BA_VIEWS;
 
@@ -1180,6 +1186,10 @@ function BeforeAfter() {
   const [view, setView] = useState<BaView>("details");
   const [anim, setAnim] = useState(false); // smooth transition during auto-hint
   const cur = BA_VIEWS[view];
+  const single = "single" in cur ? cur.single : undefined;
+  const before = "before" in cur ? cur.before : undefined;
+  const after = "after" in cur ? cur.after : undefined;
+  const isStatic = !!single;
 
   const setFromClientX = (clientX: number) => {
     const el = wrapRef.current;
@@ -1287,7 +1297,8 @@ function BeforeAfter() {
             </div>
           </div>
 
-          {/* Before / After labels — above the image */}
+          {/* Before / After labels — above the image (hidden for static single-image views) */}
+          {!isStatic && (
           <div className="flex items-center justify-between" style={{ marginBottom: 12 }}>
             <span
               style={{
@@ -1319,15 +1330,20 @@ function BeforeAfter() {
               ★ After
             </span>
           </div>
+          )}
 
           <div
             ref={wrapRef}
             className="mx-auto"
-            onPointerDown={(e) => {
-              dragging.current = true;
-              setAnim(false);
-              setFromClientX(e.clientX);
-            }}
+            onPointerDown={
+              isStatic
+                ? undefined
+                : (e) => {
+                    dragging.current = true;
+                    setAnim(false);
+                    setFromClientX(e.clientX);
+                  }
+            }
             style={{
               position: "relative",
               width: "100%",
@@ -1338,12 +1354,30 @@ function BeforeAfter() {
               background: "#eef1f6",
               userSelect: "none",
               touchAction: "none",
-              cursor: "ew-resize",
+              cursor: isStatic ? "default" : "ew-resize",
             }}
           >
+            {isStatic ? (
+              /* Static single image — already a composed before/after, no drag */
+              <img
+                src={single}
+                alt="Truckstop board with TruckBox"
+                draggable={false}
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  width: "100%",
+                  height: "100%",
+                  objectFit: "cover",
+                  objectPosition: "center",
+                  display: "block",
+                }}
+              />
+            ) : (
+            <>
             {/* AFTER — full base layer (with TruckBox) */}
             <img
-              src={cur.after}
+              src={after}
               alt="With TruckBox"
               draggable={false}
               style={{
@@ -1359,7 +1393,7 @@ function BeforeAfter() {
 
             {/* BEFORE — clipped to the left of the handle (without TruckBox) */}
             <img
-              src={cur.before}
+              src={before}
               alt="Without TruckBox"
               draggable={false}
               style={{
@@ -1415,6 +1449,8 @@ function BeforeAfter() {
                 ‹ ›
               </span>
             </div>
+            </>
+            )}
           </div>
         </Reveal>
       </div>
