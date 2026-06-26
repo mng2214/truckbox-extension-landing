@@ -1,6 +1,29 @@
 @import "tailwindcss" source(none);
 @source "../src";
 
+/* ------------------------------------------------------------
+   Cosmetic copy-deterrent: block text selection page-wide.
+   NOT security — purely "look, don't touch". Form fields and
+   anything contentEditable are exempted so the contact form,
+   typing, and pasting keep working normally.
+   ------------------------------------------------------------ */
+html {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+input,
+textarea,
+select,
+[contenteditable=""],
+[contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
 /* ============================================================
    Truck Box — editorial / kinetic redesign (mad.ac-inspired)
    Near-black canvas · bone type · one signal accent

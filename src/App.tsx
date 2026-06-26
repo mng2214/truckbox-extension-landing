@@ -2305,7 +2305,7 @@ export function Privacy() {
               This page explains what Truck Box does, what information it uses, how Google
               account access is handled, and the rules for using the service.
             </p>
-            <p className="mt-2 ed-label">Last updated — June 3, 2026</p>
+            <p className="mt-2 ed-label">Last updated — June 25, 2026</p>
           </div>
         </Reveal>
 
@@ -2315,9 +2315,10 @@ export function Privacy() {
               <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Privacy Policy</h3>
               <p>
                 <b>Truck Box</b> is a Chrome extension that helps users prepare and send broker
-                outreach emails from supported DAT load board pages using the user's own Gmail
-                account and Google-authorized access. Truck Box is designed to minimize data
-                collection and to use Google data only for user-requested, user-facing functionality.
+                outreach emails from supported load board pages (such as DAT and Truckstop) using
+                the user's own Gmail account and Google-authorized access. Truck Box is designed to
+                collect only the information needed for its features, and to use Google data only
+                for user-requested, user-facing functionality.
               </p>
               <div className="tb-note">
                 <b>Important summary:</b> Truck Box can send an email only when the user explicitly
@@ -2328,7 +2329,7 @@ export function Privacy() {
               <h3>Information we collect</h3>
               <ul>
                 <li><b>Local extension settings.</b> Truck Box may store user-entered settings locally in the browser, such as name, MC number, phone number, templates, filter preferences, and extension settings.</li>
-                <li><b>Supported page data visible to the user.</b> On supported webpages, Truck Box may read information already visible on the page, such as broker email address, origin, destination, pickup date, equipment, trip length, and similar load details, only to help compose the message the user wants to send.</li>
+                <li><b>Load board information already visible to you.</b> On supported load board pages (DAT and Truckstop), Truck Box reads load details that are <b>already displayed on the page you are actively viewing</b>, such as broker email address, broker phone, origin, destination, pickup date, equipment, trip length, posted rate, and similar load details. This information is used to help compose the message you want to send and to power Truck Box's market features (see "Load market data &amp; analytics" below).</li>
                 <li><b>Basic Google account information.</b> During sign-in, Google may provide basic profile information such as account email, profile identifier, and display name for authentication and account access purposes.</li>
                 <li><b>OAuth tokens.</b> Truck Box uses Google OAuth access tokens only to authenticate approved Google API requests related to sign-in and sending user-requested emails.</li>
                 <li><b>Account or subscription information.</b> If Truck Box uses a backend for account status, subscription verification, abuse prevention, support, or product security, limited account-level information may be processed for those purposes.</li>
@@ -2342,12 +2343,28 @@ export function Privacy() {
                 <li>We do <b>not</b> scan or analyze a user's mailbox for marketing, profiling, or advertising purposes.</li>
               </ul>
 
+              <h3>Load market data &amp; analytics</h3>
+              <p>
+                Truck Box offers market features such as posted-price history and a dedicated-loads
+                finder. To provide these, Truck Box collects load posting details already visible to
+                you and aggregates them to produce lane, broker, and pricing insights that are
+                surfaced back to you in the extension.
+              </p>
+              <ul>
+                <li><b>Only information already visible to you.</b> Truck Box collects only the load information that is already displayed on the load board page you are actively viewing. It does not access pages, accounts, search results, or data you are not viewing.</li>
+                <li><b>No crawlers, scrapers, or background scanners.</b> Truck Box does not use automated crawlers, scrapers, scanners, or bots. It does not browse the load board on its own, query hidden or undocumented endpoints, or harvest data in the background. It only reads what is already on the page in front of you.</li>
+                <li><b>Aggregate insight, not surveillance.</b> This information is used to build aggregate market intelligence (such as lane rates, posting frequency, and price trends). It is not used to read your Gmail, to build a profile about you, or to serve advertising.</li>
+                <li><b>Retention.</b> Raw captured data is retained only as long as reasonably needed to build and maintain these insights, and is purged on a rolling basis.</li>
+                <li><b>Your load board account.</b> You are responsible for using Truck Box in a way that is consistent with your own load board subscription and that platform's terms.</li>
+              </ul>
+
               <h3>How we use information</h3>
               <ul>
                 <li><b>To send emails the user explicitly requests.</b> Truck Box uses the Gmail API only to send an email when the user chooses to send that email.</li>
                 <li><b>To compose and populate email content.</b> Supported page data and saved templates are used only to help prepare the draft content and recipient details the user is sending.</li>
                 <li><b>To authenticate users.</b> Basic Google account information may be used to authenticate the user and confirm authorized access.</li>
                 <li><b>To provide account, subscription, and security functionality.</b> Limited backend processing may be used for subscription checks, fraud prevention, abuse prevention, operational reliability, and customer support.</li>
+                <li><b>To provide market and analytics features.</b> Load details already visible to you on the load board are used to build the aggregate market insights described in "Load market data &amp; analytics" above.</li>
                 <li><b>No advertising use.</b> We do not use Google user data or Gmail-related data for advertising, remarketing, profiling, or personalized ads.</li>
                 <li><b>No generalized AI training.</b> We do not use Google user data, Gmail-related data, or email content to train generalized artificial intelligence or machine learning models.</li>
               </ul>
@@ -2379,10 +2396,34 @@ export function Privacy() {
                 <li><b>You stay in control.</b> You can disconnect at any time in the extension, which immediately clears the stored session token from your browser. Tokens also expire on their own, after which you must log in again.</li>
               </ul>
 
+              <h3>Maps &amp; route display (Google Maps)</h3>
+              <p>
+                Truck Box can show a route map for a load using Google Maps. To display the map and
+                route, the relevant load location details (such as origin, destination, and the truck
+                location you provide) are sent to Google Maps so it can render the route. Truck Box
+                does not control Google Maps; your use of the map is also subject to{" "}
+                <a href="https://policies.google.com/terms" target="_blank" rel="noreferrer">Google's Terms of Service</a>{" "}
+                and{" "}
+                <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Google's Privacy Policy</a>.
+              </p>
+
+              <h3>Broker authority &amp; FMCSA data</h3>
+              <p>
+                Truck Box can display publicly available broker authority and safety information from
+                the FMCSA (the U.S. Federal Motor Carrier Safety Administration) and similar public
+                sources. To do this, a broker identifier already shown to you (such as an MC/DOT
+                number or company name) is used to look up publicly available records.
+              </p>
+              <ul>
+                <li><b>Public, informational data.</b> This information comes from public records and is provided for your convenience and information only.</li>
+                <li><b>No guarantee of accuracy.</b> Truck Box does not own, control, or verify FMCSA data and is not responsible for its accuracy, completeness, or timeliness. You should independently verify any broker before doing business.</li>
+                <li><b>No affiliation.</b> Truck Box is not affiliated with or endorsed by the FMCSA or any government agency.</li>
+              </ul>
+
               <h3>Storage &amp; Security</h3>
               <ul>
                 <li><b>Local-first design.</b> Templates, settings, and preferences are primarily stored locally on the user's device.</li>
-                <li><b>Limited backend use.</b> If backend services are used, they are limited to account management, subscription verification, security, fraud prevention, abuse prevention, support, and reliable service operation.</li>
+                <li><b>Limited backend use.</b> Backend services are used for account management, subscription verification, security, fraud prevention, abuse prevention, support, reliable service operation, and the market/analytics features described above.</li>
                 <li><b>No sale of personal data.</b> We do not sell personal information, Google user data, or Gmail-related data.</li>
                 <li><b>No unauthorized sharing.</b> We do not share Google user data except where necessary to provide a user-requested service, for security or legal compliance, or as otherwise permitted by applicable law and Google policy.</li>
                 <li><b>Reasonable safeguards.</b> We use reasonable administrative, technical, and organizational measures designed to protect the data relevant to operation of Truck Box and related services.</li>
@@ -2392,7 +2433,7 @@ export function Privacy() {
               <ul>
                 <li>Users can revoke Google account access at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">myaccount.google.com/permissions</a>.</li>
                 <li>Users can remove locally stored extension data by clearing extension storage, resetting the extension, or uninstalling the extension.</li>
-                <li>If account, subscription, or support data exists on our backend, users may request deletion by contacting us.</li>
+                <li>If account, subscription, support, or captured market data associated with your account exists on our backend, you may request access to or deletion of it by contacting us through the contact form on this website (see the "Contact" section). We will respond within a reasonable time and as required by applicable law.</li>
                 <li>After Google access is revoked, Truck Box will no longer be able to send emails through Gmail until the user signs in again.</li>
               </ul>
 
@@ -2403,6 +2444,22 @@ export function Privacy() {
                 only locally in the browser, many of these controls can be exercised directly by
                 the user through browser settings, extension reset, uninstall, or Google permission
                 revocation.
+              </p>
+
+              <h3>No affiliation &amp; trademarks</h3>
+              <p>
+                Truck Box is an independent, third-party browser add-on built for the user. It is
+                <b> not affiliated with, endorsed by, sponsored by, or otherwise associated with</b>{" "}
+                DAT, Truckstop, RTS / RTS Financial, Google, the FMCSA, or any other platform it
+                works alongside. Truck Box does not host, control, or own those services or their
+                data — it simply helps you act on information already shown to you in your own
+                accounts on those services.
+              </p>
+              <p>
+                All product names, logos, and trademarks — including "DAT," "Truckstop," "RTS,"
+                "Google," "Gmail," and "FMCSA" — are the property of their respective owners and are
+                used here only for identification and descriptive purposes. Use of these names does
+                not imply any endorsement or partnership.
               </p>
 
               <h3>Children's Privacy</h3>
@@ -2441,12 +2498,16 @@ export function Privacy() {
 
             <article id="terms" className="tb-card p-6 sm:p-8 tb-prose">
               <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Terms &amp; Conditions</h3>
-              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>June 3, 2026</b></p>
+              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>June 25, 2026</b></p>
 
               <h3>Acceptance</h3>
               <p>
                 By installing, accessing, or using Truck Box, you agree to these Terms &amp;
-                Conditions and the Privacy Policy on this page.
+                Conditions and the Privacy Policy on this page. In particular, when you sign in or
+                log in to Truck Box (including signing in with your Google account), you confirm that
+                you have read, understood, and accepted these Terms &amp; Conditions and the Privacy
+                Policy, and that you are authorized to do so. If you do not agree, do not sign in to
+                or use Truck Box.
               </p>
 
               <h3>License</h3>
@@ -2457,17 +2518,22 @@ export function Privacy() {
 
               <h3>Description of service</h3>
               <p>
-                Truck Box is a browser extension that helps users prepare and send outreach emails
-                from supported webpages using the user's own Gmail account and user-authorized
-                Google access.
+                Truck Box is an independent browser extension that works on top of supported load
+                board pages (such as DAT and Truckstop). It helps users prepare and send outreach
+                emails using the user's own Gmail account and user-authorized Google access, and it
+                provides supporting tools such as route maps, rate calculations, broker information,
+                and aggregate market analytics built from load details already visible to the user.
+                Truck Box is a tool only — the user remains the sender of every email and the
+                decision-maker for every action taken with it.
               </p>
 
               <h3>User responsibility</h3>
               <ul>
-                <li>You are responsible for the content of emails you send using Truck Box.</li>
-                <li>You must use Truck Box in compliance with applicable laws, third-party platform rules, and anti-spam requirements.</li>
+                <li>You are the sender of, and are solely responsible for, the content of every email you send using Truck Box, including compliance with anti-spam laws such as the U.S. CAN-SPAM Act and any equivalent laws that apply to you.</li>
+                <li>You are responsible for maintaining your own valid accounts and subscriptions with any load board or third-party service (such as DAT, Truckstop, or your factoring provider), and for using Truck Box in a way that complies with those services' own terms of service and acceptable-use rules.</li>
+                <li>You must use Truck Box in compliance with all applicable laws, third-party platform rules, and anti-spam requirements.</li>
                 <li>You must not use Truck Box for spam, phishing, fraud, harassment, deception, unlawful solicitation, or abusive bulk messaging.</li>
-                <li>You must not misuse Google APIs, bypass security controls, or interfere with the integrity of the service.</li>
+                <li>You must not misuse Google APIs, bypass security controls, scrape data you are not authorized to access, or interfere with the integrity of the service or any third-party platform.</li>
               </ul>
 
               <h3>Google account and API access</h3>
@@ -2477,19 +2543,45 @@ export function Privacy() {
                 Privacy Policy. Truck Box does not use Gmail access to read inbox content.
               </p>
 
-              <h3>Third-party services</h3>
+              <h3>Third-party services &amp; no affiliation</h3>
               <p>
-                Truck Box may interact with third-party services such as Google and supported load
-                board websites. Your use of those third-party services remains subject to their own
-                terms, privacy policies, and platform rules.
+                Truck Box may interact with third-party services such as Google, supported load board
+                websites (DAT, Truckstop), factoring providers (such as RTS), mapping services
+                (Google Maps), and public data sources (such as the FMCSA). Your use of those
+                third-party services remains subject to their own terms, privacy policies, and
+                platform rules.
+              </p>
+              <p>
+                Truck Box is an independent product and is <b>not affiliated with, endorsed by,
+                sponsored by, or associated with</b> DAT, Truckstop, RTS, Google, the FMCSA, or any
+                other third party. All third-party names, logos, and trademarks are the property of
+                their respective owners and are used only for identification.
               </p>
 
-              <h3>Subscriptions and billing</h3>
+              <h3>Third-party data is informational only</h3>
+              <p>
+                Information surfaced by Truck Box from third parties — including factoring credit
+                ratings, broker authority and FMCSA records, route and distance estimates, rate
+                calculations, and aggregate market analytics — is provided for your convenience and
+                information only. It may be inaccurate, incomplete, delayed, or estimated. It is not
+                financial, legal, or business advice, and you are responsible for independently
+                verifying any information before relying on it or doing business with any broker.
+              </p>
+
+              <h3>Subscriptions, billing, and cancellation</h3>
               <p>
                 Certain features may require an active subscription or valid account status.
                 Pricing, trial availability, renewal terms, cancellation, and feature access are
                 governed by the plan presented to the user at the time of purchase. If a free trial
                 is offered, any billing terms shown during signup or checkout control.
+              </p>
+              <p>
+                Unless otherwise stated at checkout, paid subscriptions renew automatically for
+                successive billing periods until cancelled. You can cancel at any time, and
+                cancellation stops future charges; access generally continues until the end of the
+                current paid period. Except where required by applicable law, payments already made
+                are non-refundable, and we are not obligated to provide refunds or credits for
+                partial periods or unused time.
               </p>
 
               <h3>Service access and enforcement</h3>
@@ -2511,7 +2603,19 @@ export function Privacy() {
                 To the maximum extent permitted by law, we are not liable for indirect, incidental,
                 special, consequential, or punitive damages, or for any loss of profits, revenues,
                 goodwill, business opportunities, or data arising out of or related to your use of
-                Truck Box.
+                Truck Box. To the maximum extent permitted by law, our total aggregate liability for
+                any claim arising out of or relating to Truck Box will not exceed the amount you paid
+                us for the service in the three (3) months before the event giving rise to the claim.
+              </p>
+
+              <h3>Indemnification</h3>
+              <p>
+                To the maximum extent permitted by law, you agree to indemnify and hold harmless
+                Truck Box and its operators from any claims, damages, losses, liabilities, and
+                expenses (including reasonable legal fees) arising out of or related to your use of
+                Truck Box, the emails or other content you send, your violation of these Terms or
+                applicable law, or your violation of the terms or rights of any third party
+                (including any load board, factoring provider, Google, or broker).
               </p>
 
               <h3>Termination</h3>
@@ -2522,10 +2626,24 @@ export function Privacy() {
                 platform requirements.
               </p>
 
+              <h3>Changes to these Terms</h3>
+              <p>
+                We may update these Terms from time to time. When we do, we will update the "Last
+                updated" date above. Your continued use of Truck Box after changes take effect means
+                you accept the updated Terms.
+              </p>
+
               <h3>Governing law</h3>
               <p>
                 These Terms are governed by the laws of the State of Illinois, without regard to
                 conflict of law principles, except where applicable law requires otherwise.
+              </p>
+
+              <h3>Severability</h3>
+              <p>
+                If any provision of these Terms is held unenforceable, that provision will be limited
+                or removed to the minimum extent necessary, and the remaining provisions will stay in
+                full force and effect.
               </p>
             </article>
           </div>

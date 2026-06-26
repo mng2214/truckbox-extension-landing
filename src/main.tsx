@@ -3,11 +3,14 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
+import { installPageGuard } from "./lib/guard";
 import PrivacyPage from "./pages/Privacy";
 import GuidePage from "./pages/Guide";
 import FAQPage from "./pages/FAQ";
 import SuccessPage from "./pages/Success";
 import CancelPage from "./pages/Cancel";
+
+installPageGuard();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
