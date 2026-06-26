@@ -2314,11 +2314,13 @@ export function Privacy() {
             <article className="tb-card p-6 sm:p-8 tb-prose">
               <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Privacy Policy</h3>
               <p>
-                <b>Truck Box</b> is a Chrome extension that helps users prepare and send broker
-                outreach emails from supported load board pages (such as DAT and Truckstop) using
-                the user's own Gmail account and Google-authorized access. Truck Box is designed to
-                collect only the information needed for its features, and to use Google data only
-                for user-requested, user-facing functionality.
+                <b>Truck Box</b> is operated by <b>TruckBox LLC</b> ("TruckBox LLC," "we," "us," or
+                "our"), which is the controller responsible for the data described in this policy.
+                Truck Box is a Chrome extension that helps users prepare and send broker outreach
+                emails from supported load board pages (such as DAT and Truckstop) using the user's
+                own Gmail account and Google-authorized access. Truck Box is designed to collect only
+                the information needed for its features, and to use Google data only for
+                user-requested, user-facing functionality.
               </p>
               <div className="tb-note">
                 <b>Important summary:</b> Truck Box can send an email only when the user explicitly
@@ -2502,8 +2504,10 @@ export function Privacy() {
 
               <h3>Acceptance</h3>
               <p>
-                By installing, accessing, or using Truck Box, you agree to these Terms &amp;
-                Conditions and the Privacy Policy on this page. In particular, when you sign in or
+                These Terms &amp; Conditions are a binding agreement between you and{" "}
+                <b>TruckBox LLC</b> ("TruckBox LLC," "we," "us," or "our"), the company that operates
+                Truck Box. By installing, accessing, or using Truck Box, you agree to these Terms
+                &amp; Conditions and the Privacy Policy on this page. In particular, when you sign in or
                 log in to Truck Box (including signing in with your Google account), you confirm that
                 you have read, understood, and accepted these Terms &amp; Conditions and the Privacy
                 Policy, and that you are authorized to do so. If you do not agree, do not sign in to
@@ -2611,8 +2615,8 @@ export function Privacy() {
               <h3>Indemnification</h3>
               <p>
                 To the maximum extent permitted by law, you agree to indemnify and hold harmless
-                Truck Box and its operators from any claims, damages, losses, liabilities, and
-                expenses (including reasonable legal fees) arising out of or related to your use of
+                TruckBox LLC, its owners, and its affiliates from any claims, damages, losses,
+                liabilities, and expenses (including reasonable legal fees) arising out of or related to your use of
                 Truck Box, the emails or other content you send, your violation of these Terms or
                 applicable law, or your violation of the terms or rights of any third party
                 (including any load board, factoring provider, Google, or broker).
@@ -3393,7 +3397,7 @@ export function Footer() {
           >
             <div className="flex flex-col items-center md:items-start">
             <span className="ed-label">
-              {new Date().getFullYear()} Truck Box
+              © {new Date().getFullYear()} TruckBox LLC
             </span>
 
               <span className="ed-label mt-1 flex items-center justify-center md:justify-start gap-1">
