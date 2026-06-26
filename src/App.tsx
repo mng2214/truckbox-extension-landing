@@ -2297,7 +2297,6 @@ export function Privacy() {
       <div className="tb-container">
         <Reveal>
           <div className="max-w-2xl">
-            <span className="tb-pill">Legal</span>
             <h2 className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
               Privacy Policy &amp; Terms
             </h2>
