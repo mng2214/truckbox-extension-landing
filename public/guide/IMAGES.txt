@@ -1,0 +1,33 @@
+Truck Box — "Get Started" guide images
+========================================
+
+Drop your screenshots into THIS folder (datemailerlanding/public/guide/)
+using the EXACT filenames below. No code changes needed — the page picks
+them up automatically once the files exist. Until then, each slot shows a
+"Screenshot coming soon" placeholder with its filename.
+
+Recommended: PNG, roughly 16:10 (e.g. 1600×1000). Images are shown with
+"contain", so nothing gets cropped — extra space just fills with the dark
+background.
+
+STEP SCREENSHOTS
+----------------
+01-install.png                       Chrome Web Store "Add to Chrome" page
+02-pin.png                           Pinning the extension (puzzle-piece menu)
+03-dat-search-loads.png              DAT One → Search Loads page
+04-open-popup.png                    Truck Box popup open (tabs visible)
+05-login-connect-gmail.png           Login tab → "Sign in with Google"
+05b-consent-send-email-checkbox.png  Google consent screen — the "send email
+                                     on your behalf" checkbox CHECKED
+06-refresh-dat.png                   Refreshing the DAT page (reload)
+07-email-template.png                Email Template tab filled in
+08-send-email.png                    Sending an email from a load
+
+FEATURE IMAGES (optional — only if you later add images to feature cards)
+------------------------------------------------------------------------
+(The feature cards currently use icons, not images. These names are reserved
+in case you want to add screenshots there later.)
+feature-email-template.png
+feature-map-filter.png
+feature-factoring.png
+feature-stats.png
