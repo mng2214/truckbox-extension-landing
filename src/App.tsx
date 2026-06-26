@@ -2300,10 +2300,6 @@ export function Privacy() {
             <h2 className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
               Privacy Policy &amp; Terms
             </h2>
-            <p className="mt-5 text-lg" style={{ color: "var(--muted)" }}>
-              This page explains what Truck Box does, what information it uses, how Google
-              account access is handled, and the rules for using the service.
-            </p>
             <p className="mt-2 ed-label">Last updated — June 25, 2026</p>
           </div>
         </Reveal>
