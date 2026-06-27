@@ -13,7 +13,9 @@ import Cabinet from "./pages/business/Cabinet";
 import InviteWizard from "./pages/business/InviteWizard";
 import RequestAccess from "./pages/business/RequestAccess";
 
-installPageGuard();
+// Anti-copy / anti-devtools guard runs in production only — kept intact, just
+// skipped during local development so it doesn't block copy/DevTools while working.
+if (import.meta.env.PROD) installPageGuard();
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
