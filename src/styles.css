@@ -247,6 +247,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ------------------------------------------------------------ buttons */
 .ed-btn {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -265,6 +266,7 @@ html.lenis, html.lenis body { height: auto; }
 .ed-btn::before {
   content: "";
   position: absolute; inset: 0;
+  z-index: -1;
   background: var(--ink);
   transform: translateY(101%);
   transition: transform .45s var(--ease);

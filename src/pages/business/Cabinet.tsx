@@ -59,12 +59,10 @@ export default function Cabinet() {
           className="ed-btn mt-auto"
           onClick={() => {
             auth.clearToken();
-            setAuthed(false);
-            setCtx(null);
-            setError(null);
+            window.location.href = "/";
           }}
         >
-          Sign out
+          <span>Sign out</span>
         </button>
       </aside>
       <main className="flex-1 p-10">

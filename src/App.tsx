@@ -46,7 +46,6 @@ const NAV: NavItem[] = [
   { href: "/faq", label: "FAQ", route: true },
   { href: "/privacy", label: "Privacy", route: true },
   { href: "/#contact", label: "Contact" },
-  { href: "/business", label: "Log in", route: true },
 ];
 
 const INSTALL_URL =
@@ -511,9 +510,9 @@ export function Header() {
           </nav>
 
           <div className="hidden md:block">
-            <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
-              <span>Install</span> <ArrowUpRight className="h-4 w-4" />
-            </a>
+            <Link className="ed-btn ed-btn-accent" to="/business">
+              <span>Sign in</span> <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
 
           <button
