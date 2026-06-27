@@ -5,7 +5,7 @@ import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
 import { PhoneVerify } from "../../components/PhoneVerify";
 
-type Step = "loading" | "invalid" | "google" | "phone" | "company" | "redirecting";
+type Step = "loading" | "invalid" | "google" | "wrong" | "phone" | "company" | "redirecting";
 
 export default function InviteWizard() {
   const [params] = useSearchParams();
@@ -13,17 +13,39 @@ export default function InviteWizard() {
   const [step, setStep] = useState<Step>("loading");
   const [company, setCompany] = useState({ companyName: "", mcNumber: "", seats: 1, billingEmail: "" });
   const [error, setError] = useState<string | null>(null);
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [authedEmail, setAuthedEmail] = useState("");
   // Local-test escape hatch: VITE_SKIP_PHONE=true skips the phone-verify step
   // (no Twilio needed). Unset in prod, so the phone step stays by default.
   const afterAuth: Step = import.meta.env.VITE_SKIP_PHONE === "true" ? "company" : "phone";
+
+  const norm = (e: string) => e.trim().toLowerCase();
+
+  // After any sign-in, confirm the signed-in account matches the invite's email
+  // BEFORE letting them fill the form (otherwise onboard fails at submit with 1033).
+  const gateAfterAuth = async (invite: string) => {
+    try {
+      const ctx = await api.get<{ email: string }>("/api/v1/account/context");
+      setAuthedEmail(ctx.email);
+      setStep(norm(ctx.email) === norm(invite) ? afterAuth : "wrong");
+    } catch {
+      auth.clearToken();
+      setStep("google");
+    }
+  };
 
   useEffect(() => {
     if (!token) { setStep("invalid"); return; }
     api
       .get<{ email: string }>(`/api/v1/org/invites/${token}`)
-      .then(() => setStep(auth.isAuthed() ? afterAuth : "google"))
+      .then((r) => {
+        setInviteEmail(r.email);
+        if (auth.isAuthed()) gateAfterAuth(r.email);
+        else setStep("google");
+      })
       .catch(() => setStep("invalid"));
-  }, [token, afterAuth]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [token]);
 
   const submitCompany = async () => {
     setError(null);
@@ -68,7 +90,27 @@ export default function InviteWizard() {
         <p style={{ color: "var(--muted)", marginBottom: "1.5rem", textAlign: "center" }}>
           Sign in with Google to continue.
         </p>
-        <GoogleSignIn onSignedIn={() => setStep(afterAuth)} />
+        <GoogleSignIn onSignedIn={() => gateAfterAuth(inviteEmail)} />
+      </Center>
+    );
+
+  if (step === "wrong")
+    return (
+      <Center>
+        <h1 className="ed-display" style={{ fontSize: "2rem", color: "var(--ink)", marginBottom: "1rem", textAlign: "center" }}>
+          Wrong account
+        </h1>
+        <p style={{ color: "var(--muted)", textAlign: "center", maxWidth: "22rem" }}>
+          This invite is for <strong style={{ color: "var(--ink)" }}>{inviteEmail}</strong>, but you are
+          signed in as <strong style={{ color: "var(--ink)" }}>{authedEmail}</strong>.
+        </p>
+        <button
+          className="ed-btn ed-btn-accent"
+          onClick={() => { auth.clearToken(); setStep("google"); }}
+          style={{ marginTop: "1rem" }}
+        >
+          Sign in as {inviteEmail}
+        </button>
       </Center>
     );
 
