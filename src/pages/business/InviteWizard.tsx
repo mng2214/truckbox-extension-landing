@@ -13,14 +13,17 @@ export default function InviteWizard() {
   const [step, setStep] = useState<Step>("loading");
   const [company, setCompany] = useState({ companyName: "", mcNumber: "", seats: 1, billingEmail: "" });
   const [error, setError] = useState<string | null>(null);
+  // Local-test escape hatch: VITE_SKIP_PHONE=true skips the phone-verify step
+  // (no Twilio needed). Unset in prod, so the phone step stays by default.
+  const afterAuth: Step = import.meta.env.VITE_SKIP_PHONE === "true" ? "company" : "phone";
 
   useEffect(() => {
     if (!token) { setStep("invalid"); return; }
     api
       .get<{ email: string }>(`/api/v1/org/invites/${token}`)
-      .then(() => setStep(auth.isAuthed() ? "phone" : "google"))
+      .then(() => setStep(auth.isAuthed() ? afterAuth : "google"))
       .catch(() => setStep("invalid"));
-  }, [token]);
+  }, [token, afterAuth]);
 
   const submitCompany = async () => {
     setError(null);
@@ -65,7 +68,7 @@ export default function InviteWizard() {
         <p style={{ color: "var(--muted)", marginBottom: "1.5rem", textAlign: "center" }}>
           Sign in with Google to continue.
         </p>
-        <GoogleSignIn onSignedIn={() => setStep("phone")} />
+        <GoogleSignIn onSignedIn={() => setStep(afterAuth)} />
       </Center>
     );
 
