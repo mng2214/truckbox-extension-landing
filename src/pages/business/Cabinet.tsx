@@ -77,21 +77,49 @@ export default function Cabinet() {
   return (
     <div className="min-h-screen flex">
       <aside
-        className="w-56 border-r p-6 flex flex-col gap-2"
+        className="w-60 border-r p-5 flex flex-col gap-1 tb-aside"
         style={{ borderColor: "var(--hairline)" }}
       >
-        <div className="ed-label mb-4">TruckBox</div>
-        {ctx.panels.includes("personal") && (
-          <NavItem label="Overview" active={section === "personal"} onClick={() => setSection("personal")} />
-        )}
-        {isManager && (
-          <NavItem label="Team" active={section === "team"} onClick={() => setSection("team")} />
-        )}
-        {isManager && (
-          <NavItem label="Statistics" active={section === "statistics"} onClick={() => setSection("statistics")} />
-        )}
+        <div
+          className="mb-7 px-1"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "1.15rem",
+            fontWeight: 800,
+            letterSpacing: "-0.01em",
+            color: "var(--ink)",
+          }}
+        >
+          Truck<span style={{ color: "var(--accent)" }}>Box</span>
+        </div>
 
-        <div className="mt-auto flex flex-col items-stretch gap-3 pt-6">
+        <nav className="flex flex-col gap-1">
+          {ctx.panels.includes("personal") && (
+            <NavItem label="Overview" active={section === "personal"} onClick={() => setSection("personal")} />
+          )}
+          {isManager && (
+            <NavItem label="Team" active={section === "team"} onClick={() => setSection("team")} />
+          )}
+          {isManager && (
+            <NavItem label="Statistics" active={section === "statistics"} onClick={() => setSection("statistics")} />
+          )}
+        </nav>
+
+        <div
+          className="mt-auto flex flex-col items-stretch gap-3 pt-5"
+          style={{ borderTop: "1px solid var(--hairline)" }}
+        >
+          <div
+            style={{
+              color: "var(--muted)",
+              fontSize: "0.72rem",
+              textAlign: "center",
+              wordBreak: "break-all",
+              lineHeight: 1.3,
+            }}
+          >
+            {ctx.email}
+          </div>
           <a
             href={SUPPORT_TELEGRAM}
             target="_blank"
@@ -123,8 +151,7 @@ function NavItem({ label, active, onClick }: { label: string; active: boolean; o
   return (
     <button
       onClick={onClick}
-      className="text-left py-2"
-      style={{ color: active ? "var(--ink)" : "var(--muted)", fontWeight: active ? 700 : 400 }}
+      className={"tb-nav" + (active ? " is-active" : "")}
     >
       {label}
     </button>

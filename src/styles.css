@@ -296,6 +296,33 @@ body.tb-cabinet-bg {
   color: var(--ink);
 }
 
+/* cabinet sidebar */
+.tb-aside {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.008));
+  backdrop-filter: blur(6px);
+}
+.tb-nav {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 13px;
+  border-radius: 10px;
+  border-left: 2px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+}
+.tb-nav:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
+.tb-nav.is-active {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--accent);
+}
+
 .ed-btn-accent {
   border-color: transparent;
   background: var(--accent-grad);
