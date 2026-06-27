@@ -26,7 +26,13 @@ export default function InviteWizard() {
     setError(null);
     setStep("redirecting");
     try {
-      await api.post("/api/v1/org/onboard", { token, ...company, seats: Number(company.seats) });
+      await api.post("/api/v1/org/onboard", {
+        token,
+        companyName: company.companyName,
+        mcNumber: company.mcNumber,
+        seats: Number(company.seats),
+        billingEmail: company.billingEmail,
+      });
       const { url } = await api.post<{ url: string }>("/api/v1/manager/team/checkout", { token });
       window.location.href = url;
     } catch (e) {
@@ -196,7 +202,7 @@ export default function InviteWizard() {
         <button
           className="ed-btn ed-btn-accent"
           onClick={submitCompany}
-          disabled={!company.companyName.trim() || !company.mcNumber.trim() || company.seats < 1}
+          disabled={!company.companyName.trim() || !company.mcNumber.trim() || company.seats < 1 || isNaN(company.seats)}
           style={{ marginTop: "0.5rem" }}
         >
           Continue to payment
