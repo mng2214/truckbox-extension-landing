@@ -5,13 +5,29 @@ import type { OrgRole } from "./types";
 type Member = { id: number; email: string; state: string; role: OrgRole };
 type Team = { id: number; name: string; seats: number; members: Member[]; cancelAtPeriodEnd: boolean };
 
+type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
+type Dispatcher = { email: string; today: Win; weekToDate: Win; monthToDate: Win; total: Win };
+type TeamStats = { organizationName: string; seats: number; dispatchers: Dispatcher[] };
+
+// Same basis as the popup: 30s saved per action.
+function timeSaved(w: Win): string {
+  const totalMin = Math.floor(((w.emailsSent + w.mapsOpened + w.callsPlaced) * 30) / 60);
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  if (h <= 0) return `${m}m`;
+  if (m === 0) return `${h}h`;
+  return `${h}h ${m}m`;
+}
+
 export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [team, setTeam] = useState<Team | null>(null);
+  const [stats, setStats] = useState<TeamStats | null>(null);
   const [newEmail, setNewEmail] = useState("");
   const [err, setErr] = useState<string | null>(null);
 
   const load = useCallback(() => {
     api.get<Team>("/api/v1/manager/team").then(setTeam).catch((e) => setErr(e instanceof ApiError ? `Error ${e.code ?? e.status}` : "Could not load team."));
+    api.get<TeamStats>("/api/v1/manager/team-stats").then(setStats).catch(() => setStats(null));
   }, []);
   useEffect(load, [load]);
 
@@ -124,6 +140,60 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
           ))}
         </tbody>
       </table>
+
+      {stats && stats.dispatchers.length > 0 && (
+        <div className="flex flex-col gap-5">
+          <h2 className="ed-display" style={{ fontSize: "1.4rem", color: "var(--ink)" }}>
+            Team activity
+          </h2>
+          {stats.dispatchers.map((d) => (
+            <div
+              key={d.email}
+              style={{ borderTop: "1px solid var(--hairline)", paddingTop: "0.85rem" }}
+            >
+              <div
+                style={{
+                  color: "var(--ink)",
+                  fontWeight: 600,
+                  marginBottom: "0.5rem",
+                  wordBreak: "break-all",
+                }}
+              >
+                {d.email}
+              </div>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr style={{ color: "var(--muted)" }}>
+                    <th className="text-left font-normal py-1"></th>
+                    <th className="text-right font-normal py-1">Emails</th>
+                    <th className="text-right font-normal py-1">Maps</th>
+                    <th className="text-right font-normal py-1">Calls</th>
+                    <th className="text-right font-normal py-1">Time saved</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {(
+                    [
+                      ["Today", d.today],
+                      ["This week", d.weekToDate],
+                      ["This month", d.monthToDate],
+                      ["Total", d.total],
+                    ] as const
+                  ).map(([label, w]) => (
+                    <tr key={label} style={{ borderTop: "1px solid var(--hairline)" }}>
+                      <td className="py-1" style={{ color: "var(--muted)" }}>{label}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{w.emailsSent}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{w.mapsOpened}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{w.callsPlaced}</td>
+                      <td className="text-right py-1" style={{ color: "var(--accent)" }}>{timeSaved(w)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="flex gap-3">
         <button
