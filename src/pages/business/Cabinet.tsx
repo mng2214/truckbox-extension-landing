@@ -6,6 +6,15 @@ import type { AccountContext } from "./types";
 import { Bounce } from "./Bounce";
 import { PersonalPanel } from "./PersonalPanel";
 import { TeamPanel } from "./TeamPanel";
+import { StatsPanel } from "./StatsPanel";
+
+// TODO: replace with the real TruckBox support Telegram handle.
+const SUPPORT_TELEGRAM = "https://t.me/your_handle";
+
+function signOut() {
+  auth.clearToken();
+  window.location.href = "/";
+}
 
 export default function Cabinet() {
   const [ctx, setCtx] = useState<AccountContext | null>(null);
@@ -32,11 +41,13 @@ export default function Cabinet() {
     if (authed) load();
   }, [authed, load]);
 
-  // Hide the marketing Crisp chat widget inside the account cabinet; restore on leave.
+  // Premium dark cabinet background + hide the marketing Crisp chat while mounted.
   useEffect(() => {
     const w = window as unknown as { $crisp?: unknown[] };
+    document.body.classList.add("tb-cabinet-bg");
     w.$crisp?.push(["do", "chat:hide"]);
     return () => {
+      document.body.classList.remove("tb-cabinet-bg");
       w.$crisp?.push(["do", "chat:show"]);
     };
   }, []);
@@ -52,31 +63,52 @@ export default function Cabinet() {
   }
   if (error) return <div className="min-h-screen flex items-center justify-center">{error}</div>;
   if (!ctx) return <div className="min-h-screen flex items-center justify-center">Loading…</div>;
-  if (ctx.verdict === "BOUNCE") return <Bounce reason={ctx.bounceReason ?? "INSTALL"} />;
+  if (ctx.verdict === "BOUNCE")
+    return <Bounce reason={ctx.bounceReason ?? "INSTALL"} onSignOut={signOut} telegram={SUPPORT_TELEGRAM} />;
+
+  const isManager = ctx.panels.includes("team") && !!ctx.org;
 
   return (
     <div className="min-h-screen flex">
-      <aside className="w-56 border-r p-6 flex flex-col gap-2" style={{ borderColor: "var(--hairline)" }}>
+      <aside
+        className="w-56 border-r p-6 flex flex-col gap-2"
+        style={{ borderColor: "var(--hairline)" }}
+      >
         <div className="ed-label mb-4">TruckBox</div>
         {ctx.panels.includes("personal") && (
           <NavItem label="Overview" active={section === "personal"} onClick={() => setSection("personal")} />
         )}
-        {ctx.panels.includes("team") && ctx.org && (
+        {isManager && (
           <NavItem label="Team" active={section === "team"} onClick={() => setSection("team")} />
         )}
-        <button
-          className="ed-btn mt-auto"
-          onClick={() => {
-            auth.clearToken();
-            window.location.href = "/";
-          }}
-        >
-          <span>Sign out</span>
-        </button>
+        {isManager && (
+          <NavItem label="Statistics" active={section === "statistics"} onClick={() => setSection("statistics")} />
+        )}
+
+        <div className="mt-auto flex flex-col items-stretch gap-3 pt-6">
+          <a
+            href={SUPPORT_TELEGRAM}
+            target="_blank"
+            rel="noreferrer"
+            style={{
+              color: "var(--muted)",
+              fontSize: "0.82rem",
+              textAlign: "center",
+              textDecoration: "underline",
+              textUnderlineOffset: "3px",
+            }}
+          >
+            Need help?
+          </a>
+          <button className="ed-btn" style={{ justifyContent: "center", width: "100%" }} onClick={signOut}>
+            <span>Sign out</span>
+          </button>
+        </div>
       </aside>
       <main className="flex-1 p-10">
         {section === "personal" && <PersonalPanel ctx={ctx} />}
         {section === "team" && ctx.org && <TeamPanel onChanged={load} />}
+        {section === "statistics" && isManager && <StatsPanel />}
       </main>
     </div>
   );

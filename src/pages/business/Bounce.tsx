@@ -25,7 +25,15 @@ const COPY: Record<BounceReason, { title: string; body: string; cta: string; hre
   },
 };
 
-export function Bounce({ reason }: { reason: BounceReason }) {
+export function Bounce({
+  reason,
+  onSignOut,
+  telegram,
+}: {
+  reason: BounceReason;
+  onSignOut?: () => void;
+  telegram?: string;
+}) {
   const c = COPY[reason];
   const external = c.href.startsWith("http");
   return (
@@ -36,12 +44,37 @@ export function Bounce({ reason }: { reason: BounceReason }) {
       </p>
       {external ? (
         <a className="ed-btn ed-btn-accent" href={c.href} target="_blank" rel="noreferrer">
-          {c.cta}
+          <span>{c.cta}</span>
         </a>
       ) : (
         <Link className="ed-btn ed-btn-accent" to={c.href}>
-          {c.cta}
+          <span>{c.cta}</span>
         </Link>
+      )}
+
+      {(telegram || onSignOut) && (
+        <div className="flex flex-col items-center gap-3 mt-2">
+          {telegram && (
+            <a
+              href={telegram}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                color: "var(--muted)",
+                fontSize: "0.82rem",
+                textDecoration: "underline",
+                textUnderlineOffset: "3px",
+              }}
+            >
+              Need help?
+            </a>
+          )}
+          {onSignOut && (
+            <button className="ed-btn" style={{ justifyContent: "center" }} onClick={onSignOut}>
+              <span>Sign out</span>
+            </button>
+          )}
+        </div>
       )}
     </div>
   );

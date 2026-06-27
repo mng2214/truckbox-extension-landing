@@ -288,6 +288,14 @@ html.lenis, html.lenis body { height: auto; }
   animation: tb-spin .7s linear infinite;
 }
 
+/* Premium near-black cabinet background (slightly warm-neutral, subtle top glow). */
+body.tb-cabinet-bg {
+  background:
+    radial-gradient(130% 90% at 50% -20%, #18181d 0%, #0e0e12 42%, #0a0a0c 100%) no-repeat fixed,
+    #0a0a0c;
+  color: var(--ink);
+}
+
 .ed-btn-accent {
   border-color: transparent;
   background: var(--accent-grad);
