@@ -11,6 +11,7 @@ import SuccessPage from "./pages/Success";
 import CancelPage from "./pages/Cancel";
 import Cabinet from "./pages/business/Cabinet";
 import InviteWizard from "./pages/business/InviteWizard";
+import RequestAccess from "./pages/business/RequestAccess";
 
 installPageGuard();
 
@@ -27,6 +28,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business" element={<Cabinet />} />
         <Route path="/business/invite" element={<InviteWizard />} />
+        <Route path="/business/request" element={<RequestAccess />} />
         <Route path="*" element={<App />} />
       </Routes>
     </BrowserRouter>

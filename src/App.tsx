@@ -1988,9 +1988,14 @@ function Pricing() {
                 your dispatchers get instant access.
               </p>
             </div>
-            <a className="ed-btn ed-btn-accent shrink-0" href="#contact">
-              <span>Contact us</span> <ArrowUpRight className="h-4 w-4" />
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <Link className="ed-btn ed-btn-accent shrink-0" to="/business/request">
+                <span>Set up a team</span> <ArrowUpRight className="h-4 w-4" />
+              </Link>
+              <a className="ed-btn shrink-0" href="#contact">
+                <span>Contact us</span>
+              </a>
+            </div>
           </div>
         </Reveal>
       </div>
