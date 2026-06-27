@@ -46,6 +46,7 @@ const NAV: NavItem[] = [
   { href: "/faq", label: "FAQ", route: true },
   { href: "/privacy", label: "Privacy", route: true },
   { href: "/#contact", label: "Contact" },
+  { href: "/business", label: "Log in", route: true },
 ];
 
 const INSTALL_URL =
