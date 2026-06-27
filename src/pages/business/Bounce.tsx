@@ -39,7 +39,7 @@ export function Bounce({
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-center px-6">
       <h1 className="ed-display text-[10vw] lg:text-[4rem]">{c.title}</h1>
-      <p className="max-w-md" style={{ color: "var(--muted)" }}>
+      <p className="lg:whitespace-nowrap" style={{ color: "var(--muted)" }}>
         {c.body}
       </p>
       {external ? (
