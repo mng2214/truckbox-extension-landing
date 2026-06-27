@@ -34,6 +34,29 @@ export default function InviteWizard() {
     }
   };
 
+  const signOut = () => {
+    auth.clearToken();
+    setAuthedEmail("");
+    setStep("google");
+  };
+
+  const signOutLink =
+    authedEmail !== "" ? (
+      <button
+        onClick={signOut}
+        style={{
+          background: "none",
+          border: "none",
+          color: "var(--muted)",
+          fontSize: "0.78rem",
+          cursor: "pointer",
+          marginTop: "0.5rem",
+        }}
+      >
+        Signed in as {authedEmail} — Sign out
+      </button>
+    ) : null;
+
   useEffect(() => {
     if (!token) { setStep("invalid"); return; }
     api
@@ -118,6 +141,7 @@ export default function InviteWizard() {
     return (
       <Center>
         <PhoneVerify onVerified={() => setStep("company")} />
+        {signOutLink}
       </Center>
     );
 
@@ -252,6 +276,8 @@ export default function InviteWizard() {
         >
           Continue to payment
         </button>
+
+        {signOutLink}
       </div>
     </Center>
   );
