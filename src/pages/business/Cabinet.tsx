@@ -43,7 +43,7 @@ export default function Cabinet() {
   }
   if (error) return <div className="min-h-screen flex items-center justify-center">{error}</div>;
   if (!ctx) return <div className="min-h-screen flex items-center justify-center">Loading…</div>;
-  if (ctx.verdict === "BOUNCE") return <Bounce reason={ctx.bounceReason!} />;
+  if (ctx.verdict === "BOUNCE") return <Bounce reason={ctx.bounceReason ?? "INSTALL"} />;
 
   return (
     <div className="min-h-screen flex">
@@ -52,7 +52,7 @@ export default function Cabinet() {
         {ctx.panels.includes("personal") && (
           <NavItem label="Overview" active={section === "personal"} onClick={() => setSection("personal")} />
         )}
-        {ctx.panels.includes("team") && (
+        {ctx.panels.includes("team") && ctx.org && (
           <NavItem label="Team" active={section === "team"} onClick={() => setSection("team")} />
         )}
         <button
@@ -60,6 +60,8 @@ export default function Cabinet() {
           onClick={() => {
             auth.clearToken();
             setAuthed(false);
+            setCtx(null);
+            setError(null);
           }}
         >
           Sign out
