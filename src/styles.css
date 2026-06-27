@@ -273,6 +273,20 @@ html.lenis, html.lenis body { height: auto; }
 }
 .ed-btn:hover { color: var(--bg); border-color: var(--ink); }
 .ed-btn:hover::before { transform: translateY(0); }
+.ed-btn:disabled { opacity: .45; cursor: not-allowed; }
+.ed-btn:disabled::before { transform: translateY(101%); }
+
+/* small inline loading spinner (cabinet actions) */
+@keyframes tb-spin { to { transform: rotate(360deg); } }
+.tb-spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--hairline);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: tb-spin .7s linear infinite;
+}
 
 .ed-btn-accent {
   border-color: transparent;

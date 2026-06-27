@@ -24,6 +24,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [stats, setStats] = useState<TeamStats | null>(null);
   const [newEmail, setNewEmail] = useState("");
   const [err, setErr] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
 
   const load = useCallback(() => {
     api.get<Team>("/api/v1/manager/team").then(setTeam).catch((e) => setErr(e instanceof ApiError ? `Error ${e.code ?? e.status}` : "Could not load team."));
@@ -31,14 +32,20 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   }, []);
   useEffect(load, [load]);
 
+  // Serializes mutations and blocks the controls while one is in flight, so a
+  // seat +/- (or any action) can't be fired repeatedly before it resolves.
   const guard = async (fn: () => Promise<unknown>) => {
+    if (busy) return;
     setErr(null);
+    setBusy(true);
     try {
       await fn();
       load();
       onChanged();
     } catch (e) {
       setErr(e instanceof ApiError ? `Error ${e.code ?? e.status}` : "Error");
+    } finally {
+      setBusy(false);
     }
   };
 
@@ -54,17 +61,20 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             className="ed-btn"
             aria-label="Remove seat"
             onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats - 1 }))}
-            disabled={team.seats <= team.members.length}
+            disabled={busy || team.seats <= team.members.length}
           >
-            −
+            <span>−</span>
           </button>
-          <span style={{ color: "var(--ink)" }}>{team.seats} seats</span>
+          <span style={{ color: "var(--ink)", display: "inline-flex", alignItems: "center", gap: "0.5rem", minWidth: "5.5rem", justifyContent: "center" }}>
+            {busy ? <span className="tb-spinner" aria-label="Updating" /> : `${team.seats} seats`}
+          </span>
           <button
             className="ed-btn"
             aria-label="Add seat"
             onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats + 1 }))}
+            disabled={busy}
           >
-            +
+            <span>+</span>
           </button>
         </div>
       </header>
@@ -88,8 +98,8 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
           onChange={(e) => setNewEmail(e.target.value)}
           required
         />
-        <button className="ed-btn ed-btn-accent" type="submit">
-          Add member
+        <button className="ed-btn ed-btn-accent" type="submit" disabled={busy}>
+          <span>{busy ? "Working…" : "Add member"}</span>
         </button>
       </form>
 
@@ -108,11 +118,13 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
               <td className="py-3" style={{ color: "var(--ink)" }}>{m.email}</td>
               <td style={{ color: "var(--muted)" }}>{m.state}</td>
               <td style={{ color: "var(--muted)" }}>{m.role}</td>
-              <td className="text-right" style={{ whiteSpace: "nowrap" }}>
+              <td className="text-right py-2" style={{ whiteSpace: "nowrap" }}>
                 {m.role !== "OWNER" && (
                   <>
                     <button
                       className="ed-btn"
+                      style={{ padding: "6px 14px", fontSize: "0.6rem" }}
+                      disabled={busy}
                       onClick={() =>
                         guard(() =>
                           api.patch("/api/v1/manager/team/members/role", {
@@ -122,16 +134,17 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
                         )
                       }
                     >
-                      {m.role === "MANAGER" ? "Make member" : "Make manager"}
+                      <span>{m.role === "MANAGER" ? "Make member" : "Make manager"}</span>
                     </button>
                     <button
                       className="ed-btn"
-                      style={{ marginLeft: "0.5rem", color: "var(--danger, #c0392b)" }}
+                      style={{ marginLeft: "0.5rem", padding: "6px 14px", fontSize: "0.6rem", color: "var(--danger, #c0392b)" }}
+                      disabled={busy}
                       onClick={() =>
                         guard(() => api.del(`/api/v1/manager/team/members?email=${encodeURIComponent(m.email)}`))
                       }
                     >
-                      Remove
+                      <span>Remove</span>
                     </button>
                   </>
                 )}

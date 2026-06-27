@@ -32,6 +32,15 @@ export default function Cabinet() {
     if (authed) load();
   }, [authed, load]);
 
+  // Hide the marketing Crisp chat widget inside the account cabinet; restore on leave.
+  useEffect(() => {
+    const w = window as unknown as { $crisp?: unknown[] };
+    w.$crisp?.push(["do", "chat:hide"]);
+    return () => {
+      w.$crisp?.push(["do", "chat:show"]);
+    };
+  }, []);
+
   if (!authed) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-8">
