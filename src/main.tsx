@@ -9,6 +9,7 @@ import GuidePage from "./pages/Guide";
 import FAQPage from "./pages/FAQ";
 import SuccessPage from "./pages/Success";
 import CancelPage from "./pages/Cancel";
+import Cabinet from "./pages/business/Cabinet";
 
 installPageGuard();
 
@@ -23,6 +24,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
+        <Route path="/business" element={<Cabinet />} />
         <Route path="*" element={<App />} />
       </Routes>
     </BrowserRouter>
