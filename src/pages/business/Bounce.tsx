@@ -62,8 +62,7 @@ export function Bounce({
               style={{
                 color: "var(--muted)",
                 fontSize: "0.82rem",
-                textDecoration: "underline",
-                textUnderlineOffset: "3px",
+                textDecoration: "none",
               }}
             >
               Need help?

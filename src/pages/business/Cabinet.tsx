@@ -100,8 +100,7 @@ export default function Cabinet() {
               color: "var(--muted)",
               fontSize: "0.82rem",
               textAlign: "center",
-              textDecoration: "underline",
-              textUnderlineOffset: "3px",
+              textDecoration: "none",
             }}
           >
             Need help?
