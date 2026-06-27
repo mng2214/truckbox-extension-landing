@@ -10,6 +10,7 @@ type MyStats = Record<string, unknown>;
 export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   const [stats, setStats] = useState<MyStats | null>(null);
   const [statsError, setStatsError] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     api
@@ -22,14 +23,22 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   }, []);
 
   const openPortal = async () => {
-    const { url } = await api.post<{ url: string }>("/api/v1/billing/portal");
-    window.location.href = url;
+    try {
+      const { url } = await api.post<{ url: string }>("/api/v1/billing/portal");
+      window.location.href = url;
+    } catch {
+      setError("Could not open billing portal. Please try again.");
+    }
   };
 
   const cancel = async () => {
     if (!confirm("Cancel your subscription at the end of the current period?")) return;
-    await api.post("/api/v1/billing/cancel-subscription");
-    alert("Your subscription will cancel at period end.");
+    try {
+      await api.post("/api/v1/billing/cancel-subscription");
+      alert("Your subscription will cancel at period end.");
+    } catch {
+      setError("Could not cancel subscription. Please try again.");
+    }
   };
 
   const statEntries = stats ? Object.entries(stats) : [];
@@ -89,6 +98,9 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
             Cancel subscription
           </button>
         </div>
+        {error && (
+          <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>
+        )}
       </div>
     </section>
   );

@@ -20,6 +20,11 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
   if (res.status === 204) return undefined as T;
   const text = await res.text();
   const json = text ? JSON.parse(text) : undefined;
+  if (res.status === 401) {
+    auth.clearToken();
+    window.location.href = "/business";
+    throw new ApiError(401, json?.code, json?.message);
+  }
   if (!res.ok) throw new ApiError(res.status, json?.code, json?.message);
   return json as T;
 }

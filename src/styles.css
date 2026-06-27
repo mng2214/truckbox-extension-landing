@@ -55,6 +55,9 @@ select,
   --accent-3: #8b5cf6;
   --accent-grad: linear-gradient(125deg, #8b5cf6 0%, #6366f1 48%, #3b82f6 100%);
 
+  /* semantic state tokens */
+  --danger: #ef5a5a;
+
   /* legacy compatibility tokens (privacy/terms reuse these) */
   --hairline: var(--line);
   --pri: var(--accent);
