@@ -11,7 +11,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [err, setErr] = useState<string | null>(null);
 
   const load = useCallback(() => {
-    api.get<Team>("/api/v1/manager/team").then(setTeam).catch(() => setErr("Could not load team."));
+    api.get<Team>("/api/v1/manager/team").then(setTeam).catch((e) => setErr(e instanceof ApiError ? `Error ${e.code ?? e.status}` : "Could not load team."));
   }, []);
   useEffect(load, [load]);
 
@@ -57,9 +57,9 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
 
       <form
         className="flex gap-3"
-        onSubmit={(e) => {
+        onSubmit={async (e) => {
           e.preventDefault();
-          guard(() => api.post("/api/v1/manager/team/members", { emails: [newEmail] }));
+          await guard(() => api.post("/api/v1/manager/team/members", { emails: [newEmail] }));
           setNewEmail("");
         }}
       >
