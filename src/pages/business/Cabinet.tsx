@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { api, ApiError } from "../../lib/api";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
@@ -21,12 +21,18 @@ export default function Cabinet() {
   const [authed, setAuthed] = useState(auth.isAuthed());
   const [section, setSection] = useState("personal");
   const [error, setError] = useState<string | null>(null);
+  // Pick the default tab only on the first load; later refreshes (e.g. after a
+  // seat/member change via onChanged) must keep the user on their current tab.
+  const sectionInit = useRef(false);
 
   const load = useCallback(async () => {
     try {
       const c = await api.get<AccountContext>("/api/v1/account/context");
       setCtx(c);
-      setSection(c.panels[0] ?? "personal");
+      if (!sectionInit.current) {
+        setSection(c.panels[0] ?? "personal");
+        sectionInit.current = true;
+      }
     } catch (e) {
       if (e instanceof ApiError && e.status === 401) {
         auth.clearToken();
