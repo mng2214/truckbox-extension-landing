@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
 
 type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
-type Dispatcher = { email: string; today: Win; weekToDate: Win; monthToDate: Win; total: Win };
+type PlatformCounts = { platform: string; emailsSent: number; mapsOpened: number; callsPlaced: number };
+type Dispatcher = {
+  email: string;
+  today: Win;
+  weekToDate: Win;
+  monthToDate: Win;
+  total: Win;
+  totalPlatforms: PlatformCounts[];
+};
 type TeamStats = { organizationName: string; seats: number; dispatchers: Dispatcher[] };
 
 // Same basis as the popup: 30s saved per action.
@@ -85,6 +93,31 @@ export function StatsPanel() {
                 ))}
               </tbody>
             </table>
+
+            {d.totalPlatforms.length > 0 && (
+              <table className="w-full text-sm mt-3">
+                <thead>
+                  <tr style={{ color: "var(--muted)" }}>
+                    <th className="text-left font-normal py-1" style={{ fontStyle: "italic" }}>
+                      By platform · all time
+                    </th>
+                    <th className="text-right font-normal py-1">Emails</th>
+                    <th className="text-right font-normal py-1">Maps</th>
+                    <th className="text-right font-normal py-1">Calls</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {d.totalPlatforms.map((p) => (
+                    <tr key={p.platform} style={{ borderTop: "1px solid var(--hairline)" }}>
+                      <td className="py-1" style={{ color: "var(--muted)" }}>{p.platform}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.emailsSent}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.mapsOpened}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.callsPlaced}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
           </div>
         ))
       )}
