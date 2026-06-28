@@ -37,11 +37,38 @@ export function StatsPanel() {
   if (err) return <p style={{ color: "var(--danger, #c0392b)" }}>{err}</p>;
   if (!stats) return <div style={{ color: "var(--muted)" }}>Loading…</div>;
 
+  // Grand total across every team member (all-time).
+  const grand: Win = stats.dispatchers.reduce(
+    (a, d) => ({
+      emailsSent: a.emailsSent + d.total.emailsSent,
+      mapsOpened: a.mapsOpened + d.total.mapsOpened,
+      callsPlaced: a.callsPlaced + d.total.callsPlaced,
+    }),
+    { emailsSent: 0, mapsOpened: 0, callsPlaced: 0 }
+  );
+
   return (
     <section className="flex flex-col gap-6">
       <h1 className="ed-display text-[6vw] lg:text-[2.5rem]" style={{ color: "var(--ink)" }}>
         Statistics
       </h1>
+
+      {stats.dispatchers.length > 0 && (
+        <div className="flex flex-col gap-3">
+          <h2
+            className="text-xs font-semibold uppercase tracking-widest"
+            style={{ color: "var(--muted)" }}
+          >
+            Whole team · all time
+          </h2>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <StatCard label="Total emails" value={String(grand.emailsSent)} />
+            <StatCard label="Total maps" value={String(grand.mapsOpened)} />
+            <StatCard label="Total calls" value={String(grand.callsPlaced)} />
+            <StatCard label="Grand total time saved" value={timeSaved(grand)} accent />
+          </div>
+        </div>
+      )}
 
       {stats.dispatchers.length === 0 ? (
         <p style={{ color: "var(--muted)" }}>
@@ -122,5 +149,21 @@ export function StatsPanel() {
         ))
       )}
     </section>
+  );
+}
+
+function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="flex flex-col gap-1 p-4 rounded-lg border" style={{ borderColor: "var(--hairline)" }}>
+      <span
+        className="text-xs font-semibold uppercase tracking-widest"
+        style={{ color: "var(--muted)" }}
+      >
+        {label}
+      </span>
+      <span className="text-2xl font-bold" style={{ color: accent ? "var(--accent)" : "var(--ink)" }}>
+        {value}
+      </span>
+    </div>
   );
 }
