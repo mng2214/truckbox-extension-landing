@@ -129,37 +129,12 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
         ) : statsError ? (
           <p style={{ color: "var(--muted)" }}>Stats unavailable.</p>
         ) : stats ? (
-          <>
-            <div className="flex flex-wrap gap-x-12 gap-y-4">
-              <StatLine label="Emails sent" value={String(stats.emailSentCount)} />
-              <StatLine label="Maps opened" value={String(stats.mapViewedCount)} />
-              <StatLine label="Calls placed" value={String(stats.phoneCallCount)} />
-              <StatLine label="Time saved" value={fmtTimeSaved(totalActions)} accent />
-            </div>
-
-            {stats.platforms.length > 0 && (
-              <table className="w-full text-sm mt-6">
-                <thead>
-                  <tr style={{ color: "var(--muted)" }}>
-                    <th className="text-left font-normal py-1">Platform</th>
-                    <th className="text-right font-normal py-1">Emails</th>
-                    <th className="text-right font-normal py-1">Maps</th>
-                    <th className="text-right font-normal py-1">Calls</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {stats.platforms.map((p) => (
-                    <tr key={p.platform} style={{ borderTop: "1px solid var(--hairline)" }}>
-                      <td className="py-1" style={{ color: "var(--ink)" }}>{p.platform}</td>
-                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.emailSentCount}</td>
-                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.mapViewedCount}</td>
-                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.phoneCallCount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </>
+          <div className="flex flex-wrap gap-x-12 gap-y-4">
+            <StatLine label="Emails sent" value={String(stats.emailSentCount)} />
+            <StatLine label="Maps opened" value={String(stats.mapViewedCount)} />
+            <StatLine label="Calls placed" value={String(stats.phoneCallCount)} />
+            <StatLine label="Time saved" value={fmtTimeSaved(totalActions)} accent />
+          </div>
         ) : null}
       </div>
 
