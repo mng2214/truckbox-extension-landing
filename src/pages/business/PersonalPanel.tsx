@@ -130,11 +130,11 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
           <p style={{ color: "var(--muted)" }}>Stats unavailable.</p>
         ) : stats ? (
           <>
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-              <StatCard label="Emails sent" value={String(stats.emailSentCount)} />
-              <StatCard label="Maps opened" value={String(stats.mapViewedCount)} />
-              <StatCard label="Calls placed" value={String(stats.phoneCallCount)} />
-              <StatCard label="Time saved" value={fmtTimeSaved(totalActions)} accent />
+            <div className="flex flex-wrap gap-x-12 gap-y-4">
+              <StatLine label="Emails sent" value={String(stats.emailSentCount)} />
+              <StatLine label="Maps opened" value={String(stats.mapViewedCount)} />
+              <StatLine label="Calls placed" value={String(stats.phoneCallCount)} />
+              <StatLine label="Time saved" value={fmtTimeSaved(totalActions)} accent />
             </div>
 
             {stats.platforms.length > 0 && (
@@ -193,6 +193,22 @@ function StatCard({ label, value, accent }: { label: string; value: string; acce
       className="flex flex-col gap-1 p-4 rounded-lg border"
       style={{ borderColor: "var(--hairline)" }}
     >
+      <span
+        className="text-xs font-semibold uppercase tracking-widest"
+        style={{ color: "var(--muted)" }}
+      >
+        {label}
+      </span>
+      <span className="text-2xl font-bold" style={{ color: accent ? "var(--accent)" : "var(--ink)" }}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function StatLine({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
+  return (
+    <div className="flex flex-col gap-1">
       <span
         className="text-xs font-semibold uppercase tracking-widest"
         style={{ color: "var(--muted)" }}
