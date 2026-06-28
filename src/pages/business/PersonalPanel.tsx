@@ -2,10 +2,28 @@ import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
 import type { AccountContext } from "./types";
 
-// TODO: map MyStatsResponse fields once backend shape confirmed
-// The backend shape of GET /api/v1/analytics/my-stats is not yet known.
-// We render the stats generically using Object.entries until the real fields are confirmed.
-type MyStats = Record<string, unknown>;
+type PlatformStats = {
+  platform: string;
+  emailSentCount: number;
+  mapViewedCount: number;
+  phoneCallCount: number;
+};
+type MyStats = {
+  emailSentCount: number;
+  mapViewedCount: number;
+  phoneCallCount: number;
+  platforms: PlatformStats[];
+};
+
+// Same basis as the popup: 30s saved per action.
+function fmtTimeSaved(actions: number): string {
+  const totalMin = Math.floor((actions * 30) / 60);
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  if (h <= 0) return `${m}m`;
+  if (m === 0) return `${h}h`;
+  return `${h}h ${m}m`;
+}
 
 export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   const [stats, setStats] = useState<MyStats | null>(null);
@@ -16,10 +34,7 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     api
       .get<MyStats>("/api/v1/analytics/my-stats")
       .then(setStats)
-      .catch(() => {
-        setStats({});
-        setStatsError(true);
-      });
+      .catch(() => setStatsError(true));
   }, []);
 
   const openPortal = async () => {
@@ -41,7 +56,9 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     }
   };
 
-  const statEntries = stats ? Object.entries(stats) : [];
+  const totalActions = stats
+    ? stats.emailSentCount + stats.mapViewedCount + stats.phoneCallCount
+    : 0;
 
   return (
     <section className="flex flex-col gap-8">
@@ -60,24 +77,43 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
         >
           Your activity
         </h2>
-        {stats === null ? (
+        {!stats && !statsError ? (
           <p style={{ color: "var(--muted)" }}>Loading stats…</p>
         ) : statsError ? (
           <p style={{ color: "var(--muted)" }}>Stats unavailable.</p>
-        ) : statEntries.length === 0 ? (
-          <p style={{ color: "var(--muted)" }}>No stats yet.</p>
-        ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            {/* TODO: map MyStatsResponse fields once backend shape confirmed */}
-            {statEntries.map(([key, value]) => (
-              <StatCard
-                key={key}
-                label={key.replace(/_/g, " ")}
-                value={String(value ?? "—")}
-              />
-            ))}
-          </div>
-        )}
+        ) : stats ? (
+          <>
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+              <StatCard label="Emails sent" value={String(stats.emailSentCount)} />
+              <StatCard label="Maps opened" value={String(stats.mapViewedCount)} />
+              <StatCard label="Calls placed" value={String(stats.phoneCallCount)} />
+              <StatCard label="Time saved" value={fmtTimeSaved(totalActions)} accent />
+            </div>
+
+            {stats.platforms.length > 0 && (
+              <table className="w-full text-sm mt-6">
+                <thead>
+                  <tr style={{ color: "var(--muted)" }}>
+                    <th className="text-left font-normal py-1">Platform</th>
+                    <th className="text-right font-normal py-1">Emails</th>
+                    <th className="text-right font-normal py-1">Maps</th>
+                    <th className="text-right font-normal py-1">Calls</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {stats.platforms.map((p) => (
+                    <tr key={p.platform} style={{ borderTop: "1px solid var(--hairline)" }}>
+                      <td className="py-1" style={{ color: "var(--ink)" }}>{p.platform}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.emailSentCount}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.mapViewedCount}</td>
+                      <td className="text-right py-1" style={{ color: "var(--ink)" }}>{p.phoneCallCount}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </>
+        ) : null}
       </div>
 
       <div
@@ -92,21 +128,19 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
         </h2>
         <div className="flex gap-3 flex-wrap">
           <button className="ed-btn ed-btn-accent" onClick={openPortal}>
-            Billing &amp; invoices
+            <span>Billing &amp; invoices</span>
           </button>
           <button className="ed-btn" onClick={cancel}>
-            Cancel subscription
+            <span>Cancel subscription</span>
           </button>
         </div>
-        {error && (
-          <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>
-        )}
+        {error && <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>}
       </div>
     </section>
   );
 }
 
-function StatCard({ label, value }: { label: string; value: string }) {
+function StatCard({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
     <div
       className="flex flex-col gap-1 p-4 rounded-lg border"
@@ -118,10 +152,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
       >
         {label}
       </span>
-      <span
-        className="text-2xl font-bold"
-        style={{ color: "var(--ink)" }}
-      >
+      <span className="text-2xl font-bold" style={{ color: accent ? "var(--accent)" : "var(--ink)" }}>
         {value}
       </span>
     </div>
