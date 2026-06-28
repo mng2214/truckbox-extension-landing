@@ -306,7 +306,7 @@ body.tb-cabinet-bg {
   width: 100%;
   text-align: left;
   padding: 9px 13px;
-  border-radius: 10px;
+  border-radius: 0;
   border-left: 2px solid transparent;
   font-family: var(--font-mono);
   font-size: 0.72rem;
