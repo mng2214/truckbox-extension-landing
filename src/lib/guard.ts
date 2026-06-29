@@ -1,18 +1,4 @@
-/**
- * Lightweight "look, don't touch" guard for the landing page.
- *
- * This is a *cosmetic deterrent only* — it discourages casual right-click /
- * copy / DevTools poking. It is NOT security: client code always ships to the
- * browser and any motivated user bypasses this in seconds (browser menu,
- * view-source:, disabling JS, curl, etc.). Kept intentionally non-aggressive —
- * no infinite `debugger`, no DevTools-open detection — so it never lags the
- * page or fights legitimate users.
- *
- * Form fields (inputs / textareas / anything contentEditable) are always
- * exempt so the contact form keeps working — typing, selecting, and pasting.
- */
 
-/** True when the event target is (or sits inside) an editable field. */
 function isEditable(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
   if (!el || !el.closest) return false;
@@ -22,7 +8,6 @@ function isEditable(target: EventTarget | null): boolean {
 export function installPageGuard(): void {
   if (typeof window === "undefined") return;
 
-  // Block the right-click context menu (except in form fields).
   window.addEventListener(
     "contextmenu",
     (e) => {
@@ -31,14 +16,11 @@ export function installPageGuard(): void {
     { capture: true }
   );
 
-  // Block text copy / cut (except from form fields).
   const blockClipboard = (e: ClipboardEvent) => {
     if (!isEditable(e.target)) e.preventDefault();
   };
   window.addEventListener("copy", blockClipboard, { capture: true });
   window.addEventListener("cut", blockClipboard, { capture: true });
-
-  // Block text selection via drag (except in form fields).
   window.addEventListener(
     "selectstart",
     (e) => {
@@ -47,7 +29,6 @@ export function installPageGuard(): void {
     { capture: true }
   );
 
-  // Block image dragging.
   window.addEventListener(
     "dragstart",
     (e) => {
@@ -56,7 +37,6 @@ export function installPageGuard(): void {
     { capture: true }
   );
 
-  // Block common DevTools / view-source keyboard shortcuts.
   window.addEventListener(
     "keydown",
     (e) => {
@@ -74,4 +54,73 @@ export function installPageGuard(): void {
     },
     { capture: true }
   );
+}
+
+export function installDevtoolsDetector(): void {
+  if (typeof window === "undefined") return;
+
+  const WIDTH_GAP = 160;
+
+  let overlay: HTMLDivElement | null = null;
+
+  const show = () => {
+    if (overlay) return;
+    const el = document.createElement("div");
+    el.setAttribute("data-tb-guard", "");
+    el.style.cssText = [
+      "position:fixed",
+      "inset:0",
+      "z-index:2147483647",
+      "display:flex",
+      "align-items:center",
+      "justify-content:center",
+      "text-align:center",
+      "padding:24px",
+      "background:rgba(10,10,12,0.96)",
+      "backdrop-filter:blur(10px)",
+      "-webkit-backdrop-filter:blur(10px)",
+      "color:#f5f5f7",
+      "font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif",
+    ].join(";");
+    el.innerHTML =
+      '<div style="max-width:420px">' +
+      '<div style="font-size:1.15rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:10px">Developer tools detected</div>' +
+      '<div style="opacity:.7;font-size:.92rem;line-height:1.55">Please close your browser’s developer tools to continue using TruckBox.</div>' +
+      "</div>";
+    document.documentElement.appendChild(el);
+    document.body.style.overflow = "hidden";
+    overlay = el;
+  };
+
+  const hide = () => {
+    if (!overlay) return;
+    overlay.remove();
+    overlay = null;
+    document.body.style.overflow = "";
+  };
+
+  let consoleSawIt = false;
+  const probe = document.createElement("div");
+  Object.defineProperty(probe, "id", {
+    get() {
+      consoleSawIt = true;
+      return "";
+    },
+  });
+
+  const check = () => {
+    const widthOpen = window.outerWidth - window.innerWidth > WIDTH_GAP;
+
+    consoleSawIt = false;
+    console.log(probe);
+    console.clear();
+    const consoleOpen = consoleSawIt;
+
+    if (widthOpen || consoleOpen) show();
+    else hide();
+  };
+
+  window.addEventListener("resize", check, { passive: true });
+  window.setInterval(check, 1000);
+  check();
 }

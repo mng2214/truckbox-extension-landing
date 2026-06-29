@@ -510,19 +510,28 @@ export function Header() {
           </nav>
 
           <div className="hidden md:block">
-            <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
-              <span>Install</span> <ArrowUpRight className="h-4 w-4" />
-            </a>
+            <Link className="ed-btn ed-btn-accent" to="/business">
+              <span>Sign in</span> <ArrowUpRight className="h-4 w-4" />
+            </Link>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            className="md:hidden ed-label flex items-center gap-2"
-          >
-            Menu <Menu className="h-5 w-5" />
-          </button>
+          <div className="md:hidden flex items-center gap-3">
+            <Link
+              className="ed-btn ed-btn-accent"
+              style={{ padding: "9px 16px", letterSpacing: "0.1em", whiteSpace: "nowrap" }}
+              to="/business"
+            >
+              <span>Sign in</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              className="ed-label flex items-center gap-2"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </header>
 
@@ -1988,9 +1997,14 @@ function Pricing() {
                 your dispatchers get instant access.
               </p>
             </div>
-            <a className="ed-btn ed-btn-accent shrink-0" href="#contact">
-              <span>Contact us</span> <ArrowUpRight className="h-4 w-4" />
-            </a>
+            <div className="flex flex-wrap gap-3">
+              <Link className="ed-btn ed-btn-accent shrink-0" to="/business/request">
+                <span>Set up a team</span> <ArrowUpRight className="h-4 w-4" />
+              </Link>
+              <a className="ed-btn shrink-0" href="#contact">
+                <span>Contact us</span>
+              </a>
+            </div>
           </div>
         </Reveal>
       </div>

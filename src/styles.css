@@ -55,6 +55,9 @@ select,
   --accent-3: #8b5cf6;
   --accent-grad: linear-gradient(125deg, #8b5cf6 0%, #6366f1 48%, #3b82f6 100%);
 
+  /* semantic state tokens */
+  --danger: #ef5a5a;
+
   /* legacy compatibility tokens (privacy/terms reuse these) */
   --hairline: var(--line);
   --pri: var(--accent);
@@ -244,6 +247,7 @@ html.lenis, html.lenis body { height: auto; }
 /* ------------------------------------------------------------ buttons */
 .ed-btn {
   position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -262,12 +266,122 @@ html.lenis, html.lenis body { height: auto; }
 .ed-btn::before {
   content: "";
   position: absolute; inset: 0;
+  z-index: -1;
   background: var(--ink);
   transform: translateY(101%);
   transition: transform .45s var(--ease);
 }
 .ed-btn:hover { color: var(--bg); border-color: var(--ink); }
 .ed-btn:hover::before { transform: translateY(0); }
+.ed-btn:disabled { opacity: .45; cursor: not-allowed; }
+.ed-btn:disabled::before { transform: translateY(101%); }
+
+/* small inline loading spinner (cabinet actions) */
+@keyframes tb-spin { to { transform: rotate(360deg); } }
+.tb-spinner {
+  display: inline-block;
+  width: 15px;
+  height: 15px;
+  border: 2px solid var(--hairline);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: tb-spin .7s linear infinite;
+}
+
+/* Premium near-black cabinet background (slightly warm-neutral, subtle top glow). */
+body.tb-cabinet-bg {
+  background:
+    radial-gradient(130% 90% at 50% -20%, #18181d 0%, #0e0e12 42%, #0a0a0c 100%) no-repeat fixed,
+    #0a0a0c;
+  color: var(--ink);
+}
+
+/* cabinet sidebar */
+.tb-aside {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.008));
+  backdrop-filter: blur(6px);
+}
+.tb-nav {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 13px;
+  border-radius: 0;
+  border-left: 2px solid transparent;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .25s var(--ease), background .25s var(--ease), border-color .25s var(--ease);
+}
+.tb-nav:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
+.tb-nav.is-active {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+  border-left-color: var(--accent);
+}
+
+/* cabinet mobile top bar — shown only below the md breakpoint. Visibility is
+   handled here (not via Tailwind's md:hidden) because this rule sets `display`
+   in unlayered CSS, which would otherwise win over the layered utility. */
+.tb-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 56px;
+  padding: 0 16px;
+  padding-left: max(16px, env(safe-area-inset-left));
+  padding-right: max(16px, env(safe-area-inset-right));
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), rgba(255, 255, 255, 0.008)), #0a0a0c;
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--hairline);
+}
+@media (min-width: 768px) {
+  .tb-topbar { display: none; }
+}
+
+/* square icon button used in the top bar + drawer */
+.tb-icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid var(--hairline);
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .2s var(--ease), border-color .2s var(--ease);
+}
+.tb-icon-btn:hover { background: rgba(255, 255, 255, 0.07); }
+
+/* cabinet mobile off-canvas drawer */
+.tb-drawer-scrim {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(2px);
+}
+.tb-drawer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 61;
+  width: min(82vw, 300px);
+  border-right: 1px solid var(--hairline);
+  padding-top: max(20px, env(safe-area-inset-top));
+  padding-bottom: max(20px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+}
 
 .ed-btn-accent {
   border-color: transparent;
