@@ -11,7 +11,6 @@ type Dispatcher = {
 };
 type TeamStats = { organizationName: string; seats: number; dispatchers: Dispatcher[] };
 
-// Same basis as the popup: 30s saved per action.
 function timeSaved(w: Win): string {
   const totalMin = Math.floor(((w.emailsSent + w.mapsOpened + w.callsPlaced) * 30) / 60);
   const h = Math.floor(totalMin / 60);
@@ -35,7 +34,6 @@ export function StatsPanel() {
   if (err) return <p style={{ color: "var(--danger, #c0392b)" }}>{err}</p>;
   if (!stats) return <div style={{ color: "var(--muted)" }}>Loading…</div>;
 
-  // Grand total across every team member (all-time).
   const grand: Win = stats.dispatchers.reduce(
     (a, d) => ({
       emailsSent: a.emailsSent + d.total.emailsSent,
@@ -89,7 +87,8 @@ export function StatsPanel() {
             >
               {d.email}
             </div>
-            <table className="w-full text-sm">
+            <div className="overflow-x-auto">
+            <table className="w-full text-sm" style={{ minWidth: "26rem" }}>
               <thead>
                 <tr style={{ color: "var(--muted)" }}>
                   <th className="text-left font-normal py-1"></th>
@@ -118,6 +117,7 @@ export function StatsPanel() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         ))
       )}

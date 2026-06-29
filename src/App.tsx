@@ -515,14 +515,23 @@ export function Header() {
             </Link>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setOpen(true)}
-            aria-label="Open menu"
-            className="md:hidden ed-label flex items-center gap-2"
-          >
-            Menu <Menu className="h-5 w-5" />
-          </button>
+          <div className="md:hidden flex items-center gap-3">
+            <Link
+              className="ed-btn ed-btn-accent"
+              style={{ padding: "9px 16px", letterSpacing: "0.1em", whiteSpace: "nowrap" }}
+              to="/business"
+            >
+              <span>Sign in</span>
+            </Link>
+            <button
+              type="button"
+              onClick={() => setOpen(true)}
+              aria-label="Open menu"
+              className="ed-label flex items-center gap-2"
+            >
+              <Menu className="h-5 w-5" />
+            </button>
+          </div>
         </div>
       </header>
 

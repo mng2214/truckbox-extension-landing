@@ -15,14 +15,8 @@ export default function InviteWizard() {
   const [error, setError] = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [authedEmail, setAuthedEmail] = useState("");
-  // Local-test escape hatch: VITE_SKIP_PHONE=true skips the phone-verify step
-  // (no Twilio needed). Unset in prod, so the phone step stays by default.
   const afterAuth: Step = import.meta.env.VITE_SKIP_PHONE === "true" ? "company" : "phone";
-
   const norm = (e: string) => e.trim().toLowerCase();
-
-  // After any sign-in, confirm the signed-in account matches the invite's email
-  // BEFORE letting them fill the form (otherwise onboard fails at submit with 1033).
   const gateAfterAuth = async (invite: string) => {
     try {
       const ctx = await api.get<{ email: string }>("/api/v1/account/context");
@@ -200,7 +194,7 @@ export default function InviteWizard() {
             id="iw-mc"
             className="ed-input"
             type="text"
-            placeholder="MC-123456"
+            placeholder="123456"
             value={company.mcNumber}
             onChange={(e) => setCompany({ ...company, mcNumber: e.target.value })}
           />
@@ -217,7 +211,7 @@ export default function InviteWizard() {
               color: "var(--muted)",
             }}
           >
-            Seats
+            Seats (Users)
           </label>
           <input
             id="iw-seats"

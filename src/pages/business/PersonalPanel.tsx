@@ -18,7 +18,6 @@ type MyStats = {
 type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
 type TeamStats = { dispatchers: { total: Win }[] };
 
-// Same basis as the popup: 30s saved per action.
 function fmtTimeSaved(actions: number): string {
   const totalMin = Math.floor((actions * 30) / 60);
   const h = Math.floor(totalMin / 60);
@@ -43,7 +42,6 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
       .catch(() => setStatsError(true));
   }, []);
 
-  // Company-wide all-time totals (managers only), mirrored from the Statistics tab.
   useEffect(() => {
     if (!isManager) return;
     api

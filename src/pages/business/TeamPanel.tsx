@@ -16,8 +16,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   }, []);
   useEffect(load, [load]);
 
-  // Serializes mutations and blocks the controls while one is in flight, so a
-  // seat +/- (or any action) can't be fired repeatedly before it resolves.
   const guard = async (fn: () => Promise<unknown>) => {
     if (busy) return;
     setErr(null);
@@ -38,8 +36,8 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
 
   return (
     <section className="flex flex-col gap-8">
-      <header className="flex items-baseline justify-between">
-        <h1 className="ed-display text-[6vw] lg:text-[2.5rem]">{team.name}</h1>
+      <header className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+        <h1 className="ed-display text-[7vw] sm:text-[6vw] lg:text-[2.5rem]" style={{ wordBreak: "break-word" }}>{team.name}</h1>
         <div className="flex items-center gap-3">
           <button
             className="ed-btn"
@@ -87,56 +85,54 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         </button>
       </form>
 
-      <table className="w-full text-sm">
-        <thead>
-          <tr style={{ borderBottom: "1px solid var(--hairline)" }}>
-            <th className="py-2 text-left" style={{ color: "var(--muted)" }}>Email</th>
-            <th className="py-2 text-left" style={{ color: "var(--muted)" }}>Status</th>
-            <th className="py-2 text-left" style={{ color: "var(--muted)" }}>Role</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {team.members.map((m) => (
-            <tr key={m.id} style={{ borderTop: "1px solid var(--hairline)" }}>
-              <td className="py-3" style={{ color: "var(--ink)" }}>{m.email}</td>
-              <td style={{ color: "var(--muted)" }}>{m.state}</td>
-              <td style={{ color: "var(--muted)" }}>{m.role}</td>
-              <td className="text-right py-2" style={{ whiteSpace: "nowrap" }}>
-                {m.role !== "OWNER" && (
-                  <>
-                    <button
-                      className="ed-btn"
-                      style={{ padding: "6px 14px", fontSize: "0.6rem" }}
-                      disabled={busy}
-                      onClick={() =>
-                        guard(() =>
-                          api.patch("/api/v1/manager/team/members/role", {
-                            email: m.email,
-                            role: m.role === "MANAGER" ? "MEMBER" : "MANAGER",
-                          })
-                        )
-                      }
-                    >
-                      <span>{m.role === "MANAGER" ? "Make member" : "Make manager"}</span>
-                    </button>
-                    <button
-                      className="ed-btn"
-                      style={{ marginLeft: "0.5rem", padding: "6px 14px", fontSize: "0.6rem", color: "var(--danger, #c0392b)" }}
-                      disabled={busy}
-                      onClick={() =>
-                        guard(() => api.del(`/api/v1/manager/team/members?email=${encodeURIComponent(m.email)}`))
-                      }
-                    >
-                      <span>Remove</span>
-                    </button>
-                  </>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="flex flex-col">
+        {team.members.map((m) => (
+          <div
+            key={m.id}
+            className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
+            style={{ borderTop: "1px solid var(--hairline)" }}
+          >
+            <div className="min-w-0 flex flex-col gap-1">
+              <span style={{ color: "var(--ink)", wordBreak: "break-all" }}>{m.email}</span>
+              <span
+                className="text-xs uppercase tracking-widest"
+                style={{ color: "var(--muted)" }}
+              >
+                {m.state} · {m.role}
+              </span>
+            </div>
+            {m.role !== "OWNER" && (
+              <div className="flex flex-wrap gap-2 shrink-0">
+                <button
+                  className="ed-btn"
+                  style={{ padding: "8px 14px", fontSize: "0.6rem" }}
+                  disabled={busy}
+                  onClick={() =>
+                    guard(() =>
+                      api.patch("/api/v1/manager/team/members/role", {
+                        email: m.email,
+                        role: m.role === "MANAGER" ? "MEMBER" : "MANAGER",
+                      })
+                    )
+                  }
+                >
+                  <span>{m.role === "MANAGER" ? "Make member" : "Make manager"}</span>
+                </button>
+                <button
+                  className="ed-btn"
+                  style={{ padding: "8px 14px", fontSize: "0.6rem", color: "var(--danger, #c0392b)" }}
+                  disabled={busy}
+                  onClick={() =>
+                    guard(() => api.del(`/api/v1/manager/team/members?email=${encodeURIComponent(m.email)}`))
+                  }
+                >
+                  <span>Remove</span>
+                </button>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
 
       <div className="flex gap-3">
         <button
