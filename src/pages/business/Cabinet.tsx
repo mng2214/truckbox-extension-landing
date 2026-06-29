@@ -78,8 +78,30 @@ export default function Cabinet() {
   }
   if (error) return <div className="min-h-screen flex items-center justify-center px-6 text-center">{error}</div>;
   if (!ctx) return <div className="min-h-screen flex items-center justify-center">Loading…</div>;
-  if (ctx.verdict === "BOUNCE")
-    return <Bounce reason={ctx.bounceReason ?? "INSTALL"} onSignOut={signOut} telegram={SUPPORT_TELEGRAM} />;
+  if (ctx.verdict === "BOUNCE") {
+    // Org owner with an unpaid/lapsed org: let them resume checkout for the existing org.
+    const ownerNeedsPayment = ctx.bounceReason === "PAYMENT" && ctx.org?.role === "OWNER";
+    const completeOrgPayment = async () => {
+      try {
+        const { url } = await api.post<{ url: string }>("/api/v1/manager/team/checkout", {
+          token: "",
+        });
+        window.location.href = url;
+      } catch {
+        setError("Could not start checkout. Please try again.");
+      }
+    };
+    return (
+      <Bounce
+        reason={ctx.bounceReason ?? "INSTALL"}
+        onSignOut={signOut}
+        telegram={SUPPORT_TELEGRAM}
+        ctaOverride={
+          ownerNeedsPayment ? { label: "Complete payment", onClick: completeOrgPayment } : undefined
+        }
+      />
+    );
+  }
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
 

@@ -29,10 +29,13 @@ export function Bounce({
   reason,
   onSignOut,
   telegram,
+  ctaOverride,
 }: {
   reason: BounceReason;
   onSignOut?: () => void;
   telegram?: string;
+  /** When set, replaces the default CTA — e.g. an org owner completing payment. */
+  ctaOverride?: { label: string; onClick: () => void };
 }) {
   const c = COPY[reason];
   const external = c.href.startsWith("http");
@@ -40,9 +43,13 @@ export function Bounce({
     <div className="min-h-screen flex flex-col items-center justify-center gap-6 text-center px-6">
       <h1 className="ed-display text-[10vw] lg:text-[4rem]">{c.title}</h1>
       <p className="lg:whitespace-nowrap" style={{ color: "var(--muted)" }}>
-        {c.body}
+        {ctaOverride ? "Complete your subscription to activate your team." : c.body}
       </p>
-      {external ? (
+      {ctaOverride ? (
+        <button className="ed-btn ed-btn-accent" onClick={ctaOverride.onClick}>
+          <span>{ctaOverride.label}</span>
+        </button>
+      ) : external ? (
         <a className="ed-btn ed-btn-accent" href={c.href} target="_blank" rel="noreferrer">
           <span>{c.cta}</span>
         </a>
