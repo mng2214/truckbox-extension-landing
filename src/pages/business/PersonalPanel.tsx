@@ -136,26 +136,30 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
         ) : null}
       </div>
 
-      <div
-        className="flex flex-col gap-2 p-6 rounded-lg border"
-        style={{ borderColor: "var(--hairline)" }}
-      >
-        <h2
-          className="text-xs font-semibold uppercase tracking-widest mb-2"
-          style={{ color: "var(--muted)" }}
+      {/* Individual billing only — org members/owners manage billing in the Team tab,
+          where the subscription actually lives (this user has no personal subscription). */}
+      {!ctx.org && (
+        <div
+          className="flex flex-col gap-2 p-6 rounded-lg border"
+          style={{ borderColor: "var(--hairline)" }}
         >
-          Billing
-        </h2>
-        <div className="flex gap-3 flex-wrap">
-          <button className="ed-btn ed-btn-accent" onClick={openPortal}>
-            <span>Billing &amp; invoices</span>
-          </button>
-          <button className="ed-btn" onClick={cancel}>
-            <span>Cancel subscription</span>
-          </button>
+          <h2
+            className="text-xs font-semibold uppercase tracking-widest mb-2"
+            style={{ color: "var(--muted)" }}
+          >
+            Billing
+          </h2>
+          <div className="flex gap-3 flex-wrap">
+            <button className="ed-btn ed-btn-accent" onClick={openPortal}>
+              <span>Billing &amp; invoices</span>
+            </button>
+            <button className="ed-btn" onClick={cancel}>
+              <span>Cancel subscription</span>
+            </button>
+          </div>
+          {error && <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>}
         </div>
-        {error && <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>}
-      </div>
+      )}
     </section>
   );
 }

@@ -5,6 +5,25 @@ import type { OrgRole } from "./types";
 type Member = { id: number; email: string; state: string; role: OrgRole };
 type Team = { id: number; name: string; seats: number; members: Member[]; cancelAtPeriodEnd: boolean };
 
+/** Maps backend error codes to human-readable messages. */
+function friendlyError(e: unknown): string {
+  if (e instanceof ApiError) {
+    switch (e.code) {
+      case 1020:
+        return "Your subscription is already scheduled to cancel at the end of the billing period.";
+      case 1019:
+        return "This team has no active subscription.";
+      case 1021:
+        return "Seat limit reached — add seats before inviting more members.";
+      case 1022:
+        return "Seat count can’t be below the current number of members.";
+      default:
+        return `Something went wrong (error ${e.code ?? e.status}).`;
+    }
+  }
+  return "Something went wrong. Please try again.";
+}
+
 export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [team, setTeam] = useState<Team | null>(null);
   const [newEmail, setNewEmail] = useState("");
@@ -25,7 +44,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
       load();
       onChanged();
     } catch (e) {
-      setErr(e instanceof ApiError ? `Error ${e.code ?? e.status}` : "Error");
+      setErr(friendlyError(e));
     } finally {
       setBusy(false);
     }
@@ -148,17 +167,24 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         >
           Billing &amp; invoices
         </button>
-        {owner && (
-          <button
-            className="ed-btn"
-            style={{ color: "var(--danger, #c0392b)" }}
-            onClick={() =>
-              guard(() => api.post("/api/v1/billing/cancel-team-subscription"))
-            }
-          >
-            Cancel team subscription
-          </button>
-        )}
+        {owner &&
+          (team.cancelAtPeriodEnd ? (
+            <span style={{ color: "var(--muted)", alignSelf: "center", fontSize: "0.85rem" }}>
+              Subscription will cancel at the end of the billing period.
+            </span>
+          ) : (
+            <button
+              className="ed-btn"
+              style={{ color: "var(--danger, #c0392b)" }}
+              disabled={busy}
+              onClick={() => {
+                if (!confirm("Cancel the team subscription at the end of the current period?")) return;
+                guard(() => api.post("/api/v1/billing/cancel-team-subscription"));
+              }}
+            >
+              Cancel team subscription
+            </button>
+          ))}
       </div>
     </section>
   );
