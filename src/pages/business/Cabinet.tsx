@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
@@ -9,6 +9,12 @@ import { Bounce } from "./Bounce";
 import { PersonalPanel } from "./PersonalPanel";
 import { TeamPanel } from "./TeamPanel";
 import { StatsPanel } from "./StatsPanel";
+import { PhoneVerify } from "./PhoneVerify";
+
+// Oracle (stealth): lazy-loaded so its code is not in the main bundle for non-entitled users.
+const DiscoveryPanel = lazy(() =>
+  import("./DiscoveryPanel").then((m) => ({ default: m.DiscoveryPanel }))
+);
 
 const SUPPORT_TELEGRAM = "https://t.me/mngartur";
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -23,6 +29,7 @@ export default function Cabinet() {
   const [authed, setAuthed] = useState(auth.isAuthed());
   const [section, setSection] = useState("personal");
   const [error, setError] = useState<string | null>(null);
+  const [needsPhone, setNeedsPhone] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const sectionInit = useRef(false);
 
@@ -30,11 +37,18 @@ export default function Cabinet() {
     try {
       const c = await api.get<AccountContext>("/api/v1/account/context");
       setCtx(c);
+      setNeedsPhone(false);
       if (!sectionInit.current) {
         setSection(c.panels[0] ?? "personal");
         sectionInit.current = true;
       }
     } catch (e) {
+      // A verification-scoped token (unverified phone) is rejected with 403 on every non-phone
+      // path — route to the phone-verification step instead of a generic error.
+      if (e instanceof ApiError && e.status === 403) {
+        setNeedsPhone(true);
+        return;
+      }
       if (e instanceof ApiError && e.status === 401) {
         auth.clearToken();
         setAuthed(false);
@@ -77,6 +91,7 @@ export default function Cabinet() {
     );
   }
   if (error) return <div className="min-h-screen flex items-center justify-center px-6 text-center">{error}</div>;
+  if (needsPhone) return <PhoneVerify onVerified={load} />;
   if (!ctx) return <div className="min-h-screen flex items-center justify-center">Loading…</div>;
   if (ctx.verdict === "BOUNCE") {
     // Org owner with an unpaid/lapsed org: let them resume checkout for the existing org.
@@ -132,6 +147,9 @@ export default function Cabinet() {
         {isManager && <NavItem label="Team" active={section === "team"} onClick={() => goto("team")} />}
         {isManager && (
           <NavItem label="Statistics" active={section === "statistics"} onClick={() => goto("statistics")} />
+        )}
+        {ctx.panels.includes("discovery") && (
+          <NavItem label="Oracle" active={section === "discovery"} onClick={() => goto("discovery")} />
         )}
       </nav>
 
@@ -244,6 +262,11 @@ export default function Cabinet() {
         {section === "personal" && <PersonalPanel ctx={ctx} />}
         {section === "team" && ctx.org && <TeamPanel onChanged={load} />}
         {section === "statistics" && isManager && <StatsPanel />}
+        {section === "discovery" && ctx.panels.includes("discovery") && (
+          <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
+            <DiscoveryPanel />
+          </Suspense>
+        )}
       </main>
     </div>
   );

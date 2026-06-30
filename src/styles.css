@@ -318,9 +318,201 @@ body.tb-cabinet-bg {
 }
 .tb-nav:hover { color: var(--ink); background: rgba(255, 255, 255, 0.04); }
 .tb-nav.is-active {
-  color: var(--ink);
-  background: rgba(255, 255, 255, 0.06);
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   border-left-color: var(--accent);
+}
+
+/* Discovery range slider — thin line + small round thumb (accent fill left of thumb). */
+.tb-range {
+  -webkit-appearance: none;
+  appearance: none;
+  height: 13px;            /* hit area; the visible track is the 2px line below */
+  background: transparent;
+  cursor: pointer;
+}
+.tb-range::-webkit-slider-runnable-track {
+  height: 2px;
+  border-radius: 0;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0%, var(--accent) var(--val, 50%),
+    var(--line) var(--val, 50%), var(--line) 100%
+  );
+}
+.tb-range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: none;
+  margin-top: -5px;        /* center the thumb on the 2px track */
+}
+.tb-range::-moz-range-track {
+  height: 2px;
+  background: var(--line);
+}
+.tb-range::-moz-range-progress {
+  height: 2px;
+  background: var(--accent);
+}
+.tb-range::-moz-range-thumb {
+  width: 12px;
+  height: 12px;
+  border: none;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.tb-range:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 6px;
+}
+
+/* Discovery: sharp (square) input corners — editorial look, not pill-rounded. */
+.ed-input.tb-sharp { border-radius: 0; }
+select.ed-input { appearance: none; -webkit-appearance: none; cursor: pointer; }
+
+/* Discovery: City/State segmented switch */
+.tb-seg { display: inline-flex; border: 1px solid var(--line); }
+.tb-seg button {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color .2s var(--ease), background .2s var(--ease);
+}
+.tb-seg button + button { border-left: 1px solid var(--line); }
+.tb-seg button.is-active { color: var(--bg); background: var(--accent); }
+
+/* Discovery: city autocomplete menu */
+.tb-ac-menu {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0; right: 0;
+  z-index: 30;
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  max-height: 240px;
+  overflow-y: auto;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.tb-ac-item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 9px 14px;
+  color: var(--ink);
+  font-size: 0.9rem;
+  background: transparent;
+  cursor: pointer;
+}
+.tb-ac-item:hover, .tb-ac-item:focus-visible {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--accent);
+  outline: none;
+}
+
+/* Discovery: equipment multi-select chips */
+.tb-eq {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  padding: 5px 9px;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color .15s var(--ease), border-color .15s var(--ease), background .15s var(--ease);
+}
+.tb-eq:hover { color: var(--ink); border-color: var(--ink); }
+.tb-eq.is-on { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+.tb-eq-x { background: transparent; border: none; color: inherit; cursor: pointer; line-height: 1; padding: 0; font-size: 0.9rem; }
+.tb-eq-add {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 6px 12px;
+  border: 1px dashed var(--line);
+  color: var(--muted);
+  background: transparent;
+  cursor: pointer;
+  transition: color .15s var(--ease), border-color .15s var(--ease);
+}
+.tb-eq-add:hover { color: var(--accent); border-color: var(--accent); }
+
+/* Discovery: tiny copy button */
+.tb-copy {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3px;
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: color .15s var(--ease);
+}
+.tb-copy:hover { color: var(--accent); }
+.tb-copy.is-done { color: var(--accent); }
+
+/* Oracle "thinking" loader (scoped to Oracle only) */
+.tb-oracle-loader {
+  --size: 1px;
+  width: calc(48 * var(--size));
+  height: calc(48 * var(--size));
+  display: inline-block;
+  position: relative;
+  transform: rotate(45deg);
+}
+.tb-oracle-loader::before {
+  content: '';
+  box-sizing: border-box;
+  width: calc(24 * var(--size));
+  height: calc(24 * var(--size));
+  position: absolute;
+  left: 0;
+  top: calc(-24 * var(--size));
+  animation: tb-oracle-load1 4s ease infinite;
+}
+.tb-oracle-loader::after {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: calc(24 * var(--size));
+  height: calc(24 * var(--size));
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: 0 0 calc(10 * var(--size)) rgba(7, 7, 7, 0.15);
+  animation: tb-oracle-load2 2s ease infinite;
+}
+@keyframes tb-oracle-load1 {
+  0%   { box-shadow: 0 calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(48*var(--size)) rgba(255,255,255,0), 0 calc(48*var(--size)) rgba(255,255,255,0); }
+  12%  { box-shadow: 0 calc(24*var(--size)) #fff, calc(24*var(--size)) calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(48*var(--size)) rgba(255,255,255,0), 0 calc(48*var(--size)) rgba(255,255,255,0); }
+  25%  { box-shadow: 0 calc(24*var(--size)) #fff, calc(24*var(--size)) calc(24*var(--size)) #fff, calc(24*var(--size)) calc(48*var(--size)) rgba(255,255,255,0), 0 calc(48*var(--size)) rgba(255,255,255,0); }
+  37%  { box-shadow: 0 calc(24*var(--size)) #fff, calc(24*var(--size)) calc(24*var(--size)) #fff, calc(24*var(--size)) calc(48*var(--size)) #fff, 0 calc(48*var(--size)) rgba(255,255,255,0); }
+  50%  { box-shadow: 0 calc(24*var(--size)) #fff, calc(24*var(--size)) calc(24*var(--size)) #fff, calc(24*var(--size)) calc(48*var(--size)) #fff, 0 calc(48*var(--size)) #fff; }
+  62%  { box-shadow: 0 calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(24*var(--size)) #fff, calc(24*var(--size)) calc(48*var(--size)) #fff, 0 calc(48*var(--size)) #fff; }
+  75%  { box-shadow: 0 calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(48*var(--size)) #fff, 0 calc(48*var(--size)) #fff; }
+  87%  { box-shadow: 0 calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(48*var(--size)) rgba(255,255,255,0), 0 calc(48*var(--size)) #fff; }
+  100% { box-shadow: 0 calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(24*var(--size)) rgba(255,255,255,0), calc(24*var(--size)) calc(48*var(--size)) rgba(255,255,255,0), 0 calc(48*var(--size)) rgba(255,255,255,0); }
+}
+@keyframes tb-oracle-load2 {
+  0%   { transform: translate(0, 0) rotateX(0) rotateY(0); }
+  25%  { transform: translate(100%, 0) rotateX(0) rotateY(180deg); }
+  50%  { transform: translate(100%, 100%) rotateX(-180deg) rotateY(180deg); }
+  75%  { transform: translate(0, 100%) rotateX(-180deg) rotateY(360deg); }
+  100% { transform: translate(0, 0) rotateX(0) rotateY(360deg); }
 }
 
 /* cabinet mobile top bar — shown only below the md breakpoint. Visibility is
