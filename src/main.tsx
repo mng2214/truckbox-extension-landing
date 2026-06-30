@@ -13,7 +13,7 @@ import Cabinet from "./pages/business/Cabinet";
 import InviteWizard from "./pages/business/InviteWizard";
 import RequestAccess from "./pages/business/RequestAccess";
 
-// installPageGuard();
+installPageGuard();
 
 if (import.meta.env.PROD) installDevtoolsDetector();
 
