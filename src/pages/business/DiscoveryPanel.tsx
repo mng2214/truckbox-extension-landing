@@ -396,8 +396,8 @@ export function DiscoveryPanel() {
                         <span
                           style={{
                             fontFamily: "var(--font-mono)",
-                            fontSize: "0.66rem",
-                            letterSpacing: "0.06em",
+                            fontSize: "0.82rem",
+                            letterSpacing: "0.04em",
                             color: "var(--muted)",
                           }}
                         >
@@ -446,16 +446,7 @@ export function DiscoveryPanel() {
                       style={{ overflow: "hidden" }}
                     >
                       <div className="flex flex-col gap-4 pb-5 pl-4 sm:pl-[3.8rem]">
-                        {(emails.length > 0 || phones.length > 0) && (
-                          <div className="flex flex-col gap-1.5" style={{ fontSize: "0.83rem" }}>
-                            {emails.map((e) => (
-                              <ContactItem key={e} icon={<Mail size={13} />} value={e} />
-                            ))}
-                            {phones.map((p) => (
-                              <ContactItem key={p} icon={<Phone size={13} />} value={p} />
-                            ))}
-                          </div>
-                        )}
+                        <ContactList emails={emails} phones={phones} />
 
                         <div className="overflow-x-auto">
                           <table className="w-full text-sm" style={{ minWidth: "30rem" }}>
@@ -782,6 +773,59 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
     >
       {done ? <Check size={12} /> : <Copy size={12} />}
     </button>
+  );
+}
+
+function ContactList({ emails, phones }: { emails: string[]; phones: string[] }) {
+  const [showAll, setShowAll] = useState(false);
+  const PREVIEW = 3;
+  const all = [
+    ...emails.map((value) => ({ kind: "email" as const, value })),
+    ...phones.map((value) => ({ kind: "phone" as const, value })),
+  ];
+  if (all.length === 0) return null;
+
+  const visible = showAll ? all : all.slice(0, PREVIEW);
+  const hidden = all.length - PREVIEW;
+
+  return (
+    <div className="flex flex-col gap-1.5" style={{ fontSize: "0.83rem" }}>
+      {visible.map((c) => (
+        <ContactItem
+          key={c.kind + c.value}
+          icon={c.kind === "email" ? <Mail size={13} /> : <Phone size={13} />}
+          value={c.value}
+        />
+      ))}
+      {all.length > PREVIEW && (
+        <button
+          type="button"
+          onClick={() => setShowAll((v) => !v)}
+          aria-expanded={showAll}
+          className="flex items-center gap-1.5 self-start mt-0.5"
+          style={{
+            background: "transparent",
+            cursor: "pointer",
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.7rem",
+            letterSpacing: "0.04em",
+            color: "var(--muted)",
+            transition: "color .2s var(--ease)",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--muted)")}
+        >
+          <ChevronDown
+            size={13}
+            style={{
+              transform: showAll ? "rotate(180deg)" : "none",
+              transition: "transform .2s var(--ease)",
+            }}
+          />
+          {showAll ? "Show less" : `+${hidden} more contact${hidden === 1 ? "" : "s"}`}
+        </button>
+      )}
+    </div>
   );
 }
 
