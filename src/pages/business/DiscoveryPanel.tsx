@@ -213,8 +213,8 @@ export function DiscoveryPanel() {
               Demo feature
             </h2>
             <p style={{ color: "var(--muted)", marginTop: "0.8rem", lineHeight: 1.55 }}>
-              Oracle is an early demo. It may work intermittently or be temporarily unavailable
-              while we refine it.
+              Oracle is an early demo. It may be temporarily unavailable or experience
+              intermittent issues while we continue to improve it. Free during the demo.
             </p>
             <button
               className="ed-btn ed-btn-accent"
