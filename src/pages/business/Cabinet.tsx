@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, Sun, Moon } from "lucide-react";
+import { Menu, X, Sun, Moon, LogOut, HelpCircle, User } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
@@ -169,58 +169,6 @@ export default function Cabinet() {
         )}
       </nav>
 
-      <div
-        className="mt-auto flex flex-col items-stretch gap-3 pt-5"
-        style={{ borderTop: "1px solid var(--hairline)" }}
-      >
-        <button
-          type="button"
-          onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-          aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
-          className="flex items-center justify-center gap-2"
-          style={{
-            background: "transparent",
-            cursor: "pointer",
-            color: "var(--muted)",
-            fontSize: "0.82rem",
-            fontFamily: "var(--font-mono)",
-            letterSpacing: "0.04em",
-            transition: "color .2s var(--ease)",
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
-          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--muted)")}
-        >
-          {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
-          {theme === "light" ? "Dark mode" : "Light mode"}
-        </button>
-        <div
-          style={{
-            color: "var(--muted)",
-            fontSize: "0.72rem",
-            textAlign: "center",
-            wordBreak: "break-all",
-            lineHeight: 1.3,
-          }}
-        >
-          {ctx.email}
-        </div>
-        <a
-          href={SUPPORT_TELEGRAM}
-          target="_blank"
-          rel="noreferrer"
-          style={{
-            color: "var(--muted)",
-            fontSize: "0.82rem",
-            textAlign: "center",
-            textDecoration: "none",
-          }}
-        >
-          Need help?
-        </a>
-        <button className="ed-btn" style={{ justifyContent: "center", width: "100%" }} onClick={signOut}>
-          <span>Sign out</span>
-        </button>
-      </div>
     </>
   );
 
@@ -247,16 +195,32 @@ export default function Cabinet() {
         >
           Truck<span style={{ color: "var(--accent)" }}>Box</span>
         </span>
-        <button
-          type="button"
-          className="tb-icon-btn"
-          aria-label="Open menu"
-          aria-expanded={navOpen}
-          onClick={() => setNavOpen(true)}
-        >
-          <Menu className="h-5 w-5" />
-        </button>
+        <div className="flex items-center gap-2">
+          <AccountMenu
+            email={ctx.email}
+            theme={theme}
+            onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+          />
+          <button
+            type="button"
+            className="tb-icon-btn"
+            aria-label="Open menu"
+            aria-expanded={navOpen}
+            onClick={() => setNavOpen(true)}
+          >
+            <Menu className="h-5 w-5" />
+          </button>
+        </div>
       </header>
+
+      {/* Desktop account menu — floats top-right so it never stretches with the sidebar */}
+      <div className="hidden md:block" style={{ position: "fixed", top: "1.1rem", right: "1.6rem", zIndex: 50 }}>
+        <AccountMenu
+          email={ctx.email}
+          theme={theme}
+          onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+        />
+      </div>
 
       {/* Mobile off-canvas drawer */}
       <AnimatePresence>
@@ -312,6 +276,149 @@ function NavItem({ label, active, onClick }: { label: string; active: boolean; o
   return (
     <button onClick={onClick} className={"tb-nav" + (active ? " is-active" : "")}>
       {label}
+    </button>
+  );
+}
+
+function AccountMenu({
+  email,
+  theme,
+  onToggleTheme,
+}: {
+  email: string;
+  theme: "dark" | "light";
+  onToggleTheme: () => void;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDoc = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, [open]);
+
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        aria-label="Account menu"
+        aria-expanded={open}
+        style={{
+          width: 38,
+          height: 38,
+          borderRadius: "50%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "color-mix(in srgb, var(--accent) 16%, transparent)",
+          color: "var(--accent)",
+          border: "1px solid var(--hairline)",
+          cursor: "pointer",
+        }}
+      >
+        <User size={18} />
+      </button>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ duration: 0.18, ease: EASE }}
+            style={{
+              position: "absolute",
+              top: "calc(100% + 8px)",
+              right: 0,
+              minWidth: 230,
+              zIndex: 70,
+              background: "var(--bg-2)",
+              border: "1px solid var(--hairline)",
+              boxShadow: "0 16px 44px rgba(0, 0, 0, 0.28)",
+              padding: "0.4rem",
+              display: "flex",
+              flexDirection: "column",
+              gap: 2,
+            }}
+          >
+            <div
+              style={{
+                padding: "0.5rem 0.6rem 0.55rem",
+                fontSize: "0.72rem",
+                color: "var(--muted)",
+                wordBreak: "break-all",
+                lineHeight: 1.35,
+                borderBottom: "1px solid var(--hairline)",
+                marginBottom: 4,
+              }}
+            >
+              {email}
+            </div>
+
+            <MenuRow
+              icon={theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
+              label={theme === "light" ? "Dark mode" : "Light mode"}
+              onClick={onToggleTheme}
+            />
+            <MenuRow icon={<HelpCircle size={15} />} label="Need help?" href={SUPPORT_TELEGRAM} />
+            <MenuRow icon={<LogOut size={15} />} label="Sign out" onClick={signOut} />
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+function MenuRow({
+  icon,
+  label,
+  onClick,
+  href,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  onClick?: () => void;
+  href?: string;
+}) {
+  const style: React.CSSProperties = {
+    display: "flex",
+    alignItems: "center",
+    gap: 10,
+    width: "100%",
+    textAlign: "left",
+    background: "transparent",
+    cursor: "pointer",
+    padding: "0.55rem 0.6rem",
+    color: "var(--ink)",
+    fontSize: "0.86rem",
+    textDecoration: "none",
+    transition: "background .15s var(--ease)",
+  };
+  const enter = (e: React.MouseEvent<HTMLElement>) =>
+    (e.currentTarget.style.background = "var(--tb-hover)");
+  const leave = (e: React.MouseEvent<HTMLElement>) =>
+    (e.currentTarget.style.background = "transparent");
+  const body = (
+    <>
+      <span style={{ color: "var(--muted)", display: "flex" }}>{icon}</span>
+      {label}
+    </>
+  );
+  if (href) {
+    return (
+      <a href={href} target="_blank" rel="noreferrer" style={style} onMouseEnter={enter} onMouseLeave={leave}>
+        {body}
+      </a>
+    );
+  }
+  return (
+    <button type="button" onClick={onClick} style={style} onMouseEnter={enter} onMouseLeave={leave}>
+      {body}
     </button>
   );
 }
