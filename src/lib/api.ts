@@ -2,6 +2,47 @@ import { auth } from "./auth";
 
 const BASE = import.meta.env.VITE_API_BASE_URL ?? "https://api.truckbox.app";
 
+function uuid(): string {
+  try {
+    return crypto.randomUUID();
+  } catch {
+    // Fallback for non-secure contexts (crypto.randomUUID needs HTTPS/localhost).
+    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => {
+      const n = Number(c);
+      return (n ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (n / 4)))).toString(16);
+    });
+  }
+}
+
+// Persistent device id (localStorage) + per-session id (sessionStorage), sent on every request
+// as X-Device-Id / X-Session-Id — the same contract the extension uses, so the backend's
+// RequestLoggingFilter + device logic light up for the web with no backend change.
+function getDeviceId(): string {
+  try {
+    let id = localStorage.getItem("tb-device-id");
+    if (!id) {
+      id = uuid();
+      localStorage.setItem("tb-device-id", id);
+    }
+    return id;
+  } catch {
+    return "web-unknown";
+  }
+}
+
+function getSessionId(): string {
+  try {
+    let id = sessionStorage.getItem("tb-session-id");
+    if (!id) {
+      id = uuid();
+      sessionStorage.setItem("tb-session-id", id);
+    }
+    return id;
+  } catch {
+    return uuid();
+  }
+}
+
 export class ApiError extends Error {
   constructor(public status: number, public code?: number, msg?: string) {
     super(msg ?? `HTTP ${status}`);
@@ -9,7 +50,11 @@ export class ApiError extends Error {
 }
 
 async function req<T>(method: string, path: string, body?: unknown): Promise<T> {
-  const headers: Record<string, string> = { "Content-Type": "application/json" };
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+    "X-Device-Id": getDeviceId(),
+    "X-Session-Id": getSessionId(),
+  };
   const token = auth.getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
   const res = await fetch(BASE + path, {

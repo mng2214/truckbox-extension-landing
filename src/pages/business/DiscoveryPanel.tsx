@@ -57,6 +57,19 @@ type Quota = { used: number; limit: number | null; unlimited: boolean };
 const usd = (n: number | null) =>
   n == null ? "—" : "$" + Math.round(n).toLocaleString("en-US");
 
+// Fire-and-forget usage analytics (broker opens, contact copies). Never blocks the UI and
+// swallows errors — the backend endpoint is gated + fail-safe, and a lost event is harmless.
+function trackEvent(payload: {
+  eventType: string;
+  brokerId?: number | null;
+  mcNumber?: string | null;
+  origin?: string;
+  destination?: string;
+  equipment?: string | null;
+}) {
+  api.post("/api/v1/discovery/event", payload).catch(() => {});
+}
+
 function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
   const map = new Map<string, BrokerGroup>();
   for (const r of rows) {
@@ -144,6 +157,22 @@ export function DiscoveryPanel() {
       next.has(k) ? next.delete(k) : next.add(k);
       return next;
     });
+
+  // Toggle a broker card; log an OPEN_BROKER event only on the open transition.
+  const toggleBroker = (g: BrokerGroup) => {
+    const wasOpen = expanded.has(g.key);
+    toggle(g.key);
+    if (!wasOpen) {
+      trackEvent({
+        eventType: "OPEN_BROKER_ORACLE",
+        brokerId: g.lanes[0]?.brokerId ?? null,
+        mcNumber: g.mcNumber,
+        origin: oValue.trim(),
+        destination: dValue.trim(),
+        equipment: g.lanes[0]?.equipment ?? null,
+      });
+    }
+  };
 
   const run = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -284,7 +313,7 @@ export function DiscoveryPanel() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
           <div className="flex flex-col gap-2.5">
             <span className="flex items-baseline justify-between gap-3">
-              <span className="ed-label" style={{ color: "var(--ink)" }}>Equipment (optional)</span>
+              <span className="ed-label" style={{ color: "var(--ink)" }}>Equipment (optional )</span>
             </span>
             <EquipmentSelect value={equipment} onChange={setEquipment} />
           </div>
@@ -356,7 +385,7 @@ export function DiscoveryPanel() {
                 style={{ borderBottom: "1px solid var(--hairline)" }}
               >
                 <button
-                  onClick={() => toggle(g.key)}
+                  onClick={() => toggleBroker(g)}
                   aria-expanded={open}
                   className="w-full flex items-center gap-4 text-left"
                   style={{
@@ -446,7 +475,19 @@ export function DiscoveryPanel() {
                       style={{ overflow: "hidden" }}
                     >
                       <div className="flex flex-col gap-4 pb-5 pl-4 sm:pl-[3.8rem]">
-                        <ContactList emails={emails} phones={phones} />
+                        <ContactList
+                          emails={emails}
+                          phones={phones}
+                          onCopy={() =>
+                            trackEvent({
+                              eventType: "COPY_CONTACT",
+                              brokerId: g.lanes[0]?.brokerId ?? null,
+                              mcNumber: g.mcNumber,
+                              origin: oValue.trim(),
+                              destination: dValue.trim(),
+                            })
+                          }
+                        />
 
                         <div className="overflow-x-auto">
                           <table className="w-full text-sm" style={{ minWidth: "30rem" }}>
@@ -751,7 +792,7 @@ function Field({
   );
 }
 
-function CopyButton({ text, label }: { text: string; label?: string }) {
+function CopyButton({ text, label, onCopied }: { text: string; label?: string; onCopied?: () => void }) {
   const [done, setDone] = useState(false);
   const copy = async (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -759,6 +800,7 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
       await navigator.clipboard.writeText(text);
       setDone(true);
       setTimeout(() => setDone(false), 1200);
+      onCopied?.();
     } catch {
       /* clipboard unavailable */
     }
@@ -776,7 +818,15 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
   );
 }
 
-function ContactList({ emails, phones }: { emails: string[]; phones: string[] }) {
+function ContactList({
+  emails,
+  phones,
+  onCopy,
+}: {
+  emails: string[];
+  phones: string[];
+  onCopy?: () => void;
+}) {
   const [showAll, setShowAll] = useState(false);
   const PREVIEW = 3;
   const all = [
@@ -795,6 +845,7 @@ function ContactList({ emails, phones }: { emails: string[]; phones: string[] })
           key={c.kind + c.value}
           icon={c.kind === "email" ? <Mail size={13} /> : <Phone size={13} />}
           value={c.value}
+          onCopy={onCopy}
         />
       ))}
       {all.length > PREVIEW && (
@@ -829,14 +880,22 @@ function ContactList({ emails, phones }: { emails: string[]; phones: string[] })
   );
 }
 
-function ContactItem({ icon, value }: { icon: React.ReactNode; value: string }) {
+function ContactItem({
+  icon,
+  value,
+  onCopy,
+}: {
+  icon: React.ReactNode;
+  value: string;
+  onCopy?: () => void;
+}) {
   return (
     <span className="flex items-center gap-2" style={{ color: "var(--muted)" }}>
       <span style={{ color: "var(--accent)" }}>{icon}</span>
       <span style={{ color: "var(--ink)", wordBreak: "break-word", fontFamily: "var(--font-mono)", fontSize: "0.8rem" }}>
         {value}
       </span>
-      <CopyButton text={value} label={`Copy ${value}`} />
+      <CopyButton text={value} label={`Copy ${value}`} onCopied={onCopy} />
     </span>
   );
 }
