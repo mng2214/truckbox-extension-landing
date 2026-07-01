@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Sun, Moon } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
@@ -31,6 +31,12 @@ export default function Cabinet() {
   const [error, setError] = useState<string | null>(null);
   const [needsPhone, setNeedsPhone] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  // Light is the default for the back office; respected as dark only if the user explicitly chose it.
+  const [theme, setTheme] = useState<"dark" | "light">(() =>
+    typeof localStorage !== "undefined" && localStorage.getItem("tb-theme") === "dark"
+      ? "dark"
+      : "light",
+  );
   const sectionInit = useRef(false);
 
   const load = useCallback(async () => {
@@ -71,6 +77,16 @@ export default function Cabinet() {
       w.$crisp?.push(["do", "chat:show"]);
     };
   }, []);
+
+  // Light mode is scoped to the cabinet: set data-theme on <html> while mounted,
+  // remove it on unmount so the (dark-only) landing is never affected.
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "light") root.setAttribute("data-theme", "light");
+    else root.removeAttribute("data-theme");
+    localStorage.setItem("tb-theme", theme);
+    return () => root.removeAttribute("data-theme");
+  }, [theme]);
 
   useEffect(() => {
     if (!navOpen) return;
@@ -157,6 +173,26 @@ export default function Cabinet() {
         className="mt-auto flex flex-col items-stretch gap-3 pt-5"
         style={{ borderTop: "1px solid var(--hairline)" }}
       >
+        <button
+          type="button"
+          onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+          aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          className="flex items-center justify-center gap-2"
+          style={{
+            background: "transparent",
+            cursor: "pointer",
+            color: "var(--muted)",
+            fontSize: "0.82rem",
+            fontFamily: "var(--font-mono)",
+            letterSpacing: "0.04em",
+            transition: "color .2s var(--ease)",
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.color = "var(--ink)")}
+          onMouseLeave={(e) => (e.currentTarget.style.color = "var(--muted)")}
+        >
+          {theme === "light" ? <Moon size={14} /> : <Sun size={14} />}
+          {theme === "light" ? "Dark mode" : "Light mode"}
+        </button>
         <div
           style={{
             color: "var(--muted)",
