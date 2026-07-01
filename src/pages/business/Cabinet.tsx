@@ -107,7 +107,7 @@ export default function Cabinet() {
     );
   }
   if (error) return <div className="min-h-screen flex items-center justify-center px-6 text-center">{error}</div>;
-  if (needsPhone) return <PhoneVerify onVerified={load} />;
+  if (needsPhone) return <PhoneVerify onVerified={load} onSignOut={signOut} />;
   if (!ctx) return <div className="min-h-screen flex items-center justify-center">Loading…</div>;
   if (ctx.verdict === "BOUNCE") {
     // Org owner with an unpaid/lapsed org: let them resume checkout for the existing org.

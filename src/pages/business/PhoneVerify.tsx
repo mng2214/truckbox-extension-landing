@@ -77,7 +77,13 @@ function formatNational(raw: string, dial: string): string {
  * Uses the verification token (already in storage) to call /auth/phone/start then /confirm; the
  * confirm response carries the full token, after which the cabinet loads normally.
  */
-export function PhoneVerify({ onVerified }: { onVerified: () => void }) {
+export function PhoneVerify({
+  onVerified,
+  onSignOut,
+}: {
+  onVerified: () => void;
+  onSignOut?: () => void;
+}) {
   const [country, setCountry] = useState<Country>(COUNTRIES[0]);
   const [national, setNational] = useState("");
   const [code, setCode] = useState("");
@@ -249,6 +255,24 @@ export function PhoneVerify({ onVerified }: { onVerified: () => void }) {
             Message us on Telegram
           </a>
         </p>
+
+        {onSignOut && (
+          <button
+            type="button"
+            onClick={onSignOut}
+            className="mt-3 mx-auto block"
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "var(--muted)",
+              fontSize: "0.82rem",
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
+            Sign out
+          </button>
+        )}
       </div>
     </div>
   );
