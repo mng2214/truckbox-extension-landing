@@ -84,7 +84,7 @@ export function installDevtoolsDetector(): void {
     ].join(";");
     el.innerHTML =
       '<div style="max-width:460px">' +
-      '<div style="font-size:1.15rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:10px">Hi there, competitor 👋</div>' +
+      '<div style="font-size:1.15rem;font-weight:700;letter-spacing:-0.01em;margin-bottom:10px">Hi there, competitor :)</div>' +
       '<div style="opacity:.7;font-size:.92rem;line-height:1.55">Inspecting TruckBox? Flattered. But the good stuff lives on our servers, not in here lol. Close DevTools to keep browsing.</div>' +
       "</div>";
     document.documentElement.appendChild(el);
