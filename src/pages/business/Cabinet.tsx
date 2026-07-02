@@ -18,6 +18,9 @@ const DiscoveryPanel = lazy(() =>
 
 const SUPPORT_TELEGRAM = "https://t.me/mngartur";
 const EASE = [0.16, 1, 0.3, 1] as const;
+// Backend ErrorCode.PHONE_VERIFICATION_REQUIRED — a distinct 403 that means "verify your phone"
+// (vs a generic 403/expired token, which means "log in again").
+const PHONE_VERIFICATION_REQUIRED = 1023;
 
 function signOut() {
   auth.clearToken();
@@ -49,13 +52,15 @@ export default function Cabinet() {
         sectionInit.current = true;
       }
     } catch (e) {
-      // A verification-scoped token (unverified phone) is rejected with 403 on every non-phone
-      // path — route to the phone-verification step instead of a generic error.
-      if (e instanceof ApiError && e.status === 403) {
+      // A verification-scoped token (unverified phone) is rejected with a DISTINCT 403 code —
+      // route to the phone-verification step. An expired/invalid token gives a generic 401/403
+      // (no phone code), so send the user back to log in — NOT to phone verify (which used to show
+      // even for already-verified users whose session had simply expired).
+      if (e instanceof ApiError && e.status === 403 && e.code === PHONE_VERIFICATION_REQUIRED) {
         setNeedsPhone(true);
         return;
       }
-      if (e instanceof ApiError && e.status === 401) {
+      if (e instanceof ApiError && (e.status === 401 || e.status === 403)) {
         auth.clearToken();
         setAuthed(false);
       } else {

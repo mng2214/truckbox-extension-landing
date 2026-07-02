@@ -57,6 +57,10 @@ type Quota = { used: number; limit: number | null; unlimited: boolean };
 const usd = (n: number | null) =>
   n == null ? "—" : "$" + Math.round(n).toLocaleString("en-US");
 
+// A city picked from the suggestions looks like "Chicago, IL" (ends with ", ST"). Free text
+// like "chicago il" won't geocode — this gates the search client-side.
+const isPickedCity = (v: string) => /,\s*[A-Za-z]{2}\s*$/.test(v.trim());
+
 function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
   const map = new Map<string, BrokerGroup>();
   for (const r of rows) {
@@ -149,6 +153,16 @@ export function DiscoveryPanel() {
     e.preventDefault();
     if (!oValue.trim() || !dValue.trim()) {
       setError("Choose both an origin and a destination.");
+      return;
+    }
+    // City-mode inputs must be a picked "City, ST" (that's what the suggestions produce) — free
+    // text like "chicago il" can't be geocoded. Guide the user instead of hitting the backend.
+    if (oMode === "city" && !isPickedCity(oValue)) {
+      setError("Pick the origin city from the suggestions (e.g. Chicago, IL).");
+      return;
+    }
+    if (dMode === "city" && !isPickedCity(dValue)) {
+      setError("Pick the destination city from the suggestions (e.g. Miami, FL).");
       return;
     }
     setLoading(true);
