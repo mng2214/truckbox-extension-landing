@@ -219,17 +219,19 @@ function MaskLines({
   className,
   delay = 0,
   play = false,
+  as: Tag = "div",
 }: {
   lines: React.ReactNode[];
   className?: string;
   delay?: number;
   play?: boolean;
+  as?: "div" | "h1" | "h2";
 }) {
   const trigger = play
     ? { animate: { y: 0 } }
     : { whileInView: { y: 0 }, viewport: { once: true, margin: "-60px" } };
   return (
-    <div className={className}>
+    <Tag className={className} style={{ margin: 0 }}>
       {lines.map((ln, i) => (
         <span className="ed-mask" key={i}>
           <motion.span
@@ -242,7 +244,7 @@ function MaskLines({
           </motion.span>
         </span>
       ))}
-    </div>
+    </Tag>
   );
 }
 
@@ -371,6 +373,7 @@ export default function App() {
       <Header />
       <main>
         <Hero />
+        <RateTape />
         <BeforeAfter />
         <Features />
         <SocialProof />
@@ -453,7 +456,7 @@ export function Header() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-colors duration-500"
         style={{
-          background: scrolled ? "rgba(10,10,9,0.72)" : "transparent",
+          background: scrolled ? "rgba(9,11,18,0.72)" : "transparent",
           backdropFilter: scrolled ? "blur(14px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
           borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
@@ -489,13 +492,14 @@ export function Header() {
                   flex: "0 0 auto",
                   WebkitMaskImage: "radial-gradient(circle, #000 74%, transparent 100%)",
                   maskImage: "radial-gradient(circle, #000 74%, transparent 100%)",
-                  filter: "drop-shadow(0 0 8px rgba(124,92,246,0.45))",
+                  filter:
+                    "drop-shadow(0 0 8px rgba(147,167,242,0.35))",
                 }}
               />
             )}
             <span
-              className="font-extrabold tracking-tight text-[1.05rem] uppercase"
-              style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em" }}
+              className="tracking-tight text-[1.12rem]"
+              style={{ fontFamily: "var(--font-display)", fontWeight: 560, letterSpacing: "-0.01em", fontVariationSettings: "'opsz' 40" }}
             >
               Truck&nbsp;Box
             </span>
@@ -590,8 +594,8 @@ export function Header() {
    ============================================================ */
 
 const HM_ROWS = [
-  { o: "Bolingbrook, IL", d: "Allentown, PA", rate: "$2,850", age: "2m", pin: "#6f8bff" },
-  { o: "Chicago, IL", d: "Columbus, OH", rate: "$1,420", age: "5m", pin: "#a78bfa" },
+  { o: "Bolingbrook, IL", d: "Allentown, PA", rate: "$2,850", age: "2m", pin: "#93a7f2" },
+  { o: "Chicago, IL", d: "Columbus, OH", rate: "$1,420", age: "5m", pin: "#b9a8ee" },
   { o: "Joliet, IL", d: "Nashville, TN", rate: "$2,100", age: "8m", pin: "#34d399" },
   { o: "Gary, IN", d: "Atlanta, GA", rate: "$2,640", age: "11m", pin: "#f59e0b" },
 ];
@@ -899,6 +903,45 @@ function HeroMockup() {
    Hero
    ============================================================ */
 
+/* Signature element: lane-rate ticker tape. Sample corridor rates in the
+   style of a market tape — labeled as sample data, never claimed live. */
+const TAPE_LANES = [
+  { o: "CHI", d: "ATL", r: "$2.41" },
+  { o: "DAL", d: "MEM", r: "$2.18" },
+  { o: "JOL", d: "NSH", r: "$2.63" },
+  { o: "CLT", d: "JAX", r: "$1.97" },
+  { o: "IND", d: "CMH", r: "$2.85" },
+  { o: "STL", d: "KCY", r: "$2.32" },
+  { o: "GRY", d: "ATL", r: "$2.09" },
+  { o: "MKE", d: "MSP", r: "$2.54" },
+];
+
+function RateTape() {
+  const half = (
+    <>
+      {TAPE_LANES.map((l, i) => (
+        <span className="tb-tape-item" key={i}>
+          <b>
+            {l.o} → {l.d}
+          </b>
+          <span className="tb-tape-rate">{l.r}/mi</span>
+        </span>
+      ))}
+      <span className="tb-tape-item">
+        <span className="tb-tape-label">TruckBox Lane Intelligence · sample rates</span>
+      </span>
+    </>
+  );
+  return (
+    <div className="tb-tape" aria-hidden>
+      <div className="tb-tape-track">
+        {half}
+        {half}
+      </div>
+    </div>
+  );
+}
+
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -915,16 +958,17 @@ function Hero() {
       <motion.div style={{ y, opacity: op }} className="ed-container">
         <div className="flex items-center justify-between gap-6 mb-6">
           <span className="ed-label">[ 01 ] — Chrome Extension · DAT + Truckstop — for truck dispatchers</span>
-          <span className="ed-label hidden sm:block">Est. 2025 — Chicago, USA</span>
+          <span className="ed-label hidden sm:block">TruckBox LLC — Chicago, USA · Est. 2025</span>
         </div>
 
         <MaskLines
           play
-          className="ed-display text-[7vw] lg:text-[5.25rem] whitespace-nowrap"
+          as="h1"
+          className="ed-display text-[8.8vw] lg:text-[5.6rem] whitespace-nowrap"
           lines={[
-            "First to the broker",
+            "First to the broker.",
             <span key="oc">
-              <span className="ed-accent">First to the load</span>
+              <span className="ed-accent" style={{ fontStyle: "italic" }}>First to the load.</span>
             </span>,
           ]}
         />
@@ -956,6 +1000,9 @@ function Hero() {
                   <span style={{ color: "var(--muted)" }}> — no credit card required</span>
                 </span>
               </div>
+              <span className="ed-label" style={{ letterSpacing: "0.08em", color: "var(--muted)" }}>
+                Google sign-in only — we never see your DAT password
+              </span>
               <a
                 href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
                 target="_blank"
@@ -3022,6 +3069,10 @@ export function Guide() {
         {/* ---------- hero ---------- */}
         <Reveal delay={0.2}>
           <div className="max-w-3xl">
+            <span className="ed-label">[ Guide ] — From install to first email</span>
+            <h1 className="ed-h2 mt-4">
+              The five-minute <span className="ed-accent" style={{ fontStyle: "italic" }}>setup.</span>
+            </h1>
             <p className="mt-6 text-lg" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
               A calm, step-by-step walkthrough. Follow along and you’ll be sending broker
               emails from your own Gmail in a few minutes. Nothing here can break anything —
@@ -3406,7 +3457,7 @@ export function Footer() {
           >
             <div className="flex flex-col items-center md:items-start">
             <span className="ed-label">
-              © {new Date().getFullYear()} TruckBox LLC
+              © {new Date().getFullYear()} TruckBox LLC — registered in Illinois, USA
             </span>
 
               <span className="ed-label mt-1 flex items-center justify-center md:justify-start gap-1">
