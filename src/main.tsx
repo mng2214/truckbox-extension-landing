@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
+import { installCrispTheme } from "./lib/crispTheme";
 import PrivacyPage from "./pages/Privacy";
 import GuidePage from "./pages/Guide";
 import FAQPage from "./pages/FAQ";
@@ -14,6 +15,7 @@ import InviteWizard from "./pages/business/InviteWizard";
 import RequestAccess from "./pages/business/RequestAccess";
 
 installPageGuard();
+installCrispTheme();
 
 if (import.meta.env.PROD) installDevtoolsDetector();
 

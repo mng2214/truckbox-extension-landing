@@ -505,7 +505,7 @@ export function Header() {
             )}
             <span
               className="tracking-tight text-[1.12rem]"
-              style={{ fontFamily: "var(--font-display)", fontWeight: 560, letterSpacing: "-0.01em", fontVariationSettings: "'opsz' 40" }}
+              style={{ fontFamily: "var(--font-display)", fontWeight: 700, letterSpacing: "-0.02em", fontVariationSettings: "'opsz' 40" }}
             >
               Truck&nbsp;Box
             </span>

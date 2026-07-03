@@ -35,7 +35,7 @@ select,
   --color-muted: #99a2bc;
   --color-accent: #93a7f2;
   --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+  --font-display: 'Bricolage Grotesque', 'Instrument Sans', ui-sans-serif, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
 }
 
@@ -65,7 +65,7 @@ select,
   --pri-soft: rgba(147, 167, 242, 0.14);
   --gradient: var(--accent-grad);
 
-  --font-display: 'Fraunces', Georgia, serif;
+  --font-display: 'Bricolage Grotesque', 'Instrument Sans', sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -153,17 +153,17 @@ html.lenis, html.lenis body { height: auto; }
 /* ------------------------------------------------------------ type */
 .ed-display {
   font-family: var(--font-display);
-  font-weight: 530;
-  font-variation-settings: "opsz" 132;
-  letter-spacing: -0.022em;
+  font-weight: 800;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.03em;
   line-height: 0.98;
   text-transform: none;
 }
 .ed-h2 {
   font-family: var(--font-display);
-  font-weight: 490;
-  font-variation-settings: "opsz" 110;
-  letter-spacing: -0.018em;
+  font-weight: 700;
+  font-variation-settings: "opsz" 96;
+  letter-spacing: -0.025em;
   line-height: 1.02;
   text-transform: none;
   font-size: clamp(2.2rem, 5.6vw, 4.6rem);
@@ -1813,16 +1813,25 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
    NOTE: current Crisp renders the launcher as a <div role="button"> (not an <a>)
    with data-maximized="false" while closed — so we scope to that (pulse only
    while the chat is closed; language-independent, no class-hash reliance). */
-.crisp-client [role="button"][data-maximized="false"] {
+/* The [role=button] node is a full-width wrapper on mobile; the visible round
+   bubble is its last span's inner span (54x54). All paint goes on the bubble —
+   never on the wrapper — so mobile doesn't grow a full-width gray bar. */
+.crisp-client [role="button"][data-maximized="false"] > span:last-child > span:not(#tbx) {
+  /* light-gray bubble (overrides the Crisp theme colour); the violet identity
+     stays in the neon glow + radar ring */
+  background: #d9dbe3 !important;
+  background-image: none !important;
   position: relative !important;
   overflow: visible !important;
   border-radius: 50% !important;
   /* neon glow via filter (Crisp resets box-shadow !important, but not filter) */
   animation: tbCrispGlow 2.8s ease-in-out infinite !important;
 }
+/* Icon recolor lives in lib/crispTheme.ts (data-uri swap — CSS filters clash
+   with the launcher's composited layer and invert the whole bubble). */
 /* single soft "radar" ring — pseudo-element driven by transform + opacity +
    border (no box-shadow, which Crisp wipes). Radiates gently outward. */
-.crisp-client [role="button"][data-maximized="false"]::after {
+.crisp-client [role="button"][data-maximized="false"] > span:last-child > span::after {
   content: "" !important;
   position: absolute !important;
   inset: -1px !important;
@@ -1844,9 +1853,9 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   100% { transform: scale(1.4); opacity: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .crisp-client [role="button"][data-maximized="false"],
-  .crisp-client [role="button"][data-maximized="false"]::before,
-  .crisp-client [role="button"][data-maximized="false"]::after { animation: none !important; }
+  .crisp-client [role="button"][data-maximized="false"] > span:last-child > span,
+  .crisp-client [role="button"][data-maximized="false"] > span:last-child > span::before,
+  .crisp-client [role="button"][data-maximized="false"] > span:last-child > span::after { animation: none !important; }
 }
 
 /* ============================================================
