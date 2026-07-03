@@ -719,43 +719,6 @@ select.ed-input { appearance: none; -webkit-appearance: none; cursor: pointer; }
 }
 .ed-marquee-star { color: var(--accent); padding: 0 0.2em; }
 
-/* ---- signature: lane-rate ticker tape (The Freight Desk) ---- */
-.tb-tape {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(147, 167, 242, 0.045), transparent 70%);
-  overflow: hidden;
-  padding: 13px 0;
-}
-.tb-tape-track {
-  display: flex;
-  width: max-content;
-  animation: tb-tape-scroll 52s linear infinite;
-  will-change: transform;
-}
-.tb-tape:hover .tb-tape-track { animation-play-state: paused; }
-@media (prefers-reduced-motion: reduce) { .tb-tape-track { animation: none; } }
-@keyframes tb-tape-scroll { to { transform: translateX(-50%); } }
-.tb-tape-item {
-  font-family: var(--font-mono);
-  font-size: 0.76rem;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-  padding: 0 20px;
-  display: inline-flex;
-  align-items: baseline;
-  gap: 9px;
-  color: var(--muted);
-}
-.tb-tape-item b { color: var(--ink); font-weight: 500; }
-.tb-tape-rate { color: var(--accent); font-weight: 600; }
-.tb-tape-label {
-  color: var(--accent);
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  font-size: 0.66rem;
-}
-
 /* freight-market ticker (reuses the marquee scroll) */
 .tb-ticker-item {
   display: inline-flex;

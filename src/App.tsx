@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react";
+import { usePageMeta } from "./lib/meta";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import Lenis from "lenis";
@@ -365,6 +366,12 @@ function StickyCTA() {
    ============================================================ */
 
 export default function App() {
+  usePageMeta({
+    title: "TruckBox — One-Click Broker Emails for DAT & Truckstop",
+    description:
+      "Chrome extension for truck dispatchers: send broker emails from DAT One and Truckstop in one click, with templates, lane analytics, route maps and RTS credit checks. $7/mo, 7-day free trial.",
+    path: "/",
+  });
   return (
     <div className="min-h-screen">
       <Spotlight />
@@ -373,7 +380,6 @@ export default function App() {
       <Header />
       <main>
         <Hero />
-        <RateTape />
         <BeforeAfter />
         <Features />
         <SocialProof />
@@ -903,45 +909,6 @@ function HeroMockup() {
    Hero
    ============================================================ */
 
-/* Signature element: lane-rate ticker tape. Sample corridor rates in the
-   style of a market tape — labeled as sample data, never claimed live. */
-const TAPE_LANES = [
-  { o: "CHI", d: "ATL", r: "$2.41" },
-  { o: "DAL", d: "MEM", r: "$2.18" },
-  { o: "JOL", d: "NSH", r: "$2.63" },
-  { o: "CLT", d: "JAX", r: "$1.97" },
-  { o: "IND", d: "CMH", r: "$2.85" },
-  { o: "STL", d: "KCY", r: "$2.32" },
-  { o: "GRY", d: "ATL", r: "$2.09" },
-  { o: "MKE", d: "MSP", r: "$2.54" },
-];
-
-function RateTape() {
-  const half = (
-    <>
-      {TAPE_LANES.map((l, i) => (
-        <span className="tb-tape-item" key={i}>
-          <b>
-            {l.o} → {l.d}
-          </b>
-          <span className="tb-tape-rate">{l.r}/mi</span>
-        </span>
-      ))}
-      <span className="tb-tape-item">
-        <span className="tb-tape-label">TruckBox Lane Intelligence · sample rates</span>
-      </span>
-    </>
-  );
-  return (
-    <div className="tb-tape" aria-hidden>
-      <div className="tb-tape-track">
-        {half}
-        {half}
-      </div>
-    </div>
-  );
-}
-
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
@@ -1176,7 +1143,7 @@ function FeatureCard({ item, index, total }: { item: FeatureItem; index: number;
             ref={vid}
             className="ed-fcard-media"
             src={`/demos/${item.slug}.mp4`}
-            poster={`/demos/${item.slug}.jpg`}
+            poster={`/demos/${item.slug}.webp`}
             muted
             loop
             playsInline
@@ -1209,26 +1176,26 @@ function FeatureCard({ item, index, total }: { item: FeatureItem; index: number;
 const BA_VIEWS = {
   details: {
     label: "Load details",
-    before: "/compare/before.png",
-    after: "/compare/after.png",
+    before: "/compare/before.webp",
+    after: "/compare/after.webp",
     ratio: "1447 / 982",
   },
   list: {
     label: "Loads list",
-    before: "/compare/before-list.png",
-    after: "/compare/after-list.png",
+    before: "/compare/before-list.webp",
+    after: "/compare/after-list.webp",
     ratio: "1230 / 899",
   },
   darkmode: {
     label: "Day / Night",
-    before: "/compare/day.png",
-    after: "/compare/night.png",
+    before: "/compare/day.webp",
+    after: "/compare/night.webp",
     ratio: "1347 / 909",
   },
   truckstop: {
     label: "Truckstop",
     // Single pre-composed before/after image (labels baked in) — shown static.
-    single: "/compare/truckstop.png",
+    single: "/compare/truckstop.webp",
     ratio: "1450 / 950",
   },
 } as const;
@@ -1415,7 +1382,7 @@ function BeforeAfter() {
           >
             {isStatic ? (
               /* Static single image — already a composed before/after, no drag */
-              <img
+              <img loading="lazy" decoding="async"
                 src={single}
                 alt="Truckstop board with TruckBox"
                 draggable={false}
@@ -1432,7 +1399,7 @@ function BeforeAfter() {
             ) : (
             <>
             {/* AFTER — full base layer (with TruckBox) */}
-            <img
+            <img loading="lazy" decoding="async"
               src={after}
               alt="With TruckBox"
               draggable={false}
@@ -1448,7 +1415,7 @@ function BeforeAfter() {
             />
 
             {/* BEFORE — clipped to the left of the handle (without TruckBox) */}
-            <img
+            <img loading="lazy" decoding="async"
               src={before}
               alt="Without TruckBox"
               draggable={false}
@@ -1574,7 +1541,7 @@ function Features() {
   useEffect(() => {
     items.forEach((it) => {
       const img = new Image();
-      img.src = `/demos/${it.slug}.jpg`;
+      img.src = `/demos/${it.slug}.webp`;
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -1730,7 +1697,7 @@ function Features() {
               >
                 <span className="tb-bento-media">
                   <img
-                    src={`/demos/${it.slug}.jpg`}
+                    src={`/demos/${it.slug}.webp`}
                     alt={it.title}
                     loading="lazy"
                     decoding="async"
@@ -1807,7 +1774,7 @@ function Features() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img src={`/demos/${items[lb].slug}.jpg`} alt={items[lb].title} />
+              <img loading="lazy" decoding="async" src={`/demos/${items[lb].slug}.webp`} alt={items[lb].title} />
               <figcaption>
                 <span className="tb-bento-idx">{String(lb + 1).padStart(2, "0")}</span>
                 <span className="tb-lb-title">{items[lb].title}</span>
@@ -1925,8 +1892,8 @@ function PlatformsBand() {
           </h2>
           <div className="mt-6 flex items-center gap-3 flex-wrap">
             <span className="ed-label" style={{ color: "var(--muted)" }}>Works with</span>
-            <span style={chip}><img style={logo} src="/dat.png" alt="DAT" /></span>
-            <span style={chip}><img style={logo} src="/truckstop.png" alt="Truckstop" /></span>
+            <span style={chip}><img loading="lazy" decoding="async" style={logo} src="/dat.png" alt="DAT" /></span>
+            <span style={chip}><img loading="lazy" decoding="async" style={logo} src="/truckstop.png" alt="Truckstop" /></span>
           </div>
         </div>
         <div className="grid sm:grid-cols-2 gap-5">
@@ -2834,7 +2801,7 @@ function ImageZoom({ src, alt, onClose }: { src: string; alt: string; onClose: (
       <button className="tb-zoom-close" onClick={onClose} aria-label="Close image">
         <X className="h-6 w-6" />
       </button>
-      <img
+      <img loading="lazy" decoding="async"
         src={src}
         alt={alt}
         className="tb-zoom-img"
@@ -2904,7 +2871,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Install",
     icon: Download,
     title: "Install Truck Box",
-    shots: ["/guide/01-install.png"],
+    shots: ["/guide/01-install.webp"],
     cta: true,
   },
   {
@@ -2912,14 +2879,14 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Pin it",
     icon: Pin,
     title: "Pin it to your toolbar",
-    shots: ["/guide/02-pin.png"],
+    shots: ["/guide/02-pin.webp"],
   },
   {
     phase: "Connect",
     short: "Open DAT",
     icon: MapPin,
     title: "Open DAT → Search Loads",
-    shots: ["/guide/03-dat-search-loads.png"],
+    shots: ["/guide/03-dat-search-loads.webp"],
     note: {
       tone: "info",
       text: (
@@ -2935,14 +2902,14 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Open popup",
     icon: MousePointerClick,
     title: "Open the Truck Box popup",
-    shots: ["/guide/04-open-popup.png"],
+    shots: ["/guide/04-open-popup.webp"],
   },
   {
     phase: "Connect",
     short: "Connect Gmail",
     icon: LogIn,
     title: "Log in & connect Gmail",
-    shots: ["/guide/05-login-connect-gmail.png", "/guide/05b-consent-send-email-checkbox.png"],
+    shots: ["/guide/05-login-connect-gmail.webp", "/guide/05b-consent-send-email-checkbox.webp"],
     note: {
       tone: "warn",
       text: (
@@ -2959,7 +2926,7 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Refresh",
     icon: RotateCw,
     title: "Refresh the DAT page",
-    shots: ["/guide/06-refresh-dat.png"],
+    shots: ["/guide/06-refresh-dat.webp"],
     note: {
       tone: "calm",
       text: (
@@ -2975,14 +2942,14 @@ const GUIDE_STEPS: GuideStep[] = [
     short: "Template",
     icon: FileText,
     title: "Set up your email template",
-    shots: ["/guide/07-email-template.png"],
+    shots: ["/guide/07-email-template.webp"],
   },
   {
     phase: "Send",
     short: "Send it",
     icon: Send,
     title: "Send your first email",
-    shots: ["/guide/08-send-email.png"],
+    shots: ["/guide/08-send-email.webp"],
   },
 ];
 
@@ -3462,7 +3429,7 @@ export function Footer() {
 
               <span className="ed-label mt-1 flex items-center justify-center md:justify-start gap-1">
               Crafted with coffee and java
-              <img
+              <img loading="lazy" decoding="async"
                   src="/java-logo.png"
                   alt="Java"
                   width={18}

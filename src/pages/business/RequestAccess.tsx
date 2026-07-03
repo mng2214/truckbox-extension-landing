@@ -1,7 +1,9 @@
 import { useForm, ValidationError } from "@formspree/react";
 import { Link } from "react-router-dom";
+import { usePageMeta } from "../../lib/meta";
 
 export default function RequestAccess() {
+  usePageMeta({ title: "Set up a team — TruckBox", description: "Request TruckBox access for your dispatch team.", path: "/business/request", noindex: true });
   const [state, handleSubmit] = useForm("xnjyvqjv");
 
   if (state.succeeded) {

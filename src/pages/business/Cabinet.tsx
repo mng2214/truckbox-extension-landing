@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react"
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X, Sun, Moon, LogOut, HelpCircle, User } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
+import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
 import type { AccountContext } from "./types";
@@ -28,6 +29,7 @@ function signOut() {
 }
 
 export default function Cabinet() {
+  usePageMeta({ title: "Business cabinet — TruckBox", description: "Manage your TruckBox team.", path: "/business", noindex: true });
   const [ctx, setCtx] = useState<AccountContext | null>(null);
   const [authed, setAuthed] = useState(auth.isAuthed());
   const [section, setSection] = useState("personal");

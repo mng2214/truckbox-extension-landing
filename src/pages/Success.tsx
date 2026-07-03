@@ -2,8 +2,10 @@ import { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { ArrowUpRight, Check } from "lucide-react";
 import { Header, Footer, Reveal, INSTALL_URL } from "../App";
+import { usePageMeta } from "../lib/meta";
 
 export default function SuccessPage() {
+  usePageMeta({ title: "Payment successful — TruckBox", description: "Your TruckBox subscription is active.", path: "/success", noindex: true });
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);

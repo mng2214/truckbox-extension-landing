@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { api, ApiError } from "../../lib/api";
+import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
 import { PhoneVerify } from "../../components/PhoneVerify";
@@ -8,6 +9,7 @@ import { PhoneVerify } from "../../components/PhoneVerify";
 type Step = "loading" | "invalid" | "google" | "wrong" | "phone" | "company" | "redirecting";
 
 export default function InviteWizard() {
+  usePageMeta({ title: "Team invite — TruckBox", description: "Activate your TruckBox seat.", path: "/business/invite", noindex: true });
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const [step, setStep] = useState<Step>("loading");
