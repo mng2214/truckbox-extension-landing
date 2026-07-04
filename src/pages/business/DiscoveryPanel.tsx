@@ -467,8 +467,8 @@ export function DiscoveryPanel() {
                             <thead>
                               <tr style={{ color: "var(--muted)" }}>
                                 <th className="text-left font-normal py-1.5" style={thLabel}>Lane</th>
-                                <th className="text-right font-normal py-1.5" style={thLabel}>Days</th>
-                                <th className="text-right font-normal py-1.5" style={thLabel}>Reposts</th>
+                                <th className="text-right font-normal py-1.5" style={thLabel}>Days Posted</th>
+                                <th className="text-right font-normal py-1.5" style={thLabel}>Total Reposts</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>Avg</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>Last</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>RPM</th>
