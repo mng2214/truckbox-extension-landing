@@ -2,6 +2,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, ChevronDown, Copy, MapPin, Mail, Phone, Search } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
+import { probeAgent } from "./agent/AgentApi";
+import { AgentSection } from "./agent/AgentSection";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -108,11 +110,23 @@ export function DiscoveryPanel() {
   const [minActiveDays, setMinActiveDays] = useState(2);
 
   const [rows, setRows] = useState<BrokerRow[] | null>(null);
+  const [requestId, setRequestId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [quota, setQuota] = useState<Quota | null>(null);
   const reduce = useReducedMotion();
+
+  // Agent (outreach) is stealth: UI exists only after the probe returns 200.
+  const [agent, setAgent] = useState<{ available: boolean; connected: boolean }>({
+    available: false,
+    connected: false,
+  });
+  // null = search view; {requestId} = draft entry; {requestId: null} = campaigns list
+  const [agentView, setAgentView] = useState<{ requestId: number | null } | null>(null);
+  useEffect(() => {
+    probeAgent().then(setAgent);
+  }, []);
 
   const fetchQuota = () =>
     api
@@ -169,18 +183,22 @@ export function DiscoveryPanel() {
     setError(null);
     const started = Date.now();
     try {
-      const result = await api.post<BrokerRow[]>("/api/v1/discovery/search", {
-        origin: oValue.trim(),
-        destination: dValue.trim(),
-        originRadius: oMode === "city" ? oRadius : null,
-        destRadius: dMode === "city" ? dRadius : null,
-        equipment: equipment.length ? equipment : null,
-        minActiveDays,
-      });
+      const result = await api.post<{ requestId: number | null; brokers: BrokerRow[] }>(
+        "/api/v1/discovery/search",
+        {
+          origin: oValue.trim(),
+          destination: dValue.trim(),
+          originRadius: oMode === "city" ? oRadius : null,
+          destRadius: dMode === "city" ? dRadius : null,
+          equipment: equipment.length ? equipment : null,
+          minActiveDays,
+        },
+      );
       // Hold the "thinking" loader for at least 3s, even if the API is faster.
       const wait = 3000 - (Date.now() - started);
       if (wait > 0) await new Promise((r) => setTimeout(r, wait));
-      setRows(result);
+      setRows(result.brokers);
+      setRequestId(result.requestId ?? null);
       setExpanded(new Set());
       fetchQuota();
     } catch (err) {
@@ -190,6 +208,20 @@ export function DiscoveryPanel() {
       setLoading(false);
     }
   };
+
+  // Agent views replace the search UI entirely (draft screen / dashboard / campaign list).
+  if (agentView) {
+    return (
+      <section className="flex flex-col">
+        <AgentSection
+          initialRequestId={agentView.requestId}
+          connected={agent.connected}
+          onConnected={() => setAgent((a) => ({ ...a, connected: true }))}
+          onClose={() => setAgentView(null)}
+        />
+      </section>
+    );
+  }
 
   return (
     <section className="flex flex-col">
@@ -246,7 +278,26 @@ export function DiscoveryPanel() {
       <h1 className="ed-display mt-3" style={{ fontSize: "clamp(2.2rem, 6vw, 3rem)", color: "var(--ink)" }}>
         Oracle
       </h1>
-      <p className="ed-label mt-2.5">Dedicated lanes discovery</p>
+      <p className="ed-label mt-2.5" style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
+        Dedicated lanes discovery
+        {agent.available && (
+          <button
+            onClick={() => setAgentView({ requestId: null })}
+            style={{
+              background: "transparent",
+              border: "none",
+              color: "var(--accent)",
+              cursor: "pointer",
+              font: "inherit",
+              padding: 0,
+              textDecoration: "underline",
+              textUnderlineOffset: 3,
+            }}
+          >
+            Agent · my campaigns
+          </button>
+        )}
+      </p>
       {quota && (
         <span
           className="mt-3"
@@ -346,8 +397,19 @@ export function DiscoveryPanel() {
             <span className="ed-label" style={{ color: "var(--ink)" }}>
               {groups.length} broker{groups.length === 1 ? "" : "s"}
             </span>
-            <span className="ed-label">
-              {rows.length} lane{rows.length === 1 ? "" : "s"}
+            <span className="flex items-baseline gap-4">
+              {agent.available && requestId != null && groups.length > 0 && (
+                <button
+                  className="ed-btn ed-btn-accent"
+                  style={{ fontSize: "0.78rem" }}
+                  onClick={() => setAgentView({ requestId })}
+                >
+                  Start outreach with Agent
+                </button>
+              )}
+              <span className="ed-label">
+                {rows.length} lane{rows.length === 1 ? "" : "s"}
+              </span>
             </span>
           </div>
 

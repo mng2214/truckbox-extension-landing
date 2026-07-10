@@ -17,6 +17,11 @@ const DiscoveryPanel = lazy(() =>
   import("./DiscoveryPanel").then((m) => ({ default: m.DiscoveryPanel }))
 );
 
+// Agent (outreach): admin-only tab for testing. Lazy for the same stealth reason.
+const AgentPanel = lazy(() =>
+  import("./AgentPanel").then((m) => ({ default: m.AgentPanel }))
+);
+
 const SUPPORT_TELEGRAM = "https://t.me/mngartur";
 const EASE = [0.16, 1, 0.3, 1] as const;
 // Backend ErrorCode.PHONE_VERIFICATION_REQUIRED — a distinct 403 that means "verify your phone"
@@ -174,6 +179,9 @@ export default function Cabinet() {
         {ctx.panels.includes("discovery") && (
           <NavItem label="Oracle" active={section === "discovery"} onClick={() => goto("discovery")} />
         )}
+        {ctx.panels.includes("agent") && (
+          <NavItem label="Agent" active={section === "agent"} onClick={() => goto("agent")} />
+        )}
       </nav>
 
     </>
@@ -272,6 +280,11 @@ export default function Cabinet() {
         {section === "discovery" && ctx.panels.includes("discovery") && (
           <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
             <DiscoveryPanel />
+          </Suspense>
+        )}
+        {section === "agent" && ctx.panels.includes("agent") && (
+          <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
+            <AgentPanel />
           </Suspense>
         )}
       </main>
