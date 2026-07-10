@@ -4,9 +4,14 @@ import { api, ApiError } from "../../lib/api";
 import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
-import { PhoneVerify } from "../../components/PhoneVerify";
+import type { GoogleAuthResult } from "../../lib/google";
+import { PhoneVerify } from "./PhoneVerify";
 
 type Step = "loading" | "invalid" | "google" | "wrong" | "phone" | "company" | "redirecting";
+
+// Backend ErrorCode.PHONE_VERIFICATION_REQUIRED — a distinct 403 that means "verify your phone"
+// (vs a generic 403/expired token, which means "log in again"). Same contract as the cabinet.
+const PHONE_VERIFICATION_REQUIRED = 1023;
 
 export default function InviteWizard() {
   usePageMeta({ title: "Team invite — TruckBox", description: "Activate your TruckBox seat.", path: "/business/invite", noindex: true });
@@ -17,17 +22,33 @@ export default function InviteWizard() {
   const [error, setError] = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [authedEmail, setAuthedEmail] = useState("");
-  const afterAuth: Step = import.meta.env.VITE_SKIP_PHONE === "true" ? "company" : "phone";
   const norm = (e: string) => e.trim().toLowerCase();
   const gateAfterAuth = async (invite: string) => {
     try {
       const ctx = await api.get<{ email: string }>("/api/v1/account/context");
       setAuthedEmail(ctx.email);
-      setStep(norm(ctx.email) === norm(invite) ? afterAuth : "wrong");
-    } catch {
+      setStep(norm(ctx.email) === norm(invite) ? "company" : "wrong");
+    } catch (e) {
+      // Verification-scoped token (phone not confirmed yet): show the phone step, keep the token —
+      // it is exactly what the phone endpoints need. Anything else: session is unusable, re-login.
+      if (e instanceof ApiError && e.status === 403 && e.code === PHONE_VERIFICATION_REQUIRED) {
+        setStep("phone");
+        return;
+      }
       auth.clearToken();
       setStep("google");
     }
+  };
+
+  // Fresh Google sign-in: the auth response tells us both who signed in and whether the backend
+  // still requires phone verification — no extra round-trip needed.
+  const onSignedIn = (res: GoogleAuthResult) => {
+    setAuthedEmail(res.email);
+    if (norm(res.email) !== norm(inviteEmail)) {
+      setStep("wrong");
+      return;
+    }
+    setStep(res.phoneVerificationRequired ? "phone" : "company");
   };
 
   const signOut = () => {
@@ -109,7 +130,7 @@ export default function InviteWizard() {
         <p style={{ color: "var(--muted)", marginBottom: "1.5rem", textAlign: "center" }}>
           Sign in with Google to continue.
         </p>
-        <GoogleSignIn onSignedIn={() => gateAfterAuth(inviteEmail)} />
+        <GoogleSignIn onSignedIn={onSignedIn} />
       </Center>
     );
 
@@ -134,11 +155,17 @@ export default function InviteWizard() {
     );
 
   if (step === "phone")
+    // After confirm, PhoneVerify has swapped the verification-scoped token for a full one —
+    // re-gate to run the invite-email match (unknown when the phone step was reached with a
+    // stored verification token, where /account/context is not accessible yet).
     return (
-      <Center>
-        <PhoneVerify onVerified={() => setStep("company")} />
-        {signOutLink}
-      </Center>
+      <PhoneVerify
+        onVerified={() => {
+          setStep("loading");
+          gateAfterAuth(inviteEmail);
+        }}
+        onSignOut={signOut}
+      />
     );
 
   if (step === "redirecting")
