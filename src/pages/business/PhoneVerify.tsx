@@ -93,6 +93,18 @@ export function PhoneVerify({
 
   const e164 = country.dial + national.replace(/\D/g, "");
 
+  // Friendly texts for the backend's phone error codes; raw backend messages are technical
+  // (e.g. "Phone number must be in E.164 format").
+  const ERR: Record<number, string> = {
+    1024: "This number is already linked to another account.",
+    1025: "Virtual or temporary numbers are not supported. Use a real mobile number.",
+    1026: "Wrong or expired code.",
+    1027: "Enter a valid phone number with country code.",
+    1028: "Too many attempts. Please wait and try again.",
+  };
+  const explain = (e: unknown, fallback: string) =>
+    e instanceof ApiError ? (e.code && ERR[e.code]) || e.message || fallback : fallback;
+
   const sendCode = async () => {
     if (national.replace(/\D/g, "").length < 5) {
       setError("Enter your phone number.");
@@ -104,7 +116,7 @@ export function PhoneVerify({
       await api.post("/api/v1/auth/phone/start", { phone: e164 });
       setSent(true);
     } catch (e) {
-      setError(e instanceof ApiError && e.message ? e.message : "Couldn't send the code. Try again.");
+      setError(explain(e, "Couldn't send the code. Try again."));
     } finally {
       setLoading(false);
     }
@@ -125,7 +137,7 @@ export function PhoneVerify({
       auth.setToken(res.token);
       onVerified();
     } catch (e) {
-      setError(e instanceof ApiError && e.message ? e.message : "Invalid or expired code.");
+      setError(explain(e, "Invalid or expired code."));
     } finally {
       setLoading(false);
     }

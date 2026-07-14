@@ -55,10 +55,37 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
 
   return (
     <section className="flex flex-col gap-8">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-baseline sm:justify-between">
+      <header>
         <h1 className="ed-display text-[7vw] sm:text-[6vw] lg:text-[2.5rem]" style={{ wordBreak: "break-word" }}>{team.name}</h1>
-        <div className="flex items-center gap-3">
+      </header>
+
+      {err && <p style={{ color: "var(--danger, #c0392b)" }}>{err}</p>}
+
+      <form
+        className="flex flex-wrap items-center gap-3"
+        onSubmit={async (e) => {
+          e.preventDefault();
+          await guard(() => api.post("/api/v1/manager/team/members", { emails: [newEmail] }));
+          setNewEmail("");
+        }}
+      >
+        <input
+          className="border px-3 py-2 w-full sm:w-[22rem]"
+          style={{ borderColor: "var(--hairline)", color: "var(--ink)" }}
+          type="email"
+          placeholder="dispatcher@company.com"
+          value={newEmail}
+          onChange={(e) => setNewEmail(e.target.value)}
+          required
+        />
+        <button className="ed-btn ed-btn-accent" type="submit" disabled={busy}>
+          <span>{busy ? "Working…" : "Add member"}</span>
+        </button>
+
+        {/* type="button" — inside the form these must not trigger submit/validation */}
+        <div className="flex items-center gap-3 sm:ml-auto">
           <button
+            type="button"
             className="ed-btn"
             aria-label="Remove seat"
             onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats - 1 }))}
@@ -70,6 +97,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             {busy ? <span className="tb-spinner" aria-label="Updating" /> : `${team.seats} seats`}
           </span>
           <button
+            type="button"
             className="ed-btn"
             aria-label="Add seat"
             onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats + 1 }))}
@@ -78,30 +106,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             <span>+</span>
           </button>
         </div>
-      </header>
-
-      {err && <p style={{ color: "var(--danger, #c0392b)" }}>{err}</p>}
-
-      <form
-        className="flex gap-3"
-        onSubmit={async (e) => {
-          e.preventDefault();
-          await guard(() => api.post("/api/v1/manager/team/members", { emails: [newEmail] }));
-          setNewEmail("");
-        }}
-      >
-        <input
-          className="border px-3 py-2 flex-1"
-          style={{ borderColor: "var(--hairline)", color: "var(--ink)" }}
-          type="email"
-          placeholder="dispatcher@company.com"
-          value={newEmail}
-          onChange={(e) => setNewEmail(e.target.value)}
-          required
-        />
-        <button className="ed-btn ed-btn-accent" type="submit" disabled={busy}>
-          <span>{busy ? "Working…" : "Add member"}</span>
-        </button>
       </form>
 
       <div className="flex flex-col">

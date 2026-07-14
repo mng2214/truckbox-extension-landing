@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { exchangeGoogleAccessToken } from "../lib/google";
+import { exchangeGoogleAccessToken, type GoogleAuthResult } from "../lib/google";
 
 declare global {
   interface Window {
@@ -7,7 +7,7 @@ declare global {
   }
 }
 
-export function GoogleSignIn({ onSignedIn }: { onSignedIn: () => void }) {
+export function GoogleSignIn({ onSignedIn }: { onSignedIn: (res: GoogleAuthResult) => void }) {
   const clientRef = useRef<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -26,8 +26,8 @@ export function GoogleSignIn({ onSignedIn }: { onSignedIn: () => void }) {
             return;
           }
           try {
-            await exchangeGoogleAccessToken(resp.access_token);
-            onSignedIn();
+            const res = await exchangeGoogleAccessToken(resp.access_token);
+            onSignedIn(res);
           } catch (err) {
             console.error("Google sign-in exchange failed:", err);
             setError("Sign-in failed. Please try again.");

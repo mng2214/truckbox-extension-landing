@@ -1,15 +1,15 @@
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
 
-type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
-type Dispatcher = {
+export type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
+export type Dispatcher = {
   email: string;
   today: Win;
   weekToDate: Win;
   monthToDate: Win;
   total: Win;
 };
-type TeamStats = { organizationName: string; seats: number; dispatchers: Dispatcher[] };
+export type TeamStats = { organizationName: string; seats: number; dispatchers: Dispatcher[] };
 
 function timeSaved(w: Win): string {
   const totalMin = Math.floor(((w.emailsSent + w.mapsOpened + w.callsPlaced) * 30) / 60);
@@ -23,6 +23,7 @@ function timeSaved(w: Win): string {
 export function StatsPanel() {
   const [stats, setStats] = useState<TeamStats | null>(null);
   const [err, setErr] = useState<string | null>(null);
+  const [pdfBusy, setPdfBusy] = useState(false);
 
   useEffect(() => {
     api
@@ -30,6 +31,20 @@ export function StatsPanel() {
       .then(setStats)
       .catch(() => setErr("Could not load statistics."));
   }, []);
+
+  const downloadPdf = async () => {
+    if (!stats || pdfBusy) return;
+    setPdfBusy(true);
+    try {
+      // Lazy chunk: jspdf (~150KB gz) loads only when a manager actually exports.
+      const { downloadTeamReportPdf } = await import("./teamReportPdf");
+      downloadTeamReportPdf(stats);
+    } catch {
+      setErr("Could not generate the PDF. Please try again.");
+    } finally {
+      setPdfBusy(false);
+    }
+  };
 
   if (err) return <p style={{ color: "var(--danger, #c0392b)" }}>{err}</p>;
   if (!stats) return <div style={{ color: "var(--muted)" }}>Loading…</div>;
@@ -45,9 +60,16 @@ export function StatsPanel() {
 
   return (
     <section className="flex flex-col gap-6">
-      <h1 className="ed-display text-[6vw] lg:text-[2.5rem]" style={{ color: "var(--ink)" }}>
-        Statistics
-      </h1>
+      <header className="flex flex-wrap items-center gap-4">
+        <h1 className="ed-display text-[6vw] lg:text-[2.5rem]" style={{ color: "var(--ink)" }}>
+          Statistics
+        </h1>
+        {stats.dispatchers.length > 0 && (
+          <button className="ed-btn" onClick={downloadPdf} disabled={pdfBusy}>
+            {pdfBusy ? "Preparing…" : "Download PDF report"}
+          </button>
+        )}
+      </header>
 
       {stats.dispatchers.length > 0 && (
         <div className="flex flex-col gap-3">

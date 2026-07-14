@@ -1,9 +1,14 @@
 import { api } from "./api";
 import { auth } from "./auth";
 
-type AuthResponse = { token: string };
+export type GoogleAuthResult = {
+  token: string;
+  email: string;
+  phoneVerificationRequired: boolean;
+};
 
-export async function exchangeGoogleAccessToken(accessToken: string): Promise<void> {
-  const res = await api.post<AuthResponse>("/api/v1/auth/google", { googleToken: accessToken });
+export async function exchangeGoogleAccessToken(accessToken: string): Promise<GoogleAuthResult> {
+  const res = await api.post<GoogleAuthResult>("/api/v1/auth/google", { googleToken: accessToken });
   auth.setToken(res.token);
+  return res;
 }
