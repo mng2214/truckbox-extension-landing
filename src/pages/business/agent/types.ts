@@ -14,11 +14,32 @@ export type DraftBrokerRow = {
   preChecked: boolean;
 };
 
+/**
+ * Display-only cleanup of an email body: cut the quoted tail ("On … wrote:" + "> …" lines)
+ * so the timeline shows just the new text. Raw bodies stay untouched in the DB/API.
+ */
+export function stripQuotedTail(body: string | null): string {
+  if (!body) return "";
+  const lines = body.split("\n");
+  let cut = lines.length;
+  for (let i = 0; i < lines.length; i++) {
+    const l = lines[i].trim();
+    if (l.startsWith(">") || (/^On .{5,120} wrote:$/.test(l) && i > 0)) {
+      cut = i;
+      break;
+    }
+  }
+  const stripped = lines.slice(0, cut).join("\n").trimEnd();
+  return stripped.length > 0 ? stripped : body; // a pure-quote email still shows something
+}
+
 export type CampaignDraft = {
   campaignId: number;
   brokers: DraftBrokerRow[];
   maxBrokers: number;
   mcRequired: boolean;
+  companyRequired: boolean;
+  firstNameRequired: boolean;
 };
 
 export type CampaignSummary = {

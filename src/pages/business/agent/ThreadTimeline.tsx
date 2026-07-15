@@ -1,6 +1,6 @@
 import { useState } from "react";
 import type { AgentMessage, ThreadStatus } from "./types";
-import { isTerminal } from "./types";
+import { isTerminal, stripQuotedTail } from "./types";
 
 /**
  * The agreed progress UX: grey track with event dots, green fill up to the current step, hover a
@@ -158,7 +158,7 @@ export function ThreadTimeline({
               overflowY: "auto",
             }}
           >
-            {dots[hover].message!.body}
+            {stripQuotedTail(dots[hover].message!.body)}
           </div>
         </div>
       )}

@@ -26,10 +26,14 @@ export function confirmCampaign(
   campaignId: number,
   brokerIds: number[],
   mcNumber: string | null,
+  companyName: string | null,
+  firstName: string | null,
 ): Promise<CampaignSummary> {
   return api.put<CampaignSummary>(`/api/v1/outreach/campaigns/${campaignId}/confirm`, {
     brokerIds,
     mcNumber,
+    companyName,
+    firstName,
   });
 }
 

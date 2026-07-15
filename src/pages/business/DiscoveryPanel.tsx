@@ -284,17 +284,25 @@ export function DiscoveryPanel() {
           <button
             onClick={() => setAgentView({ requestId: null })}
             style={{
-              background: "transparent",
-              border: "none",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+              border: "1px solid color-mix(in srgb, var(--accent) 35%, transparent)",
+              borderRadius: 999,
               color: "var(--accent)",
               cursor: "pointer",
-              font: "inherit",
-              padding: 0,
-              textDecoration: "underline",
-              textUnderlineOffset: 3,
+              fontFamily: "var(--font-sans, inherit)",
+              fontSize: "0.8rem",
+              fontWeight: 600,
+              letterSpacing: 0,
+              textTransform: "none",
+              lineHeight: 1,
+              padding: "0.32rem 0.7rem",
             }}
           >
-            Agent · my campaigns
+            My campaigns
+            <span aria-hidden style={{ fontSize: "0.9em" }}>→</span>
           </button>
         )}
       </p>

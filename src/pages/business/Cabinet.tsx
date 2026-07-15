@@ -1,6 +1,7 @@
 import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
+import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, Sun, Moon, LogOut, HelpCircle, User } from "lucide-react";
+import { Menu, X, Sun, Moon, LogOut, HelpCircle, User, Settings } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
@@ -37,27 +38,25 @@ export default function Cabinet() {
   usePageMeta({ title: "Business cabinet — TruckBox", description: "Manage your TruckBox team.", path: "/business", noindex: true });
   const [ctx, setCtx] = useState<AccountContext | null>(null);
   const [authed, setAuthed] = useState(auth.isAuthed());
-  const [section, setSection] = useState("personal");
+  const params = useParams();
+  const navigate = useNavigate();
+  const section = params.section ?? null;
   const [error, setError] = useState<string | null>(null);
   const [needsPhone, setNeedsPhone] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   // Light is the default for the back office; respected as dark only if the user explicitly chose it.
   const [theme, setTheme] = useState<"dark" | "light">(() =>
     typeof localStorage !== "undefined" && localStorage.getItem("tb-theme") === "dark"
       ? "dark"
       : "light",
   );
-  const sectionInit = useRef(false);
 
   const load = useCallback(async () => {
     try {
       const c = await api.get<AccountContext>("/api/v1/account/context");
       setCtx(c);
       setNeedsPhone(false);
-      if (!sectionInit.current) {
-        setSection(c.panels[0] ?? "personal");
-        sectionInit.current = true;
-      }
     } catch (e) {
       // A verification-scoped token (unverified phone) is rejected with a DISTINCT 403 code —
       // route to the phone-verification step. An expired/invalid token gives a generic 401/403
@@ -110,11 +109,22 @@ export default function Cabinet() {
   }, [navOpen]);
 
   if (!authed) {
+    const expired =
+      typeof sessionStorage !== "undefined" && sessionStorage.getItem("tb-session-expired") === "1";
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-8 px-6 text-center">
         <h1 className="ed-display text-[8vw] lg:text-[3.5rem]">Account</h1>
-        <p style={{ color: "var(--muted)" }}>Sign in to manage your plan and team.</p>
-        <GoogleSignIn onSignedIn={() => setAuthed(true)} />
+        <p style={{ color: expired ? "var(--danger)" : "var(--muted)" }}>
+          {expired
+            ? "Your session expired — please sign in again."
+            : "Sign in to manage your plan and team."}
+        </p>
+        <GoogleSignIn
+          onSignedIn={() => {
+            sessionStorage.removeItem("tb-session-expired");
+            setAuthed(true);
+          }}
+        />
       </div>
     );
   }
@@ -148,8 +158,20 @@ export default function Cabinet() {
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
 
+  const allowed = (s: string): boolean => {
+    if (s === "personal") return ctx.panels.includes("personal");
+    if (s === "team" || s === "statistics") return isManager;
+    if (s === "discovery") return ctx.panels.includes("discovery");
+    if (s === "agent") return ctx.panels.includes("agent");
+    return false;
+  };
+  const defaultSection = ctx.panels[0] ?? "personal";
+  if (!section || !allowed(section)) {
+    return <Navigate to={`/business/${defaultSection}`} replace />;
+  }
+
   const goto = (s: string) => {
-    setSection(s);
+    navigate(`/business/${s}`);
     setNavOpen(false);
   };
 
@@ -188,7 +210,7 @@ export default function Cabinet() {
   );
 
   return (
-    <div className="min-h-screen md:flex">
+    <div className="min-h-screen md:flex" style={{ position: "relative" }}>
       {/* Static desktop sidebar */}
       <aside
         className="tb-aside hidden md:flex w-60 shrink-0 border-r p-5 flex-col gap-1"
@@ -215,6 +237,7 @@ export default function Cabinet() {
             email={ctx.email}
             theme={theme}
             onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+            onOpenSettings={() => setSettingsOpen(true)}
           />
           <button
             type="button"
@@ -228,14 +251,19 @@ export default function Cabinet() {
         </div>
       </header>
 
-      {/* Desktop account menu — floats top-right so it never stretches with the sidebar */}
-      <div className="hidden md:block" style={{ position: "fixed", top: "1.1rem", right: "1.6rem", zIndex: 50 }}>
+      {/* Desktop account menu — anchored to the top of the page (scrolls away, not pinned) */}
+      <div className="hidden md:block" style={{ position: "absolute", top: "1.1rem", right: "1.6rem", zIndex: 50 }}>
         <AccountMenu
           email={ctx.email}
           theme={theme}
           onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+          onOpenSettings={() => setSettingsOpen(true)}
         />
       </div>
+
+      <AnimatePresence>
+        {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
+      </AnimatePresence>
 
       {/* Mobile off-canvas drawer */}
       <AnimatePresence>
@@ -284,7 +312,7 @@ export default function Cabinet() {
         )}
         {section === "agent" && ctx.panels.includes("agent") && (
           <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
-            <AgentPanel />
+            <AgentPanel campaignId={params.id ? Number(params.id) : null} />
           </Suspense>
         )}
       </main>
@@ -304,10 +332,12 @@ function AccountMenu({
   email,
   theme,
   onToggleTheme,
+  onOpenSettings,
 }: {
   email: string;
   theme: "dark" | "light";
   onToggleTheme: () => void;
+  onOpenSettings: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -385,12 +415,190 @@ function AccountMenu({
               label={theme === "light" ? "Dark mode" : "Light mode"}
               onClick={onToggleTheme}
             />
+            <MenuRow
+              icon={<Settings size={15} />}
+              label="Settings"
+              onClick={() => {
+                setOpen(false);
+                onOpenSettings();
+              }}
+            />
             <MenuRow icon={<HelpCircle size={15} />} label="Need help?" href={SUPPORT_TELEGRAM} />
             <MenuRow icon={<LogOut size={15} />} label="Sign out" onClick={signOut} />
           </motion.div>
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+type AccountSettings = { mcNumber: string | null; companyName: string | null; firstName: string | null };
+
+/** Company details for the Agent (company → branded reply address; MC shared on request). */
+function SettingsModal({ onClose }: { onClose: () => void }) {
+  const [mc, setMc] = useState("");
+  const [company, setCompany] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+
+  useEffect(() => {
+    api
+      .get<AccountSettings>("/api/v1/account/settings")
+      .then((s) => {
+        setMc(s.mcNumber ?? "");
+        setCompany(s.companyName ?? "");
+        setFirstName(s.firstName ?? "");
+      })
+      .catch(() => setError("Failed to load settings."))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const save = () => {
+    setSaving(true);
+    setError(null);
+    api
+      .put<AccountSettings>("/api/v1/account/settings", {
+        mcNumber: mc,
+        companyName: company,
+        firstName,
+      })
+      .then((s) => {
+        setMc(s.mcNumber ?? "");
+        setCompany(s.companyName ?? "");
+        setFirstName(s.firstName ?? "");
+        setSaved(true);
+        setTimeout(onClose, 700);
+      })
+      .catch(() => setError("Failed to save. Try again."))
+      .finally(() => setSaving(false));
+  };
+
+  return (
+    <motion.div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Settings"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2, ease: EASE }}
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 80,
+        background: "rgba(0,0,0,0.45)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "min(420px, 100%)",
+          background: "var(--bg-2)",
+          border: "1px solid var(--hairline)",
+          boxShadow: "0 24px 60px rgba(0, 0, 0, 0.35)",
+          padding: "1.4rem 1.5rem 1.5rem",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
+          <h3 className="ed-display" style={{ fontSize: "1.05rem", margin: 0 }}>
+            Settings
+          </h3>
+          <button type="button" className="tb-icon-btn" aria-label="Close settings" onClick={onClose}>
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <label
+          style={{ display: "block", fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}
+        >
+          First name
+        </label>
+        <input
+          value={firstName}
+          disabled={loading}
+          onChange={(e) => setFirstName(e.target.value)}
+          placeholder="e.g. Artur"
+          style={{
+            width: "100%",
+            padding: "0.55rem 0.7rem",
+            fontSize: "0.9rem",
+            color: "var(--ink)",
+            background: "transparent",
+            border: "1px solid var(--hairline)",
+            outline: "none",
+          }}
+        />
+        <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "0.5rem 0 1rem", lineHeight: 1.4 }}>
+          The Agent signs its emails with this name.
+        </p>
+
+        <label
+          style={{ display: "block", fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}
+        >
+          Company name
+        </label>
+        <input
+          value={company}
+          disabled={loading}
+          onChange={(e) => setCompany(e.target.value)}
+          placeholder="e.g. Smart Freight LLC"
+          style={{
+            width: "100%",
+            padding: "0.55rem 0.7rem",
+            fontSize: "0.9rem",
+            color: "var(--ink)",
+            background: "transparent",
+            border: "1px solid var(--hairline)",
+            outline: "none",
+          }}
+        />
+        <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "0.5rem 0 1rem", lineHeight: 1.4 }}>
+          Goes into the Agent's reply address (smart-freight-llc_…@truckbox.app). Required before
+          launching campaigns.
+        </p>
+
+        <label
+          style={{ display: "block", fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}
+        >
+          MC number
+        </label>
+        <input
+          value={mc}
+          disabled={loading}
+          onChange={(e) => setMc(e.target.value)}
+          placeholder="e.g. 123456"
+          inputMode="numeric"
+          style={{
+            width: "100%",
+            padding: "0.55rem 0.7rem",
+            fontSize: "0.9rem",
+            color: "var(--ink)",
+            background: "transparent",
+            border: "1px solid var(--hairline)",
+            outline: "none",
+          }}
+        />
+        <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "0.5rem 0 1rem", lineHeight: 1.4 }}>
+          The Agent shares your MC only when a broker asks for it.
+        </p>
+
+        {error && (
+          <p style={{ color: "var(--danger)", fontSize: "0.8rem", marginBottom: "0.7rem" }}>{error}</p>
+        )}
+
+        <button type="button" className="ed-btn" disabled={loading || saving} onClick={save}>
+          {saved ? "Saved ✓" : saving ? "Saving…" : "Save"}
+        </button>
+      </div>
+    </motion.div>
   );
 }
 

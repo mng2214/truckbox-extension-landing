@@ -24,6 +24,8 @@ export function CampaignDraftScreen({
   const [draft, setDraft] = useState<Draft | null>(null);
   const [checked, setChecked] = useState<Set<number>>(new Set());
   const [mc, setMc] = useState("");
+  const [company, setCompany] = useState("");
+  const [firstName, setFirstName] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [starting, setStarting] = useState(false);
@@ -68,6 +70,8 @@ export function CampaignDraftScreen({
         draft.campaignId,
         [...checked],
         draft.mcRequired ? mc.trim() || null : null,
+        draft.companyRequired ? company.trim() || null : null,
+        draft.firstNameRequired ? firstName.trim() || null : null,
       );
       onStarted(summary.id);
     } catch (e) {
@@ -80,7 +84,13 @@ export function CampaignDraftScreen({
   if (!draft) return <p style={{ color: "var(--danger)" }}>{error ?? "Failed to load."}</p>;
 
   const startDisabled =
-    starting || checked.size === 0 || overLimit || !connected || (draft.mcRequired && !mc.trim());
+    starting ||
+    checked.size === 0 ||
+    overLimit ||
+    !connected ||
+    (draft.mcRequired && !mc.trim()) ||
+    (draft.companyRequired && !company.trim()) ||
+    (draft.firstNameRequired && !firstName.trim());
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
@@ -166,8 +176,30 @@ export function CampaignDraftScreen({
           className="ed-label"
           style={{ color: overLimit ? "var(--danger)" : "var(--muted)" }}
         >
-          {checked.size}/{draft.maxBrokers} brokers
+          {draft.maxBrokers >= 100000
+            ? `${checked.size} brokers`
+            : `${checked.size}/${draft.maxBrokers} brokers`}
         </span>
+        {draft.firstNameRequired && (
+          <input
+            className="ed-input"
+            placeholder="Your first name (required)"
+            title="The agent signs emails with this name"
+            value={firstName}
+            onChange={(e) => setFirstName(e.target.value)}
+            style={{ maxWidth: 180 }}
+          />
+        )}
+        {draft.companyRequired && (
+          <input
+            className="ed-input"
+            placeholder="Company name (required)"
+            title="Used in your reply address, e.g. smart-freight_…@truckbox.app"
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            style={{ maxWidth: 220 }}
+          />
+        )}
         {draft.mcRequired && (
           <input
             className="ed-input"

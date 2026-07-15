@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-import { listCampaigns } from "./AgentApi";
+import { useState } from "react";
 import { CampaignDashboard } from "./CampaignDashboard";
 import { CampaignDraftScreen } from "./CampaignDraft";
-import type { CampaignSummary } from "./types";
+import { CampaignList } from "./CampaignList";
 
 type View =
   | { kind: "list" }
@@ -27,15 +26,6 @@ export function AgentSection({
   const [view, setView] = useState<View>(
     initialRequestId != null ? { kind: "draft", requestId: initialRequestId } : { kind: "list" },
   );
-  const [campaigns, setCampaigns] = useState<CampaignSummary[] | null>(null);
-
-  useEffect(() => {
-    if (view.kind === "list") {
-      listCampaigns()
-        .then(setCampaigns)
-        .catch(() => setCampaigns([]));
-    }
-  }, [view.kind]);
 
   if (view.kind === "draft") {
     return (
@@ -70,35 +60,7 @@ export function AgentSection({
           Agent · my campaigns
         </h3>
       </div>
-      {campaigns === null && <p style={{ color: "var(--muted)" }}>Loading…</p>}
-      {campaigns?.length === 0 && (
-        <p style={{ color: "var(--muted)", fontSize: "0.85rem" }}>
-          No campaigns yet. Run an Oracle search and hit “Start outreach with Agent”.
-        </p>
-      )}
-      {campaigns?.map((c) => (
-        <button
-          key={c.id}
-          onClick={() => setView({ kind: "dashboard", campaignId: c.id })}
-          style={{
-            textAlign: "left",
-            background: "var(--bg-2)",
-            border: "1px solid var(--hairline, rgba(255,255,255,0.06))",
-            borderRadius: 10,
-            padding: "0.7rem 1rem",
-            cursor: "pointer",
-            color: "var(--ink)",
-          }}
-        >
-          <span style={{ fontWeight: 600 }}>
-            {c.origin} → {c.destination}
-          </span>
-          <span style={{ color: "var(--muted)", marginLeft: 10, fontSize: "0.78rem" }}>
-            {c.brokerCount} brokers · {c.status}
-            {c.startedAt ? ` · ${new Date(c.startedAt).toLocaleDateString()}` : ""}
-          </span>
-        </button>
-      ))}
+      <CampaignList onOpen={(id) => setView({ kind: "dashboard", campaignId: id })} />
     </div>
   );
 }

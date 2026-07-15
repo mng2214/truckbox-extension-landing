@@ -30,9 +30,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
-        <Route path="/business" element={<Cabinet />} />
         <Route path="/business/invite" element={<InviteWizard />} />
         <Route path="/business/request" element={<RequestAccess />} />
+        <Route path="/business" element={<Cabinet />} />
+        <Route path="/business/:section" element={<Cabinet />} />
+        <Route path="/business/:section/:id" element={<Cabinet />} />
         <Route path="*" element={<App />} />
       </Routes>
     </BrowserRouter>

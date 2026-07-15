@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { cancelCampaign, getCampaign, stopThread } from "./AgentApi";
+import { ConsentCard } from "./ConsentCard";
 import { ThreadTimeline } from "./ThreadTimeline";
 import type { AgentThread, CampaignDetail, ThreadStatus } from "./types";
-import { isTerminal } from "./types";
+import { isTerminal, stripQuotedTail } from "./types";
 
 const STATUS_LABEL: Record<ThreadStatus, string> = {
   QUEUED: "queued",
@@ -53,8 +54,76 @@ function ExtractedTable({ raw }: { raw: string }) {
   );
 }
 
+/** Styled confirm popup (mobile-friendly) — used where an action cannot be undone. */
+function ConfirmDialog({
+  title,
+  message,
+  confirmLabel,
+  onConfirm,
+  onClose,
+}: {
+  title: string;
+  message: string;
+  confirmLabel: string;
+  onConfirm: () => void;
+  onClose: () => void;
+}) {
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label={title}
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 90,
+        background: "rgba(0,0,0,0.45)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "1rem",
+      }}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          width: "min(400px, 100%)",
+          background: "var(--bg-2)",
+          border: "1px solid var(--hairline, rgba(255,255,255,0.1))",
+          boxShadow: "0 24px 60px rgba(0,0,0,0.35)",
+          padding: "1.2rem 1.3rem 1.3rem",
+        }}
+      >
+        <h4 className="ed-display" style={{ fontSize: "1rem", margin: "0 0 0.5rem" }}>
+          {title}
+        </h4>
+        <p style={{ fontSize: "0.85rem", color: "var(--muted)", lineHeight: 1.45, margin: "0 0 1rem" }}>
+          {message}
+        </p>
+        <div style={{ display: "flex", gap: "0.6rem", justifyContent: "flex-end", flexWrap: "wrap" }}>
+          <button className="ed-btn" style={{ fontSize: "0.8rem" }} onClick={onClose}>
+            Keep it
+          </button>
+          <button
+            className="ed-btn"
+            style={{ fontSize: "0.8rem", color: "var(--danger)", borderColor: "var(--danger)" }}
+            onClick={() => {
+              onConfirm();
+              onClose();
+            }}
+          >
+            {confirmLabel}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function ThreadCard({ thread, onStopped }: { thread: AgentThread; onStopped: () => void }) {
   const [open, setOpen] = useState(false);
+  const [confirmStop, setConfirmStop] = useState(false);
   return (
     <div
       style={{
@@ -90,10 +159,19 @@ function ThreadCard({ thread, onStopped }: { thread: AgentThread; onStopped: () 
           <button
             className="ed-btn"
             style={{ fontSize: "0.72rem" }}
-            onClick={() => stopThread(thread.id).then(onStopped)}
+            onClick={() => setConfirmStop(true)}
           >
             Stop
           </button>
+        )}
+        {confirmStop && (
+          <ConfirmDialog
+            title="Stop this conversation?"
+            message={`The agent will stop emailing ${thread.brokerName || thread.contactEmail}. A stopped conversation cannot be resumed.`}
+            confirmLabel="Stop conversation"
+            onConfirm={() => stopThread(thread.id).then(onStopped)}
+            onClose={() => setConfirmStop(false)}
+          />
         )}
         <button className="ed-btn" style={{ fontSize: "0.72rem" }} onClick={() => setOpen(!open)}>
           {open ? "Hide" : "Conversation"}
@@ -119,7 +197,7 @@ function ThreadCard({ thread, onStopped }: { thread: AgentThread; onStopped: () 
               </div>
               {m.subject && <div style={{ fontSize: "0.8rem", fontWeight: 600 }}>{m.subject}</div>}
               <div style={{ whiteSpace: "pre-wrap", fontSize: "0.78rem", color: "var(--muted)" }}>
-                {m.body}
+                {stripQuotedTail(m.body)}
               </div>
             </div>
           ))}
@@ -142,6 +220,7 @@ export function CampaignDashboard({
   const [detail, setDetail] = useState<CampaignDetail | null>(null);
   const [tab, setTab] = useState<"threads" | "report">("threads");
   const [error, setError] = useState<string | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState(false);
 
   const load = useCallback(
     () =>
@@ -194,20 +273,29 @@ export function CampaignDashboard({
         >
           {summary.status === "PAUSED_AUTH" ? "PAUSED — reconnect Google" : summary.status}
         </span>
-        <span style={{ flex: 1 }} />
         {summary.status === "RUNNING" && (
           <button
             className="ed-btn"
             style={{ fontSize: "0.75rem" }}
-            onClick={() => {
-              if (window.confirm("Cancel this campaign? Threads will be stopped."))
-                cancelCampaign(campaignId).then(load);
-            }}
+            onClick={() => setConfirmCancel(true)}
           >
             Cancel campaign
           </button>
         )}
+        {confirmCancel && (
+          <ConfirmDialog
+            title="Cancel this campaign?"
+            message="All conversations will be stopped and cannot be resumed. Brokers already contacted stay under the cooldown."
+            confirmLabel="Cancel campaign"
+            onConfirm={() => cancelCampaign(campaignId).then(load)}
+            onClose={() => setConfirmCancel(false)}
+          />
+        )}
       </div>
+
+      {summary.status === "PAUSED_AUTH" && (
+        <ConsentCard connected={false} onConnected={load} />
+      )}
 
       <div>
         <div
@@ -259,19 +347,34 @@ export function CampaignDashboard({
           {!threads.length && <p style={{ color: "var(--muted)" }}>No conversations yet.</p>}
         </div>
       ) : (
-        <pre
-          style={{
-            whiteSpace: "pre-wrap",
-            fontFamily: "inherit",
-            fontSize: "0.85rem",
-            background: "var(--bg-2)",
-            borderRadius: 12,
-            padding: "1rem 1.25rem",
-            margin: 0,
-          }}
-        >
-          {reportMd}
-        </pre>
+        <div>
+          <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: "0.6rem" }}>
+            <button
+              className="ed-btn"
+              style={{ fontSize: "0.75rem" }}
+              onClick={() => window.print()}
+              disabled={!reportMd}
+            >
+              Download PDF
+            </button>
+          </div>
+          <pre
+            style={{
+              whiteSpace: "pre-wrap",
+              fontFamily: "inherit",
+              fontSize: "0.85rem",
+              background: "var(--bg-2)",
+              borderRadius: 12,
+              padding: "1rem 1.25rem",
+              margin: 0,
+            }}
+          >
+            {reportMd}
+          </pre>
+          <div id="tb-report-print">
+            {`${summary.origin} to ${summary.destination}\n\n${reportMd ?? ""}`}
+          </div>
+        </div>
       )}
     </div>
   );
