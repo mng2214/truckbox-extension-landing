@@ -80,7 +80,16 @@ export function CampaignDraftScreen({
     }
   };
 
-  if (loading) return <p style={{ color: "var(--muted)" }}>Preparing the broker list…</p>;
+  if (loading)
+    return (
+      <div
+        className="flex flex-col items-center justify-center gap-6"
+        style={{ minHeight: "60vh" }}
+      >
+        <span className="tb-oracle-loader" />
+        <span className="ed-label">Preparing the broker list…</span>
+      </div>
+    );
   if (!draft) return <p style={{ color: "var(--danger)" }}>{error ?? "Failed to load."}</p>;
 
   const startDisabled =
@@ -111,15 +120,25 @@ export function CampaignDraftScreen({
       <ConsentCard connected={connected} onConnected={onConnected} />
 
       {(draft.firstNameRequired || draft.companyRequired || draft.mcRequired) && (
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: "0.6rem",
+            background: "var(--bg-2)",
+            border: "1px solid var(--hairline, rgba(255,255,255,0.06))",
+            borderRadius: 10,
+            padding: "0.9rem 1rem",
+          }}
+        >
           <span className="ed-label" style={{ color: "var(--muted)" }}>
-            Your details
+            Your details — the agent signs and identifies you with these
           </span>
           <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
             {draft.firstNameRequired && (
               <input
                 className="ed-input"
-                placeholder="Your first name"
+                placeholder="Your first name (required)"
                 title="The agent signs emails with this name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -129,7 +148,7 @@ export function CampaignDraftScreen({
             {draft.companyRequired && (
               <input
                 className="ed-input"
-                placeholder="Company name"
+                placeholder="Company name (required)"
                 title="Used in your reply address, e.g. smart-freight_…@truckbox.app"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
@@ -139,7 +158,7 @@ export function CampaignDraftScreen({
             {draft.mcRequired && (
               <input
                 className="ed-input"
-                placeholder="Your MC #"
+                placeholder="Your MC # (required)"
                 value={mc}
                 onChange={(e) => setMc(e.target.value)}
                 style={{ maxWidth: 220 }}

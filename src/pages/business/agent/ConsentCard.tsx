@@ -83,8 +83,7 @@ export function ConsentCard({ connected, onConnected }: { connected: boolean; on
     >
       <div style={{ fontWeight: 600 }}>Connect Gmail to launch</div>
       <p style={{ color: "var(--muted)", fontSize: "0.85rem", margin: 0 }}>
-        The Agent writes to brokers from your own email address — that's why brokers reply. We can
-        only send; we never read your mailbox.
+        We can only send; we never read your mailbox.
       </p>
       <div>
         <button className="ed-btn ed-btn-accent" onClick={connect} disabled={busy}>
