@@ -66,6 +66,9 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
   const text = await res.text();
   const json = text ? JSON.parse(text) : undefined;
   if (res.status === 401) {
+    // Only flag a real expiry (a token existed) so the sign-in screen can say why they're back
+    // here; a never-authed 401 keeps the default sign-in copy.
+    if (auth.getToken()) sessionStorage.setItem("tb-session-expired", "1");
     auth.clearToken();
     window.location.href = "/business";
     throw new ApiError(401, json?.code, json?.message);
@@ -77,6 +80,7 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
 export const api = {
   get: <T>(p: string) => req<T>("GET", p),
   post: <T>(p: string, b?: unknown) => req<T>("POST", p, b),
+  put: <T>(p: string, b?: unknown) => req<T>("PUT", p, b),
   patch: <T>(p: string, b?: unknown) => req<T>("PATCH", p, b),
   del: <T>(p: string) => req<T>("DELETE", p),
 };

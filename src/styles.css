@@ -310,6 +310,9 @@ html.lenis, html.lenis body { height: auto; }
 .ed-btn:hover::before { transform: translateY(0); }
 .ed-btn:disabled { opacity: .45; cursor: not-allowed; }
 .ed-btn:disabled::before { transform: translateY(101%); }
+/* Disabled buttons keep their resting colors on hover: the dark fill above is suppressed for
+   :disabled, so the hover text color (var(--bg)) would otherwise vanish into the background. */
+.ed-btn:disabled:hover { color: var(--ink); border-color: var(--line-strong); }
 
 /* small inline loading spinner (cabinet actions) */
 @keyframes tb-spin { to { transform: rotate(360deg); } }
@@ -2151,3 +2154,23 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
 @media (prefers-reduced-motion: reduce) {
   .tb-aurora::before, .tb-aurora::after, .hm-cursor, .hm-plane { animation: none !important; }
 }
+
+/* Report PDF export: window.print() shows only the report block, hides the app chrome. */
+@media print {
+  body * { visibility: hidden; }
+  #tb-report-print, #tb-report-print * { visibility: visible; }
+  #tb-report-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 24px 32px;
+    white-space: pre-wrap;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    color: #000;
+    background: #fff;
+  }
+}
+#tb-report-print { display: none; }
+@media print { #tb-report-print { display: block; } }
