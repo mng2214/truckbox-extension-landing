@@ -110,6 +110,45 @@ export function CampaignDraftScreen({
 
       <ConsentCard connected={connected} onConnected={onConnected} />
 
+      {(draft.firstNameRequired || draft.companyRequired || draft.mcRequired) && (
+        <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+          <span className="ed-label" style={{ color: "var(--muted)" }}>
+            Your details
+          </span>
+          <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+            {draft.firstNameRequired && (
+              <input
+                className="ed-input"
+                placeholder="Your first name"
+                title="The agent signs emails with this name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                style={{ maxWidth: 180 }}
+              />
+            )}
+            {draft.companyRequired && (
+              <input
+                className="ed-input"
+                placeholder="Company name"
+                title="Used in your reply address, e.g. smart-freight_…@truckbox.app"
+                value={company}
+                onChange={(e) => setCompany(e.target.value)}
+                style={{ maxWidth: 220 }}
+              />
+            )}
+            {draft.mcRequired && (
+              <input
+                className="ed-input"
+                placeholder="Your MC #"
+                value={mc}
+                onChange={(e) => setMc(e.target.value)}
+                style={{ maxWidth: 220 }}
+              />
+            )}
+          </div>
+        </div>
+      )}
+
       <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem" }}>
         {draft.brokers.map((b) => {
           const on = checked.has(b.brokerId);
@@ -180,35 +219,6 @@ export function CampaignDraftScreen({
             ? `${checked.size} brokers`
             : `${checked.size}/${draft.maxBrokers} brokers`}
         </span>
-        {draft.firstNameRequired && (
-          <input
-            className="ed-input"
-            placeholder="Your first name (required)"
-            title="The agent signs emails with this name"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            style={{ maxWidth: 180 }}
-          />
-        )}
-        {draft.companyRequired && (
-          <input
-            className="ed-input"
-            placeholder="Company name (required)"
-            title="Used in your reply address, e.g. smart-freight_…@truckbox.app"
-            value={company}
-            onChange={(e) => setCompany(e.target.value)}
-            style={{ maxWidth: 220 }}
-          />
-        )}
-        {draft.mcRequired && (
-          <input
-            className="ed-input"
-            placeholder="Your MC # (required)"
-            value={mc}
-            onChange={(e) => setMc(e.target.value)}
-            style={{ maxWidth: 220 }}
-          />
-        )}
         <button className="ed-btn ed-btn-accent" onClick={start} disabled={startDisabled}>
           {starting ? "Starting…" : "Start the Agent"}
         </button>
