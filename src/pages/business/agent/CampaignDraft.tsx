@@ -138,7 +138,7 @@ export function CampaignDraftScreen({
             {draft.firstNameRequired && (
               <input
                 className="ed-input"
-                placeholder="Your first name (required)"
+                placeholder="Your first name"
                 title="The agent signs emails with this name"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
@@ -148,7 +148,7 @@ export function CampaignDraftScreen({
             {draft.companyRequired && (
               <input
                 className="ed-input"
-                placeholder="Company name (required)"
+                placeholder="Company name"
                 title="Used in your reply address, e.g. smart-freight_…@truckbox.app"
                 value={company}
                 onChange={(e) => setCompany(e.target.value)}
@@ -158,7 +158,7 @@ export function CampaignDraftScreen({
             {draft.mcRequired && (
               <input
                 className="ed-input"
-                placeholder="Your MC # (required)"
+                placeholder="Your MC #"
                 value={mc}
                 onChange={(e) => setMc(e.target.value)}
                 style={{ maxWidth: 220 }}
