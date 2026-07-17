@@ -41,8 +41,14 @@ export default function RequestAccess() {
           required
         />
         <ValidationError prefix="Phone" field="phone" errors={state.errors} className="ed-error" />
-        <input className="border px-3 py-2" name="mc_number" placeholder="MC number" required />
-        <input className="border px-3 py-2" name="fleet_size" placeholder="How many dispatchers?" />
+        <input className="border px-3 py-2" name="mc_number" placeholder="MC number (optional)" />
+        <input
+          className="border px-3 py-2"
+          name="fleet_size"
+          placeholder="How many dispatchers?"
+          inputMode="numeric"
+          required
+        />
         <button className="ed-btn ed-btn-accent" type="submit" disabled={state.submitting}>
           Request access
         </button>
