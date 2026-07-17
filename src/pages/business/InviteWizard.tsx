@@ -18,7 +18,13 @@ export default function InviteWizard() {
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const [step, setStep] = useState<Step>("loading");
-  const [company, setCompany] = useState({ companyName: "", mcNumber: "", seats: 1, billingEmail: "" });
+  const [company, setCompany] = useState({
+    companyName: "",
+    mcNumber: "",
+    dispatcherSeats: 1,
+    ownerUsesDat: false,
+    billingEmail: "",
+  });
   const [error, setError] = useState<string | null>(null);
   const [inviteEmail, setInviteEmail] = useState("");
   const [authedEmail, setAuthedEmail] = useState("");
@@ -95,7 +101,8 @@ export default function InviteWizard() {
         token,
         companyName: company.companyName,
         mcNumber: company.mcNumber,
-        seats: Number(company.seats),
+        dispatcherSeats: Number(company.dispatcherSeats),
+        ownerUsesDat: company.ownerUsesDat,
         billingEmail: company.billingEmail,
       });
       const { url } = await api.post<{ url: string }>("/api/v1/manager/team/checkout", { token });
@@ -240,7 +247,7 @@ export default function InviteWizard() {
               color: "var(--muted)",
             }}
           >
-            Seats (Users)
+            How many dispatchers will work in DAT?
           </label>
           <input
             id="iw-seats"
@@ -248,9 +255,20 @@ export default function InviteWizard() {
             type="number"
             min={1}
             placeholder="1"
-            value={company.seats}
-            onChange={(e) => setCompany({ ...company, seats: Number(e.target.value) })}
+            value={company.dispatcherSeats}
+            onChange={(e) => setCompany({ ...company, dispatcherSeats: Number(e.target.value) })}
           />
+          <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
+            <input
+              type="checkbox"
+              checked={company.ownerUsesDat}
+              onChange={(e) => setCompany({ ...company, ownerUsesDat: e.target.checked })}
+            />
+            <span style={{ fontSize: "0.85rem" }}>I will work in DAT/Truckstop too</span>
+          </label>
+          <p style={{ color: "var(--muted)", fontSize: "0.78rem", margin: 0 }}>
+            Leave unchecked if you only need the back office — you won't be charged for a seat.
+          </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -294,7 +312,12 @@ export default function InviteWizard() {
         <button
           className="ed-btn ed-btn-accent"
           onClick={submitCompany}
-          disabled={!company.companyName.trim() || !company.mcNumber.trim() || company.seats < 1 || isNaN(company.seats)}
+          disabled={
+            !company.companyName.trim() ||
+            !company.mcNumber.trim() ||
+            company.dispatcherSeats < 1 ||
+            isNaN(company.dispatcherSeats)
+          }
           style={{ marginTop: "0.5rem" }}
         >
           Continue to payment

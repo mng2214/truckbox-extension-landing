@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import { api, ApiError } from "../../lib/api";
 import type { OrgRole } from "./types";
 
-type Member = { id: number; email: string; state: string; role: OrgRole };
+type Member = { id: number; email: string; state: string; role: OrgRole; hasSeat: boolean };
 type Team = { id: number; name: string; seats: number; members: Member[]; cancelAtPeriodEnd: boolean };
 
 /** Maps backend error codes to human-readable messages. */
@@ -89,7 +89,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             className="ed-btn"
             aria-label="Remove seat"
             onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats - 1 }))}
-            disabled={busy || team.seats <= team.members.length}
+            disabled={busy || team.seats <= team.members.filter((m) => m.hasSeat).length}
           >
             <span>−</span>
           </button>
@@ -123,6 +123,28 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
               >
                 {m.state} · {m.role}
               </span>
+              {/* Dispatchers exist to use DAT, so they always hold a seat — only owners and
+                  managers choose. The toggle is what's billed. */}
+              {m.role !== "MEMBER" && (
+                <label style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
+                  <input
+                    type="checkbox"
+                    checked={m.hasSeat}
+                    disabled={busy}
+                    onChange={(e) =>
+                      guard(() =>
+                        api.patch("/api/v1/manager/team/members/seat", {
+                          email: m.email,
+                          hasSeat: e.target.checked,
+                        })
+                      )
+                    }
+                  />
+                  <span style={{ fontSize: "0.72rem", color: "var(--muted)" }}>
+                    works in DAT (uses a seat)
+                  </span>
+                </label>
+              )}
             </div>
             {m.role !== "OWNER" && (
               <div className="flex flex-wrap gap-2 shrink-0">
