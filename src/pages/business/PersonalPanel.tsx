@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { api } from "../../lib/api";
 import type { AccountContext } from "./types";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 type PlatformStats = {
   platform: string;
@@ -32,6 +33,10 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   const [statsError, setStatsError] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [company, setCompany] = useState<Win | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [portalLoading, setPortalLoading] = useState(false);
+  const [confirmCancel, setConfirmCancel] = useState(false);
+  const [notice, setNotice] = useState<string | null>(null);
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
 
@@ -62,21 +67,32 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   }, [isManager]);
 
   const openPortal = async () => {
+    if (busy) return;
+    setError(null);
+    setBusy(true);
+    setPortalLoading(true);
     try {
       const { url } = await api.post<{ url: string }>("/api/v1/billing/portal");
-      window.location.href = url;
+      window.location.href = url; // navigating away; stays locked until unload
     } catch {
       setError("Could not open billing portal. Please try again.");
+      setBusy(false);
+      setPortalLoading(false);
     }
   };
 
   const cancel = async () => {
-    if (!confirm("Cancel your subscription at the end of the current period?")) return;
+    if (busy) return;
+    setError(null);
+    setBusy(true);
     try {
       await api.post("/api/v1/billing/cancel-subscription");
-      alert("Your subscription will cancel at period end.");
+      setNotice("Your subscription will cancel at the end of the billing period.");
     } catch {
       setError("Could not cancel subscription. Please try again.");
+    } finally {
+      setBusy(false);
+      setConfirmCancel(false);
     }
   };
 
@@ -150,16 +166,49 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
             Billing
           </h2>
           <div className="flex gap-3 flex-wrap">
-            <button className="ed-btn ed-btn-accent" onClick={openPortal}>
-              <span>Billing &amp; invoices</span>
+            <button
+              className="ed-btn ed-btn-accent"
+              disabled={busy}
+              aria-busy={portalLoading}
+              onClick={openPortal}
+            >
+              {portalLoading ? (
+                <span className="inline-flex items-center gap-2">
+                  <span
+                    className="tb-spinner"
+                    style={{ borderColor: "rgba(255,255,255,0.45)", borderTopColor: "#fff" }}
+                    aria-hidden
+                  />
+                  Opening…
+                </span>
+              ) : (
+                <span>Billing &amp; invoices</span>
+              )}
             </button>
-            <button className="ed-btn" onClick={cancel}>
+            <button
+              className="ed-btn"
+              disabled={busy || !!notice}
+              onClick={() => setConfirmCancel(true)}
+            >
               <span>Cancel subscription</span>
             </button>
           </div>
           {error && <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>}
+          {notice && <p style={{ color: "var(--sub)", fontSize: "0.85rem" }}>{notice}</p>}
         </div>
       )}
+
+      <ConfirmDialog
+        open={confirmCancel}
+        title="Cancel subscription?"
+        message="You keep full access until the end of the current billing period. After that, your extension access ends."
+        confirmLabel="Cancel subscription"
+        cancelLabel="Keep subscription"
+        destructive
+        busy={busy}
+        onConfirm={cancel}
+        onClose={() => setConfirmCancel(false)}
+      />
     </section>
   );
 }

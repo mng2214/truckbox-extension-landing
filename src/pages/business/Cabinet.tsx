@@ -1,7 +1,10 @@
 import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
-import { Menu, X, Sun, Moon, LogOut, HelpCircle, User, Settings } from "lucide-react";
+import {
+  Menu, X, Sun, Moon, LogOut, HelpCircle, User, Settings,
+  LayoutDashboard, Users, BarChart3, Gem, Sparkles,
+} from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
@@ -192,17 +195,17 @@ export default function Cabinet() {
 
       <nav className="flex flex-col gap-1">
         {ctx.panels.includes("personal") && (
-          <NavItem label="Overview" active={section === "personal"} onClick={() => goto("personal")} />
+          <NavItem label="Overview" icon={<LayoutDashboard />} active={section === "personal"} onClick={() => goto("personal")} />
         )}
-        {isManager && <NavItem label="Team" active={section === "team"} onClick={() => goto("team")} />}
+        {isManager && <NavItem label="Team" icon={<Users />} active={section === "team"} onClick={() => goto("team")} />}
         {isManager && (
-          <NavItem label="Statistics" active={section === "statistics"} onClick={() => goto("statistics")} />
+          <NavItem label="Statistics" icon={<BarChart3 />} active={section === "statistics"} onClick={() => goto("statistics")} />
         )}
         {ctx.panels.includes("discovery") && (
-          <NavItem label="Oracle" active={section === "discovery"} onClick={() => goto("discovery")} />
+          <NavItem label="Oracle" icon={<Gem />} premium active={section === "discovery"} onClick={() => goto("discovery")} />
         )}
         {ctx.panels.includes("agent") && (
-          <NavItem label="Agent" active={section === "agent"} onClick={() => goto("agent")} />
+          <NavItem label="Agent" icon={<Sparkles />} premium active={section === "agent"} onClick={() => goto("agent")} />
         )}
       </nav>
 
@@ -223,7 +226,7 @@ export default function Cabinet() {
       <header className="tb-topbar md:hidden">
         <span
           style={{
-            fontFamily: "var(--font-display)",
+            fontFamily: "var(--font-sans)",
             fontSize: "1.05rem",
             fontWeight: 800,
             letterSpacing: "-0.01em",
@@ -320,10 +323,31 @@ export default function Cabinet() {
   );
 }
 
-function NavItem({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function NavItem({
+  label,
+  icon,
+  active,
+  premium,
+  onClick,
+}: {
+  label: string;
+  icon: React.ReactNode;
+  active: boolean;
+  premium?: boolean;
+  onClick: () => void;
+}) {
   return (
-    <button onClick={onClick} className={"tb-nav" + (active ? " is-active" : "")}>
+    <button
+      onClick={onClick}
+      className={"tb-nav" + (active ? " is-active" : "") + (premium ? " is-premium" : "")}
+    >
+      {icon}
       {label}
+      {premium && (
+        <span className="tb-prem-spark" aria-label="Premium">
+          <Sparkles />
+        </span>
+      )}
     </button>
   );
 }
@@ -476,6 +500,16 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
       .finally(() => setSaving(false));
   };
 
+  const LABEL: React.CSSProperties = {
+    display: "block", fontSize: "0.72rem", letterSpacing: "0.06em",
+    textTransform: "uppercase", color: "var(--muted)", marginBottom: 7,
+  };
+  const FIELD: React.CSSProperties = {
+    width: "100%", padding: "0.6rem 0.7rem", fontSize: "0.9rem",
+    color: "var(--ink)", background: "transparent",
+    border: "1px solid var(--hairline)", outline: "none",
+  };
+
   return (
     <motion.div
       role="dialog"
@@ -516,87 +550,49 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
           </button>
         </div>
 
-        <label
-          style={{ display: "block", fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}
-        >
-          First name
-        </label>
-        <input
-          value={firstName}
-          disabled={loading}
-          onChange={(e) => setFirstName(e.target.value)}
-          placeholder="e.g. Artur"
-          style={{
-            width: "100%",
-            padding: "0.55rem 0.7rem",
-            fontSize: "0.9rem",
-            color: "var(--ink)",
-            background: "transparent",
-            border: "1px solid var(--hairline)",
-            outline: "none",
-          }}
-        />
-        <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "0.5rem 0 1rem", lineHeight: 1.4 }}>
-          The Agent signs its emails with this name.
-        </p>
-
-        <label
-          style={{ display: "block", fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}
-        >
-          Company name
-        </label>
-        <input
-          value={company}
-          disabled={loading}
-          onChange={(e) => setCompany(e.target.value)}
-          placeholder="e.g. Smart Freight LLC"
-          style={{
-            width: "100%",
-            padding: "0.55rem 0.7rem",
-            fontSize: "0.9rem",
-            color: "var(--ink)",
-            background: "transparent",
-            border: "1px solid var(--hairline)",
-            outline: "none",
-          }}
-        />
-        <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "0.5rem 0 1rem", lineHeight: 1.4 }}>
-          Goes into the Agent's reply address (smart-freight-llc_…@truckbox.app). Required before
-          launching campaigns.
-        </p>
-
-        <label
-          style={{ display: "block", fontSize: "0.72rem", letterSpacing: "0.06em", textTransform: "uppercase", color: "var(--muted)", marginBottom: 6 }}
-        >
-          MC number
-        </label>
-        <input
-          value={mc}
-          disabled={loading}
-          onChange={(e) => setMc(e.target.value)}
-          placeholder="e.g. 123456"
-          inputMode="numeric"
-          style={{
-            width: "100%",
-            padding: "0.55rem 0.7rem",
-            fontSize: "0.9rem",
-            color: "var(--ink)",
-            background: "transparent",
-            border: "1px solid var(--hairline)",
-            outline: "none",
-          }}
-        />
-        <p style={{ fontSize: "0.75rem", color: "var(--muted)", margin: "0.5rem 0 1rem", lineHeight: 1.4 }}>
-          The Agent shares your MC only when a broker asks for it.
-        </p>
+        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
+          <div>
+            <label style={LABEL}>First name</label>
+            <input
+              value={firstName}
+              disabled={loading}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="e.g. Artur"
+              style={FIELD}
+            />
+          </div>
+          <div>
+            <label style={LABEL}>Company name</label>
+            <input
+              value={company}
+              disabled={loading}
+              onChange={(e) => setCompany(e.target.value)}
+              placeholder="e.g. Smart Freight LLC"
+              style={FIELD}
+            />
+          </div>
+          <div>
+            <label style={LABEL}>MC number</label>
+            <input
+              value={mc}
+              disabled={loading}
+              onChange={(e) => setMc(e.target.value)}
+              placeholder="e.g. 123456"
+              inputMode="numeric"
+              style={FIELD}
+            />
+          </div>
+        </div>
 
         {error && (
-          <p style={{ color: "var(--danger)", fontSize: "0.8rem", marginBottom: "0.7rem" }}>{error}</p>
+          <p style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "0.9rem" }}>{error}</p>
         )}
 
-        <button type="button" className="ed-btn" disabled={loading || saving} onClick={save}>
-          {saved ? "Saved ✓" : saving ? "Saving…" : "Save"}
-        </button>
+        <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem", borderTop: "1px solid var(--hairline)" }}>
+          <button type="button" className="ed-btn" disabled={loading || saving} onClick={save}>
+            {saved ? "Saved ✓" : saving ? "Saving…" : "Save"}
+          </button>
+        </div>
       </div>
     </motion.div>
   );

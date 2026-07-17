@@ -409,6 +409,229 @@ body.tb-cabinet-bg {
 .ed-input.tb-sharp { border-radius: 0; }
 select.ed-input { appearance: none; -webkit-appearance: none; cursor: pointer; }
 
+/* ============================================================
+   BACK-OFFICE SWISS SYSTEM
+   Scoped to body.tb-cabinet-bg so the (dark editorial) landing is never touched.
+   Stark, grid-driven, heavy sans, sharp corners, one electric accent + a purple
+   note reserved for premium features (Oracle, Agent). Light is default; dark is a toggle.
+   ============================================================ */
+
+/* Dark cabinet (default = no data-theme on <html>) */
+body.tb-cabinet-bg {
+  --bg: #0d0d0f;
+  --bg-2: #141416;
+  --ink: #f2f2f4;
+  --sub: #b6b6bc;
+  --muted: #85858c;
+  --line: rgba(255, 255, 255, 0.10);
+  --line-strong: rgba(255, 255, 255, 0.20);
+  --hairline: var(--line);
+  --accent: #4b63ff;
+  --accent-ink: #6c7dff;
+  --accent-tint: rgba(75, 99, 255, 0.16);
+  --pp: #8b78ff;
+  --pp-ink: #a394ff;
+  --pp-tint: rgba(139, 120, 255, 0.15);
+  --tb-cabinet-bg: #0d0d0f;
+  --tb-panel: #141416;
+  --tb-topbar-bg: #141416;
+  --tb-hover: rgba(255, 255, 255, 0.06);
+  /* Swiss cabinet = one type family. Remap the mono token to sans so every
+     var(--font-mono) usage inside the cabinet (segmented toggles, +EQUIPMENT,
+     RADIUS, "100 mi", codes) renders in Instrument Sans, inline styles included.
+     Landing has no .tb-cabinet-bg, so its mono treatment is untouched. */
+  --font-mono: var(--font-sans);
+  background: var(--tb-cabinet-bg);
+}
+/* Light cabinet (the default theme; data-theme set on <html> while mounted) */
+[data-theme="light"] body.tb-cabinet-bg {
+  --bg: #f4f4f5;
+  --bg-2: #ffffff;
+  --ink: #0a0a0a;
+  --sub: #3d3d3f;
+  --muted: #8a8a8e;
+  --line: #dcdce1;
+  --line-strong: #cfcfd4;
+  --hairline: var(--line);
+  --accent: #3a5bff;
+  --accent-ink: #1f43ff;
+  --accent-tint: #e8ebff;
+  --pp: #7b5cff;
+  --pp-ink: #5b3fe0;
+  --pp-tint: #f0ecff;
+  --tb-cabinet-bg: #f4f4f5;
+  --tb-panel: #ffffff;
+  --tb-topbar-bg: #ffffff;
+  --tb-hover: #f3f3f5;
+}
+
+/* Typography — one sans, fixed scale, no display font, no mono labels */
+body.tb-cabinet-bg .ed-display {
+  font-family: var(--font-sans);
+  font-weight: 700;
+  font-variation-settings: normal;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+body.tb-cabinet-bg .ed-label {
+  font-family: var(--font-sans);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+/* Page titles — ONE calm size across every panel, so the back office reads as one
+   system instead of each screen shouting at its own scale. Overrides the divergent
+   per-panel sizes (text-[8vw], inline 2.5–4rem, etc). Section headings are h3/h4 and
+   keep their own smaller step. */
+body.tb-cabinet-bg h1.ed-display {
+  font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2rem) !important;
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  text-wrap: balance;
+}
+/* Section headings — normalize the 1.0–1.2rem drift into two clean steps */
+body.tb-cabinet-bg h2.ed-display { font-size: 1.35rem !important; letter-spacing: -0.02em; }
+body.tb-cabinet-bg h3.ed-display { font-size: 1.15rem !important; letter-spacing: -0.015em; }
+body.tb-cabinet-bg h4.ed-display { font-size: 1rem !important; letter-spacing: -0.01em; }
+
+/* Buttons — sharp, uppercase bold; kill the editorial slide-fill */
+body.tb-cabinet-bg .ed-btn {
+  border-radius: 0;
+  justify-content: center;
+  text-align: center;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  padding: 11px 16px;
+  border: 1px solid var(--line-strong);
+  transition: background .15s var(--ease), color .15s var(--ease), border-color .15s var(--ease);
+}
+body.tb-cabinet-bg .ed-btn::before { display: none; }
+body.tb-cabinet-bg .ed-btn:hover { background: var(--tb-hover); color: var(--ink); border-color: var(--line-strong); }
+body.tb-cabinet-bg .ed-btn-accent {
+  background: var(--accent); border-color: var(--accent); color: #fff;
+}
+body.tb-cabinet-bg .ed-btn-accent:hover { background: var(--accent-ink); border-color: var(--accent-ink); color: #fff; }
+body.tb-cabinet-bg .ed-btn:disabled { opacity: .5; }
+body.tb-cabinet-bg .ed-btn:disabled:hover { background: transparent; color: var(--ink); }
+body.tb-cabinet-bg .ed-btn-accent:disabled:hover { background: var(--accent); color: #fff; }
+/* Destructive fill — darker red so white label stays legible (~4.9:1) */
+body.tb-cabinet-bg .ed-btn.is-danger { background: #c53030; border-color: #c53030; color: #fff; }
+body.tb-cabinet-bg .ed-btn.is-danger:hover { background: #a82626; border-color: #a82626; color: #fff; }
+body.tb-cabinet-bg .ed-btn.is-danger:disabled:hover { background: #c53030; color: #fff; }
+
+/* Inputs — sharp, hairline, accent focus */
+body.tb-cabinet-bg .ed-input {
+  border-radius: 0;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-sans);
+}
+body.tb-cabinet-bg .ed-input:focus,
+body.tb-cabinet-bg .ed-input:focus-visible {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tint);
+}
+
+/* Nav — uppercase bold, icon + label, no side-stripe; active = accent tint */
+body.tb-cabinet-bg .tb-nav {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 0.82rem;
+  letter-spacing: 0.02em;
+  border-left: none;
+  border-radius: 0;
+  padding: 9px 11px;
+}
+body.tb-cabinet-bg .tb-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+body.tb-cabinet-bg .tb-nav:hover { background: var(--tb-hover); color: var(--ink); border-left: none; }
+body.tb-cabinet-bg .tb-nav.is-active { background: var(--accent-tint); color: var(--accent); border-left: none; }
+/* Premium features (Oracle, Agent): purple icon + marker, purple hover */
+body.tb-cabinet-bg .tb-nav.is-premium svg:first-child { color: var(--pp); }
+body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark { margin-left: auto; color: var(--pp); display: inline-flex; }
+body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark svg { width: 12px; height: 12px; }
+body.tb-cabinet-bg .tb-nav.is-premium:hover { background: var(--pp-tint); color: var(--pp-ink); }
+body.tb-cabinet-bg .tb-nav.is-premium:hover svg { color: var(--pp-ink); }
+
+/* Cabinet building blocks — used by the panels (sharp, hairline, tabular) */
+body.tb-cabinet-bg .tb-card {
+  background: var(--bg-2);
+  border: 1px solid var(--line);
+  border-radius: 0;
+}
+body.tb-cabinet-bg .tb-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border: 1px solid var(--line);
+}
+body.tb-cabinet-bg .tb-metrics > div { padding: 14px 16px; border-right: 1px solid var(--line); }
+body.tb-cabinet-bg .tb-metrics > div:last-child { border-right: none; }
+body.tb-cabinet-bg .tb-metric-k { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+body.tb-cabinet-bg .tb-metric-v { font-size: clamp(1.55rem, 1.15rem + 1.4vw, 1.9rem); font-weight: 700; letter-spacing: -0.035em; margin-top: 6px; line-height: 1; font-variant-numeric: tabular-nums; }
+body.tb-cabinet-bg .tb-metric-v small { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
+body.tb-cabinet-bg .tb-meter { margin-top: 9px; height: 5px; background: var(--tb-hover); }
+body.tb-cabinet-bg .tb-meter i { display: block; height: 100%; background: var(--accent); }
+@media (max-width: 640px) {
+  body.tb-cabinet-bg .tb-metrics { grid-template-columns: 1fr 1fr; }
+  body.tb-cabinet-bg .tb-metrics > div:first-child { grid-column: 1 / 3; border-bottom: 1px solid var(--line); }
+  body.tb-cabinet-bg .tb-metrics > div:nth-child(2) { border-right: 1px solid var(--line); }
+}
+
+/* Chips — sharp, uppercase micro; role-coded */
+body.tb-cabinet-bg .tb-chip {
+  font-size: 0.66rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  padding: 3px 8px;
+  border: 1px solid var(--line-strong);
+  color: var(--sub);
+  border-radius: 0;
+  white-space: nowrap;
+}
+body.tb-cabinet-bg .tb-chip.is-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+body.tb-cabinet-bg .tb-chip.is-ink { background: var(--ink); border-color: var(--ink); color: var(--bg-2); }
+
+/* Seat switch — sharp square knob, accent when on */
+body.tb-cabinet-bg .tb-switch {
+  position: relative;
+  width: 38px;
+  height: 20px;
+  background: var(--line-strong);
+  flex-shrink: 0;
+  cursor: pointer;
+  border: none;
+  padding: 0;
+  transition: background .15s var(--ease);
+}
+body.tb-cabinet-bg .tb-switch.is-on { background: var(--accent); }
+body.tb-cabinet-bg .tb-switch::after {
+  content: "";
+  position: absolute; top: 2px; left: 2px;
+  width: 16px; height: 16px;
+  background: #fff;
+  transition: left .15s var(--ease);
+}
+body.tb-cabinet-bg .tb-switch.is-on::after { left: 20px; }
+body.tb-cabinet-bg .tb-switch:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+@media (prefers-reduced-motion: reduce) {
+  body.tb-cabinet-bg .tb-switch, body.tb-cabinet-bg .tb-switch::after,
+  body.tb-cabinet-bg .ed-btn, body.tb-cabinet-bg .tb-nav { transition: none; }
+}
+
+/* Swiss cabinet: sharp corners EVERYWHERE. Neutralizes stray inline/rounded radii
+   in panels not yet hand-converted so the whole back office reads sharp at once.
+   Scoped to the cabinet (landing keeps its own rounded system); spinner stays circular. */
+body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
+
 /* Discovery: City/State segmented switch */
 .tb-seg { display: inline-flex; border: 1px solid var(--line); }
 .tb-seg button {

@@ -107,7 +107,9 @@ export function DiscoveryPanel() {
   const [dValue, setDValue] = useState("");
   const [dRadius, setDRadius] = useState(100);
   const [equipment, setEquipment] = useState<string[]>([]);
-  const [minActiveDays, setMinActiveDays] = useState(2);
+  // Silent quality filter: only brokers who reposted the lane on ≥2 distinct days
+  // in the last 30d. Not user-facing (was confusing); tune here if needed.
+  const minActiveDays = 2;
 
   const [rows, setRows] = useState<BrokerRow[] | null>(null);
   const [requestId, setRequestId] = useState<number | null>(null);
@@ -354,23 +356,9 @@ export function DiscoveryPanel() {
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-6">
-          <div className="flex flex-col gap-2.5">
-            <span className="flex items-baseline justify-between gap-3">
-              <span className="ed-label" style={{ color: "var(--ink)" }}>Equipment (optional )</span>
-            </span>
-            <EquipmentSelect value={equipment} onChange={setEquipment} />
-          </div>
-          <Field label="Min active days" hint="reposted on ≥ N days · 30d">
-            <input
-              type="number"
-              min={1}
-              max={30}
-              className="ed-input tb-sharp"
-              value={minActiveDays}
-              onChange={(e) => setMinActiveDays(Math.max(1, Number(e.target.value) || 1))}
-            />
-          </Field>
+        <div className="flex flex-col gap-2.5">
+          <span className="ed-label" style={{ color: "var(--ink)" }}>Equipment (optional)</span>
+          <EquipmentSelect value={equipment} onChange={setEquipment} />
         </div>
 
         <div className="flex items-center gap-5 pt-1">
@@ -739,13 +727,13 @@ function CityAutocomplete({
   );
 }
 
-const EQ_COMMON = ["V", "VR", "R", "F", "SD", "LO", "RG"];
-const EQ_MORE = [
-  "AC", "C", "CI", "CR", "DD", "LA", "DT", "FA", "BT", "F2", "FZ", "FR", "MX", "FS", "FT", "FM",
-  "FD", "HB", "LB", "MV", "NU", "PQ", "RM", "ST", "TA", "TM", "TS", "TT", "VI", "VA", "VS", "VC",
-  "V2", "VH", "VN", "VG", "VL", "OT", "VB", "IR", "RW", "FC", "RP", "VF", "LR", "VP", "SR", "CV",
-  "FO", "CN", "FN", "SN", "SB",
-];
+// Data-driven from real prod volume (loads.equipment). The Discovery filter matches
+// equipment by EXACT string — `l.equipment IN (:equipment)` — so combo codes like
+// FH / HS / FSD must be listed explicitly; a plain "F" does NOT catch them.
+// COMMON = top 8 by volume (~86% of loads); MORE reaches ~95%. The old 60-code list
+// included 16 codes that never appear in the data at all, plus ~15 near-zero ones.
+const EQ_COMMON = ["V", "F", "R", "FH", "FD", "VR", "HS", "FSD"]; // ~86% of loads
+const EQ_MORE = ["SD", "SB", "PO", "FT", "CONG", "FO", "CN", "RG"]; // → ~95%
 
 function EquipmentSelect({
   value,
