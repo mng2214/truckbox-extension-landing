@@ -120,7 +120,7 @@ export default function Cabinet() {
         <p style={{ color: expired ? "var(--danger)" : "var(--muted)" }}>
           {expired
             ? "Your session expired — please sign in again."
-            : "Sign in to manage your plan and team."}
+            : "Back office login."}
         </p>
         <GoogleSignIn
           onSignedIn={() => {
