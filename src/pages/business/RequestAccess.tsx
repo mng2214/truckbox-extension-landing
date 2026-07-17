@@ -31,6 +31,16 @@ export default function RequestAccess() {
         <input className="border px-3 py-2" name="company" placeholder="Company name" required />
         <input className="border px-3 py-2" type="email" name="email" placeholder="Work email" required />
         <ValidationError prefix="Email" field="email" errors={state.errors} className="ed-error" />
+        <input
+          className="border px-3 py-2"
+          type="tel"
+          name="phone"
+          placeholder="Phone number"
+          autoComplete="tel"
+          inputMode="tel"
+          required
+        />
+        <ValidationError prefix="Phone" field="phone" errors={state.errors} className="ed-error" />
         <input className="border px-3 py-2" name="mc_number" placeholder="MC number" required />
         <input className="border px-3 py-2" name="fleet_size" placeholder="How many dispatchers?" />
         <button className="ed-btn ed-btn-accent" type="submit" disabled={state.submitting}>
