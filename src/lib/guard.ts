@@ -59,8 +59,6 @@ export function installPageGuard(): void {
 export function installDevtoolsDetector(): void {
   if (typeof window === "undefined") return;
 
-  const WIDTH_GAP = 160;
-
   let overlay: HTMLDivElement | null = null;
 
   const show = () => {
@@ -109,18 +107,15 @@ export function installDevtoolsDetector(): void {
   });
 
   const check = () => {
-    const widthOpen = window.outerWidth - window.innerWidth > WIDTH_GAP;
-
     consoleSawIt = false;
     console.log(probe);
     console.clear();
     const consoleOpen = consoleSawIt;
 
-    if (widthOpen || consoleOpen) show();
+    if (consoleOpen) show();
     else hide();
   };
 
-  window.addEventListener("resize", check, { passive: true });
   window.setInterval(check, 1000);
   check();
 }
