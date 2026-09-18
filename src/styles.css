@@ -2397,3 +2397,10 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
 }
 #tb-report-print { display: none; }
 @media print { #tb-report-print { display: block; } }
+
+/* Guide — "How to update version" */
+
+.tb-update-steps { list-style: decimal; padding-left: 1.4rem; display: grid; gap: .5rem; font-size: 1.05rem; line-height: 1.6; }
+.tb-update-steps b { color: var(--fg, inherit); }
+.tb-copy-url { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
+.tb-copy-url-hint { color: var(--muted); font-size: .9em; }

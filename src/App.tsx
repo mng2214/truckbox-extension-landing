@@ -18,8 +18,6 @@ import {
   Mail,
   MapPin,
   Check,
-  Gauge,
-  Filter,
   Keyboard,
   ChevronDown,
   RotateCw,
@@ -30,11 +28,8 @@ import {
   MousePointerClick,
   LogIn,
   Send,
-  DollarSign,
   ShieldCheck,
   Clock,
-  Map,
-  Calculator,
   ZoomIn,
 } from "lucide-react";
 
@@ -44,6 +39,7 @@ const NAV: NavItem[] = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/guide", label: "Guide", route: true },
+  { href: "/update", label: "Update", route: true },
   { href: "/faq", label: "FAQ", route: true },
   { href: "/privacy", label: "Privacy", route: true },
   { href: "/#contact", label: "Contact" },
@@ -369,7 +365,7 @@ export default function App() {
   usePageMeta({
     title: "TruckBox — One-Click Broker Emails for DAT & Truckstop",
     description:
-      "Chrome extension for truck dispatchers: send broker emails from DAT One and Truckstop in one click, with templates, lane analytics, route maps and RTS credit checks. $7/mo, 7-day free trial.",
+      "Chrome extension for truck dispatchers: send broker emails from DAT One and Truckstop in one click, with templates, lane analytics, route maps and factoring credit checks (RTS, Apex, Triumph). $7/mo, 7-day free trial.",
     path: "/",
   });
   return (
@@ -1495,8 +1491,8 @@ function Features() {
     },
     {
       slug: "rts",
-      title: "RTS Credit Check",
-      body: "See a broker's RTS factoring credit rating and days-to-pay on the load — for carriers who factor with RTS.",
+      title: "Factoring Credit Check",
+      body: "See a broker's factoring credit rating and days-to-pay on the load — works with RTS, Apex Capital and Triumph, using your own account.",
     },
     {
       slug: "map",
@@ -1865,7 +1861,7 @@ function PlatformsBand() {
   const news = [
     {
       t: "Truckstop support",
-      d: "Everything you use on DAT now works on Truckstop too — one-click email, route map, FMCSA & RTS, the rate board.",
+      d: "Everything you use on DAT now works on Truckstop too — one-click email, route map, FMCSA & factoring credit checks, the rate board.",
     },
     {
       t: "Posted load price analytics",
@@ -1931,7 +1927,7 @@ function Pricing() {
     "Multiple email templates (up to 3)",
     "Posted load price analytics",
     "Dedicated loads finder",
-    "RTS factoring credit check",
+    "Factoring credit check (RTS, Apex, Triumph)",
     "Built-in Google Maps route",
     "Rate-per-mile calculator",
     "Copy & share load info",
@@ -2117,7 +2113,14 @@ const FAQS = [
       <p>
         Chrome usually updates extensions automatically. You can also open{" "}
         <strong>chrome://extensions</strong>, enable Developer Mode, and press{" "}
-        <strong>Update</strong> to refresh manually.
+        <strong>Update</strong> to refresh manually.{" "}
+        <Link
+          to="/update"
+          className="ed-accent"
+          style={{ textDecoration: "underline", textUnderlineOffset: 3 }}
+        >
+          See the update guide with screenshots →
+        </Link>
       </p>
     ),
   },
@@ -2184,21 +2187,21 @@ const FAQS = [
     ),
   },
   {
-    q: "How do I set up RTS Credit Checks?",
+    q: "How do I set up factoring credit checks (RTS, Apex, Triumph)?",
     a: (
         <p>
-          Open the TruckBox extension, go to the <strong>Factoring</strong> tab, select <strong>RTS</strong>,
-          and click <strong>Login</strong>. After signing in to your RTS account,
-          you'll be able to use RTS Credit Checks directly from the DAT load board.
+          Open the TruckBox extension, go to the <strong>Factoring</strong> tab, select your provider
+          — <strong>RTS</strong>, <strong>Apex Capital</strong> or <strong>Triumph</strong> — and click <strong>Login</strong>.
+          After signing in to your factoring account, you'll be able to check broker credit directly from the DAT load board.
         </p>
     ),
   },
   {
-    q: "Can I use RTS if I'm not set up with them?",
+    q: "Can I use credit checks if I don't factor with RTS, Apex or Triumph?",
     a: (
         <p>
-          No. To use this feature, you must already have an active account with RTS Financial.
-          If you're not currently set up with RTS, you'll need to contact them first.
+          No. To use this feature, you must already have an active account with RTS Financial,
+          Apex Capital or Triumph. If you're not set up with one of them, you'll need to contact them first.
         </p>
     ),
   },
@@ -2211,7 +2214,7 @@ const FAQS = [
           <li>
             <strong>Update the extension</strong> if you haven't yet — open{" "}
             <strong>chrome://extensions</strong>, turn on Developer Mode, and press{" "}
-            <strong>Update</strong>.
+            <strong>Update</strong> (<Link to="/update" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>how to update</Link>).
           </li>
           <li>
             <strong>Log out and log back in</strong> from the Truck Box popup.
@@ -2408,10 +2411,10 @@ export function Privacy() {
                 Gmail settings.
               </div>
 
-              <h3>Third-party factoring connections (RTS Pro)</h3>
+              <h3>Third-party factoring connections (RTS Pro, Apex Capital, Triumph)</h3>
               <p>
                 Truck Box includes an optional feature that displays a broker's factoring
-                credit rating using your own factoring provider account (for example, RTS Pro).
+                credit rating using your own factoring provider account (RTS Pro, Apex Capital or Triumph).
                 This connection is entirely optional and is only used if you choose to enable it.
               </p>
               <ul>
@@ -2475,13 +2478,13 @@ export function Privacy() {
               <p>
                 Truck Box is an independent, third-party browser add-on built for the user. It is
                 <b> not affiliated with, endorsed by, sponsored by, or otherwise associated with</b>{" "}
-                DAT, Truckstop, RTS / RTS Financial, Google, the FMCSA, or any other platform it
+                DAT, Truckstop, RTS / RTS Financial, Apex Capital, Triumph, Google, the FMCSA, or any other platform it
                 works alongside. Truck Box does not host, control, or own those services or their
                 data — it simply helps you act on information already shown to you in your own
                 accounts on those services.
               </p>
               <p>
-                All product names, logos, and trademarks — including "DAT," "Truckstop," "RTS,"
+                All product names, logos, and trademarks — including "DAT," "Truckstop," "RTS," "Apex Capital," "Triumph,"
                 "Google," "Gmail," and "FMCSA" — are the property of their respective owners and are
                 used here only for identification and descriptive purposes. Use of these names does
                 not imply any endorsement or partnership.
@@ -2953,42 +2956,6 @@ const GUIDE_STEPS: GuideStep[] = [
   },
 ];
 
-const GUIDE_FEATURES = [
-  {
-    icon: FileText,
-    name: "Email Template",
-    body: "Save your message once. Truck Box auto-fills the load and broker details, so every email is ready in a single click.",
-  },
-  {
-    icon: Filter,
-    name: "Map & Filter",
-    body: "See routes on a map and filter loads fast — so you spend your time only on the loads worth chasing.",
-  },
-  {
-    icon: DollarSign,
-    name: "RTS Credit Check",
-    body: "Check a broker’s factoring credit rating right inside DAT, using your own RTS Pro account.",
-    isNew: true,
-  },
-  {
-    icon: Gauge,
-    name: "Stats",
-    body: "Track how many emails you’ve sent and stay on top of your outreach at a glance.",
-  },
-  {
-    icon: Map,
-    name: "Google Maps Built In",
-    body: "See each load’s route on a real Google map without leaving DAT — no extra tabs, no copy-pasting addresses.",
-    isNew: true,
-  },
-  {
-    icon: Calculator,
-    name: "RPM Calculator",
-    body: "Get the rate-per-mile on every load instantly, so the best-paying runs stand out at a glance.",
-    isNew: true,
-  },
-];
-
 const PHASE_ORDER: Phase[] = ["Set up", "Connect", "Send"];
 
 /** At-a-glance end-to-end flow: one continuous rail with the 8 steps as
@@ -3045,6 +3012,10 @@ export function Guide() {
               emails from your own Gmail in a few minutes. Nothing here can break anything —
               if you get stuck, you can always start a step over.
             </p>
+            <Link to="/update" className="ed-btn mt-6 inline-flex items-center gap-2">
+              <RotateCw className="h-4 w-4" aria-hidden />
+              <span>Already installed? How to update version</span>
+            </Link>
           </div>
         </Reveal>
 
@@ -3123,44 +3094,6 @@ export function Guide() {
           </div>
         </Reveal>
 
-        {/* ---------- features ---------- */}
-        <div className="mt-24">
-          <Reveal>
-            <span className="ed-label">What you get</span>
-            <h2
-              className="ed-h2 mt-4"
-              style={{ textTransform: "none", fontSize: "clamp(2rem, 6vw, 4rem)" }}
-            >
-              Built to get you<br />to the broker first
-            </h2>
-          </Reveal>
-
-          <Reveal delay={0.06}>
-            <div className="tb-feature-grid mt-10">
-              {GUIDE_FEATURES.map((f, i) => {
-                const Icon = f.icon;
-                return (
-                  <div className="tb-feature" key={f.name}>
-                    <div className="tb-feature-top">
-                      <span className="tb-feature-index">
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="tb-feature-icon">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                    </div>
-                    <div className="tb-feature-head">
-                      <h3>{f.name}</h3>
-                      {f.isNew && <span className="tb-feature-new">New</span>}
-                    </div>
-                    <p>{f.body}</p>
-                  </div>
-                );
-              })}
-            </div>
-          </Reveal>
-        </div>
-
         {/* ---------- final CTA ---------- */}
 
         <Reveal>
@@ -3173,6 +3106,72 @@ export function Guide() {
             <span>Install Truck Box — Free</span>
             <ArrowUpRight className="h-4 w-4" />
           </a>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+
+/* ============================================================
+   How to update version (route: /update)
+   ============================================================ */
+
+/** chrome:// pages can't be opened by a link from a website (Chrome blocks it),
+ *  so the address copies to the clipboard for the user to paste. */
+function CopyChromeUrl({ url = "chrome://extensions" }: { url?: string }) {
+  const [copied, setCopied] = useState(false);
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2500);
+    } catch {
+      /* clipboard blocked — the address is still visible to type */
+    }
+  };
+  return (
+    <>
+      <button type="button" className="tb-copy-url" onClick={copy} title="Copy address">
+        <b>{url}</b>
+      </button>
+      {copied && <span className="tb-copy-url-hint"> Copied — paste it in the address bar</span>}
+    </>
+  );
+}
+
+export function UpdateGuide() {
+  return (
+    <section id="update" className="ed-section" style={{ paddingTop: 150 }}>
+      <div className="ed-container">
+        <Reveal delay={0.2}>
+          <div className="max-w-3xl">
+            <span className="ed-label">[ Update ] — Already installed?</span>
+            <h1 className="ed-h2 mt-4">
+              How to update <span className="ed-accent" style={{ fontStyle: "italic" }}>version.</span>
+            </h1>
+            <p className="mt-6 text-lg" style={{ color: "var(--muted)", lineHeight: 1.65 }}>
+              Chrome updates Truck Box on its own, but that can take a few hours. When we ship a
+              fix, you can grab it right away:
+            </p>
+          </div>
+        </Reveal>
+
+        <Reveal delay={0.06} className="mt-10">
+          <ol className="tb-update-steps">
+            <li>
+              Open <CopyChromeUrl /> in the address bar.
+            </li>
+            <li>Turn on <b>Developer mode</b> (top right).</li>
+            <li>Click <b>Update</b> (top left).</li>
+            <li>Check the version on the Truck Box card, then refresh the DAT page.</li>
+          </ol>
+          <div className="tb-note tb-note--calm mt-6">
+            You can turn Developer mode off again afterwards — it’s only needed for the Update button.
+          </div>
+          <div className="tb-step-shots">
+            <GuideShot src="/guide/09-update-version.webp" alt="chrome://extensions — Developer mode (1) and Update (2)" />
+          </div>
         </Reveal>
       </div>
     </section>

@@ -12,7 +12,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROUTES = ["/", "/guide", "/faq", "/privacy"];
+const ROUTES = ["/", "/guide", "/update", "/faq", "/privacy"];
 const DIST = join(dirname(fileURLToPath(import.meta.url)), "..", "dist");
 
 const MIME = {
