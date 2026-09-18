@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react";
 import { usePageMeta } from "./lib/meta";
+import { getLandingTheme, setLandingTheme, THEME_EVENT, type LandingTheme } from "./lib/theme";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
 import Lenis from "lenis";
 import { useForm, ValidationError } from "@formspree/react";
 
 import {
+  Sun,
+  Moon,
   ArrowRight,
   ArrowUpRight,
   Plus,
@@ -431,6 +434,28 @@ function GoogleGLogo({ size = 20 }: { size?: number }) {
    Header
    ============================================================ */
 
+/** Light ↔ dark switch for the landing (the back office has its own). */
+function ThemeToggle() {
+  const [theme, setTheme] = useState<LandingTheme>(() => getLandingTheme());
+  useEffect(() => {
+    const sync = () => setTheme(getLandingTheme());
+    window.addEventListener(THEME_EVENT, sync);
+    return () => window.removeEventListener(THEME_EVENT, sync);
+  }, []);
+  const next: LandingTheme = theme === "light" ? "dark" : "light";
+  return (
+    <button
+      type="button"
+      className="tb-theme-toggle"
+      onClick={() => setLandingTheme(next)}
+      aria-label={`Switch to ${next} theme`}
+      title={`Switch to ${next} theme`}
+    >
+      {theme === "light" ? <Moon className="h-4 w-4" aria-hidden /> : <Sun className="h-4 w-4" aria-hidden />}
+    </button>
+  );
+}
+
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
@@ -458,7 +483,7 @@ export function Header() {
       <header
         className="fixed top-0 left-0 right-0 z-50 transition-colors duration-500"
         style={{
-          background: scrolled ? "rgba(9,11,18,0.72)" : "transparent",
+          background: scrolled ? "var(--header-bg)" : "transparent",
           backdropFilter: scrolled ? "blur(14px)" : "none",
           WebkitBackdropFilter: scrolled ? "blur(14px)" : "none",
           borderBottom: scrolled ? "1px solid var(--line)" : "1px solid transparent",
@@ -515,13 +540,15 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:block">
+          <div className="hidden md:flex items-center gap-3">
+            <ThemeToggle />
             <Link className="ed-btn ed-btn-accent" to="/business">
               <span>Sign in</span> <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
 
           <div className="md:hidden flex items-center gap-3">
+            <ThemeToggle />
             <Link
               className="ed-btn ed-btn-accent"
               style={{ padding: "9px 16px", letterSpacing: "0.1em", whiteSpace: "nowrap" }}
@@ -1066,7 +1093,7 @@ function SocialProof() {
               className="ed-display text-5xl leading-none"
               style={{ textTransform: "none", letterSpacing: "-0.02em" }}
             >
-              5.0 <span className="ed-accent">★</span>
+              5.0 <span className="ed-accent tb-star">★</span>
             </div>
             <a
               href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
@@ -1304,7 +1331,7 @@ function BeforeAfter() {
                       font: "700 11px/1 'Space Mono', monospace",
                       letterSpacing: ".1em",
                       textTransform: "uppercase",
-                      color: active ? "#0a0a09" : "var(--ink)",
+                      color: active ? "var(--on-accent)" : "var(--ink)",
                       background: active ? "var(--accent)" : "transparent",
                       transition: "background .2s, color .2s",
                     }}
@@ -1338,7 +1365,7 @@ function BeforeAfter() {
                 font: "800 12.5px/1 'Space Mono', monospace",
                 letterSpacing: ".12em",
                 textTransform: "uppercase",
-                color: "#0a0a09",
+                color: "var(--on-accent)",
                 background: "var(--accent)",
                 border: "1px solid var(--accent)",
                 borderRadius: 999,
@@ -2069,10 +2096,10 @@ function Walkthrough() {
                 <span className="absolute inset-0 flex items-center justify-center">
                   <span
                     className="inline-flex items-center gap-3 px-7 py-4 rounded-full"
-                    style={{ background: "var(--accent)", color: "#0a0a09" }}
+                    style={{ background: "var(--accent)", color: "var(--on-accent)" }}
                   >
                     <Play className="h-5 w-5" fill="currentColor" />
-                    <span className="ed-label" style={{ color: "#0a0a09" }}>Play walkthrough</span>
+                    <span className="ed-label" style={{ color: "var(--on-accent)" }}>Play walkthrough</span>
                   </span>
                 </span>
               </button>

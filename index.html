@@ -1,6 +1,19 @@
 <!doctype html>
 <html lang="en">
   <head>
+    <script>
+      /* landing theme before first paint — same rule as src/lib/theme.ts */
+      (function () {
+        try {
+          var q = new URLSearchParams(location.search).get("theme");
+          var t = q === "dark" || q === "light" ? q : localStorage.getItem("tb-landing-theme");
+          document.documentElement.classList.toggle(
+            "tb-light",
+            location.pathname.indexOf("/business") !== 0 && t !== "dark"
+          );
+        } catch (e) {}
+      })();
+    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>TruckBox — One-Click Broker Emails for DAT & Truckstop</title>

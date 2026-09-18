@@ -55,6 +55,8 @@ select,
   --accent-2: #b9a8ee;
   --accent-3: #8fc4ee;
   --accent-grad: linear-gradient(110deg, #8fc4ee 0%, #93a7f2 40%, #b9a8ee 62%, #93a7f2 100%);
+  --header-bg: rgba(9, 11, 18, 0.72);
+  --on-accent: #0d1020;   /* text on accent fills */
 
   /* semantic state tokens */
   --danger: #ef6a6a;
@@ -838,7 +840,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   border-color: transparent;
   background: var(--accent-grad);
   background-size: 200% auto;
-  color: #0d1020;
+  color: var(--on-accent);
   font-weight: 600;
   animation: ed-pan 7s ease infinite;
 }
@@ -2162,7 +2164,7 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
 .tb-sticky-cta .tb-sticky-txt b { color: var(--accent-2); }
 .tb-sticky-pill-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  padding: 10px 18px; border-radius: 999px; color: #0d1020;
+  padding: 10px 18px; border-radius: 999px; color: var(--on-accent);
   background: var(--accent-grad); background-size: 200% auto;
   animation: ed-pan 7s ease infinite;
   font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em;
@@ -2218,7 +2220,7 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
   display: inline-flex; align-items: center; gap: 5px;
   font-family: var(--font-mono); font-size: .56rem; letter-spacing: .12em;
   text-transform: uppercase; font-weight: 700;
-  color: #0d1020; padding: 4px 8px; border-radius: 6px;
+  color: var(--on-accent); padding: 4px 8px; border-radius: 6px;
   background: var(--accent-grad); background-size: 200% auto;
   animation: ed-pan 7s ease infinite;
   box-shadow: 0 4px 14px rgba(147, 167, 242,.4);
@@ -2274,7 +2276,7 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
 .hm-line.hm-line-accent { background: linear-gradient(90deg, rgba(147, 167, 242,.6), rgba(185, 168, 238,.3)); }
 .hm-send {
   margin-top: 11px; display: inline-flex; align-items: center; gap: 8px;
-  padding: 9px 16px; border-radius: 9px; color: #0d1020; font-family: var(--font-mono);
+  padding: 9px 16px; border-radius: 9px; color: var(--on-accent); font-family: var(--font-mono);
   font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 700;
   background: var(--accent-grad); background-size: 200% auto; animation: ed-pan 7s ease infinite;
   box-shadow: 0 8px 22px -6px rgba(147, 167, 242,.6);
@@ -2404,3 +2406,152 @@ html.has-cursor .ed-cursor, html.has-cursor .ed-cursor-dot { opacity: 1; }
 .tb-update-steps b { color: var(--fg, inherit); }
 .tb-copy-url { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
 .tb-copy-url-hint { color: var(--muted); font-size: .9em; }
+
+
+/* ============================================================
+   Light landing theme (experiment) — html.tb-light, toggled by ?theme=light.
+   Strategy: full palette, brand-led. Indigo carries the brand, violet is its
+   companion, amber (headlights / road signage) is the rare warm spark.
+   Neutrals are tinted toward the brand hue (280), never plain gray.
+   Rhythm: light hero with an aurora wash → tinted bands for compare/pricing →
+   one drenched indigo band for the walkthrough video. Product screenshots and
+   the hero mock stay dark on purpose — they read as app windows.
+   The cabinet keeps its own theme.
+   ============================================================ */
+html.tb-light {
+  color-scheme: light;
+  --bg:          oklch(0.975 0.009 280);
+  --bg-2:        oklch(1 0 0);
+  --band:        oklch(0.95 0.022 280);          /* tinted section band */
+  --ink:         oklch(0.21 0.035 280);
+  --muted:       oklch(0.47 0.035 280);          /* 6.3:1 on --bg */
+  --faint:       oklch(0.62 0.03 280);
+  --line:        oklch(0.89 0.022 280);
+  --line-strong: oklch(0.78 0.04 280);
+  --accent:      oklch(0.52 0.19 272);
+  --accent-2:    oklch(0.53 0.2 300);
+  --accent-3:    oklch(0.58 0.15 245);
+  --accent-grad: linear-gradient(110deg, oklch(0.56 0.15 245) 0%, oklch(0.52 0.19 272) 40%, oklch(0.53 0.2 300) 62%, oklch(0.52 0.19 272) 100%);
+  --warm:        oklch(0.8 0.15 70);             /* amber spark — fills/decoration only */
+  --warm-ink:    oklch(0.5 0.13 60);             /* amber text that passes on light */
+  --pri-soft:    oklch(0.52 0.19 272 / 0.1);
+  --on-accent:   oklch(1 0 0);
+  --header-bg:   oklch(0.975 0.009 280 / 0.8);
+  --shadow-sm:   0 1px 2px oklch(0.3 0.08 280 / 0.06), 0 4px 14px -6px oklch(0.4 0.12 280 / 0.14);
+  --shadow-lg:   0 2px 6px oklch(0.3 0.08 280 / 0.06), 0 24px 60px -24px oklch(0.4 0.16 280 / 0.35);
+  --color-bg: var(--bg);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+}
+
+/* ---- atmosphere: aurora wash instead of dark vignette ---- */
+html.tb-light .tb-bg-vignette {
+  background:
+    radial-gradient(60% 45% at 85% -5%, oklch(0.85 0.09 280 / 0.55), transparent 70%),
+    radial-gradient(45% 35% at -5% 20%, oklch(0.88 0.08 300 / 0.45), transparent 70%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+}
+html.tb-light .tb-bg-blobs::before { background: radial-gradient(circle, oklch(0.75 0.14 272 / 0.28), transparent 64%); }
+html.tb-light .tb-bg-blobs::after  { background: radial-gradient(circle, oklch(0.85 0.12 70 / 0.22), transparent 64%); }
+
+/* ---- hero: a lit stage behind the product mock ---- */
+html.tb-light #top::before {
+  content: "";
+  position: absolute; z-index: -1; pointer-events: none;
+  right: -6%; top: 18%; width: 60%; height: 70%;
+  background:
+    radial-gradient(closest-side, oklch(0.7 0.17 272 / 0.35), transparent),
+    radial-gradient(40% 40% at 30% 80%, oklch(0.84 0.13 70 / 0.35), transparent 70%);
+  filter: blur(30px);
+}
+html.tb-light .hm-board { box-shadow: var(--shadow-lg), 0 0 0 1px oklch(0.4 0.1 280 / 0.12); }
+html.tb-light .hm-trust .hm-stars { color: var(--warm); }
+
+/* ---- section rhythm: tinted bands ---- */
+html.tb-light #compare,
+html.tb-light #pricing {
+  background:
+    linear-gradient(180deg, transparent, var(--band) 14%, var(--band) 86%, transparent);
+}
+
+/* ---- the one drenched band: walkthrough video ---- */
+html.tb-light #walkthrough {
+  --ink: oklch(0.97 0.01 280);
+  --muted: oklch(0.82 0.04 280);
+  --line: oklch(1 0 0 / 0.14);
+  background:
+    radial-gradient(70% 90% at 80% 0%, oklch(0.45 0.2 300 / 0.55), transparent 70%),
+    radial-gradient(60% 80% at 10% 100%, oklch(0.5 0.16 245 / 0.45), transparent 70%),
+    oklch(0.28 0.11 278);
+  color: var(--ink);
+}
+
+/* ---- depth: soft brand-tinted shadows instead of flat hairlines ---- */
+html.tb-light .tb-bento-card { background: var(--bg-2); box-shadow: var(--shadow-sm); }
+html.tb-light .tb-bento-card:hover { box-shadow: var(--shadow-lg); border-color: oklch(0.78 0.08 272); }
+html.tb-light .tb-bento-media::after { background: linear-gradient(to top, oklch(0.3 0.1 280 / 0.12), transparent 45%); }
+html.tb-light .tb-shot,
+html.tb-light .ed-fcard { box-shadow: var(--shadow-lg); }
+html.tb-light .ed-btn-accent,
+html.tb-light .tb-sticky-pill-btn {
+  box-shadow: 0 8px 22px -8px oklch(0.52 0.19 272 / 0.7);
+}
+html.tb-light .ed-btn-accent:hover { color: var(--bg); }
+html.tb-light .ed-btn:not(.ed-btn-accent) { background: oklch(1 0 0 / 0.7); }
+
+/* ---- amber spark: rating stars, NEW badges ---- */
+html.tb-light .tb-star,
+html.tb-light .tb-feature-new {
+  background: none;
+  -webkit-text-fill-color: var(--warm);
+  color: var(--warm);
+}
+
+/* ---- calm/info surfaces pick up the brand tint ---- */
+html.tb-light .tb-guide-calm,
+html.tb-light .ed-form-done { background: var(--bg-2); box-shadow: var(--shadow-sm); }
+html.tb-light .tb-note { background: oklch(0.52 0.19 272 / 0.06); }
+html.tb-light .ed-fcard-idx { background: oklch(1 0 0 / 0.85); color: var(--ink); }
+html.tb-light footer { background: var(--band); }
+
+/* Carousel: the strip scrolls (overflow-x), which clips anything outside its
+   box — give card shadows room so hover depth isn't cut into a gray slab. */
+html.tb-light .tb-caro {
+  padding: 14px 16px 44px;
+  margin: -6px -14px -22px;
+  scroll-padding-left: 16px;
+}
+html.tb-light .tb-caro-card:hover {
+  box-shadow: 0 2px 4px oklch(0.3 0.08 280 / 0.05), 0 14px 30px -14px oklch(0.4 0.16 280 / 0.35);
+}
+html.tb-light .tb-caro-arrow {
+  background: var(--bg-2);
+  color: var(--ink);
+  border-color: var(--line);
+  box-shadow: var(--shadow-sm);
+}
+html.tb-light .tb-sticky-cta {
+  background: oklch(1 0 0 / 0.86);
+  border-color: var(--line);
+  box-shadow: 0 2px 6px oklch(0.3 0.08 280 / 0.06), 0 18px 44px -14px oklch(0.4 0.16 280 / 0.4);
+}
+/* controls that sit on dark imagery / the lightbox keep light glyphs */
+html.tb-light .tb-lb-nav,
+html.tb-light .tb-shot-zoom,
+html.tb-light .tb-zoom-close { color: oklch(0.97 0.01 280); }
+
+/* Landing light/dark switch (header) */
+.tb-theme-toggle {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; flex: 0 0 auto;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color .25s var(--ease), color .25s var(--ease), background .25s var(--ease);
+}
+.tb-theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
+.tb-theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+html.tb-light .tb-theme-toggle { background: var(--bg-2); border-color: var(--line); box-shadow: var(--shadow-sm); }

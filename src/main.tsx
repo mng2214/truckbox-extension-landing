@@ -1,10 +1,11 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
 import { installCrispTheme } from "./lib/crispTheme";
+import { applyLandingTheme, setLandingTheme } from "./lib/theme";
 import PrivacyPage from "./pages/Privacy";
 import GuidePage from "./pages/Guide";
 import UpdatePage from "./pages/Update";
@@ -17,6 +18,20 @@ const Cabinet = lazy(() => import("./pages/business/Cabinet"));
 const InviteWizard = lazy(() => import("./pages/business/InviteWizard"));
 const RequestAccess = lazy(() => import("./pages/business/RequestAccess"));
 
+// Landing theme: ?theme=light|dark sets and remembers it; otherwise stored/default.
+{
+  const q = new URLSearchParams(location.search).get("theme");
+  if (q === "light" || q === "dark") setLandingTheme(q);
+  else applyLandingTheme();
+}
+
+/** Re-applies the landing theme on client-side navigation (off on /business). */
+function LandingThemeSync() {
+  const { pathname } = useLocation();
+  useEffect(() => applyLandingTheme(pathname), [pathname]);
+  return null;
+}
+
 installPageGuard();
 installCrispTheme();
 
@@ -26,6 +41,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <SmoothScroll />
+      <LandingThemeSync />
       <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<App />} />
