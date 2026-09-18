@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "./styles.css";
@@ -11,9 +11,11 @@ import UpdatePage from "./pages/Update";
 import FAQPage from "./pages/FAQ";
 import SuccessPage from "./pages/Success";
 import CancelPage from "./pages/Cancel";
-import Cabinet from "./pages/business/Cabinet";
-import InviteWizard from "./pages/business/InviteWizard";
-import RequestAccess from "./pages/business/RequestAccess";
+// Business cabinet is its own app — loaded only on /business/* so landing
+// visitors don't download it.
+const Cabinet = lazy(() => import("./pages/business/Cabinet"));
+const InviteWizard = lazy(() => import("./pages/business/InviteWizard"));
+const RequestAccess = lazy(() => import("./pages/business/RequestAccess"));
 
 installPageGuard();
 installCrispTheme();
@@ -24,6 +26,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <BrowserRouter>
       <SmoothScroll />
+      <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<App />} />
         <Route path="/privacy" element={<PrivacyPage />} />
@@ -39,6 +42,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/business/:section/:id" element={<Cabinet />} />
         <Route path="*" element={<App />} />
       </Routes>
+      </Suspense>
     </BrowserRouter>
   </React.StrictMode>
 );

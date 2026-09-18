@@ -482,7 +482,7 @@ export function Header() {
               />
             ) : (
               <img
-                src="/logo.png"
+                src="/logo-96.webp"
                 alt=""
                 width={30}
                 height={30}
