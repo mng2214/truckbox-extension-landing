@@ -15,6 +15,7 @@ import { PersonalPanel } from "./PersonalPanel";
 import { TeamPanel } from "./TeamPanel";
 import { StatsPanel } from "./StatsPanel";
 import { PhoneVerify } from "./PhoneVerify";
+import { LinkedAccounts } from "./LinkedAccounts";
 
 // Oracle (stealth): lazy-loaded so its code is not in the main bundle for non-entitled users.
 const DiscoveryPanel = lazy(() =>
@@ -582,6 +583,7 @@ function SettingsModal({ onClose }: { onClose: () => void }) {
               style={FIELD}
             />
           </div>
+          <LinkedAccounts />
         </div>
 
         {error && (
