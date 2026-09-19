@@ -44,7 +44,13 @@ function getSessionId(): string {
 }
 
 export class ApiError extends Error {
-  constructor(public status: number, public code?: number, msg?: string) {
+  constructor(
+    public status: number,
+    public code?: number,
+    msg?: string,
+    /** Extra fields some errors carry (e.g. which account a merge would close). */
+    public details?: Record<string, unknown>,
+  ) {
     super(msg ?? `HTTP ${status}`);
   }
 }
@@ -73,7 +79,7 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
     window.location.href = "/business";
     throw new ApiError(401, json?.code, json?.message);
   }
-  if (!res.ok) throw new ApiError(res.status, json?.code, json?.message);
+  if (!res.ok) throw new ApiError(res.status, json?.code, json?.message, json?.details);
   return json as T;
 }
 

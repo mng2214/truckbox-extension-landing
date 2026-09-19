@@ -1,5 +1,6 @@
-import { useEffect, useRef, useState, Fragment, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, Fragment } from "react";
 import { usePageMeta } from "./lib/meta";
+import { ProviderLogo } from "./components/ProviderLogo";
 import { getLandingTheme, setLandingTheme, THEME_EVENT, type LandingTheme } from "./lib/theme";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
@@ -9,7 +10,6 @@ import { useForm, ValidationError } from "@formspree/react";
 import {
   Sun,
   Moon,
-  ArrowRight,
   ArrowUpRight,
   Plus,
   Minus,
@@ -18,11 +18,8 @@ import {
   X,
   Instagram,
   Facebook,
-  Mail,
   MapPin,
   Check,
-  Keyboard,
-  ChevronDown,
   RotateCw,
   FileText,
   Image as ImageIcon,
@@ -32,7 +29,6 @@ import {
   LogIn,
   Send,
   ShieldCheck,
-  Clock,
   ZoomIn,
 } from "lucide-react";
 
@@ -41,8 +37,8 @@ type NavItem = { href: string; label: string; route?: boolean };
 const NAV: NavItem[] = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
+  { href: "/business/start", label: "Teams", route: true },
   { href: "/guide", label: "Guide", route: true },
-  { href: "/update", label: "Update", route: true },
   { href: "/faq", label: "FAQ", route: true },
   { href: "/privacy", label: "Privacy", route: true },
   { href: "/#contact", label: "Contact" },
@@ -58,57 +54,9 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 export { NAV, INSTALL_URL, CALENDLY_URL };
 
 /* ============================================================
-   Global chrome: custom cursor + smooth scroll
-   (mounted once in main.tsx so every route gets them)
+   Global chrome: smooth scroll
+   (mounted once in main.tsx so every route gets it)
    ============================================================ */
-
-export function Cursor() {
-  const ring = useRef<HTMLDivElement>(null);
-  const dot = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    const root = document.documentElement;
-    root.classList.add("has-cursor");
-
-    let mx = window.innerWidth / 2;
-    let my = window.innerHeight / 2;
-    let rx = mx;
-    let ry = my;
-    let active = false;
-    let raf = 0;
-
-    const onMove = (e: MouseEvent) => {
-      mx = e.clientX;
-      my = e.clientY;
-      if (dot.current) dot.current.style.transform = `translate(${mx}px, ${my}px)`;
-      const t = (e.target as HTMLElement)?.closest?.("a, button, [data-cursor]");
-      active = !!t;
-    };
-    const loop = () => {
-      rx += (mx - rx) * 0.16;
-      ry += (my - ry) * 0.16;
-      if (ring.current)
-        ring.current.style.transform = `translate(${rx}px, ${ry}px) scale(${active ? 2.1 : 1})`;
-      raf = requestAnimationFrame(loop);
-    };
-
-    window.addEventListener("mousemove", onMove);
-    raf = requestAnimationFrame(loop);
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener("mousemove", onMove);
-      root.classList.remove("has-cursor");
-    };
-  }, []);
-
-  return (
-    <>
-      <div ref={ring} className="ed-cursor" aria-hidden />
-      <div ref={dot} className="ed-cursor-dot" aria-hidden />
-    </>
-  );
-}
 
 export function SmoothScroll() {
   const location = useLocation();
@@ -395,42 +343,6 @@ export default function App() {
 }
 
 /* ============================================================
-   Brand logos (inline SVG)
-   ============================================================ */
-
-function ChromeLogo({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden focusable="false">
-      <path d="M24 24 L4.95 13 A22 22 0 0 1 43.05 13 Z" fill="#ea4335" />
-      <path d="M24 24 L24 46 A22 22 0 0 1 4.95 13 Z" fill="#34a853" />
-      <path d="M24 24 L43.05 13 A22 22 0 0 1 24 46 Z" fill="#fbbc05" />
-      <circle cx="24" cy="24" r="10" fill="#fff" />
-      <circle cx="24" cy="24" r="7" fill="#4285f4" />
-    </svg>
-  );
-}
-
-function OperaLogo({ size = 22 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden focusable="false">
-      <ellipse cx="24" cy="24" rx="14" ry="20" fill="#ff1b2d" />
-      <ellipse cx="24" cy="24" rx="6.4" ry="12.4" fill="#fff" />
-    </svg>
-  );
-}
-
-function GoogleGLogo({ size = 20 }: { size?: number }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 48 48" aria-hidden focusable="false">
-      <path fill="#FFC107" d="M43.611 20.083H42V20H24v8h11.303c-1.649 4.657-6.08 8-11.303 8-6.627 0-12-5.373-12-12s5.373-12 12-12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 12.955 4 4 12.955 4 24s8.955 20 20 20 20-8.955 20-20c0-1.341-.138-2.65-.389-3.917z" />
-      <path fill="#FF3D00" d="M6.306 14.691l6.571 4.819C14.655 15.108 18.961 12 24 12c3.059 0 5.842 1.154 7.961 3.039l5.657-5.657C34.046 6.053 29.268 4 24 4 16.318 4 9.656 8.337 6.306 14.691z" />
-      <path fill="#4CAF50" d="M24 44c5.166 0 9.86-1.977 13.409-5.192l-6.19-5.238C29.211 35.091 26.715 36 24 36c-5.202 0-9.619-3.317-11.283-7.946l-6.522 5.025C9.505 39.556 16.227 44 24 44z" />
-      <path fill="#1976D2" d="M43.611 20.083H42V20H24v8h11.303c-.792 2.237-2.231 4.166-4.087 5.571l6.19 5.238C36.971 39.205 44 34 44 24c0-1.341-.138-2.65-.389-3.917z" />
-    </svg>
-  );
-}
-
-/* ============================================================
    Header
    ============================================================ */
 
@@ -532,9 +444,13 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8">
+          <nav className="hidden md:flex items-center gap-5 xl:gap-8">
             {NAV.map((n) => (
-              <Link key={n.href} to={n.href} className="ed-label hover:text-[color:var(--ink)] transition-colors">
+              <Link
+                key={n.href}
+                to={n.href}
+                className="ed-label whitespace-nowrap hover:text-[color:var(--ink)] transition-colors"
+              >
                 {n.label}
               </Link>
             ))}
@@ -542,7 +458,7 @@ export function Header() {
 
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
-            <Link className="ed-btn ed-btn-accent" to="/business">
+            <Link className="ed-btn ed-btn-accent whitespace-nowrap" to="/business">
               <span>Sign in</span> <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
@@ -990,9 +906,6 @@ function Hero() {
                   <span style={{ color: "var(--muted)" }}> — no credit card required</span>
                 </span>
               </div>
-              <span className="ed-label" style={{ letterSpacing: "0.08em", color: "var(--muted)" }}>
-                Google sign-in only — we never see your DAT password
-              </span>
               <a
                 href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
                 target="_blank"
@@ -1004,17 +917,29 @@ function Hero() {
                   <b>5.0</b> · 100+ dispatchers · Chrome Web Store
                 </span>
               </a>
-              <div className="inline-flex items-center gap-2.5 mt-1">
-                <span className="ed-label" style={{ color: "var(--muted)", letterSpacing: "0.08em" }}>
-                  Works with
-                </span>
-                <span style={{ display: "inline-flex", alignItems: "center", background: "#fff", borderRadius: 8, padding: "5px 9px" }}>
-                  <img src="/dat.png" alt="DAT" style={{ height: 18, width: "auto", display: "block" }} />
-                </span>
-                <span style={{ display: "inline-flex", alignItems: "center", background: "#fff", borderRadius: 8, padding: "5px 9px" }}>
-                  <img src="/truckstop.png" alt="Truckstop" style={{ height: 18, width: "auto", display: "block" }} />
-                </span>
+              <div className="tb-hero-logos">
+                <span className="tb-hero-logos-label">Works with</span>
+                <div className="tb-hero-logos-row">
+                  <span className="tb-logo-chip">
+                    <img src="/dat.png" alt="DAT" />
+                  </span>
+                  <span className="tb-logo-chip">
+                    <img src="/truckstop.png" alt="Truckstop" />
+                  </span>
+                </div>
+                <span className="tb-hero-logos-label">Sends from</span>
+                <div className="tb-hero-logos-row">
+                  <span className="tb-logo-chip">
+                    <ProviderLogo provider="GOOGLE" size={15} /> Gmail
+                  </span>
+                  <span className="tb-logo-chip">
+                    <ProviderLogo provider="MICROSOFT" size={14} /> Outlook
+                  </span>
+                </div>
               </div>
+              <span className="tb-hero-note">
+                Google or Microsoft sign-in · we never see your DAT password
+              </span>
             </div>
           </Reveal>
 
@@ -1028,30 +953,6 @@ function Hero() {
     </section>
   );
 }
-
-function SpinBadge() {
-  return (
-    <div className="relative h-44 w-44">
-      <svg viewBox="0 0 200 200" className="ed-badge h-full w-full">
-        <defs>
-          <path id="tb-circle" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
-        </defs>
-        <text
-          fill="var(--muted)"
-          style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: 6, textTransform: "uppercase" }}
-        >
-          <textPath href="#tb-circle">
-            Truck Box · Send faster · Truck Box · Send faster ·
-          </textPath>
-        </text>
-      </svg>
-      <span className="absolute inset-0 flex items-center justify-center">
-        <ArrowRight className="h-7 w-7" style={{ color: "var(--accent)" }} />
-      </span>
-    </div>
-  );
-}
-
 
 /* ============================================================
    Social proof — real Chrome Web Store reviews
@@ -1090,7 +991,7 @@ function SocialProof() {
           </h2>
           <div className="text-left md:text-right">
             <div
-              className="ed-display text-5xl leading-none"
+              className="tb-rating ed-display text-5xl leading-none"
               style={{ textTransform: "none", letterSpacing: "-0.02em" }}
             >
               5.0 <span className="ed-accent tb-star">★</span>
@@ -1107,17 +1008,16 @@ function SocialProof() {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3">
+        <div className="tb-reviews grid md:grid-cols-3">
           {reviews.map((r, i) => (
             <Reveal key={r.name} delay={i * 0.08}>
-              <figure
-                className="py-8 md:py-10 md:px-8 md:first:pl-0"
-                style={{ borderTop: "1px solid var(--line)" }}
-              >
-                <blockquote className="text-lg leading-relaxed">
-                  “{r.text}”
-                </blockquote>
-                <figcaption className="ed-label mt-6">{r.name}</figcaption>
+              <figure className="tb-review">
+                <span className="tb-review-mark" aria-hidden>“</span>
+                <blockquote className="text-lg leading-relaxed">{r.text}</blockquote>
+                <figcaption className="ed-label mt-6">
+                  <span className="tb-review-stars" aria-label="5 stars">★★★★★</span>
+                  {r.name}
+                </figcaption>
               </figure>
             </Reveal>
           ))}
@@ -1131,64 +1031,108 @@ function SocialProof() {
    Features — horizontal pinned track
    ============================================================ */
 
-type FeatureItem = { slug: string; title: string; body: string; video?: boolean };
+type FeatureVisualKind = "platforms" | "mailboxes" | "analytics";
+type FeatureItem = {
+  slug: string;
+  title: string;
+  body: string;
+  /** Drawn in markup instead of a /demos screenshot (crisp at any size). */
+  visual?: FeatureVisualKind;
+  /** Partner logos shown under the description. */
+  logos?: { src: string; alt: string }[];
+};
 
-function FeatureCard({ item, index, total }: { item: FeatureItem; index: number; total: number }) {
-  const vid = useRef<HTMLVideoElement>(null);
-  const [failed, setFailed] = useState(false);
-
-  const onEnter = () => {
-    vid.current?.play().catch(() => {});
-  };
-  const onLeave = () => {
-    const v = vid.current;
-    if (v) {
-      v.pause();
-      v.currentTime = 0;
-    }
-  };
-
+function FeatureLogos({ item }: { item: FeatureItem }) {
+  if (!item.logos) return null;
   return (
-    <article
-      className="ed-fcard"
-      data-cursor
-      onMouseEnter={onEnter}
-      onMouseLeave={onLeave}
-    >
-      <div className="ed-fcard-media-wrap">
-        {failed ? (
-          <div className="ed-fcard-ph">
-            <span className="ed-fcard-ph-play">▶</span>
-            <span className="ed-fcard-ph-note">Demo coming</span>
-          </div>
-        ) : (
-          <video
-            ref={vid}
-            className="ed-fcard-media"
-            src={`/demos/${item.slug}.mp4`}
-            poster={`/demos/${item.slug}.webp`}
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            onError={() => setFailed(true)}
-          />
-        )}
-        <span className="ed-fcard-idx">{String(index + 1).padStart(2, "0")} / {String(total).padStart(2, "0")}</span>
-      </div>
+    <span className="tb-feature-logos">
+      {item.logos.map((l) => (
+        <img key={l.src} src={l.src} alt={l.alt} loading="lazy" decoding="async" draggable={false} />
+      ))}
+    </span>
+  );
+}
 
-      <div className="ed-fcard-body">
-        <h3
-          className="ed-display text-2xl leading-[0.98]"
-          style={{ textTransform: "none", letterSpacing: "-0.02em" }}
-        >
-          {item.title}
-        </h3>
-        <p className="mt-3 text-[0.95rem] leading-relaxed" style={{ color: "var(--muted)" }}>
-          {item.body}
-        </p>
-      </div>
-    </article>
+/** The feature's picture: a /demos screenshot, or a visual drawn in markup. */
+function FeatureMedia({ item, alt = "" }: { item: FeatureItem; alt?: string }) {
+  if (!item.visual) {
+    return <img src={`/demos/${item.slug}.webp`} alt={alt} loading="lazy" decoding="async" draggable={false} />;
+  }
+  return (
+    <div className={"tb-fv tb-fv-" + item.visual} role="img" aria-label={alt || item.title}>
+      {item.visual === "platforms" && (
+        <>
+          <div className="tb-fv-group">
+            <div className="tb-fv-kicker">Works inside</div>
+            <div className="tb-fv-chips">
+              <span className="tb-fv-chip">
+                <img src="/dat.png" alt="DAT" loading="lazy" decoding="async" draggable={false} />
+              </span>
+              <span className="tb-fv-chip">
+                <img src="/truckstop.png" alt="Truckstop" loading="lazy" decoding="async" draggable={false} />
+              </span>
+            </div>
+          </div>
+          <div className="tb-fv-group">
+            <div className="tb-fv-kicker">Sends from</div>
+            <div className="tb-fv-chips">
+              <span className="tb-fv-chip">
+                <ProviderLogo provider="GOOGLE" size={26} />
+                <b>Gmail</b>
+              </span>
+              <span className="tb-fv-chip">
+                <ProviderLogo provider="MICROSOFT" size={24} />
+                <b>Outlook</b>
+              </span>
+            </div>
+          </div>
+        </>
+      )}
+      {item.visual === "mailboxes" && (
+        <>
+          <div className="tb-fv-kicker">Send from</div>
+          <div className="tb-fv-list">
+            {[
+              { p: "GOOGLE" as const, a: "ops@smartfreight.com", t: "Smart Freight · Reefer" },
+              { p: "MICROSOFT" as const, a: "dispatch@acmelogistics.com", t: "Acme Logistics · Dry van" },
+              { p: "GOOGLE" as const, a: "loads@bluelinecarriers.com", t: "Blueline · Flatbed" },
+            ].map((m, i) => (
+              <div key={m.a} className={"tb-fv-row" + (i === 1 ? " is-on" : "")}>
+                <ProviderLogo provider={m.p} size={20} />
+                <div>
+                  <b>{m.a}</b>
+                  <span>Template: {m.t}</span>
+                </div>
+                {i === 1 && <em>✓</em>}
+              </div>
+            ))}
+          </div>
+          <div className="tb-fv-note">Each email keeps its own templates, name and MC</div>
+        </>
+      )}
+      {item.visual === "analytics" && (
+        <>
+          <div className="tb-fv-kicker">This load today · Chicago, IL → Dallas, TX</div>
+          <svg className="tb-fv-chart" viewBox="0 0 320 150" aria-hidden="true">
+            <line x1="0" y1="130" x2="320" y2="130" />
+            <polyline points="10,98 60,92 110,80 160,84 210,62 260,50 310,40" />
+            {[
+              [10, 98], [60, 92], [110, 80], [160, 84], [210, 62], [260, 50], [310, 40],
+            ].map(([x, y]) => (
+              <circle key={x} cx={x} cy={y} r="4" />
+            ))}
+            <text x="10" y="146">6 AM</text>
+            <text x="150" y="146">12 PM</text>
+            <text x="286" y="146">Now</text>
+          </svg>
+          <div className="tb-fv-stats">
+            <div><span>Low</span><b>$1,850</b></div>
+            <div><span>High</span><b>$2,400</b></div>
+            <div><span>Posted today</span><b>14×</b></div>
+          </div>
+        </>
+      )}
+    </div>
   );
 }
 
@@ -1198,27 +1142,22 @@ function FeatureCard({ item, index, total }: { item: FeatureItem; index: number;
 
 const BA_VIEWS = {
   details: {
-    label: "Load details",
+    // Loads list + an opened load in one frame.
+    label: "DAT",
     before: "/compare/before.webp",
     after: "/compare/after.webp",
-    ratio: "1447 / 982",
-  },
-  list: {
-    label: "Loads list",
-    before: "/compare/before-list.webp",
-    after: "/compare/after-list.webp",
-    ratio: "1230 / 899",
+    ratio: "1999 / 1094",
   },
   darkmode: {
     label: "Day / Night",
     before: "/compare/day.webp",
     after: "/compare/night.webp",
-    ratio: "1347 / 909",
+    ratio: "1751 / 791",
   },
   truckstop: {
     label: "Truckstop",
-    // Single pre-composed before/after image (labels baked in) — shown static.
-    single: "/compare/truckstop.webp",
+    // Two phone-width panels shown side by side (a slider over tall narrow cards reads poorly).
+    pair: { before: "/compare/truckstop-before.webp", after: "/compare/truckstop-after.webp" },
     ratio: "1450 / 950",
   },
 } as const;
@@ -1232,10 +1171,10 @@ function BeforeAfter() {
   const [view, setView] = useState<BaView>("details");
   const [anim, setAnim] = useState(false); // smooth transition during auto-hint
   const cur = BA_VIEWS[view];
-  const single = "single" in cur ? cur.single : undefined;
+  const pair = "pair" in cur ? cur.pair : undefined;
   const before = "before" in cur ? cur.before : undefined;
   const after = "after" in cur ? cur.after : undefined;
-  const isStatic = !!single;
+  const isStatic = !!pair;
 
   const setFromClientX = (clientX: number) => {
     const el = wrapRef.current;
@@ -1393,32 +1332,35 @@ function BeforeAfter() {
             style={{
               position: "relative",
               width: "100%",
-              aspectRatio: cur.ratio,
-              overflow: "hidden",
+              aspectRatio: isStatic ? undefined : cur.ratio,
+              overflow: isStatic ? "visible" : "hidden",
               borderRadius: 18,
-              border: "1px solid var(--line)",
-              background: "#eef1f6",
+              border: isStatic ? "none" : "1px solid var(--line)",
+              background: isStatic ? "transparent" : "#eef1f6",
               userSelect: "none",
               touchAction: "none",
               cursor: isStatic ? "default" : "ew-resize",
             }}
           >
             {isStatic ? (
-              /* Static single image — already a composed before/after, no drag */
-              <img loading="lazy" decoding="async"
-                src={single}
-                alt="Truckstop board with TruckBox"
-                draggable={false}
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                  objectPosition: "center",
-                  display: "block",
-                }}
-              />
+              /* Truckstop: before / after panels side by side */
+              <div className="tb-ts-pair">
+                {[
+                  { src: pair!.before, label: "Before", after: false },
+                  { src: pair!.after, label: "★ After", after: true },
+                ].map((p) => (
+                  <figure key={p.src} className={"tb-ts-card" + (p.after ? " is-after" : "")}>
+                    <figcaption className="tb-ts-label">{p.label}</figcaption>
+                    <img
+                      loading="lazy"
+                      decoding="async"
+                      src={p.src}
+                      alt={p.after ? "Truckstop load with TruckBox" : "Truckstop load without TruckBox"}
+                      draggable={false}
+                    />
+                  </figure>
+                ))}
+              </div>
             ) : (
             <>
             {/* AFTER — full base layer (with TruckBox) */}
@@ -1504,54 +1446,127 @@ function BeforeAfter() {
   );
 }
 
+/* Desktop feature panels: one open, the rest collapsed to a vertical title.
+   Hover (or focus) opens a panel; left alone, they step through on their own. */
+function FeaturePanels({ items, onOpen }: { items: FeatureItem[]; onOpen: (i: number) => void }) {
+  const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+  const reduce =
+    typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setInView(e.isIntersecting), { threshold: 0.35 });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (paused || !inView || reduce) return;
+    const t = window.setTimeout(() => setActive((a) => (a + 1) % items.length), 5000);
+    return () => window.clearTimeout(t);
+  }, [active, paused, inView, reduce, items.length]);
+
+  return (
+    <div
+      ref={ref}
+      className="tb-fpanels hidden lg:flex"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {items.map((it, i) => {
+        const open = i === active;
+        const num = String(i + 1).padStart(2, "0");
+        return (
+          <div
+            key={it.slug}
+            role="button"
+            tabIndex={0}
+            aria-expanded={open}
+            aria-label={it.title}
+            className={"tb-fpanel" + (open ? " is-open" : "")}
+            onMouseEnter={() => setActive(i)}
+            onFocus={() => setActive(i)}
+            onClick={() => (open ? onOpen(i) : setActive(i))}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                onOpen(i);
+              }
+            }}
+          >
+            {/* Collapsed layer: number + vertical title. Crossfades, since
+                writing-mode can't animate. */}
+            <div className="tb-fpanel-closed" aria-hidden>
+              <span className="tb-fpanel-num">/{num}</span>
+              <span className="tb-fpanel-vtitle">{it.title}</span>
+            </div>
+
+            <div className="tb-fpanel-open">
+              <div className="tb-fpanel-media">
+                <FeatureMedia item={it} />
+                <span className="tb-bento-zoom" aria-hidden>⤢</span>
+              </div>
+              <div className="tb-fpanel-text">
+                <span className="tb-fpanel-num is-accent">/{num}</span>
+                <h3 className="tb-fpanel-title">{it.title}</h3>
+                <p className="tb-fpanel-body">{it.body}</p>
+                <FeatureLogos item={it} />
+              </div>
+            </div>
+
+            {open && !paused && inView && !reduce && <span className="tb-fpanel-timer" aria-hidden />}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 function Features() {
+  // The six that sell it. Everything else is listed in Pricing.
   const items: FeatureItem[] = [
     {
       slug: "email",
       title: "One-click email",
-      body: "Email the broker straight from a DAT or Truckstop load — no copy-paste, no Gmail tab.",
-    },
-    {
-      slug: "template",
-      title: "Multiple email templates",
-      body: "Up to 3 saved templates with dynamic fields — switch per broker or company.",
+      body: "Email the broker straight from a DAT or Truckstop load with your template filled in — no copy-paste, no extra tab.",
     },
     {
       slug: "rts",
-      title: "Factoring Credit Check",
-      body: "See a broker's factoring credit rating and days-to-pay on the load — works with RTS, Apex Capital and Triumph, using your own account.",
+      title: "Factoring credit check",
+      body: "A broker's credit rating and days-to-pay right on the load, from 3 factoring companies — RTS, Triumph and Apex Capital — with your own account.",
+      logos: [
+        { src: "/logos/rts.webp", alt: "RTS Financial" },
+        { src: "/logos/triumph.webp", alt: "Triumph" },
+        { src: "/logos/apex.webp", alt: "Apex Capital" },
+      ],
     },
     {
-      slug: "map",
-      title: "Inbuilt Map",
-      body: "A live Google Maps route for every load — truck, pickup and destination.",
+      slug: "platforms",
+      title: "Multiple platforms",
+      body: "Works right inside DAT and Truckstop and sends from your own Gmail or Outlook — personal accounts or Microsoft 365 work mailboxes.",
+      visual: "platforms",
     },
     {
-      slug: "calculator",
-      title: "Rate calculator",
-      body: "Price a load on the spot — rate-per-mile and deadhead-adjusted RPM right on the board.",
+      slug: "analytics",
+      title: "Lane price analytics",
+      body: "See how many times a load was posted today and how its price changed during the day — know when to call and what to ask.",
+      visual: "analytics",
     },
     {
-      slug: "filter",
-      title: "Load filter",
-      body: "Dim loads under your minimum miles and focus on the lanes worth your time.",
+      slug: "mailboxes",
+      title: "Multiple mailboxes",
+      body: "Connect several Gmail or Outlook addresses. Each has its own templates, name and MC — pick the sender per load.",
+      visual: "mailboxes",
     },
     {
       slug: "keyboard",
-      title: "Keyboard navigation",
-      body: "Hands stay on the keyboard. W/S move loads, A/D switch tabs, C copies, E sends, R refreshes.",
+      title: "Built for speed",
+      body: "Hands stay on the keyboard: W/S move between loads, E sends, C copies the load, and one click calls the broker.",
     },
-    {
-      slug: "refresh",
-      title: "Load Refresh",
-      body: "Refresh load list not all DAT page",
-    },
-    {
-      slug: "night",
-      title: "Night Mode",
-      body: "Enable Night Mode in DAT load board",
-    },
-
   ];
 
   const total = items.length;
@@ -1563,6 +1578,7 @@ function Features() {
   // Preload every feature image so the grid and the lightbox feel instant.
   useEffect(() => {
     items.forEach((it) => {
+      if (it.visual) return;
       const img = new Image();
       img.src = `/demos/${it.slug}.webp`;
     });
@@ -1692,13 +1708,17 @@ function Features() {
               <span className="ed-accent">Premium in feel</span>
             </h2>
           </div>
-          <span className="ed-label hidden md:block max-w-[220px] text-right">
-            Swipe through — tap a card to enlarge
+          <span className="ed-label hidden lg:block max-w-[220px] text-right">
+            Hover to explore — click to enlarge
           </span>
         </div>
 
-        {/* Carousel — swipe on touch, arrows / drag on desktop. The next card
-            peeks at the edge so it always reads as scrollable. */}
+        {/* Desktop: expanding panels. Hover drives it, a click opens the lightbox. */}
+        <FeaturePanels items={items} onOpen={setLb} />
+
+        {/* Below lg: the swipe carousel. The next card peeks at the edge so it
+            always reads as scrollable. */}
+        <div className="lg:hidden">
         <div className="tb-caro-wrap">
           <button
             type="button"
@@ -1719,19 +1739,14 @@ function Features() {
                 className="tb-bento-card tb-caro-card"
               >
                 <span className="tb-bento-media">
-                  <img
-                    src={`/demos/${it.slug}.webp`}
-                    alt={it.title}
-                    loading="lazy"
-                    decoding="async"
-                    draggable={false}
-                  />
+                  <FeatureMedia item={it} alt={it.title} />
                   <span className="tb-bento-zoom" aria-hidden>⤢</span>
                 </span>
                 <span className="tb-bento-text">
                   <span className="tb-bento-idx">{String(i + 1).padStart(2, "0")}</span>
                   <span className="tb-bento-title">{it.title}</span>
                   <span className="tb-bento-body">{it.body}</span>
+                  <FeatureLogos item={it} />
                 </span>
               </button>
             ))}
@@ -1758,6 +1773,7 @@ function Features() {
               onClick={() => scrollToPage(i)}
             />
           ))}
+        </div>
         </div>
       </div>
 
@@ -1797,11 +1813,12 @@ function Features() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.24, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img loading="lazy" decoding="async" src={`/demos/${items[lb].slug}.webp`} alt={items[lb].title} />
+              <FeatureMedia item={items[lb]} alt={items[lb].title} />
               <figcaption>
                 <span className="tb-bento-idx">{String(lb + 1).padStart(2, "0")}</span>
                 <span className="tb-lb-title">{items[lb].title}</span>
                 <span className="tb-lb-body">{items[lb].body}</span>
+                <FeatureLogos item={items[lb]} />
               </figcaption>
             </motion.figure>
             <button
@@ -1826,9 +1843,13 @@ function Features() {
 function HowItWorks() {
   const steps = [
     { t: "Install the extension", d: "Add Truck Box to Chrome and pin it for quick access." },
-    { t: "Sign in with Google", d: "Connect your Gmail account and activate the free trial." },
-    { t: "Work inside DAT", d: "Open DAT, use your templates, filter loads, and send with one click." },
+    { t: "Sign in with Google or Microsoft", d: "Connect Gmail or Outlook and activate the free trial." },
+    {
+      t: "Work inside DAT or Truckstop",
+      d: "Open DAT or Truckstop, use your templates, filter loads, and send with one click.",
+    },
   ];
+  const view = { once: true, margin: "-80px" } as const;
   return (
     <section className="ed-section">
       <div className="ed-container">
@@ -1837,37 +1858,71 @@ function HowItWorks() {
             <span className="ed-label">[ 04 ] — How it works</span>
             <h2 className="ed-h2 mt-4">Start in 3 steps</h2>
           </div>
-          <span className="ed-label hidden md:block">No heavy training needed</span>
         </div>
 
         <div>
           {steps.map((s, i) => (
-            <motion.div
+            <div
               key={s.t}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, ease: EASE }}
-              className="grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start py-10"
-              style={{ borderTop: "1px solid var(--line)" }}
+              className="tb-hiw grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start py-10"
             >
-              <span
-                className="ed-display ed-outline text-[5rem] md:text-[8rem] leading-none"
+              {/* Hairline draws in from the left. */}
+              <motion.span
+                aria-hidden
+                className="tb-hiw-line"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={view}
+                transition={{ duration: 1.1, ease: EASE }}
+              />
+              {/* Number: rises out of a mask, like a counter rolling in. */}
+              {/* The mask watches the viewport: the number itself starts clipped, so it never "intersects". */}
+              <motion.span
+                className="tb-hiw-num-mask text-[5rem] md:text-[8rem] leading-none"
+                initial="hidden"
+                whileInView="shown"
+                viewport={view}
               >
-                {String(i + 1).padStart(2, "0")}
-              </span>
-              <div className="md:pt-6">
-                <h3
-                  className="ed-display text-4xl md:text-6xl"
-                  style={{ textTransform: "none", letterSpacing: "-0.025em" }}
+                <motion.span
+                  className="tb-hiw-num ed-display ed-outline text-[5rem] md:text-[8rem] leading-none"
+                  variants={{ hidden: { y: "105%", rotate: 6 }, shown: { y: "0%", rotate: 0 } }}
+                  transition={{ duration: 1, ease: EASE, delay: 0.1 }}
                 >
-                  {s.t}
-                </h3>
-                <p className="mt-4 max-w-md text-lg" style={{ color: "var(--muted)" }}>
+                  {String(i + 1).padStart(2, "0")}
+                </motion.span>
+              </motion.span>
+              {/* Text: slides in from the right with a blur, then the description follows. */}
+              <div className="md:pt-6">
+                <motion.h3
+                  className="tb-hiw-title ed-display text-4xl md:text-6xl"
+                  style={{ textTransform: "none", letterSpacing: "-0.025em" }}
+                  initial={{ opacity: 0, x: 48, filter: "blur(8px)" }}
+                  whileInView={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+                  viewport={view}
+                  transition={{ duration: 0.9, ease: EASE, delay: 0.25 }}
+                >
+                  <span className="tb-hiw-fill">{s.t}</span>
+                </motion.h3>
+                <motion.span
+                  aria-hidden
+                  className="tb-hiw-bar"
+                  initial={{ scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={view}
+                  transition={{ duration: 0.9, ease: EASE, delay: 0.55 }}
+                />
+                <motion.p
+                  className="tb-hiw-desc mt-4 max-w-md text-lg"
+                  style={{ color: "var(--muted)" }}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={view}
+                  transition={{ duration: 0.8, ease: EASE, delay: 0.45 }}
+                >
                   {s.d}
-                </p>
+                </motion.p>
               </div>
-            </motion.div>
+            </div>
           ))}
           <div style={{ borderTop: "1px solid var(--line)" }} />
         </div>
@@ -1880,68 +1935,158 @@ function HowItWorks() {
    Pricing
    ============================================================ */
 
-function PlatformsBand() {
-  const chip: CSSProperties = {
-    display: "inline-flex", alignItems: "center", background: "#fff", borderRadius: 9, padding: "6px 11px",
+const DRUM_ROW = 52; // px, matches .tb-drum li height
+const DRUM_VISIBLE = 9;
+
+/**
+ * The included-features list as a scroll wheel: rows curve away from the centre band and the centred
+ * one lights up. It turns by itself while it is on screen and nobody is touching it.
+ */
+function FeatureDrum({ items }: { items: string[] }) {
+  const box = useRef<HTMLDivElement>(null);
+  const [active, setActive] = useState(0);
+  const activeRef = useRef(0);
+  const paused = useRef(false);
+  const visible = useRef(false);
+
+  // Bend each row by its distance from the centre; returns the index nearest the centre.
+  const bend = useCallback(() => {
+    const el = box.current;
+    if (!el) return 0;
+    const pos = el.scrollTop / DRUM_ROW;
+    el.querySelectorAll<HTMLLIElement>("li").forEach((li, i) => {
+      const d = i - pos;
+      const a = Math.min(Math.abs(d), 5);
+      li.style.transform = `rotateX(${(-d * 11).toFixed(2)}deg) scale(${(1 - a * 0.075).toFixed(3)})`;
+      li.style.opacity = String(Math.max(0.2, 1 - a * 0.16));
+    });
+    return Math.max(0, Math.min(items.length - 1, Math.round(pos)));
+  }, [items.length]);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    bend();
+    let raf = 0;
+    const onScroll = () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const i = bend();
+        if (i !== activeRef.current) {
+          activeRef.current = i;
+          setActive(i);
+        }
+      });
+    };
+    el.addEventListener("scroll", onScroll, { passive: true });
+    const io = new IntersectionObserver(([e]) => (visible.current = e.isIntersecting), { threshold: 0.6 });
+    io.observe(el);
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const timer = reduce
+      ? 0
+      : window.setInterval(() => {
+          if (paused.current || !visible.current || document.hidden) return;
+          const next = (activeRef.current + 1) % items.length;
+          el.scrollTo({ top: next * DRUM_ROW, behavior: "smooth" });
+        }, 2200);
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      cancelAnimationFrame(raf);
+      io.disconnect();
+      window.clearInterval(timer);
+    };
+  }, [bend, items.length]);
+
+  const go = (i: number) => {
+    const n = Math.max(0, Math.min(items.length - 1, i));
+    box.current?.scrollTo({ top: n * DRUM_ROW, behavior: "smooth" });
   };
-  const logo: CSSProperties = { height: 20, width: "auto", display: "block" };
-  const news = [
-    {
-      t: "Truckstop support",
-      d: "Everything you use on DAT now works on Truckstop too — one-click email, route map, FMCSA & factoring credit checks, the rate board.",
-    },
-    {
-      t: "Posted load price analytics",
-      d: "See how a broker moved the price through the day and across the lane — negotiate from data, not guesses.",
-    },
-    {
-      t: "Dedicated loads finder",
-      d: "Spot brokers who keep running the same lane and surface potential recurring & contract leads.",
-    },
-    {
-      t: "Multiple email templates",
-      d: "Save up to 3 templates — each with its own signature — and switch per broker or company.",
-    },
-  ];
+  const hold = () => (paused.current = true);
+  const release = () => (paused.current = false);
+
   return (
-    <section id="platforms" className="ed-section">
-      <div className="ed-container">
-        <div className="mb-10">
-          <span className="ed-label">[ NEW ] — Two load boards, one tool</span>
-          <h2 className="ed-h2 mt-4">
-            Now on <span className="ed-accent">DAT</span>{" "}
-            <span style={{ color: "var(--muted)" }}>&amp;</span>{" "}
-            <span className="ed-accent">Truckstop</span>
-          </h2>
-          <div className="mt-6 flex items-center gap-3 flex-wrap">
-            <span className="ed-label" style={{ color: "var(--muted)" }}>Works with</span>
-            <span style={chip}><img loading="lazy" decoding="async" style={logo} src="/dat.png" alt="DAT" /></span>
-            <span style={chip}><img loading="lazy" decoding="async" style={logo} src="/truckstop.png" alt="Truckstop" /></span>
-          </div>
-        </div>
-        <div className="grid sm:grid-cols-2 gap-5">
-          {news.map((n) => (
-            <div
-              key={n.t}
-              style={{
-                border: "1px solid var(--line)",
-                borderRadius: 14,
-                padding: "20px 22px",
-                background: "var(--bg-2)",
-                height: "100%",
-              }}
-            >
-              <h3 className="ed-display text-xl" style={{ textTransform: "none", letterSpacing: "-0.01em" }}>
-                {n.t}
-              </h3>
-              <p className="mt-2 text-[0.95rem] leading-relaxed" style={{ color: "var(--muted)" }}>
-                {n.d}
-              </p>
-            </div>
+    <div className="tb-drum-wrap" onMouseEnter={hold} onMouseLeave={release} onTouchStart={hold} onFocus={hold} onBlur={release}>
+      <div className="tb-drum-band" style={{ top: DRUM_ROW * ((DRUM_VISIBLE - 1) / 2), height: DRUM_ROW }} aria-hidden />
+      <div
+        ref={box}
+        className="tb-drum"
+        style={{ height: DRUM_ROW * DRUM_VISIBLE }}
+        tabIndex={0}
+        role="region"
+        aria-label="Everything included in the subscription"
+        onKeyDown={(e) => {
+          if (e.key === "ArrowDown") { e.preventDefault(); go(active + 1); }
+          if (e.key === "ArrowUp") { e.preventDefault(); go(active - 1); }
+        }}
+      >
+        <ul style={{ paddingBlock: (DRUM_ROW * (DRUM_VISIBLE - 1)) / 2 }}>
+          {items.map((f, i) => (
+            <li key={f} className={i === active ? "is-active" : undefined} onClick={() => go(i)}>
+              <span>{f}</span>
+              <span className="ed-label ed-accent">incl.</span>
+            </li>
           ))}
+        </ul>
+      </div>
+      <div className="tb-drum-foot">
+        <span className="ed-label">
+          {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")} included
+        </span>
+        <span className="tb-drum-nav">
+          <button type="button" aria-label="Previous feature" onClick={() => go(active - 1)} disabled={active === 0}>↑</button>
+          <button type="button" aria-label="Next feature" onClick={() => go(active + 1)} disabled={active === items.length - 1}>↓</button>
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================
+   Teams offer (inside Pricing): seat stepper, live total, self-serve sign-up
+   ============================================================ */
+function TeamsOffer() {
+  const [seats, setSeats] = useState(3);
+  const step = (d: number) => setSeats((n) => Math.min(200, Math.max(1, n + d)));
+  return (
+    <>
+      <div>
+        <span className="ed-label ed-accent">For teams</span>
+        <h3
+          className="ed-display text-3xl md:text-4xl mt-3"
+          style={{ textTransform: "none", letterSpacing: "-0.02em" }}
+        >
+          COMPANY OR DISPATCH TEAM?
+        </h3>
+        <p className="mt-3 max-w-lg text-lg" style={{ color: "var(--muted)" }}>
+          $7 per seat per month. One bill, a manager back office with team stats, add or remove
+          seats any time.
+        </p>
+      </div>
+      <div className="flex flex-col gap-4 md:items-end">
+        <div className="flex items-center gap-3">
+          <button type="button" className="tb-seat-step" aria-label="Fewer seats" onClick={() => step(-1)}>
+            −
+          </button>
+          <span className="ed-display text-2xl" style={{ minWidth: 110, textAlign: "center" }}>
+            {seats} seat{seats === 1 ? "" : "s"}
+          </span>
+          <button type="button" className="tb-seat-step" aria-label="More seats" onClick={() => step(1)}>
+            +
+          </button>
+          <span className="ed-label" style={{ color: "var(--ink)", fontWeight: 700 }}>
+            = ${seats * 7}/mo
+          </span>
+        </div>
+        <div className="flex flex-wrap gap-3">
+          <Link className="ed-btn ed-btn-accent shrink-0" to="/business/start">
+            <span>Start a team</span> <ArrowUpRight className="h-4 w-4" />
+          </Link>
+          <a className="ed-btn shrink-0" href="#contact">
+            <span>Contact us</span>
+          </a>
         </div>
       </div>
-    </section>
+    </>
   );
 }
 
@@ -1952,6 +2097,8 @@ function Pricing() {
     "Works on DAT + Truckstop",
     "One-click email sending",
     "Multiple email templates (up to 3)",
+    "Gmail & Outlook — Google or Microsoft sign-in",
+    "Multiple sender mailboxes (up to 3 extra)",
     "Posted load price analytics",
     "Dedicated loads finder",
     "Factoring credit check (RTS, Apex, Triumph)",
@@ -1976,7 +2123,10 @@ function Pricing() {
         <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
           <Reveal>
             <div className="flex items-start gap-4">
-              <span className="ed-display text-[8rem] md:text-[12rem] leading-[0.8] ed-accent">$7</span>
+              <span className="tb-price ed-display text-[8rem] md:text-[12rem] leading-[0.8]" aria-label="$7">
+                <span className="tb-price-cur ed-accent" aria-hidden>$</span>
+                <span className="tb-price-num ed-accent" aria-hidden>7</span>
+              </span>
               <span className="ed-label mt-6">/ per user<br />month</span>
             </div>
             <p className="mt-6 max-w-md text-lg" style={{ color: "var(--muted)" }}>
@@ -1995,24 +2145,11 @@ function Pricing() {
             </p>
           </Reveal>
 
-          <Reveal delay={0.1}>
-            <ul>
-              {features.map((f, i) => (
-                <motion.li
-                  key={f}
-                  initial={{ opacity: 0, x: 20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.06, duration: 0.6, ease: EASE }}
-                  className="flex items-center justify-between py-5"
-                  style={{ borderTop: "1px solid var(--line)" }}
-                >
-                  <span className="text-lg">{f}</span>
-                  <span className="ed-label ed-accent">incl.</span>
-                </motion.li>
-              ))}
-              <li style={{ borderTop: "1px solid var(--line)" }} />
-            </ul>
+          <Reveal delay={0.1} className="min-w-0">
+            <FeatureDrum items={features} />
+            <p className="tb-drum-lead">
+              <b>Every feature is included.</b> No hidden fees, no paid add-ons, no premium tier.
+            </p>
           </Reveal>
         </div>
 
@@ -2021,27 +2158,7 @@ function Pricing() {
             className="mt-16 md:mt-20 flex flex-col gap-6 md:flex-row md:items-center md:justify-between"
             style={{ borderTop: "1px solid var(--line)", paddingTop: 40 }}
           >
-            <div>
-              <span className="ed-label ed-accent">For teams</span>
-              <h3
-                className="ed-display text-3xl md:text-4xl mt-3"
-                style={{ textTransform: "none", letterSpacing: "-0.02em" }}
-              >
-                COMPANY OR DISPATCH TEAM?
-              </h3>
-              <p className="mt-3 max-w-lg text-lg" style={{ color: "var(--muted)" }}>
-                Get custom team setup and add everyone by email. You get one bill,
-                your dispatchers get instant access.
-              </p>
-            </div>
-            <div className="flex flex-wrap gap-3">
-              <Link className="ed-btn ed-btn-accent shrink-0" to="/business/request">
-                <span>Set up a team</span> <ArrowUpRight className="h-4 w-4" />
-              </Link>
-              <a className="ed-btn shrink-0" href="#contact">
-                <span>Contact us</span>
-              </a>
-            </div>
+            <TeamsOffer />
           </div>
         </Reveal>
       </div>
@@ -2142,12 +2259,116 @@ const FAQS = [
         <strong>chrome://extensions</strong>, enable Developer Mode, and press{" "}
         <strong>Update</strong> to refresh manually.{" "}
         <Link
-          to="/update"
+          to="/guide"
           className="ed-accent"
           style={{ textDecoration: "underline", textUnderlineOffset: 3 }}
         >
-          See the update guide with screenshots →
+          See the Guide →
         </Link>
+      </p>
+    ),
+  },
+  {
+    q: "Does Truck Box work with Outlook?",
+    a: (
+      <p>
+        Yes. Click <strong>Sign in with Microsoft</strong> in the extension popup and Truck Box
+        sends from your Outlook — personal <strong>Outlook.com / Hotmail</strong> accounts and{" "}
+        <strong>Microsoft 365</strong> work mailboxes both work. Gmail and Google Workspace are
+        supported the same way through <strong>Sign in with Google</strong>.
+      </p>
+    ),
+  },
+  {
+    q: "Can I send from more than one email address?",
+    a: (
+      <p>
+        Yes. Open the{" "}
+        <Link to="/business" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+          back office
+        </Link>{" "}
+        → <strong>Mailboxes</strong> and connect extra Gmail or Outlook addresses (up to 3 on top of
+        the one you sign in with). Handy if you dispatch for several carriers: each address gets its
+        own template, name and MC.
+      </p>
+    ),
+  },
+  {
+    q: "How do I choose which address an email is sent from?",
+    a: (
+      <p>
+        Every template is tied to one sender. In the extension popup open <strong>Template</strong>,
+        pick the address under <strong>Send from</strong> and save. On DAT or Truckstop, the arrow
+        next to the email button lets you switch templates — and with it the sender — for that load.
+      </p>
+    ),
+  },
+  {
+    q: "Can I log in with both Google and Microsoft?",
+    a: (
+      <p>
+        Yes. In the{" "}
+        <Link to="/business" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+          back office
+        </Link>{" "}
+        → <strong>Accounts</strong> you can link your Google and Microsoft logins to the same Truck Box
+        account, so either one signs you in to the same subscription, templates and mailboxes.
+      </p>
+    ),
+  },
+  {
+    q: "Does it work on Truckstop too?",
+    a: (
+      <p>
+        Yes. Truck Box works on both <strong>DAT One</strong> and <strong>Truckstop</strong> — one-click
+        email, route map, FMCSA and factoring credit checks are on both boards, with the same
+        templates and settings.
+      </p>
+    ),
+  },
+  {
+    q: "Does Truck Box read my email? Is it safe?",
+    a: (
+      <p>
+        No, it can't read your email. Truck Box asks Google and Microsoft only for permission to{" "}
+        <strong>send</strong> email — it has no access to open, read or delete anything in your
+        inbox. It never sees your email, DAT or Truckstop passwords, and you can revoke access any
+        time in your Google or Microsoft account settings.
+      </p>
+    ),
+  },
+  {
+    q: "What does it cost? Are there any add-ons?",
+    a: (
+      <p>
+        $7 per user per month after a free 7-day trial (no credit card needed). Every feature is
+        included — no hidden fees, no paid add-ons, no premium tier. Cancel anytime in one click.
+      </p>
+    ),
+  },
+  {
+    q: "Do you have a plan for dispatch companies?",
+    a: (
+      <p>
+        Yes — $7 per seat per month on one bill, with a manager back office for seats, invites and
+        team stats. Set it up yourself in a couple of minutes on the{" "}
+        <Link to="/business/start" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+          team signup page
+        </Link>
+        . Dispatchers who already pay for Truck Box just accept the invite; their personal plan ends
+        with its paid period, so nobody pays twice.
+      </p>
+    ),
+  },
+  {
+    q: "Why can't I send from my Outlook address?",
+    a: (
+      <p>
+        Usually the Microsoft account has no Outlook mailbox behind it — for example a work account
+        without an Exchange license, or a personal Microsoft account made with a Gmail address. Sign
+        in with an account that has an Outlook inbox (you can open it at outlook.com), or ask your IT
+        admin to enable a mailbox. If a mailbox shows <strong>Disconnected</strong>, press{" "}
+        <strong>Reconnect</strong> in Mailboxes.
       </p>
     ),
   },
@@ -2175,7 +2396,7 @@ const FAQS = [
     q: "How do I edit my email template?",
     a: (
       <p>
-        Open the Truck Box extension popup, go to the <strong>Email Template</strong> tab,
+        Open the Truck Box extension popup, go to the <strong>Template</strong> tab,
         and update your subject or body. Save the template, and Truck Box will use it for
         future emails.
       </p>
@@ -2241,7 +2462,7 @@ const FAQS = [
           <li>
             <strong>Update the extension</strong> if you haven't yet — open{" "}
             <strong>chrome://extensions</strong>, turn on Developer Mode, and press{" "}
-            <strong>Update</strong> (<Link to="/update" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>how to update</Link>).
+            <strong>Update</strong> (see the <Link to="/guide" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>Guide</Link>).
           </li>
           <li>
             <strong>Log out and log back in</strong> from the Truck Box popup.
@@ -2358,7 +2579,7 @@ export function Privacy() {
             <h2 className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
               Privacy Policy &amp; Terms
             </h2>
-            <p className="mt-2 ed-label">Last updated — June 25, 2026</p>
+            <p className="mt-2 ed-label">Last updated — September 19, 2026</p>
           </div>
         </Reveal>
 
@@ -2377,24 +2598,28 @@ export function Privacy() {
               </p>
               <div className="tb-note">
                 <b>Important summary:</b> Truck Box can send an email only when the user explicitly
-                clicks to send it. Truck Box does <b>not</b> read the user's Gmail inbox, read
-                Gmail messages, read attachments, or scan mailbox content.
+                clicks to send it. Truck Box does <b>not</b> read the user's Gmail or Outlook inbox,
+                read messages, read attachments, or scan mailbox content. It reads load information
+                only from the load board page the user is looking at, inside the user's own
+                logged-in session.
               </div>
 
               <h3>Information we collect</h3>
               <ul>
                 <li><b>Local extension settings.</b> Truck Box may store user-entered settings locally in the browser, such as name, MC number, phone number, templates, filter preferences, and extension settings.</li>
                 <li><b>Load board information already visible to you.</b> On supported load board pages (DAT and Truckstop), Truck Box reads load details that are <b>already displayed on the page you are actively viewing</b>, such as broker email address, broker phone, origin, destination, pickup date, equipment, trip length, posted rate, and similar load details. This information is used to help compose the message you want to send and to power Truck Box's market features (see "Load market data &amp; analytics" below).</li>
-                <li><b>Basic Google account information.</b> During sign-in, Google may provide basic profile information such as account email, profile identifier, and display name for authentication and account access purposes.</li>
-                <li><b>OAuth tokens.</b> Truck Box uses Google OAuth access tokens only to authenticate approved Google API requests related to sign-in and sending user-requested emails.</li>
+                <li><b>Basic Google or Microsoft account information.</b> During sign-in, Google or Microsoft may provide basic profile information such as account email, profile identifier, and display name for authentication and account access purposes.</li>
+                <li><b>OAuth tokens.</b> Truck Box uses Google and Microsoft OAuth tokens only to authenticate approved API requests related to sign-in and sending user-requested emails from the mailboxes the user connects.</li>
+                <li><b>Connected mailboxes.</b> If you connect additional Gmail or Outlook mailboxes, we store the mailbox address, provider, connection status, and the tokens needed to send the emails you request from it.</li>
+                <li><b>Team information.</b> If you use Truck Box through a company (team) plan, we process the company name, MC number, seat and member emails, invitation status, and usage statistics that are shown to the team's owner and managers.</li>
                 <li><b>Account or subscription information.</b> If Truck Box uses a backend for account status, subscription verification, abuse prevention, support, or product security, limited account-level information may be processed for those purposes.</li>
               </ul>
 
-              <h3>Information we do not collect from Gmail</h3>
+              <h3>Information we do not collect from your mailbox</h3>
               <ul>
-                <li>We do <b>not</b> collect or store Gmail inbox messages.</li>
-                <li>We do <b>not</b> read the content of Gmail conversations.</li>
-                <li>We do <b>not</b> access Gmail attachments.</li>
+                <li>We do <b>not</b> collect or store Gmail or Outlook inbox messages.</li>
+                <li>We do <b>not</b> read the content of your email conversations.</li>
+                <li>We do <b>not</b> access email attachments, contacts, or calendars.</li>
                 <li>We do <b>not</b> scan or analyze a user's mailbox for marketing, profiling, or advertising purposes.</li>
               </ul>
 
@@ -2407,21 +2632,25 @@ export function Privacy() {
               </p>
               <ul>
                 <li><b>Only information already visible to you.</b> Truck Box collects only the load information that is already displayed on the load board page you are actively viewing. It does not access pages, accounts, search results, or data you are not viewing.</li>
+                <li><b>Only your own session and your own results.</b> Truck Box runs inside your browser, in the load board session you signed in to yourself, and sees only the search results and loads that the load board chooses to show to your account under your own subscription. It never signs in on your behalf, never asks for or stores your DAT or Truckstop password, and never accesses another user's account or data.</li>
+                <li><b>No access beyond your permissions.</b> Truck Box cannot see anything your load board account is not already permitted to see, and it does not unlock, bypass, or expand any limits, filters, or paid features of the load board.</li>
                 <li><b>No crawlers, scrapers, or background scanners.</b> Truck Box does not use automated crawlers, scrapers, scanners, or bots. It does not browse the load board on its own, query hidden or undocumented endpoints, or harvest data in the background. It only reads what is already on the page in front of you.</li>
-                <li><b>Aggregate insight, not surveillance.</b> This information is used to build aggregate market intelligence (such as lane rates, posting frequency, and price trends). It is not used to read your Gmail, to build a profile about you, or to serve advertising.</li>
+                <li><b>Aggregate insight, not surveillance.</b> This information is used to build aggregate market intelligence (such as lane rates, posting frequency, and price trends). It is not used to read your email, to build a profile about you, or to serve advertising, and insights shown to other users do not identify you.</li>
+                <li><b>No resale of load board data.</b> We do not sell, publish, or redistribute raw load board listings.</li>
                 <li><b>Retention.</b> Raw captured data is retained only as long as reasonably needed to build and maintain these insights, and is purged on a rolling basis.</li>
                 <li><b>Your load board account.</b> You are responsible for using Truck Box in a way that is consistent with your own load board subscription and that platform's terms.</li>
               </ul>
 
               <h3>How we use information</h3>
               <ul>
-                <li><b>To send emails the user explicitly requests.</b> Truck Box uses the Gmail API only to send an email when the user chooses to send that email.</li>
+                <li><b>To send emails the user explicitly requests.</b> Truck Box uses the Gmail API or Microsoft Graph only to send an email when the user chooses to send that email.</li>
+                <li><b>To run your account.</b> Sign-in, subscriptions and billing, team seats, support, and preventing fraud and abuse of the service.</li>
                 <li><b>To compose and populate email content.</b> Supported page data and saved templates are used only to help prepare the draft content and recipient details the user is sending.</li>
                 <li><b>To authenticate users.</b> Basic Google account information may be used to authenticate the user and confirm authorized access.</li>
                 <li><b>To provide account, subscription, and security functionality.</b> Limited backend processing may be used for subscription checks, fraud prevention, abuse prevention, operational reliability, and customer support.</li>
                 <li><b>To provide market and analytics features.</b> Load details already visible to you on the load board are used to build the aggregate market insights described in "Load market data &amp; analytics" above.</li>
                 <li><b>No advertising use.</b> We do not use Google user data or Gmail-related data for advertising, remarketing, profiling, or personalized ads.</li>
-                <li><b>No generalized AI training.</b> We do not use Google user data, Gmail-related data, or email content to train generalized artificial intelligence or machine learning models.</li>
+                <li><b>No generalized AI training.</b> We do not use Google or Microsoft user data, mailbox data, or email content to train generalized artificial intelligence or machine learning models.</li>
               </ul>
 
               <h3>Google OAuth scopes</h3>
@@ -2436,6 +2665,20 @@ export function Privacy() {
                 <b>Truck Box does not request Gmail read access.</b> It does not request permission
                 to read inbox messages, read Gmail conversations, access attachments, or manage
                 Gmail settings.
+              </div>
+
+              <h3>Microsoft (Outlook) permissions</h3>
+              <p>If you sign in with Microsoft or connect an Outlook mailbox, Truck Box requests only:</p>
+              <ul>
+                <li><code>Mail.Send</code> — used only to send emails the user explicitly chooses to send.</li>
+                <li><code>User.Read</code>, <code>openid</code>, <code>email</code>, <code>profile</code> — used for sign-in and to identify the signed-in account.</li>
+                <li><code>offline_access</code> — lets a connected mailbox keep sending without asking you to sign in again each time.</li>
+              </ul>
+              <div className="tb-note">
+                <b>Truck Box does not request Outlook read access.</b> It cannot read, search, move,
+                or delete messages in your mailbox. You can remove its access at{" "}
+                <a href="https://account.live.com/consent/Manage" target="_blank" rel="noreferrer">account.live.com/consent/Manage</a>{" "}
+                (personal accounts) or through your organization's Microsoft 365 administrator.
               </div>
 
               <h3>Third-party factoring connections (RTS Pro, Apex Capital, Triumph)</h3>
@@ -2479,7 +2722,9 @@ export function Privacy() {
               <ul>
                 <li><b>Local-first design.</b> Templates, settings, and preferences are primarily stored locally on the user's device.</li>
                 <li><b>Limited backend use.</b> Backend services are used for account management, subscription verification, security, fraud prevention, abuse prevention, support, reliable service operation, and the market/analytics features described above.</li>
-                <li><b>No sale of personal data.</b> We do not sell personal information, Google user data, or Gmail-related data.</li>
+                <li><b>No sale of personal data.</b> We do not sell personal information, Google or Microsoft user data, or mailbox data.</li>
+                <li><b>Service providers.</b> We use trusted providers to run the service — for example hosting, payments (Stripe), SMS phone verification, email delivery, and customer chat. They process data only on our behalf and only as needed to provide their service.</li>
+                <li><b>Legal requests.</b> We may disclose information if required by law, subpoena, or court order, or when reasonably necessary to investigate fraud, abuse, or violations of our Terms, or to protect the rights and safety of our users, third parties, or Truck Box.</li>
                 <li><b>No unauthorized sharing.</b> We do not share Google user data except where necessary to provide a user-requested service, for security or legal compliance, or as otherwise permitted by applicable law and Google policy.</li>
                 <li><b>Reasonable safeguards.</b> We use reasonable administrative, technical, and organizational measures designed to protect the data relevant to operation of Truck Box and related services.</li>
               </ul>
@@ -2489,7 +2734,8 @@ export function Privacy() {
                 <li>Users can revoke Google account access at <a href="https://myaccount.google.com/permissions" target="_blank" rel="noreferrer">myaccount.google.com/permissions</a>.</li>
                 <li>Users can remove locally stored extension data by clearing extension storage, resetting the extension, or uninstalling the extension.</li>
                 <li>If account, subscription, support, or captured market data associated with your account exists on our backend, you may request access to or deletion of it by contacting us through the contact form on this website (see the "Contact" section). We will respond within a reasonable time and as required by applicable law.</li>
-                <li>After Google access is revoked, Truck Box will no longer be able to send emails through Gmail until the user signs in again.</li>
+                <li>After Google or Microsoft access is revoked, Truck Box will no longer be able to send emails from that mailbox until the user signs in or reconnects it again.</li>
+                <li>We may keep limited records (such as billing records and records of abuse or fraud) where required by law or needed to protect the service.</li>
               </ul>
 
               <h3>Your rights</h3>
@@ -2553,7 +2799,7 @@ export function Privacy() {
 
             <article id="terms" className="tb-card p-6 sm:p-8 tb-prose">
               <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Terms &amp; Conditions</h3>
-              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>June 25, 2026</b></p>
+              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>September 19, 2026</b></p>
 
               <h3>Acceptance</h3>
               <p>
@@ -2593,11 +2839,61 @@ export function Privacy() {
                 <li>You must not misuse Google APIs, bypass security controls, scrape data you are not authorized to access, or interfere with the integrity of the service or any third-party platform.</li>
               </ul>
 
-              <h3>Google account and API access</h3>
+              <h3>Acceptable use</h3>
               <p>
-                By connecting your Google account, you authorize Truck Box to use the approved
-                scopes described on this page solely for the limited purposes described in this
-                Privacy Policy. Truck Box does not use Gmail access to read inbox content.
+                Truck Box is a productivity tool for legitimate freight dispatching. When using it you
+                agree <b>not</b> to:
+              </p>
+              <ul>
+                <li>Use Truck Box for any unlawful purpose or in connection with any illegal activity, including fraud, double brokering, cargo theft, identity theft, or money laundering.</li>
+                <li>Impersonate any carrier, broker, company, or person, use an MC/DOT number or company name you are not authorized to use, or send emails containing false or misleading information.</li>
+                <li>Send spam, unsolicited bulk email, phishing, malware, or harassing, threatening, or abusive messages.</li>
+                <li>Automate Truck Box or the load board with bots, scripts, macros, auto-clickers, or other tools that send emails, open loads, or collect data without a person actively using it.</li>
+                <li>Scrape, harvest, copy, export, resell, or redistribute load board data, broker contact details, or Truck Box analytics, or use them to build a competing database or product.</li>
+                <li>Use Truck Box with a load board, factoring, or email account that is not yours or that you are not authorized to use, or share your Truck Box account, seat, or login with anyone else.</li>
+                <li>Bypass, disable, or interfere with any security feature, usage limit, or access control of Truck Box, a load board, a factoring provider, Google, or Microsoft.</li>
+                <li>Reverse engineer, decompile, modify, or tamper with the extension or our servers, or access our APIs other than through the extension and website as provided.</li>
+                <li>Overload, disrupt, or attempt unauthorized access to Truck Box or any third-party service, or probe, scan, or test their vulnerabilities without our written permission.</li>
+                <li>Violate the terms of service of DAT, Truckstop, your factoring provider, Google, Microsoft, or any other platform you use with Truck Box.</li>
+              </ul>
+              <p>
+                We may monitor usage patterns (such as unusual sending volume or automated activity)
+                to detect abuse. If we believe you have broken these rules, we may warn you, limit
+                features, or suspend or terminate your account immediately and without refund, and
+                we may report illegal activity to the relevant authorities and cooperate with law
+                enforcement.
+              </p>
+
+              <h3>Your account</h3>
+              <ul>
+                <li>You must be at least 18 years old and able to enter into a binding contract, and the information you give us (including your company name, MC number, and phone number) must be accurate.</li>
+                <li>Each subscription or team seat is for one person. You are responsible for keeping your login secure and for all activity under your account.</li>
+                <li>If you use Truck Box through a company plan, the company that manages the team is responsible for the people it invites and for their use of the service, and its owner and managers can see team usage statistics.</li>
+                <li>Tell us promptly if you believe your account has been used without your permission.</li>
+              </ul>
+
+              <h3>Load board data</h3>
+              <p>
+                Load listings and related information belong to the load board and the parties who
+                posted them. Truck Box only reads what your own load board account already shows you,
+                in your own browser, to help you act on it. Truck Box does not grant you any right to
+                that data beyond what your load board subscription allows, and you remain responsible
+                for how you use it.
+              </p>
+
+              <h3>No guarantee of results</h3>
+              <p>
+                Truck Box helps you work faster, but we do not guarantee that you will book any load,
+                receive replies from brokers, or earn any particular amount. Load boards, email
+                providers, and factoring providers can change their websites or services at any time,
+                which may temporarily or permanently affect some features.
+              </p>
+
+              <h3>Google and Microsoft account access</h3>
+              <p>
+                By connecting your Google or Microsoft account, you authorize Truck Box to use the
+                approved permissions described on this page solely for the limited purposes described
+                in this Privacy Policy. Truck Box does not use that access to read inbox content.
               </p>
 
               <h3>Third-party services &amp; no affiliation</h3>
@@ -2677,8 +2973,8 @@ export function Privacy() {
 
               <h3>Termination</h3>
               <p>
-                You may stop using Truck Box at any time by uninstalling the extension and revoking
-                Google access. We may suspend or terminate access if reasonably necessary to
+                You may stop using Truck Box at any time by cancelling your subscription,
+                uninstalling the extension, and revoking Google or Microsoft access. We may suspend or terminate access if reasonably necessary to
                 protect the service, enforce these Terms, address abuse, or comply with legal or
                 platform requirements.
               </p>
@@ -2694,6 +2990,21 @@ export function Privacy() {
               <p>
                 These Terms are governed by the laws of the State of Illinois, without regard to
                 conflict of law principles, except where applicable law requires otherwise.
+              </p>
+
+              <h3>Entire agreement &amp; assignment</h3>
+              <p>
+                These Terms, together with the Privacy Policy and any terms shown at checkout, are the
+                entire agreement between you and TruckBox LLC about Truck Box. You may not transfer your
+                account or these Terms without our consent; we may assign them in connection with a
+                merger, acquisition, or sale of assets.
+              </p>
+
+              <h3>Events beyond our control</h3>
+              <p>
+                We are not responsible for delays or failures caused by events outside our reasonable
+                control, including outages or changes of third-party services (load boards, Google,
+                Microsoft, payment or hosting providers), internet failures, or acts of government.
               </p>
 
               <h3>Severability</h3>
@@ -3139,7 +3450,6 @@ export function Guide() {
   );
 }
 
-
 /* ============================================================
    How to update version (route: /update)
    ============================================================ */
@@ -3204,7 +3514,6 @@ export function UpdateGuide() {
     </section>
   );
 }
-
 
 /* ============================================================
    Contact

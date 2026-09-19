@@ -17,6 +17,12 @@ const COPY: Record<BounceReason, { title: string; body: string; cta: string; hre
     cta: "Renew plan",
     href: "/#pricing",
   },
+  NO_ACCOUNT: {
+    title: "Install TruckBox first",
+    body: "There's no TruckBox account for this email yet. Install the extension and sign in there — then come back here.",
+    cta: "Install the extension",
+    href: INSTALL_URL,
+  },
   USE_EXTENSION: {
     title: "You are on a team",
     body: "Your access is managed by your team. Open the extension to keep working.",
@@ -30,12 +36,14 @@ export function Bounce({
   onSignOut,
   telegram,
   ctaOverride,
+  signOutLabel = "Sign out",
 }: {
   reason: BounceReason;
   onSignOut?: () => void;
   telegram?: string;
   /** When set, replaces the default CTA — e.g. an org owner completing payment. */
   ctaOverride?: { label: string; onClick: () => void };
+  signOutLabel?: string;
 }) {
   const c = COPY[reason];
   const external = c.href.startsWith("http");
@@ -59,6 +67,12 @@ export function Bounce({
         </Link>
       )}
 
+      {reason === "NO_ACCOUNT" && (
+        <Link to="/business/start" style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+          Setting up a company? <span className="ed-accent">Start a team →</span>
+        </Link>
+      )}
+
       {(telegram || onSignOut) && (
         <div className="flex flex-col items-center gap-3 mt-2">
           {telegram && (
@@ -77,7 +91,7 @@ export function Bounce({
           )}
           {onSignOut && (
             <button className="ed-btn" style={{ justifyContent: "center" }} onClick={onSignOut}>
-              <span>Sign out</span>
+              <span>{signOutLabel}</span>
             </button>
           )}
         </div>

@@ -1,23 +1,48 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { ArrowLeft } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
+import { mcDigits, plainText } from "../../lib/inputGuards";
 import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
+import { MicrosoftSignIn } from "../../components/MicrosoftSignIn";
 import type { GoogleAuthResult } from "../../lib/google";
 import { PhoneVerify } from "./PhoneVerify";
 
-type Step = "loading" | "invalid" | "google" | "wrong" | "phone" | "company" | "redirecting";
+type Step = "loading" | "signin" | "phone" | "company" | "redirecting";
 
 // Backend ErrorCode.PHONE_VERIFICATION_REQUIRED — a distinct 403 that means "verify your phone"
 // (vs a generic 403/expired token, which means "log in again"). Same contract as the cabinet.
 const PHONE_VERIFICATION_REQUIRED = 1023;
+const SEAT_PRICE = 7;
 
-export default function InviteWizard() {
-  usePageMeta({ title: "Team invite — TruckBox", description: "Activate your TruckBox seat.", path: "/business/invite", noindex: true });
-  const [params] = useSearchParams();
-  const token = params.get("token") ?? "";
-  const [step, setStep] = useState<Step>("loading");
+/**
+ * Where a signed-in visitor continues: the company form, or the phone step while their token is
+ * still verification-scoped (403 PHONE_VERIFICATION_REQUIRED). An unusable session signs out.
+ */
+async function sessionStep(): Promise<{ step: Step; email: string }> {
+  try {
+    const ctx = await api.get<{ email: string }>("/api/v1/account/context");
+    return { step: "company", email: ctx.email };
+  } catch (e) {
+    if (e instanceof ApiError && e.status === 403 && e.code === PHONE_VERIFICATION_REQUIRED) {
+      return { step: "phone", email: "" };
+    }
+    auth.clearToken();
+    return { step: "signin", email: "" };
+  }
+}
+
+/** Public team sign-up: sign in → phone → company & seats → Stripe → cabinet. */
+export default function TeamStart() {
+  usePageMeta({
+    title: "Start a team — TruckBox",
+    description: "Set up TruckBox for your dispatch team: one bill, a manager back office, $7 per seat.",
+    path: "/business/start",
+  });
+  // Signed in already → check the session first; otherwise straight to sign-in.
+  const [step, setStep] = useState<Step>(() => (auth.isAuthed() ? "loading" : "signin"));
   const [company, setCompany] = useState({
     companyName: "",
     mcNumber: "",
@@ -26,41 +51,24 @@ export default function InviteWizard() {
     billingEmail: "",
   });
   const [error, setError] = useState<string | null>(null);
-  const [inviteEmail, setInviteEmail] = useState("");
   const [authedEmail, setAuthedEmail] = useState("");
-  const norm = (e: string) => e.trim().toLowerCase();
-  const gateAfterAuth = async (invite: string) => {
-    try {
-      const ctx = await api.get<{ email: string }>("/api/v1/account/context");
-      setAuthedEmail(ctx.email);
-      setStep(norm(ctx.email) === norm(invite) ? "company" : "wrong");
-    } catch (e) {
-      // Verification-scoped token (phone not confirmed yet): show the phone step, keep the token —
-      // it is exactly what the phone endpoints need. Anything else: session is unusable, re-login.
-      if (e instanceof ApiError && e.status === 403 && e.code === PHONE_VERIFICATION_REQUIRED) {
-        setStep("phone");
-        return;
-      }
-      auth.clearToken();
-      setStep("google");
-    }
-  };
 
-  // Fresh Google sign-in: the auth response tells us both who signed in and whether the backend
-  // still requires phone verification — no extra round-trip needed.
-  const onSignedIn = (res: GoogleAuthResult) => {
+  const gateAfterAuth = () =>
+    sessionStep().then((r) => {
+      setAuthedEmail(r.email);
+      setStep(r.step);
+    });
+
+  // Fresh Google sign-in: the auth response says whether the phone still needs verifying.
+  const onGoogleSignedIn = (res: GoogleAuthResult) => {
     setAuthedEmail(res.email);
-    if (norm(res.email) !== norm(inviteEmail)) {
-      setStep("wrong");
-      return;
-    }
     setStep(res.phoneVerificationRequired ? "phone" : "company");
   };
 
   const signOut = () => {
     auth.clearToken();
     setAuthedEmail("");
-    setStep("google");
+    setStep("signin");
   };
 
   const signOutLink =
@@ -81,95 +89,62 @@ export default function InviteWizard() {
     ) : null;
 
   useEffect(() => {
-    if (!token) { setStep("invalid"); return; }
-    api
-      .get<{ email: string }>(`/api/v1/org/invites/${token}`)
-      .then((r) => {
-        setInviteEmail(r.email);
-        if (auth.isAuthed()) gateAfterAuth(r.email);
-        else setStep("google");
-      })
-      .catch(() => setStep("invalid"));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [token]);
+    if (!auth.isAuthed()) return;
+    sessionStep().then((r) => {
+      setAuthedEmail(r.email);
+      setStep(r.step);
+    });
+  }, []);
 
   const submitCompany = async () => {
     setError(null);
     setStep("redirecting");
     try {
       await api.post("/api/v1/org/onboard", {
-        token,
         companyName: company.companyName,
         mcNumber: company.mcNumber,
         dispatcherSeats: Number(company.dispatcherSeats),
         ownerUsesDat: company.ownerUsesDat,
         billingEmail: company.billingEmail,
       });
-      const { url } = await api.post<{ url: string }>("/api/v1/manager/team/checkout", { token });
+      const { url } = await api.post<{ url: string }>("/api/v1/manager/team/checkout", {});
       window.location.href = url;
     } catch (e) {
       setStep("company");
+      const code = e instanceof ApiError ? e.code : undefined;
       setError(
-        e instanceof ApiError && e.code === 1033
-          ? "This invite is for a different email."
-          : "Something went wrong. Please try again."
+        code === 1066
+          ? "Confirm your email first: open your account → Accounts → Contact email, then come back."
+          : code === 1034
+            ? "You're already on a team. Ask its owner to remove you first, or manage it in your account."
+            : "Something went wrong. Please try again."
       );
     }
   };
 
   if (step === "loading") return <Center>Loading…</Center>;
 
-  if (step === "invalid")
+  if (step === "signin")
     return (
       <Center>
-        <p style={{ color: "var(--ink)", fontSize: "1.1rem", textAlign: "center" }}>
-          This invite link is invalid or has expired.
-        </p>
-      </Center>
-    );
-
-  if (step === "google")
-    return (
-      <Center>
-        <h1 className="ed-display" style={{ fontSize: "2.5rem", color: "var(--ink)", marginBottom: "1.5rem" }}>
-          Set up your team
+        <h1 className="ed-display" style={{ fontSize: "2.5rem", color: "var(--ink)", marginBottom: "0.5rem" }}>
+          Start your team
         </h1>
-        <p style={{ color: "var(--muted)", marginBottom: "1.5rem", textAlign: "center" }}>
-          Sign in with Google to continue.
+        <p style={{ color: "var(--muted)", marginBottom: "1rem", textAlign: "center", maxWidth: "24rem" }}>
+          Sign in with the account you'll manage the team from. ${SEAT_PRICE} per seat per month, one bill.
         </p>
-        <GoogleSignIn onSignedIn={onSignedIn} />
-      </Center>
-    );
-
-  if (step === "wrong")
-    return (
-      <Center>
-        <h1 className="ed-display" style={{ fontSize: "2rem", color: "var(--ink)", marginBottom: "1rem", textAlign: "center" }}>
-          Wrong account
-        </h1>
-        <p style={{ color: "var(--muted)", textAlign: "center", maxWidth: "22rem" }}>
-          This invite is for <strong style={{ color: "var(--ink)" }}>{inviteEmail}</strong>, but you are
-          signed in as <strong style={{ color: "var(--ink)" }}>{authedEmail}</strong>.
-        </p>
-        <button
-          className="ed-btn ed-btn-accent"
-          onClick={() => { auth.clearToken(); setStep("google"); }}
-          style={{ marginTop: "1rem" }}
-        >
-          Sign in as {inviteEmail}
-        </button>
+        <GoogleSignIn signup onSignedIn={onGoogleSignedIn} />
+        <MicrosoftSignIn signup onSignedIn={() => gateAfterAuth()} />
       </Center>
     );
 
   if (step === "phone")
-    // After confirm, PhoneVerify has swapped the verification-scoped token for a full one —
-    // re-gate to run the invite-email match (unknown when the phone step was reached with a
-    // stored verification token, where /account/context is not accessible yet).
+    // After confirm, PhoneVerify has swapped the verification-scoped token for a full one.
     return (
       <PhoneVerify
         onVerified={() => {
           setStep("loading");
-          gateAfterAuth(inviteEmail);
+          gateAfterAuth();
         }}
         onSignOut={signOut}
       />
@@ -209,7 +184,8 @@ export default function InviteWizard() {
             type="text"
             placeholder="Acme Freight LLC"
             value={company.companyName}
-            onChange={(e) => setCompany({ ...company, companyName: e.target.value })}
+            maxLength={120}
+            onChange={(e) => setCompany({ ...company, companyName: plainText(e.target.value) })}
           />
         </div>
 
@@ -232,7 +208,9 @@ export default function InviteWizard() {
             type="text"
             placeholder="123456"
             value={company.mcNumber}
-            onChange={(e) => setCompany({ ...company, mcNumber: e.target.value })}
+            maxLength={10}
+            inputMode="numeric"
+            onChange={(e) => setCompany({ ...company, mcNumber: mcDigits(e.target.value) })}
           />
         </div>
 
@@ -256,7 +234,8 @@ export default function InviteWizard() {
             min={1}
             placeholder="1"
             value={company.dispatcherSeats}
-            onChange={(e) => setCompany({ ...company, dispatcherSeats: Number(e.target.value) })}
+            max={100}
+            onChange={(e) => setCompany({ ...company, dispatcherSeats: Math.min(100, Number(e.target.value)) })}
           />
           <label style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
             <input
@@ -269,6 +248,16 @@ export default function InviteWizard() {
           <p style={{ color: "var(--muted)", fontSize: "0.78rem", margin: 0 }}>
             Leave unchecked if you only need the back office — you won't be charged for a seat.
           </p>
+          {(() => {
+            const billable =
+              (isNaN(company.dispatcherSeats) ? 0 : Number(company.dispatcherSeats)) +
+              (company.ownerUsesDat ? 1 : 0);
+            return (
+              <p style={{ margin: "0.25rem 0 0", fontWeight: 700, color: "var(--ink)" }}>
+                {billable} seat{billable === 1 ? "" : "s"} × ${SEAT_PRICE} = ${billable * SEAT_PRICE}/mo
+              </p>
+            );
+          })()}
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
@@ -290,6 +279,7 @@ export default function InviteWizard() {
             type="email"
             placeholder="billing@company.com"
             value={company.billingEmail}
+            maxLength={254}
             onChange={(e) => setCompany({ ...company, billingEmail: e.target.value })}
           />
         </div>
@@ -333,6 +323,7 @@ function Center({ children }: { children: React.ReactNode }) {
   return (
     <div
       style={{
+        position: "relative",
         minHeight: "100vh",
         display: "flex",
         flexDirection: "column",
@@ -342,6 +333,14 @@ function Center({ children }: { children: React.ReactNode }) {
         padding: "1.5rem",
       }}
     >
+      <Link
+        to="/"
+        className="ed-btn tb-back-btn"
+        style={{ position: "absolute", top: "1.25rem", left: "1.25rem", display: "inline-flex", alignItems: "center", gap: 8 }}
+      >
+        <ArrowLeft className="h-4 w-4" />
+        Back to site
+      </Link>
       {children}
     </div>
   );

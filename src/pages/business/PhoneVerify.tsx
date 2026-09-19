@@ -96,7 +96,7 @@ export function PhoneVerify({
   // Friendly texts for the backend's phone error codes; raw backend messages are technical
   // (e.g. "Phone number must be in E.164 format").
   const ERR: Record<number, string> = {
-    1024: "This number is already linked to another account.",
+    1024: "This number is already linked to another TruckBox account. Sign in with that account and add this Google or Microsoft login under Accounts → Sign-in accounts.",
     1025: "Virtual or temporary numbers are not supported. Use a real mobile number.",
     1026: "Wrong or expired code.",
     1027: "Enter a valid phone number with country code.",

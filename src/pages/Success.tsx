@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowUpRight, Check } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { Header, Footer, Reveal, INSTALL_URL } from "../App";
 import { usePageMeta } from "../lib/meta";
 

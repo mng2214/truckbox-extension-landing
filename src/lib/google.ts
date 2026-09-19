@@ -7,8 +7,15 @@ export type GoogleAuthResult = {
   phoneVerificationRequired: boolean;
 };
 
-export async function exchangeGoogleAccessToken(accessToken: string): Promise<GoogleAuthResult> {
-  const res = await api.post<GoogleAuthResult>("/api/v1/auth/google", { googleToken: accessToken });
+/** @param signup true only on the team signup page — elsewhere a newcomer must start in the extension. */
+export async function exchangeGoogleAccessToken(
+  accessToken: string,
+  signup = false,
+): Promise<GoogleAuthResult> {
+  const res = await api.post<GoogleAuthResult>("/api/v1/auth/google", {
+    googleToken: accessToken,
+    ...(signup ? { signup: true } : {}),
+  });
   auth.setToken(res.token);
   return res;
 }
