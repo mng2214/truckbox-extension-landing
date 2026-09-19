@@ -30,7 +30,9 @@ type BrokerRow = {
   brokerId: number | null;
   brokerName: string | null;
   mcNumber: string | null;
+  /** Distinct days the broker was seen anywhere on this corridor — the same on each of its lanes. */
   activeDays30d: number;
+  /** How many times TruckBox saw this lane posted in the last 30 days (not the board's own count). */
   totalReposted30d: number;
   avgPrice: number | null;
   minPrice: number | null;
@@ -107,7 +109,7 @@ export function DiscoveryPanel() {
   const [dValue, setDValue] = useState("");
   const [dRadius, setDRadius] = useState(100);
   const [equipment, setEquipment] = useState<string[]>([]);
-  // Silent quality filter: only brokers who reposted the lane on ≥2 distinct days
+  // Silent quality filter: only brokers seen on the corridor on ≥2 distinct days
   // in the last 30d. Not user-facing (was confusing); tune here if needed.
   const minActiveDays = 2;
 
@@ -483,9 +485,9 @@ export function DiscoveryPanel() {
                     >
                       <span>{g.lanes.length} lane{g.lanes.length === 1 ? "" : "s"}</span>
                       <Dot />
-                      <span>{g.totalReposts} reposts</span>
+                      <span>seen {g.totalReposts}×</span>
                       <Dot />
-                      <span>{g.activeDays}d active</span>
+                      <span>{g.activeDays} days active</span>
                       {g.minPrice != null && (
                         <>
                           <Dot />
@@ -525,8 +527,7 @@ export function DiscoveryPanel() {
                             <thead>
                               <tr style={{ color: "var(--muted)" }}>
                                 <th className="text-left font-normal py-1.5" style={thLabel}>Lane</th>
-                                <th className="text-right font-normal py-1.5" style={thLabel}>Days Posted</th>
-                                <th className="text-right font-normal py-1.5" style={thLabel}>Total Reposts</th>
+                                <th className="text-right font-normal py-1.5" style={thLabel}>Times seen</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>Avg</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>Last</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>RPM</th>
@@ -548,7 +549,6 @@ export function DiscoveryPanel() {
                                       />
                                     </span>
                                   </td>
-                                  <td className="text-right py-1.5" style={mono("var(--ink)")}>{l.activeDays30d}</td>
                                   <td className="text-right py-1.5" style={mono("var(--ink)")}>{l.totalReposted30d}</td>
                                   <td className="text-right py-1.5" style={mono("var(--ink)")}>{usd(l.avgPrice)}</td>
                                   <td className="text-right py-1.5" style={mono("var(--accent)")}>{usd(l.lastPrice)}</td>
