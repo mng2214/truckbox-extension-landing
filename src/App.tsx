@@ -1055,34 +1055,6 @@ function Integrations() {
     { img: "/logos/fmcsa.svg", alt: "FMCSA", note: "Authority" },
   ];
 
-  const bandRef = useRef<HTMLDivElement>(null);
-
-  // Magnifying glass: every frame, each logo gets a 0..1 strength from how close it is to the
-  // middle of the band. The CSS turns that into scale, colour and the visibility of its tag, so
-  // the row appears to pass under a lens instead of sliding past as a strip of cards.
-  useEffect(() => {
-    const band = bandRef.current;
-    if (!band || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const chips = Array.from(band.querySelectorAll<HTMLElement>(".tb-int"));
-    let raf = 0;
-    const frame = () => {
-      const rect = band.getBoundingClientRect();
-      const center = rect.left + rect.width / 2;
-      // How far from the middle a logo still feels the glass.
-      const reach = Math.min(340, rect.width / 2);
-      for (const chip of chips) {
-        const box = chip.getBoundingClientRect();
-        const d = Math.abs(box.left + box.width / 2 - center) / reach;
-        // Bell curve: 1 right under the lens, 0 at its rim, no step anywhere.
-        const k = d >= 1 ? 0 : (1 - d * d) ** 2;
-        chip.style.setProperty("--k", k.toFixed(3));
-      }
-      raf = requestAnimationFrame(frame);
-    };
-    raf = requestAnimationFrame(frame);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-
   return (
     <section className="ed-section" style={{ paddingTop: 0 }}>
       <div className="ed-container">
@@ -1093,9 +1065,10 @@ function Integrations() {
         </Reveal>
       </div>
 
-        {/* Marquee: one row, duplicated so the loop has no seam. Pauses on hover. The lens
-            (see the effect above) magnifies whichever logo is passing the middle. */}
-        <div className="tb-marquee" ref={bandRef}>
+        {/* Marquee: one row, duplicated so the loop has no seam. Every logo is set in the same
+            ink so the row reads as one line; the real colours come back under the cursor, which
+            also pauses the loop. */}
+        <div className="tb-marquee">
           <div className="tb-marquee-track">
             {[0, 1].map((copy) =>
               items.map((it) => (
@@ -1109,8 +1082,6 @@ function Integrations() {
               )),
             )}
           </div>
-          {/* The glass itself: a soft column of light, no edges. */}
-          <span className="tb-marquee-lens" aria-hidden="true" />
         </div>
     </section>
   );
@@ -1185,8 +1156,8 @@ function Hero() {
         <div className="mt-12 grid lg:grid-cols-[1.04fr_1fr] gap-12 lg:gap-10 items-center">
           <Reveal delay={0.2}>
             <p className="max-w-xl text-lg leading-relaxed" style={{ color: "var(--muted)" }}>
-              Truck Box helps DAT and Truckstop dispatchers send broker emails in one click with ready templates,
-              maps, filters, shortcuts, lane analytics and live stats — so you reach the broker before everyone else.
+              Brokers answer whoever writes first. One key turns any DAT or Truckstop load into a ready quote,
+              sent from your own Gmail or Outlook — with 30 days of that lane's prices already on screen.
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-3">
               <a ref={tryRef} className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">

@@ -2654,20 +2654,20 @@ body:has(.tb-news) header.fixed { top: 38px; }
   .tb-stat, .tb-stat::before, .tb-stat-value { transition: none; }
 }
 
-/* Integrations marquee: the tools TruckBox plugs into, passing under a magnifying glass. No
-   cards and no shadows — the only thing that separates one logo from the next is how strongly
-   the lens holds it. `--k` (0..1) comes from the rAF loop in Integrations(). */
+/* Integrations marquee: the tools TruckBox plugs into, as one quiet line of marks. Every logo is
+   flattened to the same ink so no single brand shouts over the others; the real colours return
+   under the cursor, which also stops the loop. */
 .tb-marquee {
   position: relative;
   overflow: hidden;
-  padding: 38px 0;
+  padding: 34px 0;
   /* No hard edges: the tint fades out on all four sides so the band melts into the page. */
   background:
-    radial-gradient(70% 120% at 50% 50%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 70%),
-    linear-gradient(180deg, transparent, color-mix(in oklab, var(--accent) 5%, transparent) 40%,
-      color-mix(in oklab, var(--accent) 5%, transparent) 60%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+    radial-gradient(70% 120% at 50% 50%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 72%),
+    linear-gradient(180deg, transparent, color-mix(in oklab, var(--accent) 4%, transparent) 40%,
+      color-mix(in oklab, var(--accent) 4%, transparent) 60%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
 /* Hairline top and bottom: solid across the middle, dissolving into the page at both ends, so
    the band is bounded without ever drawing a corner. */
@@ -2685,83 +2685,66 @@ body:has(.tb-news) header.fixed { top: 38px; }
 }
 .tb-marquee::before { top: 0; }
 .tb-marquee::after { bottom: 0; }
-/* The glass: a column of light in the middle, blurred so it has no rim of its own. */
-.tb-marquee-lens {
-  position: absolute; left: 50%; top: 0; bottom: 0;
-  width: 420px;
-  transform: translateX(-50%);
-  pointer-events: none;
-  background:
-    radial-gradient(58% 64% at 50% 50%, var(--lens-glow), transparent 72%),
-    linear-gradient(90deg, transparent, color-mix(in oklab, var(--accent) 7%, transparent) 30%,
-      color-mix(in oklab, var(--accent) 7%, transparent) 70%, transparent);
-  filter: blur(12px);
-  /* Behind the logos, so the glass lights them instead of fogging them. */
-  z-index: 0;
-}
 .tb-marquee-track {
   position: relative;
   z-index: 1;
   display: flex;
   align-items: center;
-  gap: 40px;
+  gap: 58px;
   width: max-content;
-  animation: tb-marquee 46s linear infinite;
+  animation: tb-marquee 52s linear infinite;
 }
 @keyframes tb-marquee {
   from { transform: translateX(0); }
   /* The row is rendered twice, so half a lap is a full seamless loop. */
-  to { transform: translateX(calc(-50% - 20px)); }
+  to { transform: translateX(calc(-50% - 29px)); }
 }
 .tb-int {
-  --k: 1;
-  position: relative;
   display: flex; align-items: center; gap: 13px;
   flex: 0 0 auto;
-  /* Under the lens: bigger, in full colour, fully opaque. Away from it: small, pale, washed out. */
-  transform: scale(calc(.84 + .3 * var(--k)));
-  opacity: calc(.46 + .54 * var(--k));
-  filter: saturate(calc(.15 + .85 * var(--k)));
 }
+/* One ink for every mark: grey, a touch lighter than the text around it. */
 .tb-int-mark {
-  flex: 0 0 78px; height: 56px;
+  flex: 0 0 68px; height: 46px;
   display: flex; align-items: center; justify-content: center;
-  color: #6d28d9;
+  filter: grayscale(1) contrast(1.05);
+  opacity: .74;
+  transition: filter .4s var(--ease), opacity .4s var(--ease);
 }
-/* The logo files are dark marks on transparency; on the dark theme they'd sink into the band,
-   so there they render as white silhouettes. The Maps pin keeps its colours. */
-html:not(.tb-light) .tb-int-mark img:not([src$="gmaps.svg"]) { filter: brightness(0) invert(1); opacity: .88; }
-.tb-int-mark img { max-width: 72px; max-height: 36px; width: auto; height: auto; display: block; }
+html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1); opacity: .58; }
+.tb-int-mark img { max-width: 64px; max-height: 32px; width: auto; height: auto; display: block; }
 /* The Maps pin is tall and narrow; the FMCSA mark is wide — give each its own fit. */
-.tb-int-mark img[src$="gmaps.svg"] { max-width: 32px; max-height: 44px; }
-.tb-int-mark img[src$="fmcsa.svg"] { max-width: 78px; max-height: 42px; }
+.tb-int-mark img[src$="gmaps.svg"] { max-width: 28px; max-height: 38px; }
+.tb-int-mark img[src$="fmcsa.svg"] { max-width: 70px; max-height: 38px; }
 .tb-int-name {
-  font: 700 18px/1.2 "Inter", system-ui, sans-serif;
+  font: 600 16px/1.2 "Inter", system-ui, sans-serif;
   letter-spacing: -.01em;
-  color: var(--ink);
+  color: color-mix(in oklab, var(--ink) 72%, transparent);
   white-space: nowrap;
+  transition: color .4s var(--ease);
 }
-/* The tag belongs to whichever logo the lens is holding; it keeps its space so nothing shifts. */
 .tb-int-note {
-  color: color-mix(in oklab, var(--accent) 80%, var(--ink));
-  font: 700 10.5px/1 "Inter", system-ui, sans-serif;
+  color: var(--faint);
+  font: 600 10.5px/1 "Inter", system-ui, sans-serif;
   letter-spacing: .12em;
   text-transform: uppercase;
   white-space: nowrap;
-  opacity: calc(var(--k) * var(--k));
+  transition: color .4s var(--ease);
 }
 @media (hover: hover) {
   .tb-marquee:hover .tb-marquee-track { animation-play-state: paused; }
+  .tb-int:hover .tb-int-mark { filter: none; opacity: 1; }
+  .tb-int:hover .tb-int-name { color: var(--ink); }
+  .tb-int:hover .tb-int-note { color: var(--accent); }
 }
 @media (max-width: 700px) {
-  .tb-marquee-lens { width: 260px; }
-  .tb-marquee-track { gap: 28px; }
-  @keyframes tb-marquee { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 14px)); } }
+  .tb-marquee-track { gap: 34px; }
+  @keyframes tb-marquee { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 17px)); } }
+  .tb-int-mark { flex: 0 0 56px; height: 38px; }
+  .tb-int-mark img { max-width: 52px; max-height: 26px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tb-marquee-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
-  .tb-marquee-lens { display: none; }
-  .tb-int { transform: none; opacity: 1; filter: none; }
 }
 
 /* Hero demo clip — framed like the app window, same footprint as the animation it replaces. */
