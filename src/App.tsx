@@ -411,7 +411,7 @@ export function Header() {
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="flex items-center gap-3"
+            className="tb-brand flex items-center gap-3"
             aria-label="Truck Box — home"
           >
             {logoFailed ? (
@@ -426,6 +426,7 @@ export function Header() {
                 alt=""
                 width={30}
                 height={30}
+                className="tb-brand-mark"
                 onError={() => setLogoFailed(true)}
                 style={{
                   display: "block",
@@ -443,7 +444,17 @@ export function Header() {
               className="tracking-tight text-[1.12rem]"
               style={{ fontFamily: "var(--font-display)", fontWeight: 700, letterSpacing: "-0.02em", fontVariationSettings: "'opsz' 40" }}
             >
-              Truck&nbsp;Box
+              {"Truck Box".split("").map((ch, i) => (
+                <span
+                  key={i}
+                  className="tb-brand-letter"
+                  style={{ animationDelay: `${i * 28}ms` }}
+                  aria-hidden
+                >
+                  {ch === " " ? "\u00a0" : ch}
+                </span>
+              ))}
+              <span className="sr-only">Truck Box</span>
             </span>
           </Link>
 
@@ -452,7 +463,7 @@ export function Header() {
               <Link
                 key={n.href}
                 to={n.href}
-                className="ed-label whitespace-nowrap hover:text-[color:var(--ink)] transition-colors"
+                className="tb-nav-link ed-label whitespace-nowrap"
               >
                 {n.label}
               </Link>
@@ -966,7 +977,8 @@ function Numbers() {
       value: <CountUp to={PLAN_FEATURE_COUNT} />,
       label: "features for $7",
       sub: "no tiers, no add-ons",
-      href: "/#features",
+      // Straight to the price section, where the whole feature list lives.
+      href: "/#pricing",
     },
   ];
   return (
@@ -1134,7 +1146,7 @@ function Hero() {
                 <span>TRY FREE</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Book Call</span>
+                <span>Book Demo</span>
               </a>
             </div>
             <div className="mt-7 flex flex-col gap-3.5">
@@ -1458,40 +1470,18 @@ function BeforeAfter() {
         <Reveal>
           {/* View switch — directly above the photo */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
-            <div
-              style={{
-                display: "inline-flex",
-                gap: 4,
-                padding: 4,
-                background: "var(--bg-2, #fff)",
-                border: "1px solid var(--line)",
-                borderRadius: 999,
-              }}
-            >
-              {(Object.keys(BA_VIEWS) as BaView[]).map((k) => {
-                const active = k === view;
-                return (
-                  <button
-                    key={k}
-                    type="button"
-                    onClick={() => setView(k)}
-                    style={{
-                      border: 0,
-                      cursor: "pointer",
-                      borderRadius: 999,
-                      padding: "9px 18px",
-                      font: "700 11px/1 'Space Mono', monospace",
-                      letterSpacing: ".1em",
-                      textTransform: "uppercase",
-                      color: active ? "var(--on-accent)" : "var(--ink)",
-                      background: active ? "var(--accent)" : "transparent",
-                      transition: "background .2s, color .2s",
-                    }}
-                  >
-                    {BA_VIEWS[k].label}
-                  </button>
-                );
-              })}
+            <div className="tb-ba-tabs">
+              {(Object.keys(BA_VIEWS) as BaView[]).map((k) => (
+                <button
+                  key={k}
+                  type="button"
+                  onClick={() => setView(k)}
+                  className={"tb-ba-tab" + (k === view ? " is-on" : "")}
+                  aria-pressed={k === view}
+                >
+                  {BA_VIEWS[k].label}
+                </button>
+              ))}
             </div>
           </div>
 
@@ -2317,23 +2307,38 @@ function Pricing() {
 
         <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
           <Reveal>
-            <div className="flex items-start gap-4">
+            <div className="tb-price-row flex items-start gap-4">
               <span className="tb-price ed-display text-[8rem] md:text-[12rem] leading-[0.8]" aria-label="$7">
                 <span className="tb-price-cur ed-accent" aria-hidden>$</span>
                 <span className="tb-price-num ed-accent" aria-hidden>7</span>
               </span>
               <span className="ed-label mt-6">/ per user<br />month</span>
             </div>
-            <p className="mt-6 max-w-md text-lg" style={{ color: "var(--muted)" }}>
-              Start with the free 1-week trial first. No credit card required. Cancel anytime.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            {/* The three things people check before signing up, set like the numbers band.
+                Wrapper is shrink-to-fit, so the strip ends exactly where the buttons below do. */}
+            <div className="tb-plan-cta mt-7">
+            <div className="tb-trial">
+              <div className="tb-trial-item">
+                <b>7 days</b>
+                <span>free trial</span>
+              </div>
+              <div className="tb-trial-item">
+                <b>No card</b>
+                <span>to start</span>
+              </div>
+              <div className="tb-trial-item">
+                <b>1 click</b>
+                <span>to cancel</span>
+              </div>
+            </div>
+            <div className="mt-6 flex flex-wrap gap-3">
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
                 <span>Start Free Trial</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Book Call</span>
+                <span>Book Demo</span>
               </a>
+            </div>
             </div>
             <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em" }}>
               We only send email, we never read your inbox.

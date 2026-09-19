@@ -4,7 +4,6 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
-import { installCrispTheme } from "./lib/crispTheme";
 import { applyLandingTheme, setLandingTheme } from "./lib/theme";
 import PrivacyPage from "./pages/Privacy";
 import GuidePage from "./pages/Guide";
@@ -33,7 +32,6 @@ function LandingThemeSync() {
 }
 
 installPageGuard();
-installCrispTheme();
 
 if (import.meta.env.PROD) installDevtoolsDetector();
 
