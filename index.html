@@ -17,18 +17,19 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <title>TruckBox — One-Click Broker Emails for DAT & Truckstop</title>
-    <meta name="description" content="Chrome extension for truck dispatchers: send broker emails from DAT One and Truckstop in one click, with templates, lane analytics, route maps and RTS credit checks. $7/mo, 7-day free trial." />
+    <meta name="description" content="Chrome extension for truck dispatchers: send broker emails from DAT One and Truckstop in one click, with templates, lane analytics, route maps and factoring credit checks (RTS, Apex, Triumph). $7/mo, 7-day free trial." />
+    <link rel="alternate" type="text/plain" title="LLM summary" href="/llms.txt" />
     <meta name="author" content="Truck Box" />
     <meta name="google-site-verification" content="bvy7nZIAzPQ9yrk6uu5sFuuiwQGBn-yNcqidpf2Ap8E" />
 
-    <meta property="og:title" content="Truck Box — Email Sender for DAT Loads" />
-    <meta property="og:description" content="Send broker emails directly from one.dat.com with one click. Templates, filtering, and a cleaner DAT workflow." />
+    <meta property="og:title" content="TruckBox — One-Click Broker Emails for DAT & Truckstop" />
+    <meta property="og:description" content="Send broker emails from DAT One and Truckstop in one click from Gmail or Outlook. Templates, factoring credit checks, lane price analytics, route maps. $7/mo, 7-day free trial." />
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://truckbox.app/" />
     <meta property="og:image" content="https://truckbox.app/fav-128x128.png" />
     <meta name="twitter:card" content="summary" />
-    <meta name="twitter:title" content="Truck Box — Email Sender for DAT Loads" />
-    <meta name="twitter:description" content="Send broker emails from one.dat.com in one click. Templates, route maps, deadhead-adjusted RPM, miles filter, keyboard navigation. Works in Chrome & Opera." />
+    <meta name="twitter:title" content="TruckBox — One-Click Broker Emails for DAT & Truckstop" />
+    <meta name="twitter:description" content="Send broker emails from DAT One and Truckstop in one click from Gmail or Outlook. Templates, credit checks, lane analytics, route maps, deadhead RPM, keyboard shortcuts." />
     <meta name="twitter:image" content="https://truckbox.app/fav-128x128.png" />
     <meta property="og:site_name" content="Truck Box" />
     <meta property="og:image:width" content="128" />
@@ -48,7 +49,7 @@
           "name": "Truck Box",
           "url": "https://truckbox.app/",
           "logo": "https://truckbox.app/fav-128x128.png",
-          "description": "Maker of Truck Box, a browser extension that speeds up freight dispatching on the DAT One load board.",
+          "description": "Maker of Truck Box, a Chrome extension that speeds up freight dispatching on the DAT One and Truckstop load boards.",
           "foundingDate": "2025",
           "foundingLocation": "Chicago, USA",
           "sameAs": [
@@ -61,49 +62,89 @@
           "url": "https://truckbox.app/",
           "name": "Truck Box",
           "inLanguage": "en",
-          "publisher": { "@id": "https://truckbox.app/#organization" }
+          "publisher": {
+            "@id": "https://truckbox.app/#organization"
+          }
         },
         {
           "@type": "SoftwareApplication",
           "@id": "https://truckbox.app/#software",
           "name": "Truck Box",
-          "alternateName": ["Truck Box for DAT One", "DAT One broker emailer"],
+          "alternateName": [
+            "Truck Box for DAT One",
+            "Truck Box for Truckstop",
+            "DAT One broker emailer"
+          ],
           "applicationCategory": "BusinessApplication",
           "applicationSubCategory": "Freight dispatch and trucking productivity tool",
-          "keywords": "DAT One broker emailer, truck dispatcher tool, dry van loads, flatbed loads, reefer loads, freight dispatching, load board email automation, deadhead RPM",
-          "audience": { "@type": "Audience", "audienceType": "Truck dispatchers, carriers, and owner-operators" },
+          "keywords": "DAT One broker emailer, Truckstop extension, truck dispatcher tool, broker email templates, Gmail, Outlook, factoring credit check, RTS, Triumph, Apex Capital, lane price analytics, deadhead RPM, dry van, reefer, flatbed",
+          "audience": {
+            "@type": "Audience",
+            "audienceType": "Truck dispatchers, dispatch companies, carriers and owner-operators"
+          },
           "operatingSystem": "Chrome, Opera",
           "browserRequirements": "Requires Google Chrome or Opera (Chromium-based browsers)",
-          "softwareVersion": "1.0.30",
+          "softwareVersion": "2.0.0",
           "url": "https://truckbox.app/",
           "downloadUrl": "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd",
           "installUrl": "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd",
           "image": "https://truckbox.app/fav-128x128.png",
           "inLanguage": "en",
-          "publisher": { "@id": "https://truckbox.app/#organization" },
-          "author": { "@id": "https://truckbox.app/#organization" },
-          "description": "Truck Box is the DAT One broker emailer built for truck dispatchers, carriers, and owner-operators. It speeds up the DAT One load board (one.dat.com) for dry van, flatbed, and reefer loads. Send a broker a ready-to-go email in one click from a custom, dynamic template that auto-fills from the load and sends through your own Gmail (it never reads your inbox). Check a broker's RTS factoring credit rating and days-to-pay right on the load. Open any load's route in Google Maps as a 3-stop trip (your truck location, the pickup, the destination). Use the built-in rate calculator for deadhead-adjusted rate-per-mile, or reverse it to turn a target RPM into the rate to ask. Filter out short loads and duplicates, move through the board entirely by keyboard, refresh just the load list, and switch the board to a dark night mode. Works in Chrome and Opera with secure Google sign-in.",
-          "featureList": [
-            "DAT One broker emailer for dispatchers across dry van, flatbed, and reefer loads",
-            "One-click broker emails from a custom template that auto-fills from the DAT load",
-            "Custom dynamic email templates with placeholders (origin, destination, pickup date, equipment, your name, MC and phone)",
-            "Sends from your own Gmail and never reads your inbox",
-            "RTS factoring credit check: a broker's credit rating and days-to-pay shown on the load, for carriers who factor with RTS",
-            "Inbuilt Google Maps route in one click as three stops: truck location, pickup, destination",
-            "Rate calculator with deadhead-adjusted rate-per-mile (RPM), plus a reverse mode that turns a target RPM into the rate to ask the broker",
-            "Miles filter to hide loads shorter than a chosen distance, plus a duplicate-load filter that greys out repeats",
-            "Keyboard navigation across the load board (W/S move loads, A/D switch tabs, C copy, E send, R refresh)",
-            "Load-list refresh that updates only the loads, not the whole DAT page",
-            "Night / dark mode for the DAT One load board",
-            "Works in Google Chrome and Opera",
-            "Secure Google sign-in"
-          ],
-          "offers": {
-            "@type": "Offer",
-            "price": "0",
-            "priceCurrency": "USD",
-            "description": "7-day free trial, no credit card required"
+          "publisher": {
+            "@id": "https://truckbox.app/#organization"
           },
+          "author": {
+            "@id": "https://truckbox.app/#organization"
+          },
+          "description": "Truck Box is a Chrome extension for truck dispatchers, carriers and owner-operators that works inside the DAT One and Truckstop load boards. Send a broker a ready-to-go email in one click from a template filled in from the load, sent from your own Gmail or Outlook (personal or Microsoft 365); it never reads your inbox. Check broker credit and days-to-pay with RTS, Triumph or Apex Capital right on the load, see how many times a load was posted today and how its price moved, open the route in Google Maps, work out deadhead-adjusted rate-per-mile, filter short and duplicate loads, work by keyboard, and switch DAT to night mode. $7 per user per month after a 7-day free trial with no credit card; every feature included. Teams get one bill and a manager back office.",
+          "featureList": [
+            "Works inside the DAT One and Truckstop load boards",
+            "One-click broker emails from a template that auto-fills from the load",
+            "Up to 3 email templates with placeholders (origin, destination, pickup date, equipment, length, weight, your name, MC, phone)",
+            "Sign in with Google or Microsoft; send from Gmail, Google Workspace, Outlook.com or Microsoft 365",
+            "Multiple sender mailboxes, each with its own templates, name and MC",
+            "Send-only email access (Gmail gmail.send, Microsoft Mail.Send): cannot read your inbox",
+            "Factoring credit check with RTS Financial, Triumph or Apex Capital: credit rating and days-to-pay on the load",
+            "Posted load price analytics: how many times a load was posted today and how its price changed",
+            "Dedicated loads finder for brokers who repeatedly post the same lane",
+            "FMCSA broker report and click-to-call broker numbers",
+            "Google Maps route in one click as three stops: truck location, pickup, destination",
+            "Rate calculator with deadhead-adjusted rate-per-mile and a reverse target-RPM mode",
+            "Short-load and duplicate-load filters",
+            "Keyboard navigation (W/S move, A/D tabs, E send, Q map, C copy, R refresh, F credit check, I FMCSA)",
+            "Load-list refresh without reloading the page",
+            "Night mode for the DAT One board",
+            "Team plan with a manager back office and per-seat billing"
+          ],
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "Truck Box",
+              "price": "7.00",
+              "priceCurrency": "USD",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "7.00",
+                "priceCurrency": "USD",
+                "unitText": "per user per month"
+              },
+              "description": "$7 per user per month after a 7-day free trial, no credit card required. All features included."
+            },
+            {
+              "@type": "Offer",
+              "name": "Truck Box for teams",
+              "price": "7.00",
+              "priceCurrency": "USD",
+              "url": "https://truckbox.app/business/start",
+              "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "7.00",
+                "priceCurrency": "USD",
+                "unitText": "per seat per month"
+              },
+              "description": "$7 per seat per month on one bill, with a manager back office."
+            }
+          ],
           "softwareHelp": "https://calendly.com/truckboxapp"
         },
         {
@@ -115,15 +156,23 @@
               "name": "What does Truck Box do?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Truck Box is a browser extension for the DAT One load board. It lets dispatchers send a broker a ready-to-go email in one click from a custom template, open the load's route in Google Maps, see a rate-per-mile that includes deadhead, filter out short loads, and navigate the board by keyboard."
+                "text": "Truck Box is a Chrome extension for the DAT One and Truckstop load boards. It sends a broker a ready-to-go email in one click from your own Gmail or Outlook, checks broker credit with RTS, Triumph or Apex Capital, shows how a load's posted price changed during the day, and adds route maps, a deadhead-adjusted rate-per-mile calculator, load filters, keyboard shortcuts and night mode."
               }
             },
             {
               "@type": "Question",
-              "name": "Which browsers does Truck Box support?",
+              "name": "Does Truck Box work on Truckstop?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Truck Box works in Google Chrome and Opera (Chromium-based browsers). You sign in securely with Google."
+                "text": "Yes. Truck Box works on both DAT One (one.dat.com) and Truckstop."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Can Truck Box send from Outlook?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. Sign in with Microsoft to send from Outlook.com or a Microsoft 365 work mailbox. Gmail and Google Workspace are supported too, and you can connect several mailboxes."
               }
             },
             {
@@ -131,7 +180,7 @@
               "name": "How much does Truck Box cost?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Truck Box starts with a 7-day free trial and does not require a credit card to try."
+                "text": "$7 per user per month after a 7-day free trial that needs no credit card. Every feature is included, with no hidden fees or paid add-ons. Teams pay $7 per seat per month on one bill."
               }
             },
             {
@@ -139,7 +188,23 @@
               "name": "Does Truck Box read my email?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "No. Truck Box only sends emails you explicitly choose to send from your own Gmail. It never reads your inbox."
+                "text": "No. Truck Box asks only for send-only access (Gmail gmail.send, Microsoft Mail.Send), so it cannot open, read or search your inbox. It only sends the emails you choose to send, and you can revoke access anytime in your Google or Microsoft account."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is Truck Box safe to use?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes. It uses official Google and Microsoft sign-in, requests only permission to send email, never sees your email, DAT or Truckstop passwords, and only uses load details already shown on the page you are viewing."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Which factoring companies does the credit check support?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "RTS Financial, Triumph and Apex Capital. You need your own active account with one of them."
               }
             },
             {
@@ -147,7 +212,7 @@
               "name": "What is RPM with deadhead?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "It is a rate-per-mile that includes the empty (deadhead) miles to the pickup, along with the total miles including deadhead, so you can see the real economics of a load before you call."
+                "text": "It is the rate-per-mile including the empty (deadhead) miles to the pickup, so you see the real economics of a load before you call. The calculator also works in reverse: enter a target RPM to get the rate to ask."
               }
             },
             {
@@ -155,7 +220,7 @@
               "name": "How do I install Truck Box?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Add Truck Box from the Chrome Web Store, pin it, and sign in with Google. It then appears on the DAT One load board at one.dat.com."
+                "text": "Add Truck Box from the Chrome Web Store, pin it, and sign in with Google or Microsoft. It then appears on the DAT One and Truckstop load boards."
               }
             },
             {
@@ -163,15 +228,7 @@
               "name": "Who is Truck Box for?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Truck Box is built for truck dispatchers, carriers, and owner-operators who source freight on the DAT One load board and want to email brokers faster."
-              }
-            },
-            {
-              "@type": "Question",
-              "name": "What load types does Truck Box support?",
-              "acceptedAnswer": {
-                "@type": "Answer",
-                "text": "Truck Box works with any load on the DAT One board, including dry van, flatbed, and reefer freight. It is a DAT One broker emailer, so it fits any equipment type you search."
+                "text": "Truck dispatchers, dispatch companies, carriers and owner-operators who find freight on DAT One or Truckstop, across dry van, reefer, flatbed and other equipment."
               }
             }
           ]

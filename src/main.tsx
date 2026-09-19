@@ -1,6 +1,6 @@
 import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
@@ -15,8 +15,8 @@ import CancelPage from "./pages/Cancel";
 // Business cabinet is its own app — loaded only on /business/* so landing
 // visitors don't download it.
 const Cabinet = lazy(() => import("./pages/business/Cabinet"));
-const InviteWizard = lazy(() => import("./pages/business/InviteWizard"));
-const RequestAccess = lazy(() => import("./pages/business/RequestAccess"));
+const TeamStart = lazy(() => import("./pages/business/TeamStart"));
+const MicrosoftCallback = lazy(() => import("./pages/business/MicrosoftCallback"));
 
 // Landing theme: ?theme=light|dark sets and remembers it; otherwise stored/default.
 {
@@ -51,8 +51,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
-        <Route path="/business/invite" element={<InviteWizard />} />
-        <Route path="/business/request" element={<RequestAccess />} />
+        <Route path="/business/start" element={<TeamStart />} />
+        {/* The manual invite link and the "email us" request form are gone: both lead to sign-up. */}
+        <Route path="/business/invite" element={<Navigate to="/business/start" replace />} />
+        <Route path="/business/request" element={<Navigate to="/business/start" replace />} />
+        <Route path="/business/oauth/microsoft" element={<MicrosoftCallback />} />
         <Route path="/business" element={<Cabinet />} />
         <Route path="/business/:section" element={<Cabinet />} />
         <Route path="/business/:section/:id" element={<Cabinet />} />

@@ -3,8 +3,27 @@ import { api, ApiError } from "../../lib/api";
 import type { OrgRole } from "./types";
 import { ConfirmDialog } from "./ConfirmDialog";
 
-type Member = { id: number; email: string; state: string; role: OrgRole; hasSeat: boolean };
-type Team = { id: number; name: string; seats: number; members: Member[]; cancelAtPeriodEnd: boolean };
+type Member = {
+  id: number;
+  email: string;
+  state: string;
+  role: OrgRole;
+  hasSeat: boolean;
+  /** Offered to an existing TruckBox account; joins only after they accept. */
+  requiresAcceptance: boolean;
+};
+type Team = {
+  id: number;
+  name: string;
+  seats: number;
+  members: Member[];
+  cancelAtPeriodEnd: boolean;
+  pricePerSeatCents: number | null;
+  planExpiresAt: string | null;
+};
+
+const SEAT_LIMIT_REACHED = 1021;
+const money = (n: number) => `$${n.toFixed(n % 1 === 0 ? 0 : 2)}`;
 
 /** Maps backend error codes to human-readable messages. */
 function friendlyError(e: unknown): string {
@@ -34,6 +53,11 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [busy, setBusy] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
+  // Adding people past the paid seats: how many seats to buy, and the pending email.
+  const [buySeats, setBuySeats] = useState<{ needed: number; email: string; today: number } | null>(null);
+  // Removing someone: who, and whether their seat goes too.
+  const [removing, setRemoving] = useState<Member | null>(null);
+  const [releaseSeat, setReleaseSeat] = useState(true);
 
   const load = useCallback(() => {
     api
@@ -63,6 +87,32 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const owner = team.members.find((m) => m.role === "OWNER");
   const billable = team.members.filter((m) => m.hasSeat).length;
   const dispatchers = team.members.filter((m) => m.role === "MEMBER").length;
+  const unit = (team.pricePerSeatCents ?? 700) / 100;
+  const nextCharge = team.planExpiresAt ? new Date(team.planExpiresAt) : null;
+
+  const addMember = async (email: string, allowSeatIncrease: boolean) => {
+    if (busy) return;
+    setErr(null);
+    setBusy(true);
+    try {
+      await api.post("/api/v1/manager/team/members", { emails: [email], allowSeatIncrease });
+      setNewEmail("");
+      setBuySeats(null);
+      load();
+      onChanged();
+    } catch (e) {
+      const needed = e instanceof ApiError && e.code === SEAT_LIMIT_REACHED ? Number(e.details?.needed) : 0;
+      if (needed > 0 && !allowSeatIncrease) {
+        // Prorated charge for the rest of the period — an estimate; Stripe computes the exact sum.
+        const end = team.planExpiresAt ? new Date(team.planExpiresAt).getTime() : 0;
+        const daysLeft = end ? Math.min(30, Math.max(0, (end - Date.now()) / 86_400_000)) : 30;
+        setBuySeats({ needed, email, today: (needed * unit * daysLeft) / 30 });
+      }
+      else setErr(friendlyError(e));
+    } finally {
+      setBusy(false);
+    }
+  };
 
   return (
     <section className="flex flex-col gap-7">
@@ -132,6 +182,14 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         <p style={{ color: "var(--sub)", fontSize: "0.8125rem", margin: "12px 0 4px" }}>
           Access to the TruckBox extension for DAT and Truckstop. Each person with access uses one seat.
         </p>
+        <p style={{ color: "var(--ink)", fontSize: "0.8125rem", fontWeight: 600, margin: "0 0 4px" }}>
+          {team.seats} seats × {money(unit)} = {money(team.seats * unit)}/mo
+          {nextCharge && (
+            <span style={{ color: "var(--muted)", fontWeight: 400 }}>
+              {" "}· next charge {nextCharge.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+            </span>
+          )}
+        </p>
 
         <div className="flex flex-col">
           {team.members.map((m) => (
@@ -166,7 +224,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
                       {m.role === "MEMBER" ? "Dispatcher" : m.role.charAt(0) + m.role.slice(1).toLowerCase()}
                     </span>
                     <span style={{ fontSize: "0.73rem", color: m.state === "INVITED" ? "var(--pp-ink)" : "var(--muted)" }}>
-                      {m.state === "INVITED" ? "Invited" : "Active"}
+                      {m.requiresAcceptance ? "Waiting for acceptance" : m.state === "INVITED" ? "Invited" : "Active"}
                     </span>
                   </div>
                 </div>
@@ -221,7 +279,10 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
                     className="ed-btn"
                     style={{ padding: "6px 11px", fontSize: "0.66rem", color: "var(--danger)" }}
                     disabled={busy}
-                    onClick={() => guard(() => api.del(`/api/v1/manager/team/members?email=${encodeURIComponent(m.email)}`))}
+                    onClick={() => {
+                      setReleaseSeat(true);
+                      setRemoving(m);
+                    }}
                   >
                     <span>Remove</span>
                   </button>
@@ -236,8 +297,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
           className="flex flex-col sm:flex-row gap-2.5 mt-5"
           onSubmit={async (e) => {
             e.preventDefault();
-            await guard(() => api.post("/api/v1/manager/team/members", { emails: [newEmail] }));
-            setNewEmail("");
+            await addMember(newEmail, false);
           }}
         >
           <input
@@ -246,6 +306,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             type="email"
             placeholder="dispatcher@company.com"
             value={newEmail}
+            maxLength={254}
             onChange={(e) => setNewEmail(e.target.value)}
             required
           />
@@ -315,6 +376,61 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
           setConfirmCancel(false);
         }}
         onClose={() => setConfirmCancel(false)}
+      />
+
+      <ConfirmDialog
+        open={buySeats !== null}
+        title="Add a seat?"
+        message={
+          buySeats && (
+            <>
+              Your team has no free seat. Adding <b>{buySeats.email}</b> adds {buySeats.needed} seat
+              {buySeats.needed === 1 ? "" : "s"}: +{money(buySeats.needed * unit)}/mo. About{" "}
+              {money(buySeats.today)} will be charged today for the
+              rest of this billing period.
+            </>
+          )
+        }
+        confirmLabel="Add seat and member"
+        cancelLabel="Cancel"
+        busy={busy}
+        onConfirm={() => buySeats && addMember(buySeats.email, true)}
+        onClose={() => setBuySeats(null)}
+      />
+
+      <ConfirmDialog
+        open={removing !== null}
+        title="Remove from team?"
+        message={
+          removing && (
+            <>
+              <b>{removing.email}</b> loses access through your team.
+              {removing.hasSeat && team.seats > 1 && (
+                <label style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 12 }}>
+                  <input type="checkbox" checked={releaseSeat} onChange={(e) => setReleaseSeat(e.target.checked)} />
+                  Also remove the freed seat (−{money(unit)}/mo from the next billing period)
+                </label>
+              )}
+            </>
+          )
+        }
+        confirmLabel="Remove"
+        cancelLabel="Keep"
+        destructive
+        busy={busy}
+        onConfirm={async () => {
+          const m = removing;
+          if (!m) return;
+          await guard(() =>
+            api.del(
+              `/api/v1/manager/team/members?email=${encodeURIComponent(m.email)}&releaseSeat=${
+                releaseSeat && m.hasSeat && team.seats > 1
+              }`
+            )
+          );
+          setRemoving(null);
+        }}
+        onClose={() => setRemoving(null)}
       />
     </section>
   );

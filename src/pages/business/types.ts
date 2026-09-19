@@ -1,5 +1,6 @@
 export type Verdict = "ALLOW" | "BOUNCE";
-export type BounceReason = "INSTALL" | "PAYMENT" | "USE_EXTENSION";
+/** NO_ACCOUNT is client-side only: a web sign-in by someone who never signed up in the extension. */
+export type BounceReason = "INSTALL" | "PAYMENT" | "USE_EXTENSION" | "NO_ACCOUNT";
 export type OrgRole = "OWNER" | "MANAGER" | "MEMBER";
 
 export type AccountContext = {

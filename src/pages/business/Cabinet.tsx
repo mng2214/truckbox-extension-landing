@@ -2,20 +2,24 @@ import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react"
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Menu, X, Sun, Moon, LogOut, HelpCircle, User, Settings,
-  LayoutDashboard, Users, BarChart3, Gem, Sparkles,
+  Menu, X, Sun, Moon, LogOut, HelpCircle, User, Building2, ArrowLeft,
+  LayoutDashboard, Users, BarChart3, Gem, Sparkles, Mail, UserCircle,
 } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
+import { MicrosoftSignIn } from "../../components/MicrosoftSignIn";
 import type { AccountContext } from "./types";
 import { Bounce } from "./Bounce";
 import { PersonalPanel } from "./PersonalPanel";
 import { TeamPanel } from "./TeamPanel";
 import { StatsPanel } from "./StatsPanel";
 import { PhoneVerify } from "./PhoneVerify";
-import { LinkedAccounts } from "./LinkedAccounts";
+import { AccountsPanel } from "./AccountsPanel";
+import { TeamInviteBanner } from "./TeamInviteBanner";
+import { CompanyInfoPanel } from "./CompanyInfoPanel";
+import { MailboxesPanel } from "./MailboxesPanel";
 
 // Oracle (stealth): lazy-loaded so its code is not in the main bundle for non-entitled users.
 const DiscoveryPanel = lazy(() =>
@@ -47,8 +51,9 @@ export default function Cabinet() {
   const section = params.section ?? null;
   const [error, setError] = useState<string | null>(null);
   const [needsPhone, setNeedsPhone] = useState(false);
+  // Web sign-in by someone who never signed up in the extension: show "install first", no account.
+  const [noAccount, setNoAccount] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   // Light is the default for the back office; respected as dark only if the user explicitly chose it.
   const [theme, setTheme] = useState<"dark" | "light">(() =>
     typeof localStorage !== "undefined" && localStorage.getItem("tb-theme") === "dark"
@@ -112,11 +117,32 @@ export default function Cabinet() {
     };
   }, [navOpen]);
 
+  if (!authed && noAccount) {
+    return (
+      <Bounce
+        reason="NO_ACCOUNT"
+        telegram={SUPPORT_TELEGRAM}
+        onSignOut={() => setNoAccount(false)}
+        signOutLabel="Back to sign in"
+      />
+    );
+  }
   if (!authed) {
     const expired =
       typeof sessionStorage !== "undefined" && sessionStorage.getItem("tb-session-expired") === "1";
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center gap-8 px-6 text-center">
+      <div
+        className="min-h-screen w-full flex flex-col items-center justify-center gap-8 px-6 text-center"
+        style={{ position: "relative" }}
+      >
+        <a
+          href="/"
+          className="ed-btn tb-back-btn"
+          style={{ position: "absolute", top: "1.25rem", left: "1.25rem", display: "inline-flex", alignItems: "center", gap: 8 }}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to site
+        </a>
         <h1 className="ed-display text-[8vw] lg:text-[3.5rem]">Account</h1>
         <p style={{ color: expired ? "var(--danger)" : "var(--muted)" }}>
           {expired
@@ -124,6 +150,14 @@ export default function Cabinet() {
             : "Back office login."}
         </p>
         <GoogleSignIn
+          onNoAccount={() => setNoAccount(true)}
+          onSignedIn={() => {
+            sessionStorage.removeItem("tb-session-expired");
+            setAuthed(true);
+          }}
+        />
+        <MicrosoftSignIn
+          onNoAccount={() => setNoAccount(true)}
           onSignedIn={() => {
             sessionStorage.removeItem("tb-session-expired");
             setAuthed(true);
@@ -167,6 +201,7 @@ export default function Cabinet() {
     if (s === "team" || s === "statistics") return isManager;
     if (s === "discovery") return ctx.panels.includes("discovery");
     if (s === "agent") return ctx.panels.includes("agent");
+    if (s === "mailboxes" || s === "accounts" || s === "company") return true;
     return false;
   };
   const defaultSection = ctx.panels[0] ?? "personal";
@@ -201,6 +236,12 @@ export default function Cabinet() {
         {isManager && <NavItem label="Team" icon={<Users />} active={section === "team"} onClick={() => goto("team")} />}
         {isManager && (
           <NavItem label="Statistics" icon={<BarChart3 />} active={section === "statistics"} onClick={() => goto("statistics")} />
+        )}
+        <NavItem label="Mailboxes" icon={<Mail />} active={section === "mailboxes"} onClick={() => goto("mailboxes")} />
+        <NavItem label="Accounts" icon={<UserCircle />} active={section === "accounts"} onClick={() => goto("accounts")} />
+        <NavItem label="Company info" icon={<Building2 />} active={section === "company"} onClick={() => goto("company")} />
+        {(ctx.panels.includes("discovery") || ctx.panels.includes("agent")) && (
+          <div className="tb-nav-divider" role="separator" />
         )}
         {ctx.panels.includes("discovery") && (
           <NavItem label="Oracle" icon={<Gem />} premium active={section === "discovery"} onClick={() => goto("discovery")} />
@@ -241,7 +282,6 @@ export default function Cabinet() {
             email={ctx.email}
             theme={theme}
             onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-            onOpenSettings={() => setSettingsOpen(true)}
           />
           <button
             type="button"
@@ -261,13 +301,8 @@ export default function Cabinet() {
           email={ctx.email}
           theme={theme}
           onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-          onOpenSettings={() => setSettingsOpen(true)}
         />
       </div>
-
-      <AnimatePresence>
-        {settingsOpen && <SettingsModal onClose={() => setSettingsOpen(false)} />}
-      </AnimatePresence>
 
       {/* Mobile off-canvas drawer */}
       <AnimatePresence>
@@ -306,6 +341,7 @@ export default function Cabinet() {
       </AnimatePresence>
 
       <main className="flex-1 min-w-0 p-5 sm:p-8 md:p-10">
+        <TeamInviteBanner onAccepted={load} />
         {section === "personal" && <PersonalPanel ctx={ctx} />}
         {section === "team" && ctx.org && <TeamPanel onChanged={load} />}
         {section === "statistics" && isManager && <StatsPanel />}
@@ -319,6 +355,9 @@ export default function Cabinet() {
             <AgentPanel campaignId={params.id ? Number(params.id) : null} />
           </Suspense>
         )}
+        {section === "mailboxes" && <MailboxesPanel />}
+        {section === "accounts" && <AccountsPanel />}
+        {section === "company" && <CompanyInfoPanel />}
       </main>
     </div>
   );
@@ -357,12 +396,10 @@ function AccountMenu({
   email,
   theme,
   onToggleTheme,
-  onOpenSettings,
 }: {
   email: string;
   theme: "dark" | "light";
   onToggleTheme: () => void;
-  onOpenSettings: () => void;
 }) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
@@ -440,14 +477,6 @@ function AccountMenu({
               label={theme === "light" ? "Dark mode" : "Light mode"}
               onClick={onToggleTheme}
             />
-            <MenuRow
-              icon={<Settings size={15} />}
-              label="Settings"
-              onClick={() => {
-                setOpen(false);
-                onOpenSettings();
-              }}
-            />
             <MenuRow icon={<HelpCircle size={15} />} label="Need help?" href={SUPPORT_TELEGRAM} />
             <MenuRow icon={<LogOut size={15} />} label="Sign out" onClick={signOut} />
           </motion.div>
@@ -457,148 +486,6 @@ function AccountMenu({
   );
 }
 
-type AccountSettings = { mcNumber: string | null; companyName: string | null; firstName: string | null };
-
-/** Company details for the Agent (company → branded reply address; MC shared on request). */
-function SettingsModal({ onClose }: { onClose: () => void }) {
-  const [mc, setMc] = useState("");
-  const [company, setCompany] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [saved, setSaved] = useState(false);
-
-  useEffect(() => {
-    api
-      .get<AccountSettings>("/api/v1/account/settings")
-      .then((s) => {
-        setMc(s.mcNumber ?? "");
-        setCompany(s.companyName ?? "");
-        setFirstName(s.firstName ?? "");
-      })
-      .catch(() => setError("Failed to load settings."))
-      .finally(() => setLoading(false));
-  }, []);
-
-  const save = () => {
-    setSaving(true);
-    setError(null);
-    api
-      .put<AccountSettings>("/api/v1/account/settings", {
-        mcNumber: mc,
-        companyName: company,
-        firstName,
-      })
-      .then((s) => {
-        setMc(s.mcNumber ?? "");
-        setCompany(s.companyName ?? "");
-        setFirstName(s.firstName ?? "");
-        setSaved(true);
-        setTimeout(onClose, 700);
-      })
-      .catch(() => setError("Failed to save. Try again."))
-      .finally(() => setSaving(false));
-  };
-
-  const LABEL: React.CSSProperties = {
-    display: "block", fontSize: "0.72rem", letterSpacing: "0.06em",
-    textTransform: "uppercase", color: "var(--muted)", marginBottom: 7,
-  };
-  const FIELD: React.CSSProperties = {
-    width: "100%", padding: "0.6rem 0.7rem", fontSize: "0.9rem",
-    color: "var(--ink)", background: "transparent",
-    border: "1px solid var(--hairline)", outline: "none",
-  };
-
-  return (
-    <motion.div
-      role="dialog"
-      aria-modal="true"
-      aria-label="Settings"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2, ease: EASE }}
-      onClick={onClose}
-      style={{
-        position: "fixed",
-        inset: 0,
-        zIndex: 80,
-        background: "rgba(0,0,0,0.45)",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "1rem",
-      }}
-    >
-      <div
-        onClick={(e) => e.stopPropagation()}
-        style={{
-          width: "min(420px, 100%)",
-          background: "var(--bg-2)",
-          border: "1px solid var(--hairline)",
-          boxShadow: "0 24px 60px rgba(0, 0, 0, 0.35)",
-          padding: "1.4rem 1.5rem 1.5rem",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "1rem" }}>
-          <h3 className="ed-display" style={{ fontSize: "1.05rem", margin: 0 }}>
-            Settings
-          </h3>
-          <button type="button" className="tb-icon-btn" aria-label="Close settings" onClick={onClose}>
-            <X className="h-4 w-4" />
-          </button>
-        </div>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-          <div>
-            <label style={LABEL}>First name</label>
-            <input
-              value={firstName}
-              disabled={loading}
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder="e.g. Artur"
-              style={FIELD}
-            />
-          </div>
-          <div>
-            <label style={LABEL}>Company name</label>
-            <input
-              value={company}
-              disabled={loading}
-              onChange={(e) => setCompany(e.target.value)}
-              placeholder="e.g. Smart Freight LLC"
-              style={FIELD}
-            />
-          </div>
-          <div>
-            <label style={LABEL}>MC number</label>
-            <input
-              value={mc}
-              disabled={loading}
-              onChange={(e) => setMc(e.target.value)}
-              placeholder="e.g. 123456"
-              inputMode="numeric"
-              style={FIELD}
-            />
-          </div>
-          <LinkedAccounts />
-        </div>
-
-        {error && (
-          <p style={{ color: "var(--danger)", fontSize: "0.8rem", marginTop: "0.9rem" }}>{error}</p>
-        )}
-
-        <div style={{ marginTop: "1.5rem", paddingTop: "1.25rem", borderTop: "1px solid var(--hairline)" }}>
-          <button type="button" className="ed-btn" disabled={loading || saving} onClick={save}>
-            {saved ? "Saved ✓" : saving ? "Saving…" : "Save"}
-          </button>
-        </div>
-      </div>
-    </motion.div>
-  );
-}
 
 function MenuRow({
   icon,

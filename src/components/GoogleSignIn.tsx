@@ -1,5 +1,7 @@
 import { useRef, useState } from "react";
 import { exchangeGoogleAccessToken, type GoogleAuthResult } from "../lib/google";
+import { isNoAccount } from "../lib/authErrors";
+import { ProviderLogo } from "./ProviderLogo";
 
 declare global {
   interface Window {
@@ -7,7 +9,17 @@ declare global {
   }
 }
 
-export function GoogleSignIn({ onSignedIn }: { onSignedIn: (res: GoogleAuthResult) => void }) {
+export function GoogleSignIn({
+  onSignedIn,
+  onNoAccount,
+  signup = false,
+}: {
+  onSignedIn: (res: GoogleAuthResult) => void;
+  /** Called when this Google account has no TruckBox account yet (web sign-in only). */
+  onNoAccount?: () => void;
+  /** Team signup page: allowed to create a brand-new account. */
+  signup?: boolean;
+}) {
   const clientRef = useRef<any>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -26,9 +38,13 @@ export function GoogleSignIn({ onSignedIn }: { onSignedIn: (res: GoogleAuthResul
             return;
           }
           try {
-            const res = await exchangeGoogleAccessToken(resp.access_token);
+            const res = await exchangeGoogleAccessToken(resp.access_token, signup);
             onSignedIn(res);
           } catch (err) {
+            if (isNoAccount(err) && onNoAccount) {
+              onNoAccount();
+              return;
+            }
             console.error("Google sign-in exchange failed:", err);
             setError("Sign-in failed. Please try again.");
           } finally {
@@ -53,7 +69,13 @@ export function GoogleSignIn({ onSignedIn }: { onSignedIn: (res: GoogleAuthResul
 
   return (
     <div className="flex flex-col items-center gap-2">
-      <button className="ed-btn ed-btn-accent" onClick={signIn} disabled={busy}>
+      <button
+        className="ed-btn ed-btn-accent"
+        onClick={signIn}
+        disabled={busy}
+        style={{ display: "inline-flex", alignItems: "center", justifyContent: "center", gap: 10, minWidth: 250 }}
+      >
+        <ProviderLogo provider="GOOGLE" size={14} chip />
         {busy ? "Signing in…" : "Sign in with Google"}
       </button>
       {error && (
