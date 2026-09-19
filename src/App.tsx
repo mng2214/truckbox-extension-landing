@@ -964,18 +964,33 @@ function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
 
 function Numbers() {
   const stats: { value: ReactNode; label: string; sub: string; href?: string }[] = [
-    { value: <CountUp to={3} suffix="h" />, label: "saved every week", sub: "per full-time dispatcher" },
-    { value: <CountUp to={1} />, label: "click to email a broker", sub: "template fills itself" },
-    { value: <CountUp to={30} />, label: "days of price history", sub: "on every lane you open" },
+    // Units are set apart from the figure (smaller, quieter) so the number itself carries the line.
     {
-      value: <CountUp to={5} decimals={1} suffix="★" />,
+      value: (
+        <>
+          <CountUp to={3} />
+          <span className="tb-stat-unit">h</span>
+        </>
+      ),
+      label: "Saved every week",
+      sub: "per full-time dispatcher",
+    },
+    { value: <CountUp to={1} />, label: "Click to email a broker", sub: "template fills itself" },
+    { value: <CountUp to={30} />, label: "Days of price history", sub: "on every lane you open" },
+    {
+      value: (
+        <>
+          <CountUp to={5} decimals={1} />
+          <span className="tb-stat-star">★</span>
+        </>
+      ),
       label: "Chrome Web Store",
       sub: "100+ dispatchers",
       href: "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews",
     },
     {
       value: <CountUp to={PLAN_FEATURE_COUNT} />,
-      label: "features for $7",
+      label: "Features for $7",
       sub: "no tiers, no add-ons",
       // Straight to the price section, where the whole feature list lives.
       href: "/#pricing",
@@ -1031,14 +1046,43 @@ function Integrations() {
   const items = [
     { img: "/dat.png", alt: "DAT", note: "Load board" },
     { img: "/truckstop.png", alt: "Truckstop", note: "Load board" },
-    { node: <ProviderLogo provider="GOOGLE" size={20} />, alt: "Gmail", note: "Send from" },
-    { node: <ProviderLogo provider="MICROSOFT" size={19} />, alt: "Outlook", note: "Send from" },
+    { node: <ProviderLogo provider="GOOGLE" size={30} />, alt: "Gmail", note: "Send from" },
+    { node: <ProviderLogo provider="MICROSOFT" size={28} />, alt: "Outlook", note: "Send from" },
     { img: "/logos/rts.webp", alt: "RTS", note: "Credit check" },
     { img: "/logos/triumph.webp", alt: "Triumph", note: "Credit check" },
     { img: "/logos/apex.webp", alt: "Apex Capital", note: "Credit check" },
     { img: "/logos/gmaps.svg", alt: "Google Maps", note: "Routes" },
     { img: "/logos/fmcsa.svg", alt: "FMCSA", note: "Authority" },
   ];
+
+  const bandRef = useRef<HTMLDivElement>(null);
+
+  // Magnifying glass: every frame, each logo gets a 0..1 strength from how close it is to the
+  // middle of the band. The CSS turns that into scale, colour and the visibility of its tag, so
+  // the row appears to pass under a lens instead of sliding past as a strip of cards.
+  useEffect(() => {
+    const band = bandRef.current;
+    if (!band || window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const chips = Array.from(band.querySelectorAll<HTMLElement>(".tb-int"));
+    let raf = 0;
+    const frame = () => {
+      const rect = band.getBoundingClientRect();
+      const center = rect.left + rect.width / 2;
+      // How far from the middle a logo still feels the glass.
+      const reach = Math.min(340, rect.width / 2);
+      for (const chip of chips) {
+        const box = chip.getBoundingClientRect();
+        const d = Math.abs(box.left + box.width / 2 - center) / reach;
+        // Bell curve: 1 right under the lens, 0 at its rim, no step anywhere.
+        const k = d >= 1 ? 0 : (1 - d * d) ** 2;
+        chip.style.setProperty("--k", k.toFixed(3));
+      }
+      raf = requestAnimationFrame(frame);
+    };
+    raf = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
   return (
     <section className="ed-section" style={{ paddingTop: 0 }}>
       <div className="ed-container">
@@ -1049,8 +1093,9 @@ function Integrations() {
         </Reveal>
       </div>
 
-        {/* Marquee: one row of chips, duplicated so the loop has no seam. Pauses on hover. */}
-        <div className="tb-marquee">
+        {/* Marquee: one row, duplicated so the loop has no seam. Pauses on hover. The lens
+            (see the effect above) magnifies whichever logo is passing the middle. */}
+        <div className="tb-marquee" ref={bandRef}>
           <div className="tb-marquee-track">
             {[0, 1].map((copy) =>
               items.map((it) => (
@@ -1064,6 +1109,8 @@ function Integrations() {
               )),
             )}
           </div>
+          {/* The glass itself: a soft column of light, no edges. */}
+          <span className="tb-marquee-lens" aria-hidden="true" />
         </div>
     </section>
   );

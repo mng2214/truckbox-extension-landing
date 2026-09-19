@@ -48,6 +48,8 @@ select,
   --muted: #99a2bc;
   --faint: #626b85;
   --line: rgba(200, 214, 255, 0.10);
+  /* Glow inside the integrations lens — white glass on light, a violet pool on dark. */
+  --lens-glow: color-mix(in oklab, var(--accent) 34%, transparent);
   --line-strong: rgba(200, 214, 255, 0.26);
 
   /* brand accent — brass, the only accent on the page */
@@ -1826,6 +1828,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
    ============================================================ */
 html.tb-light {
   color-scheme: light;
+  --lens-glow: rgba(255, 255, 255, .92);
   --bg:          oklch(0.975 0.009 280);
   --bg-2:        oklch(1 0 0);
   --band:        oklch(0.95 0.022 280);          /* tinted section band */
@@ -2573,148 +2576,192 @@ body:has(.tb-news) header.fixed { top: 38px; }
 }
 
 .tb-numbers-wrap { padding: 8px 0 56px; }
+/* Right-hand note in the heading row: balances the line and sources the numbers. */
+.tb-numbers-note {
+  font: 500 13px/1.6 "Inter", system-ui, sans-serif;
+  color: var(--muted);
+  text-align: right;
+  margin: 0;
+  padding-bottom: 4px;
+}
+/* No frame around the band: the lead stat is wider than the rest and the cells are separated by
+   hairlines that fade out at both ends, so the row reads as one designed object, not five boxes. */
 .tb-numbers {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 1px;
-  background: var(--line);
-  /* One frame around the whole band: the 1px gaps are the dividers between cells. */
-  border: 1px solid var(--line);
 }
 .tb-stat {
   position: relative;
-  display: flex; flex-direction: column; gap: 6px;
-  padding: 26px 18px;
-  background: var(--bg);
+  display: flex; flex-direction: column; gap: 7px;
+  padding: 30px 26px;
   height: 100%;
   transition: background-color .4s var(--ease), transform .4s var(--ease), opacity .3s var(--ease);
 }
-/* Accent hairline draws in from the left on hover, like the review cards. */
+/* The lead stat starts flush with the heading above it. */
+.tb-numbers > *:first-child .tb-stat { padding-left: 0; }
+/* Divider between cells — solid in the middle, dissolving into the page at top and bottom. */
+.tb-stat::after {
+  content: "";
+  position: absolute; right: 0; top: 0; bottom: 0; width: 1px;
+  background: linear-gradient(180deg, transparent, var(--line) 22%, var(--line) 78%, transparent);
+}
+.tb-numbers > *:last-child .tb-stat::after { display: none; }
+/* Accent hairline draws in from the left on hover and fades out to the right. */
 .tb-stat::before {
   content: "";
   position: absolute; left: 0; right: 0; top: 0; height: 2px;
-  background: var(--accent);
+  background: linear-gradient(90deg, var(--accent), color-mix(in oklab, var(--accent) 20%, transparent));
   transform: scaleX(0);
   transform-origin: left;
   transition: transform .5s var(--ease);
 }
-.tb-stat-value { transition: transform .4s var(--ease); transform-origin: left bottom; }
-.tb-stat-value { font-size: clamp(2.2rem, 4vw, 3.2rem); line-height: 1; color: var(--accent); }
-.tb-stat-label { font: 700 13px/1.3 "Inter", system-ui, sans-serif; color: var(--ink); text-transform: uppercase; letter-spacing: .02em; }
+.tb-stat-value {
+  font-size: clamp(2rem, 3.4vw, 2.7rem);
+  line-height: 1;
+  color: var(--accent);
+  letter-spacing: -.02em;
+  transition: transform .4s var(--ease);
+  transform-origin: left bottom;
+}
+/* Hierarchy: the strongest claim is only a touch larger — no fill behind it. */
+.tb-numbers > *:first-child .tb-stat-value { font-size: clamp(2.4rem, 3.9vw, 3.1rem); }
+.tb-stat-unit {
+  font-size: .46em;
+  margin-left: .04em;
+  color: color-mix(in oklab, var(--accent) 45%, var(--muted));
+}
+.tb-stat-star { font-size: .46em; margin-left: .1em; vertical-align: .6em; }
+.tb-stat-label { font: 600 15px/1.35 "Inter", system-ui, sans-serif; color: var(--ink); letter-spacing: -.01em; }
 .tb-stat-sub { font: 500 13px/1.4 "Inter", system-ui, sans-serif; color: var(--muted); }
-@media (max-width: 900px) { .tb-numbers { grid-template-columns: repeat(2, 1fr); } }
 .tb-stat-link { text-decoration: none; }
 @media (hover: hover) {
-  .tb-numbers:hover .tb-stat:not(:hover) { opacity: .5; }
-  .tb-stat:hover { background: var(--bg-2, rgba(109, 40, 217, .05)); transform: translateY(-4px); }
+  .tb-numbers:hover .tb-stat:not(:hover) { opacity: .45; }
+  .tb-stat:hover { background: color-mix(in oklab, var(--accent) 5%, var(--bg)); transform: translateY(-4px); }
   .tb-stat:hover::before { transform: scaleX(1); }
-  .tb-stat:hover .tb-stat-value { transform: scale(1.08); }
+  .tb-stat:hover .tb-stat-value { transform: scale(1.06); }
   .tb-stat-link:hover .tb-stat-sub { color: var(--accent); }
+}
+@media (max-width: 900px) {
+  .tb-numbers { grid-template-columns: repeat(2, 1fr); }
+  /* The lead stat keeps its own row on phones. */
+  .tb-numbers > *:first-child { grid-column: 1 / -1; }
+  .tb-stat { padding: 20px 16px; border-top: 1px solid var(--line); }
+  .tb-numbers > *:first-child .tb-stat { border-top: 0; }
+  .tb-stat::after { display: none; }
+  .tb-numbers > *:nth-child(even) .tb-stat { padding-left: 0; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tb-stat, .tb-stat::before, .tb-stat-value { transition: none; }
 }
 
-/* Integrations marquee: an endless row of the tools TruckBox plugs into, on a soft band with a
-   slow light sweep so it reads as a showcase rather than a plain list. */
+/* Integrations marquee: the tools TruckBox plugs into, passing under a magnifying glass. No
+   cards and no shadows — the only thing that separates one logo from the next is how strongly
+   the lens holds it. `--k` (0..1) comes from the rAF loop in Integrations(). */
 .tb-marquee {
   position: relative;
   overflow: hidden;
-  padding: 44px 0;
+  padding: 38px 0;
   /* No hard edges: the tint fades out on all four sides so the band melts into the page. */
   background:
     radial-gradient(70% 120% at 50% 50%, color-mix(in oklab, var(--accent) 9%, transparent), transparent 70%),
     linear-gradient(180deg, transparent, color-mix(in oklab, var(--accent) 5%, transparent) 40%,
       color-mix(in oklab, var(--accent) 5%, transparent) 60%, transparent);
-  -webkit-mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
-  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 14%, #000 86%, transparent);
 }
-/* Light sweep travelling across the band. */
+/* Hairline top and bottom: solid across the middle, dissolving into the page at both ends, so
+   the band is bounded without ever drawing a corner. */
+.tb-marquee::before,
 .tb-marquee::after {
   content: "";
-  position: absolute; inset: 0;
-  background: linear-gradient(105deg, transparent 30%, rgba(255, 255, 255, .45) 50%, transparent 70%);
-  filter: blur(14px);
-  transform: translateX(-100%);
-  animation: tb-sheen 7s ease-in-out infinite;
+  position: absolute; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    color-mix(in oklab, var(--accent) 34%, transparent) 26%,
+    color-mix(in oklab, var(--accent) 34%, transparent) 74%,
+    transparent);
   pointer-events: none;
+  z-index: 2;
 }
-@keyframes tb-sheen {
-  0%, 65% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
+.tb-marquee::before { top: 0; }
+.tb-marquee::after { bottom: 0; }
+/* The glass: a column of light in the middle, blurred so it has no rim of its own. */
+.tb-marquee-lens {
+  position: absolute; left: 50%; top: 0; bottom: 0;
+  width: 420px;
+  transform: translateX(-50%);
+  pointer-events: none;
+  background:
+    radial-gradient(58% 64% at 50% 50%, var(--lens-glow), transparent 72%),
+    linear-gradient(90deg, transparent, color-mix(in oklab, var(--accent) 7%, transparent) 30%,
+      color-mix(in oklab, var(--accent) 7%, transparent) 70%, transparent);
+  filter: blur(12px);
+  /* Behind the logos, so the glass lights them instead of fogging them. */
+  z-index: 0;
 }
 .tb-marquee-track {
+  position: relative;
+  z-index: 1;
   display: flex;
-  gap: 14px;
+  align-items: center;
+  gap: 40px;
   width: max-content;
-  animation: tb-marquee 42s linear infinite;
+  animation: tb-marquee 46s linear infinite;
 }
 @keyframes tb-marquee {
   from { transform: translateX(0); }
   /* The row is rendered twice, so half a lap is a full seamless loop. */
-  to { transform: translateX(calc(-50% - 7px)); }
+  to { transform: translateX(calc(-50% - 20px)); }
 }
 .tb-int {
+  --k: 1;
   position: relative;
-  display: flex; align-items: center; gap: 14px;
+  display: flex; align-items: center; gap: 13px;
   flex: 0 0 auto;
-  padding: 15px 22px 15px 20px;
-  background: color-mix(in oklab, var(--bg) 78%, transparent);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid color-mix(in oklab, var(--line) 55%, transparent);
-  box-shadow: 0 22px 46px -32px rgba(17, 24, 39, .5);
-  transition: transform .45s var(--ease), border-color .45s var(--ease), box-shadow .45s var(--ease);
-}
-/* Accent edge — the same hairline language as the reviews and stats. */
-.tb-int::before {
-  content: "";
-  position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
-  background: var(--accent-grad, var(--accent));
-  opacity: .55;
-  transition: opacity .45s var(--ease);
+  /* Under the lens: bigger, in full colour, fully opaque. Away from it: small, pale, washed out. */
+  transform: scale(calc(.84 + .3 * var(--k)));
+  opacity: calc(.46 + .54 * var(--k));
+  filter: saturate(calc(.15 + .85 * var(--k)));
 }
 .tb-int-mark {
-  flex: 0 0 54px; height: 40px;
+  flex: 0 0 78px; height: 56px;
   display: flex; align-items: center; justify-content: center;
-  background: #fff; color: #6d28d9;
-  border: 1px solid var(--line);
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .9), 0 6px 14px -12px rgba(17, 24, 39, .6);
-  transition: transform .45s var(--ease);
+  color: #6d28d9;
 }
-.tb-int-mark img { max-width: 40px; max-height: 20px; width: auto; height: auto; display: block; }
+/* The logo files are dark marks on transparency; on the dark theme they'd sink into the band,
+   so there they render as white silhouettes. The Maps pin keeps its colours. */
+html:not(.tb-light) .tb-int-mark img:not([src$="gmaps.svg"]) { filter: brightness(0) invert(1); opacity: .88; }
+.tb-int-mark img { max-width: 72px; max-height: 36px; width: auto; height: auto; display: block; }
 /* The Maps pin is tall and narrow; the FMCSA mark is wide — give each its own fit. */
-.tb-int-mark img[src$="gmaps.svg"] { max-width: 18px; max-height: 24px; }
-.tb-int-mark img[src$="fmcsa.svg"] { max-width: 44px; max-height: 24px; }
+.tb-int-mark img[src$="gmaps.svg"] { max-width: 32px; max-height: 44px; }
+.tb-int-mark img[src$="fmcsa.svg"] { max-width: 78px; max-height: 42px; }
 .tb-int-name {
-  font: 700 15.5px/1.2 "Inter", system-ui, sans-serif;
+  font: 700 18px/1.2 "Inter", system-ui, sans-serif;
   letter-spacing: -.01em;
   color: var(--ink);
   white-space: nowrap;
 }
+/* The tag belongs to whichever logo the lens is holding; it keeps its space so nothing shifts. */
 .tb-int-note {
-  padding: 5px 9px;
-  background: color-mix(in oklab, var(--accent) 9%, transparent);
-  color: color-mix(in oklab, var(--accent) 75%, var(--ink));
+  color: color-mix(in oklab, var(--accent) 80%, var(--ink));
   font: 700 10.5px/1 "Inter", system-ui, sans-serif;
   letter-spacing: .12em;
   text-transform: uppercase;
   white-space: nowrap;
+  opacity: calc(var(--k) * var(--k));
 }
 @media (hover: hover) {
   .tb-marquee:hover .tb-marquee-track { animation-play-state: paused; }
-  .tb-int:hover {
-    transform: translateY(-4px);
-    border-color: color-mix(in oklab, var(--accent) 45%, var(--line));
-    box-shadow: 0 26px 46px -28px rgba(109, 40, 217, .75);
-  }
-  .tb-int:hover::before { opacity: 1; }
-  .tb-int:hover .tb-int-mark { transform: scale(1.06); }
+}
+@media (max-width: 700px) {
+  .tb-marquee-lens { width: 260px; }
+  .tb-marquee-track { gap: 28px; }
+  @keyframes tb-marquee { from { transform: translateX(0); } to { transform: translateX(calc(-50% - 14px)); } }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tb-marquee-track { animation: none; flex-wrap: wrap; width: 100%; }
-  .tb-marquee::after { animation: none; display: none; }
-  .tb-int, .tb-int::before, .tb-int-mark { transition: none; }
+  .tb-marquee-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
+  .tb-marquee-lens { display: none; }
+  .tb-int { transform: none; opacity: 1; filter: none; }
 }
 
 /* Hero demo clip — framed like the app window, same footprint as the animation it replaces. */
