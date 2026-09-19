@@ -1,9 +1,9 @@
-import { useCallback, useEffect, useRef, useState, Fragment } from "react";
+import { useCallback, useEffect, useRef, useState, Fragment, type ReactNode } from "react";
 import { usePageMeta } from "./lib/meta";
 import { ProviderLogo } from "./components/ProviderLogo";
 import { getLandingTheme, setLandingTheme, THEME_EVENT, type LandingTheme } from "./lib/theme";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence, useScroll, useTransform, useSpring } from "framer-motion";
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView } from "framer-motion";
 import Lenis from "lenis";
 import { useForm, ValidationError } from "@formspree/react";
 
@@ -324,9 +324,12 @@ export default function App() {
       <Spotlight />
       <div className="tb-bg-vignette" aria-hidden />
       <ScrollProgress />
+      <AnnouncementBar />
       <Header />
       <main>
         <Hero />
+        <Numbers />
+        <Integrations />
         <BeforeAfter />
         <Features />
         <SocialProof />
@@ -844,6 +847,247 @@ function HeroMockup() {
   );
 }
 
+/** Everything the $7 plan includes — the count is quoted on the page, so keep them together. */
+const PLAN_FEATURES = [
+    "7-day free trial (No Credit Card)",
+    "Cancel anytime (1 click)",
+    "Works on DAT + Truckstop",
+    "One-click email sending",
+    "Multiple email templates (up to 3)",
+    "Gmail & Outlook — Google or Microsoft sign-in",
+    "Multiple sender mailboxes (up to 3 extra)",
+    "Posted load price analytics",
+    "Dedicated loads finder",
+    "Factoring credit check (RTS, Apex, Triumph)",
+    "Built-in Google Maps route",
+    "Rate-per-mile calculator",
+    "Copy & share load info",
+    "Click-to-call broker numbers",
+    "FMCSA broker report",
+    "Refresh-loads button",
+    "Dark mode",
+    "Short-load filtering",
+    "Keyboard navigation",
+  ];
+
+const PLAN_FEATURE_COUNT = PLAN_FEATURES.length;
+
+/* ============================================================
+   Announcement bar — what shipped most recently (dismissible)
+   ============================================================ */
+
+const NEWS_KEY = "tb-news-2026-09";
+
+function AnnouncementBar() {
+  const [open, setOpen] = useState(() => {
+    try {
+      return localStorage.getItem(NEWS_KEY) !== "dismissed";
+    } catch {
+      return true; // private mode: just show it
+    }
+  });
+
+  if (!open) return null;
+  const close = () => {
+    setOpen(false);
+    try {
+      localStorage.setItem(NEWS_KEY, "dismissed");
+    } catch {
+      /* ignore */
+    }
+  };
+  return (
+    <div className="tb-news">
+      <Link to="/#features" className="tb-news-body">
+        <span className="tb-news-tag">New</span>
+        <span>
+          Outlook &amp; Microsoft 365, multiple mailboxes, and teams from $7 a seat
+        </span>
+        <span className="tb-news-go">See what's new →</span>
+      </Link>
+      <button type="button" className="tb-news-x" onClick={close} aria-label="Dismiss">
+        <X className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
+/* ============================================================
+   Numbers band — counts up when it scrolls into view
+   ============================================================ */
+
+function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
+  to: number; decimals?: number; prefix?: string; suffix?: string;
+}) {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const [reduced] = useState(
+    () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
+  );
+  // Reduced motion: show the final number from the start instead of counting to it.
+  const [value, setValue] = useState(reduced ? to : 0);
+
+  useEffect(() => {
+    if (!inView || reduced) return;
+    let raf = 0;
+    const start = performance.now();
+    const DURATION = 1100;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / DURATION);
+      // ease-out: fast first, settles on the number
+      setValue(to * (1 - Math.pow(1 - t, 3)));
+      if (t < 1) raf = requestAnimationFrame(tick);
+    };
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, [inView, reduced, to]);
+
+  return (
+    <span ref={ref}>
+      {prefix}
+      {value.toFixed(decimals)}
+      {suffix}
+    </span>
+  );
+}
+
+function Numbers() {
+  const stats: { value: ReactNode; label: string; sub: string; href?: string }[] = [
+    { value: <CountUp to={3} suffix="h" />, label: "saved every week", sub: "per full-time dispatcher" },
+    { value: <CountUp to={1} />, label: "click to email a broker", sub: "template fills itself" },
+    { value: <CountUp to={30} />, label: "days of price history", sub: "on every lane you open" },
+    {
+      value: <CountUp to={5} decimals={1} suffix="★" />,
+      label: "Chrome Web Store",
+      sub: "100+ dispatchers",
+      href: "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews",
+    },
+    {
+      value: <CountUp to={PLAN_FEATURE_COUNT} />,
+      label: "features for $7",
+      sub: "no tiers, no add-ons",
+      href: "/#features",
+    },
+  ];
+  return (
+    <section className="tb-numbers-wrap">
+      <div className="ed-container">
+        <Reveal>
+          <div className="flex items-end justify-between gap-6 mb-8">
+            <div>
+              <span className="ed-label">Why choose us</span>
+              <h2 className="ed-h2 mt-3" style={{ fontSize: "clamp(1.6rem, 3vw, 2.4rem)" }}>
+                Dispatchers pick Truck Box for the hours it gives back
+              </h2>
+            </div>
+          </div>
+        </Reveal>
+        <div className="tb-numbers">
+          {stats.map((s, i) => (
+            <Reveal key={i} delay={i * 0.06}>
+              {s.href ? (
+                // In-page anchors stay in this tab; the store link opens in a new one.
+                <a
+                  className="tb-stat tb-stat-link"
+                  href={s.href}
+                  {...(s.href.startsWith("http") ? { target: "_blank", rel: "noreferrer" } : {})}
+                >
+                  <span className="tb-stat-value ed-display">{s.value}</span>
+                  <span className="tb-stat-label">{s.label}</span>
+                  <span className="tb-stat-sub">{s.sub} →</span>
+                </a>
+              ) : (
+                <div className="tb-stat">
+                  <span className="tb-stat-value ed-display">{s.value}</span>
+                  <span className="tb-stat-label">{s.label}</span>
+                  <span className="tb-stat-sub">{s.sub}</span>
+                </div>
+              )}
+            </Reveal>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Integrations band — everything TruckBox plugs into
+   ============================================================ */
+
+function Integrations() {
+  const items = [
+    { img: "/dat.png", alt: "DAT", note: "Load board" },
+    { img: "/truckstop.png", alt: "Truckstop", note: "Load board" },
+    { node: <ProviderLogo provider="GOOGLE" size={20} />, alt: "Gmail", note: "Send from" },
+    { node: <ProviderLogo provider="MICROSOFT" size={19} />, alt: "Outlook", note: "Send from" },
+    { img: "/logos/rts.webp", alt: "RTS", note: "Credit check" },
+    { img: "/logos/triumph.webp", alt: "Triumph", note: "Credit check" },
+    { img: "/logos/apex.webp", alt: "Apex Capital", note: "Credit check" },
+    { img: "/logos/gmaps.svg", alt: "Google Maps", note: "Routes" },
+    { img: "/logos/fmcsa.svg", alt: "FMCSA", note: "Authority" },
+  ];
+  return (
+    <section className="ed-section" style={{ paddingTop: 0 }}>
+      <div className="ed-container">
+        <Reveal>
+          <div className="flex items-end justify-between gap-6 mb-8">
+            <span className="ed-label">Plays well with your stack</span>
+          </div>
+        </Reveal>
+      </div>
+
+        {/* Marquee: one row of chips, duplicated so the loop has no seam. Pauses on hover. */}
+        <div className="tb-marquee">
+          <div className="tb-marquee-track">
+            {[0, 1].map((copy) =>
+              items.map((it) => (
+                <div className="tb-int" key={`${copy}-${it.alt}`} aria-hidden={copy === 1}>
+                  <span className="tb-int-mark">
+                    {it.img ? <img src={it.img} alt={it.alt} loading="lazy" decoding="async" /> : it.node}
+                  </span>
+                  <span className="tb-int-name">{it.alt}</span>
+                  <span className="tb-int-note">{it.note}</span>
+                </div>
+              )),
+            )}
+          </div>
+        </div>
+    </section>
+  );
+}
+
+/* ============================================================
+   Hero media — the product demo clip, with the animation as fallback
+   ============================================================ */
+
+/**
+ * Shows a screen recording of the extension working inside DAT when
+ * `public/demos/hero.mp4` exists; until then (or if the file fails to load, e.g. a browser that
+ * refuses autoplay) it falls back to the scripted HeroMockup animation. Muted + playsInline so
+ * mobile browsers allow autoplay; `poster` keeps the first frame sharp while it buffers.
+ */
+function HeroMedia() {
+  const [failed, setFailed] = useState(false);
+  if (failed) return <HeroMockup />;
+  return (
+    <div className="tb-hero-video" data-cursor>
+      <video
+        src="/demos/hero.mp4"
+        poster="/demos/hero.webp"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        aria-label="Truck Box sending a broker email from a DAT load"
+        onError={() => setFailed(true)}
+      />
+      <span className="tb-hero-video-live">● Live in DAT</span>
+    </div>
+  );
+}
+
 /* ============================================================
    Hero
    ============================================================ */
@@ -906,37 +1150,6 @@ function Hero() {
                   <span style={{ color: "var(--muted)" }}> — no credit card required</span>
                 </span>
               </div>
-              <a
-                href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
-                target="_blank"
-                rel="noreferrer"
-                className="hm-trust tb-reviews-link"
-              >
-                <span className="hm-stars">★★★★★</span>
-                <span>
-                  <b>5.0</b> · 100+ dispatchers · Chrome Web Store
-                </span>
-              </a>
-              <div className="tb-hero-logos">
-                <span className="tb-hero-logos-label">Works with</span>
-                <div className="tb-hero-logos-row">
-                  <span className="tb-logo-chip">
-                    <img src="/dat.png" alt="DAT" />
-                  </span>
-                  <span className="tb-logo-chip">
-                    <img src="/truckstop.png" alt="Truckstop" />
-                  </span>
-                </div>
-                <span className="tb-hero-logos-label">Sends from</span>
-                <div className="tb-hero-logos-row">
-                  <span className="tb-logo-chip">
-                    <ProviderLogo provider="GOOGLE" size={15} /> Gmail
-                  </span>
-                  <span className="tb-logo-chip">
-                    <ProviderLogo provider="MICROSOFT" size={14} /> Outlook
-                  </span>
-                </div>
-              </div>
               <span className="tb-hero-note">
                 Google or Microsoft sign-in · we never see your DAT password
               </span>
@@ -945,7 +1158,7 @@ function Hero() {
 
           <Reveal delay={0.35}>
             <motion.div style={{ y: mockY }}>
-              <HeroMockup />
+              <HeroMedia />
             </motion.div>
           </Reveal>
         </div>
@@ -1708,9 +1921,6 @@ function Features() {
               <span className="ed-accent">Premium in feel</span>
             </h2>
           </div>
-          <span className="ed-label hidden lg:block max-w-[220px] text-right">
-            Hover to explore — click to enlarge
-          </span>
         </div>
 
         {/* Desktop: expanding panels. Hover drives it, a click opens the lightbox. */}
@@ -2091,33 +2301,18 @@ function TeamsOffer() {
 }
 
 function Pricing() {
-  const features = [
-    "7-day free trial (No Credit Card)",
-    "Cancel anytime (1 click)",
-    "Works on DAT + Truckstop",
-    "One-click email sending",
-    "Multiple email templates (up to 3)",
-    "Gmail & Outlook — Google or Microsoft sign-in",
-    "Multiple sender mailboxes (up to 3 extra)",
-    "Posted load price analytics",
-    "Dedicated loads finder",
-    "Factoring credit check (RTS, Apex, Triumph)",
-    "Built-in Google Maps route",
-    "Rate-per-mile calculator",
-    "Copy & share load info",
-    "Click-to-call broker numbers",
-    "FMCSA broker report",
-    "Refresh-loads button",
-    "Dark mode",
-    "Short-load filtering",
-    "Keyboard navigation",
-  ];
+  const features = PLAN_FEATURES;
   return (
     <section id="pricing" className="ed-section">
       <div className="ed-container">
         <div className="mb-14">
           <span className="ed-label">[ 05 ] — Pricing</span>
           <h2 className="ed-h2 mt-4">Simple subscription</h2>
+          <p className="mt-4 text-lg" style={{ color: "var(--muted)" }}>
+            All <b style={{ color: "var(--ink)" }}>{PLAN_FEATURE_COUNT} features</b> for{" "}
+            <b style={{ color: "var(--ink)" }}>$7 a month</b> — no tiers to compare, nothing locked
+            behind a bigger plan.
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
