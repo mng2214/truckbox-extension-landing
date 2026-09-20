@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Check, ChevronDown, Copy, MapPin, Mail, Phone, Search } from "lucide-react";
+import { Check, ChevronDown, Copy, Info, MapPin, Mail, Phone, Search } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { probeAgent } from "./agent/AgentApi";
 import { AgentSection } from "./agent/AgentSection";
@@ -263,8 +263,9 @@ export function DiscoveryPanel() {
               Demo feature
             </h2>
             <p style={{ color: "var(--muted)", marginTop: "0.8rem", lineHeight: 1.55 }}>
-              Oracle is an early demo. It may be temporarily unavailable or experience
-              intermittent issues while we continue to improve it. Free during the demo.
+              Oracle is an experimental demo. It may be temporarily unavailable or behave
+              inconsistently while we keep working on it. It is free for now, with a few searches a
+              day, and will become a paid feature later.
             </p>
             <button
               className="ed-btn ed-btn-accent"
@@ -279,8 +280,26 @@ export function DiscoveryPanel() {
 
       {/* ---- header ---- */}
 
-      <h1 className="ed-display mt-3" style={{ fontSize: "clamp(2.2rem, 6vw, 3rem)", color: "var(--ink)" }}>
+      <h1
+        className="ed-display mt-3"
+        style={{
+          fontSize: "clamp(2.2rem, 6vw, 3rem)",
+          color: "var(--ink)",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.7rem",
+        }}
+      >
         Oracle
+        <img
+          src="/logos/oracle.webp"
+          alt=""
+          width={64}
+          height={41}
+          loading="lazy"
+          decoding="async"
+          style={{ height: "0.78em", width: "auto", display: "block" }}
+        />
       </h1>
       <p className="ed-label mt-2.5" style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
         Dedicated lanes discovery
@@ -334,6 +353,30 @@ export function DiscoveryPanel() {
           )}
         </span>
       )}
+
+      {/* Sets expectations before anyone builds a workflow on Oracle: it is a demo, and it will
+          not stay free. The dialog says the same on first open; this panel is the standing
+          reminder, so it carries the accent edge rather than sitting in the page's grey. */}
+      <div
+        className="mt-3"
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          gap: "0.7rem",
+          padding: "0.75rem 0.9rem",
+          borderLeft: "3px solid var(--accent)",
+          background: "color-mix(in oklab, var(--accent) 8%, transparent)",
+        }}
+      >
+        <Info className="h-4 w-4 shrink-0" style={{ color: "var(--accent)", marginTop: 2 }} />
+        <p style={{ fontSize: "0.84rem", lineHeight: 1.5, color: "var(--ink)" }}>
+          <b>Experimental demo.</b>{" "}
+          <span style={{ color: "var(--muted)" }}>
+            Oracle is still being built and may be unavailable at times. Free while in demo — it
+            will become a paid feature later.
+          </span>
+        </p>
+      </div>
 
       {/* ---- query ---- */}
       <form onSubmit={run} className="mt-9 flex flex-col gap-7">

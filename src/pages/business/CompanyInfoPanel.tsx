@@ -76,7 +76,7 @@ export function CompanyInfoPanel() {
             maxLength={60}
             disabled={loading}
             onChange={(e) => { setFirstName(plainText(e.target.value)); setSaved(false); }}
-            placeholder="e.g. Artur"
+            placeholder="e.g. Mike"
             style={FIELD}
           />
         </div>
@@ -87,7 +87,7 @@ export function CompanyInfoPanel() {
             maxLength={120}
             disabled={loading}
             onChange={(e) => { setCompany(plainText(e.target.value)); setSaved(false); }}
-            placeholder="e.g. Smart Freight LLC"
+            placeholder="e.g. TruckBox Logistics LLC"
             style={FIELD}
           />
         </div>

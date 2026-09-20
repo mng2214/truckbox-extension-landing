@@ -3,9 +3,10 @@ import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Menu, X, Sun, Moon, LogOut, HelpCircle, User, Building2, ArrowLeft,
-  LayoutDashboard, Users, BarChart3, Gem, Sparkles, Mail, UserCircle,
+  LayoutDashboard, Users, BarChart3, Sparkles, Mail, UserCircle,
 } from "lucide-react";
-import { api, ApiError } from "../../lib/api";
+import { api, ApiError, sessionId } from "../../lib/api";
+import { OracleMark } from "../../components/OracleMark";
 import { usePageMeta } from "../../lib/meta";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
@@ -54,6 +55,7 @@ export default function Cabinet() {
   // Web sign-in by someone who never signed up in the extension: show "install first", no account.
   const [noAccount, setNoAccount] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
+  const [helpOpen, setHelpOpen] = useState(false);
   // Light is the default for the back office; respected as dark only if the user explicitly chose it.
   const [theme, setTheme] = useState<"dark" | "light">(() =>
     typeof localStorage !== "undefined" && localStorage.getItem("tb-theme") === "dark"
@@ -216,41 +218,104 @@ export default function Cabinet() {
 
   const navBody = (
     <>
-      <div
-        className="mb-7 px-1"
-        style={{
-          fontFamily: "var(--font-display)",
-          fontSize: "1.15rem",
-          fontWeight: 800,
-          letterSpacing: "-0.01em",
-          color: "var(--ink)",
-        }}
-      >
-        Truck<span style={{ color: "var(--accent)" }}>Box</span>
+      {/* Logo row, with the day/night switch sitting opposite it. */}
+      <div className="mb-7 px-1 flex items-center justify-between gap-2">
+        <span
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: "1.15rem",
+            fontWeight: 800,
+            letterSpacing: "-0.01em",
+            color: "var(--ink)",
+          }}
+        >
+          Truck<span style={{ color: "var(--accent)" }}>Box</span>
+        </span>
+        <button
+          type="button"
+          className="tb-icon-btn"
+          aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+          title={theme === "light" ? "Dark mode" : "Light mode"}
+          onClick={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
+        >
+          {theme === "light" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+        </button>
       </div>
 
+      {/* Four groups, each named: what you did, how you're set up, running the company, and the
+          premium tools. The headings make a long list scannable at a glance. */}
       <nav className="flex flex-col gap-1">
         {ctx.panels.includes("personal") && (
-          <NavItem label="Overview" icon={<LayoutDashboard />} active={section === "personal"} onClick={() => goto("personal")} />
+          <>
+            <span className="tb-nav-label is-first">Dashboard</span>
+            <NavItem label="Overview" icon={<LayoutDashboard />} active={section === "personal"} onClick={() => goto("personal")} />
+          </>
         )}
-        {isManager && <NavItem label="Team" icon={<Users />} active={section === "team"} onClick={() => goto("team")} />}
+
         {isManager && (
-          <NavItem label="Statistics" icon={<BarChart3 />} active={section === "statistics"} onClick={() => goto("statistics")} />
+          <>
+            <span className={"tb-nav-label" + (ctx.panels.includes("personal") ? "" : " is-first")}>
+              Management
+            </span>
+            <NavItem label="Team" icon={<Users />} active={section === "team"} onClick={() => goto("team")} />
+            <NavItem
+              label="Statistics"
+              icon={<BarChart3 />}
+              active={section === "statistics"}
+              onClick={() => goto("statistics")}
+            />
+          </>
         )}
+
+        {(ctx.panels.includes("discovery") || ctx.panels.includes("agent")) && (
+          <span className="tb-nav-label">Tools</span>
+        )}
+        {ctx.panels.includes("discovery") && (
+          <NavItem
+            label="Oracle"
+            sub="Dedicated lanes"
+            icon={<OracleMark size={16} />}
+            premium
+            active={section === "discovery"}
+            onClick={() => goto("discovery")}
+          />
+        )}
+        {ctx.panels.includes("agent") && (
+          <NavItem
+            label="Agent"
+            sub="Auto outreach"
+            icon={<Sparkles />}
+            premium
+            active={section === "agent"}
+            onClick={() => goto("agent")}
+          />
+        )}
+
+        <span className="tb-nav-label">Settings</span>
         <NavItem label="Mailboxes" icon={<Mail />} active={section === "mailboxes"} onClick={() => goto("mailboxes")} />
         <NavItem label="Accounts" icon={<UserCircle />} active={section === "accounts"} onClick={() => goto("accounts")} />
         <NavItem label="Company info" icon={<Building2 />} active={section === "company"} onClick={() => goto("company")} />
-        {(ctx.panels.includes("discovery") || ctx.panels.includes("agent")) && (
-          <div className="tb-nav-divider" role="separator" />
-        )}
-        {ctx.panels.includes("discovery") && (
-          <NavItem label="Oracle" icon={<Gem />} premium active={section === "discovery"} onClick={() => goto("discovery")} />
-        )}
-        {ctx.panels.includes("agent") && (
-          <NavItem label="Agent" icon={<Sparkles />} premium active={section === "agent"} onClick={() => goto("agent")} />
-        )}
       </nav>
 
+      {/* Bottom of the sidebar: help, who you are, and the way out — in that order. */}
+      <div className="mt-auto pt-8 flex flex-col gap-1">
+        <span
+          className="px-3 py-2"
+          style={{
+            fontSize: "0.72rem",
+            color: "var(--muted)",
+            wordBreak: "break-all",
+            lineHeight: 1.35,
+          }}
+        >
+          {ctx.email}
+        </span>
+        <button type="button" className="tb-nav" onClick={() => setHelpOpen(true)}>
+          <HelpCircle />
+          Need help?
+        </button>
+        <NavItem label="Sign out" icon={<LogOut />} active={false} onClick={signOut} />
+      </div>
     </>
   );
 
@@ -277,32 +342,17 @@ export default function Cabinet() {
         >
           Truck<span style={{ color: "var(--accent)" }}>Box</span>
         </span>
-        <div className="flex items-center gap-2">
-          <AccountMenu
-            email={ctx.email}
-            theme={theme}
-            onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-          />
-          <button
-            type="button"
-            className="tb-icon-btn"
-            aria-label="Open menu"
-            aria-expanded={navOpen}
-            onClick={() => setNavOpen(true)}
-          >
-            <Menu className="h-5 w-5" />
-          </button>
-        </div>
+        {/* Everything that used to live in the avatar menu is in the drawer now. */}
+        <button
+          type="button"
+          className="tb-icon-btn"
+          aria-label="Open menu"
+          aria-expanded={navOpen}
+          onClick={() => setNavOpen(true)}
+        >
+          <Menu className="h-5 w-5" />
+        </button>
       </header>
-
-      {/* Desktop account menu — anchored to the top of the page (scrolls away, not pinned) */}
-      <div className="hidden md:block" style={{ position: "absolute", top: "1.1rem", right: "1.6rem", zIndex: 50 }}>
-        <AccountMenu
-          email={ctx.email}
-          theme={theme}
-          onToggleTheme={() => setTheme((t) => (t === "light" ? "dark" : "light"))}
-        />
-      </div>
 
       {/* Mobile off-canvas drawer */}
       <AnimatePresence>
@@ -359,18 +409,148 @@ export default function Cabinet() {
         {section === "accounts" && <AccountsPanel />}
         {section === "company" && <CompanyInfoPanel />}
       </main>
+
+      <HelpDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
     </div>
+  );
+}
+
+/**
+ * What support actually needs: the session id that every request in this tab is stamped with, so a
+ * report can be traced in the logs, and one way to reach a human.
+ */
+function HelpDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const [copied, setCopied] = useState(false);
+  const id = sessionId();
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(id);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1800);
+    } catch {
+      /* clipboard blocked — the id is on screen to copy by hand */
+    }
+  };
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <div
+          className="tb-drawer-scrim"
+          style={{ display: "flex", alignItems: "center", justifyContent: "center", zIndex: 80 }}
+          onClick={onClose}
+        >
+          <motion.div
+            role="dialog"
+            aria-modal="true"
+            aria-label="Need help?"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 10 }}
+            transition={{ duration: 0.2, ease: EASE }}
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              width: "min(420px, calc(100vw - 2.5rem))",
+              background: "var(--bg-2)",
+              border: "1px solid var(--hairline)",
+              boxShadow: "0 24px 60px rgba(0,0,0,0.35)",
+              padding: "1.6rem",
+            }}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <h2
+                className="ed-display"
+                style={{ fontSize: "1.4rem", color: "var(--ink)", lineHeight: 1.1 }}
+              >
+                Need help?
+              </h2>
+              <button type="button" className="tb-icon-btn" aria-label="Close" onClick={onClose}>
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+
+            <p style={{ color: "var(--muted)", fontSize: "0.86rem", marginTop: "0.7rem" }}>
+              Send us this session ID — it lets us find exactly what happened on your account.
+            </p>
+
+            <div
+              className="mt-3 flex items-center gap-2"
+              style={{ border: "1px solid var(--hairline)", padding: "0.5rem 0.6rem" }}
+            >
+              <code
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.76rem",
+                  color: "var(--ink)",
+                  flex: 1,
+                  wordBreak: "break-all",
+                }}
+              >
+                {id}
+              </code>
+              <button
+                type="button"
+                className="ed-btn"
+                style={{ padding: "0.3rem 0.7rem", fontSize: "0.76rem", whiteSpace: "nowrap" }}
+                onClick={copy}
+              >
+                {copied ? "Copied" : "Copy"}
+              </button>
+            </div>
+
+            <a
+              className="ed-btn ed-btn-accent mt-4"
+              href={SUPPORT_TELEGRAM}
+              target="_blank"
+              rel="noreferrer"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 10,
+                width: "100%",
+                justifyContent: "center",
+              }}
+            >
+              <TelegramMark />
+              Chat with us on Telegram
+            </a>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+}
+
+/** Telegram's paper plane, inline so the dialog needs no network request for one icon. */
+function TelegramMark() {
+  return (
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M21.94 4.3 18.9 19.1c-.23 1.02-.84 1.27-1.7.79l-4.7-3.47-2.27 2.19c-.25.25-.46.46-.95.46l.34-4.8L18.4 6.4c.38-.34-.08-.53-.59-.19L6.05 13.6l-4.63-1.45c-1-.32-1.02-1 .21-1.49l18.1-6.98c.84-.3 1.57.2 1.21 2.62Z" />
+    </svg>
   );
 }
 
 function NavItem({
   label,
+  sub,
   icon,
   active,
   premium,
   onClick,
 }: {
   label: string;
+  /** One-line plain-English gloss for names nobody can guess, e.g. "Oracle". */
+  sub?: string;
   icon: React.ReactNode;
   active: boolean;
   premium?: boolean;
@@ -382,156 +562,19 @@ function NavItem({
       className={"tb-nav" + (active ? " is-active" : "") + (premium ? " is-premium" : "")}
     >
       {icon}
-      {label}
+      {sub ? (
+        <span className="tb-nav-text">
+          <span>{label}</span>
+          <span className="tb-nav-sub">{sub}</span>
+        </span>
+      ) : (
+        label
+      )}
       {premium && (
         <span className="tb-prem-spark" aria-label="Premium">
           <Sparkles />
         </span>
       )}
-    </button>
-  );
-}
-
-function AccountMenu({
-  email,
-  theme,
-  onToggleTheme,
-}: {
-  email: string;
-  theme: "dark" | "light";
-  onToggleTheme: () => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!open) return;
-    const onDoc = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", onDoc);
-    return () => document.removeEventListener("mousedown", onDoc);
-  }, [open]);
-
-  return (
-    <div ref={ref} style={{ position: "relative" }}>
-      <button
-        type="button"
-        onClick={() => setOpen((o) => !o)}
-        aria-label="Account menu"
-        aria-expanded={open}
-        style={{
-          width: 38,
-          height: 38,
-          borderRadius: "50%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "color-mix(in srgb, var(--accent) 16%, transparent)",
-          color: "var(--accent)",
-          border: "1px solid var(--hairline)",
-          cursor: "pointer",
-        }}
-      >
-        <User size={18} />
-      </button>
-
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, y: -6 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -6 }}
-            transition={{ duration: 0.18, ease: EASE }}
-            style={{
-              position: "absolute",
-              top: "calc(100% + 8px)",
-              right: 0,
-              minWidth: 230,
-              zIndex: 70,
-              background: "var(--bg-2)",
-              border: "1px solid var(--hairline)",
-              boxShadow: "0 16px 44px rgba(0, 0, 0, 0.28)",
-              padding: "0.4rem",
-              display: "flex",
-              flexDirection: "column",
-              gap: 2,
-            }}
-          >
-            <div
-              style={{
-                padding: "0.5rem 0.6rem 0.55rem",
-                fontSize: "0.72rem",
-                color: "var(--muted)",
-                wordBreak: "break-all",
-                lineHeight: 1.35,
-                borderBottom: "1px solid var(--hairline)",
-                marginBottom: 4,
-              }}
-            >
-              {email}
-            </div>
-
-            <MenuRow
-              icon={theme === "light" ? <Moon size={15} /> : <Sun size={15} />}
-              label={theme === "light" ? "Dark mode" : "Light mode"}
-              onClick={onToggleTheme}
-            />
-            <MenuRow icon={<HelpCircle size={15} />} label="Need help?" href={SUPPORT_TELEGRAM} />
-            <MenuRow icon={<LogOut size={15} />} label="Sign out" onClick={signOut} />
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-
-function MenuRow({
-  icon,
-  label,
-  onClick,
-  href,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  onClick?: () => void;
-  href?: string;
-}) {
-  const style: React.CSSProperties = {
-    display: "flex",
-    alignItems: "center",
-    gap: 10,
-    width: "100%",
-    textAlign: "left",
-    background: "transparent",
-    cursor: "pointer",
-    padding: "0.55rem 0.6rem",
-    color: "var(--ink)",
-    fontSize: "0.86rem",
-    textDecoration: "none",
-    transition: "background .15s var(--ease)",
-  };
-  const enter = (e: React.MouseEvent<HTMLElement>) =>
-    (e.currentTarget.style.background = "var(--tb-hover)");
-  const leave = (e: React.MouseEvent<HTMLElement>) =>
-    (e.currentTarget.style.background = "transparent");
-  const body = (
-    <>
-      <span style={{ color: "var(--muted)", display: "flex" }}>{icon}</span>
-      {label}
-    </>
-  );
-  if (href) {
-    return (
-      <a href={href} target="_blank" rel="noreferrer" style={style} onMouseEnter={enter} onMouseLeave={leave}>
-        {body}
-      </a>
-    );
-  }
-  return (
-    <button type="button" onClick={onClick} style={style} onMouseEnter={enter} onMouseLeave={leave}>
-      {body}
     </button>
   );
 }

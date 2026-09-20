@@ -73,19 +73,27 @@ export default function TeamStart() {
 
   const signOutLink =
     authedEmail !== "" ? (
-      <button
-        onClick={signOut}
+      // Who you are stays quiet text; the action is a real button, so nobody hunts for it.
+      <div
         style={{
-          background: "none",
-          border: "none",
-          color: "var(--muted)",
-          fontSize: "0.78rem",
-          cursor: "pointer",
-          marginTop: "0.5rem",
+          display: "flex",
+          alignItems: "center",
+          gap: "0.6rem",
+          flexWrap: "wrap",
+          marginTop: "0.6rem",
         }}
       >
-        Signed in as {authedEmail} — Sign out
-      </button>
+        <span style={{ color: "var(--muted)", fontSize: "0.78rem" }}>
+          Signed in as {authedEmail}
+        </span>
+        <button
+          className="ed-btn"
+          onClick={signOut}
+          style={{ padding: "0.28rem 0.7rem", fontSize: "0.76rem" }}
+        >
+          Sign out
+        </button>
+      </div>
     ) : null;
 
   useEffect(() => {
@@ -225,7 +233,7 @@ export default function TeamStart() {
               color: "var(--muted)",
             }}
           >
-            How many dispatchers will work in DAT?
+            How many dispatchers will work in DAT or Truckstop?
           </label>
           <input
             id="iw-seats"
@@ -246,7 +254,7 @@ export default function TeamStart() {
             <span style={{ fontSize: "0.85rem" }}>I will work in DAT/Truckstop too</span>
           </label>
           <p style={{ color: "var(--muted)", fontSize: "0.78rem", margin: 0 }}>
-            Leave unchecked if you only need the back office — you won't be charged for a seat.
+            Leave unchecked if you only manage the team and read reports — no seat, no charge.
           </p>
           {(() => {
             const billable =
@@ -308,7 +316,8 @@ export default function TeamStart() {
             company.dispatcherSeats < 1 ||
             isNaN(company.dispatcherSeats)
           }
-          style={{ marginTop: "0.5rem" }}
+          // The form stretches this button full width, so the label needs centering of its own.
+          style={{ marginTop: "0.5rem", justifyContent: "center" }}
         >
           Continue to payment
         </button>

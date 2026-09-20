@@ -480,10 +480,38 @@ body.tb-cabinet-bg .tb-nav {
   padding: 9px 11px;
 }
 body.tb-cabinet-bg .tb-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
+/* Oracle's own mark on the panel heading: accent-coloured, aligned to the text. */
+.tb-oracle-mark { color: var(--accent); flex: 0 0 auto; }
+/* Two-line nav item: the name plus a plain-English gloss ("Oracle · Find brokers on your lane"). */
+body.tb-cabinet-bg .tb-nav .tb-nav-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  min-width: 0;
+}
+body.tb-cabinet-bg .tb-nav .tb-nav-sub {
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+body.tb-cabinet-bg .tb-nav.is-active .tb-nav-sub { color: inherit; opacity: 0.75; }
 body.tb-cabinet-bg .tb-nav:hover { background: var(--tb-hover); color: var(--ink); border-left: none; }
 body.tb-cabinet-bg .tb-nav.is-active { background: var(--accent-tint); color: var(--accent); border-left: none; }
 /* Premium features (Oracle, Agent): purple icon + marker, purple hover */
-.tb-nav-divider { height: 1px; background: var(--hairline); margin: 0.5rem 0.6rem; }
+/* Heading for a group of nav items (Dashboard / Settings / Management / Tools). The hairline
+   above it is the group's divider, so the first group starts clean (.is-first). */
+.tb-nav-label {
+  margin: 0.9rem 0.6rem 0.35rem;
+  padding: 0.9rem 0.15rem 0;
+  border-top: 1px solid var(--hairline);
+  font: 700 10.5px/1 "Inter", system-ui, sans-serif;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.tb-nav-label.is-first { margin-top: 0; padding-top: 0; border-top: 0; }
 body.tb-cabinet-bg .tb-nav.is-premium svg:first-child { color: var(--pp); }
 body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark { margin-left: auto; color: var(--pp); display: inline-flex; }
 body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark svg { width: 12px; height: 12px; }
@@ -507,6 +535,57 @@ body.tb-cabinet-bg .tb-metric-k { font-size: 0.7rem; font-weight: 700; text-tran
 body.tb-cabinet-bg .tb-metric-v { font-size: clamp(1.55rem, 1.15rem + 1.4vw, 1.9rem); font-weight: 700; letter-spacing: -0.035em; margin-top: 6px; line-height: 1; font-variant-numeric: tabular-nums; }
 body.tb-cabinet-bg .tb-metric-v small { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
 body.tb-cabinet-bg .tb-meter { margin-top: 9px; height: 5px; background: var(--tb-hover); }
+
+/* Team panel: the plan, the people and the billing read as three separate objects instead of one
+   run-on column. Squares everywhere — the cabinet has no rounded corners. */
+body.tb-cabinet-bg .tb-plan-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+  padding: 14px 18px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  background: var(--bg-2);
+}
+body.tb-cabinet-bg .tb-plan-strip-v {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+body.tb-cabinet-bg .tb-plan-strip-v b { font-weight: 700; }
+body.tb-cabinet-bg .tb-plan-strip-sub { margin-top: 3px; font-size: 0.78rem; color: var(--muted); }
+/* Seat count with its own − / + on either side. */
+body.tb-cabinet-bg .tb-seat-stepper { display: flex; align-items: center; gap: 0.5rem; }
+body.tb-cabinet-bg .tb-seat-stepper .ed-btn { padding: 6px 13px; }
+body.tb-cabinet-bg .tb-seat-stepper-v {
+  min-width: 2.75rem;
+  text-align: center;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+body.tb-cabinet-bg .tb-card { border: 1px solid var(--line); background: var(--bg-2); }
+body.tb-cabinet-bg .tb-card-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 12px 18px;
+  border-bottom: 1px solid var(--line);
+}
+body.tb-cabinet-bg .tb-card-head-sub { font-size: 0.78rem; color: var(--muted); }
+body.tb-cabinet-bg .tb-member-row {
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--line);
+  transition: background .2s var(--ease);
+}
+body.tb-cabinet-bg .tb-member-row:hover { background: var(--tb-hover); }
+body.tb-cabinet-bg .tb-card-foot { padding: 14px 18px; }
 body.tb-cabinet-bg .tb-meter i { display: block; height: 100%; background: var(--accent); }
 @media (max-width: 640px) {
   body.tb-cabinet-bg .tb-metrics { grid-template-columns: 1fr 1fr; }

@@ -30,6 +30,11 @@ function getDeviceId(): string {
   }
 }
 
+/** The id stamped on every request in this tab — what support asks for to find your logs. */
+export function sessionId(): string {
+  return getSessionId();
+}
+
 function getSessionId(): string {
   try {
     let id = sessionStorage.getItem("tb-session-id");

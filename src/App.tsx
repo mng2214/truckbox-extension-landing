@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState, Fragment, type ReactNode } fr
 import { usePageMeta } from "./lib/meta";
 import { ProviderLogo } from "./components/ProviderLogo";
 import { getLandingTheme, setLandingTheme, THEME_EVENT, type LandingTheme } from "./lib/theme";
+import { auth } from "./lib/auth";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView } from "framer-motion";
 import Lenis from "lenis";
@@ -375,6 +376,15 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
+  // Someone with a live session is not signing in — they're going back to their cabinet.
+  const [signedIn] = useState(() => {
+    try {
+      return auth.isAuthed();
+    } catch {
+      return false;
+    }
+  });
+  const accountLabel = signedIn ? "Dashboard" : "Sign in";
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -473,7 +483,7 @@ export function Header() {
           <div className="hidden md:flex items-center gap-3">
             <ThemeToggle />
             <Link className="ed-btn ed-btn-accent whitespace-nowrap" to="/business">
-              <span>Sign in</span> <ArrowUpRight className="h-4 w-4" />
+              <span>{accountLabel}</span> <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
 
@@ -484,7 +494,7 @@ export function Header() {
               style={{ padding: "9px 16px", letterSpacing: "0.1em", whiteSpace: "nowrap" }}
               to="/business"
             >
-              <span>Sign in</span>
+              <span>{accountLabel}</span>
             </Link>
             <button
               type="button"

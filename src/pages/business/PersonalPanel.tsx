@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
-import { api } from "../../lib/api";
+import { ApiError, api } from "../../lib/api";
 import type { AccountContext } from "./types";
 import { ConfirmDialog } from "./ConfirmDialog";
+
+/** Backend: "User does not have an active subscription" — no Stripe customer or subscription yet. */
+const NO_SUBSCRIPTION = 1013;
 
 type PlatformStats = {
   platform: string;
@@ -19,6 +22,18 @@ type MyStats = {
 type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
 type TeamStats = { dispatchers: { total: Win }[] };
 
+/**
+ * Whole days until the trial ends, as a dispatcher would count them: today counts, so an end date
+ * later today still reads "ends today" rather than "0 days".
+ */
+function fmtTrialLeft(trialEnd: string): string | null {
+  const ms = new Date(trialEnd).getTime() - Date.now();
+  if (Number.isNaN(ms)) return null;
+  if (ms <= 0) return "ends today";
+  const days = Math.ceil(ms / 86_400_000);
+  return days === 1 ? "1 day left" : `${days} days left`;
+}
+
 function fmtTimeSaved(actions: number): string {
   const totalMin = Math.floor((actions * 30) / 60);
   const h = Math.floor(totalMin / 60);
@@ -35,10 +50,14 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   const [company, setCompany] = useState<Win | null>(null);
   const [busy, setBusy] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
+  const [trialEnd, setTrialEnd] = useState<string | null>(null);
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
+  /** Trials take no card, so there is no Stripe customer behind these buttons yet. */
+  const onTrial = ctx.effectiveStatus === "TRIAL";
 
   useEffect(() => {
     api
@@ -46,6 +65,15 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
       .then(setStats)
       .catch(() => setStatsError(true));
   }, []);
+
+  // How much trial is left. Only asked for on a trial; a failure just leaves the badge off.
+  useEffect(() => {
+    if (!onTrial) return;
+    api
+      .get<{ trialEnd: string | null }>("/api/v1/user/status")
+      .then((s) => setTrialEnd(s.trialEnd))
+      .catch(() => {});
+  }, [onTrial]);
 
   useEffect(() => {
     if (!isManager) return;
@@ -74,10 +102,30 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     try {
       const { url } = await api.post<{ url: string }>("/api/v1/billing/portal");
       window.location.href = url; // navigating away; stays locked until unload
-    } catch {
-      setError("Could not open billing portal. Please try again.");
+    } catch (e) {
+      setError(
+        e instanceof ApiError && e.code === NO_SUBSCRIPTION
+          ? "Billing opens once you subscribe. The free trial takes no payment details, so there are no invoices yet."
+          : "Could not open billing portal. Please try again.",
+      );
       setBusy(false);
       setPortalLoading(false);
+    }
+  };
+
+  /** Trial users have no other way to pay from here — the extension used to be the only entry. */
+  const subscribe = async () => {
+    if (busy) return;
+    setError(null);
+    setBusy(true);
+    setCheckoutLoading(true);
+    try {
+      const { url } = await api.post<{ url: string }>("/api/v1/billing/create-checkout-session");
+      window.location.href = url; // navigating away; stays locked until unload
+    } catch {
+      setError("Could not start checkout. Please try again.");
+      setBusy(false);
+      setCheckoutLoading(false);
     }
   };
 
@@ -88,13 +136,19 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     try {
       await api.post("/api/v1/billing/cancel-subscription");
       setNotice("Your subscription will cancel at the end of the billing period.");
-    } catch {
-      setError("Could not cancel subscription. Please try again.");
+    } catch (e) {
+      setError(
+        e instanceof ApiError && e.code === NO_SUBSCRIPTION
+          ? "You don't have a paid subscription yet, so there is nothing to cancel."
+          : "Could not cancel subscription. Please try again.",
+      );
     } finally {
       setBusy(false);
       setConfirmCancel(false);
     }
   };
+
+  const trialLeft = onTrial && trialEnd ? fmtTrialLeft(trialEnd) : null;
 
   const totalActions = stats
     ? stats.emailSentCount + stats.mapViewedCount + stats.phoneCallCount
@@ -107,6 +161,12 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
         <p style={{ color: "var(--muted)" }}>
           {ctx.email}
           {ctx.effectiveStatus ? ` · ${ctx.effectiveStatus}` : ""}
+          {trialLeft ? (
+            <>
+              {" · "}
+              <span style={{ color: "var(--accent)" }}>{trialLeft}</span>
+            </>
+          ) : null}
         </p>
       </header>
 
@@ -165,6 +225,35 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
           >
             Billing
           </h2>
+          {/* On the free trial there is no Stripe customer and no subscription, so neither button
+              can do anything — say what the state is instead of offering dead controls. */}
+          {onTrial ? (
+            <div className="flex flex-col gap-3 items-start">
+              <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+                Free trial{trialLeft ? `, ${trialLeft}` : ""} — no card on file. Subscribe any time
+                to keep your access when the trial ends.
+              </p>
+              <button
+                className="ed-btn ed-btn-accent"
+                disabled={busy}
+                aria-busy={checkoutLoading}
+                onClick={subscribe}
+              >
+                {checkoutLoading ? (
+                  <span className="inline-flex items-center gap-2">
+                    <span
+                      className="tb-spinner"
+                      style={{ borderColor: "rgba(255,255,255,0.45)", borderTopColor: "#fff" }}
+                      aria-hidden
+                    />
+                    Opening…
+                  </span>
+                ) : (
+                  <span>Subscribe — $7 / month</span>
+                )}
+              </button>
+            </div>
+          ) : (
           <div className="flex gap-3 flex-wrap">
             <button
               className="ed-btn ed-btn-accent"
@@ -193,6 +282,7 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
               <span>Cancel subscription</span>
             </button>
           </div>
+          )}
           {error && <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>}
           {notice && <p style={{ color: "var(--sub)", fontSize: "0.85rem" }}>{notice}</p>}
         </div>

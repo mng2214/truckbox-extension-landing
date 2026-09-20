@@ -5,6 +5,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), tsconfigPaths()],
+  // Fixed port so Stripe's success/cancel redirects (app.success-url in application-local.yaml)
+  // always land here. Vite's default 5173 is shared with other local projects, and a fallback
+  // port sends the redirect to whatever happens to be running there. strictPort fails loudly
+  // instead of drifting.
+  server: { port: 5174, strictPort: true },
   build: {
     rollupOptions: {
       output: {

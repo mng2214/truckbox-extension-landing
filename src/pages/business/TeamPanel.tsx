@@ -145,58 +145,58 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         </div>
       </div>
 
-      {/* Members */}
-      <div>
-        <div className="flex items-center justify-between" style={{ borderBottom: "1px solid var(--line)", paddingBottom: 7 }}>
-          <h2 className="ed-label" style={{ color: "var(--ink)" }}>Members</h2>
-          <div className="flex items-center gap-2">
-            <button
-              type="button"
-              className="ed-btn"
-              aria-label="Remove a seat"
-              style={{ padding: "6px 12px" }}
-              onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats - 1 }))}
-              disabled={busy || team.seats <= billable}
-            >
-              <span>−</span>
-            </button>
-            <span
-              className="ed-label"
-              style={{ color: "var(--ink)", minWidth: "4.5rem", textAlign: "center", fontVariantNumeric: "tabular-nums" }}
-            >
-              {busy ? <span className="tb-spinner" aria-label="Updating" /> : `${team.seats} seats`}
-            </span>
-            <button
-              type="button"
-              className="ed-btn"
-              aria-label="Add a seat"
-              style={{ padding: "6px 12px" }}
-              onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats + 1 }))}
-              disabled={busy}
-            >
-              <span>+</span>
-            </button>
+      {/* What the team pays, and the control that changes it — one row, away from the people list. */}
+      <div className="tb-plan-strip">
+        <div className="min-w-0">
+          <div className="tb-metric-k">Your plan</div>
+          <div className="tb-plan-strip-v">
+            {team.seats} seats × {money(unit)} = <b>{money(team.seats * unit)}/mo</b>
+          </div>
+          <div className="tb-plan-strip-sub">
+            {nextCharge
+              ? `Next charge ${nextCharge.toLocaleDateString("en-US", { month: "long", day: "numeric" })}`
+              : "One seat per person with extension access"}
           </div>
         </div>
+        <div className="tb-seat-stepper">
+          <button
+            type="button"
+            className="ed-btn"
+            aria-label="Remove a seat"
+            onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats - 1 }))}
+            disabled={busy || team.seats <= billable}
+          >
+            <span>−</span>
+          </button>
+          <span className="tb-seat-stepper-v">
+            {busy ? <span className="tb-spinner" aria-label="Updating" /> : team.seats}
+          </span>
+          <button
+            type="button"
+            className="ed-btn"
+            aria-label="Add a seat"
+            onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats + 1 }))}
+            disabled={busy}
+          >
+            <span>+</span>
+          </button>
+        </div>
+      </div>
 
-        <p style={{ color: "var(--sub)", fontSize: "0.8125rem", margin: "12px 0 4px" }}>
-          Access to the TruckBox extension for DAT and Truckstop. Each person with access uses one seat.
-        </p>
-        <p style={{ color: "var(--ink)", fontSize: "0.8125rem", fontWeight: 600, margin: "0 0 4px" }}>
-          {team.seats} seats × {money(unit)} = {money(team.seats * unit)}/mo
-          {nextCharge && (
-            <span style={{ color: "var(--muted)", fontWeight: 400 }}>
-              {" "}· next charge {nextCharge.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
-            </span>
-          )}
-        </p>
+      {/* Members */}
+      <div className="tb-card">
+        <div className="tb-card-head">
+          <h2 className="ed-label" style={{ color: "var(--ink)" }}>Members</h2>
+          <span className="tb-card-head-sub">
+            {billable} of {team.seats} seats used
+          </span>
+        </div>
 
         <div className="flex flex-col">
           {team.members.map((m) => (
             <div
               key={m.id}
-              className="flex flex-col gap-3 py-3.5 sm:flex-row sm:items-center sm:gap-4"
-              style={{ borderTop: "1px solid var(--line)" }}
+              className="tb-member-row flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
               <div className="flex items-center gap-3 min-w-0 flex-1">
                 <span
@@ -294,7 +294,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
 
         {/* Add member */}
         <form
-          className="flex flex-col sm:flex-row gap-2.5 mt-5"
+          className="tb-card-foot flex flex-col sm:flex-row gap-2.5"
           onSubmit={async (e) => {
             e.preventDefault();
             await addMember(newEmail, false);
@@ -317,7 +317,11 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
       </div>
 
       {/* Billing */}
-      <div className="flex flex-wrap gap-3 items-center">
+      <div className="tb-card">
+        <div className="tb-card-head">
+          <h2 className="ed-label" style={{ color: "var(--ink)" }}>Billing</h2>
+        </div>
+        <div className="flex flex-wrap gap-3 items-center" style={{ padding: "16px 18px" }}>
         <button
           className="ed-btn"
           disabled={busy || portalLoading}
@@ -361,6 +365,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
               Cancel team subscription
             </button>
           ))}
+        </div>
       </div>
 
       <ConfirmDialog

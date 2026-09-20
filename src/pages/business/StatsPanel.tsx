@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Check } from "lucide-react";
 import { api } from "../../lib/api";
 
 export type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
@@ -24,6 +25,7 @@ export function StatsPanel() {
   const [stats, setStats] = useState<TeamStats | null>(null);
   const [err, setErr] = useState<string | null>(null);
   const [pdfBusy, setPdfBusy] = useState(false);
+  const [pdfDone, setPdfDone] = useState(false);
 
   useEffect(() => {
     api
@@ -39,6 +41,9 @@ export function StatsPanel() {
       // Lazy chunk: jspdf (~150KB gz) loads only when a manager actually exports.
       const { downloadTeamReportPdf } = await import("./teamReportPdf");
       downloadTeamReportPdf(stats);
+      // The browser saves silently, so the button confirms it happened.
+      setPdfDone(true);
+      setTimeout(() => setPdfDone(false), 1800);
     } catch {
       setErr("Could not generate the PDF. Please try again.");
     } finally {
@@ -65,8 +70,20 @@ export function StatsPanel() {
           Statistics
         </h1>
         {stats.dispatchers.length > 0 && (
-          <button className="ed-btn" onClick={downloadPdf} disabled={pdfBusy}>
-            {pdfBusy ? "Preparing…" : "Download PDF report"}
+          <button
+            className="ed-btn"
+            onClick={downloadPdf}
+            disabled={pdfBusy}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 8,
+              transition: "color .25s var(--ease), border-color .25s var(--ease)",
+              ...(pdfDone ? { color: "var(--accent)", borderColor: "var(--accent)" } : null),
+            }}
+          >
+            {pdfDone && <Check className="h-4 w-4" />}
+            {pdfBusy ? "Preparing…" : pdfDone ? "Downloaded" : "Download PDF report"}
           </button>
         )}
       </header>
