@@ -878,6 +878,7 @@ const PLAN_FEATURES = [
     "Gmail & Outlook — Google or Microsoft sign-in",
     "Multiple sender mailboxes (up to 3 extra)",
     "Posted load price analytics",
+    "Saved loads with notes",
     "Dedicated loads finder",
     "Factoring credit check (RTS, Apex, Triumph)",
     "Built-in Google Maps route",
@@ -1758,7 +1759,7 @@ function FeaturePanels({ items, onOpen }: { items: FeatureItem[]; onOpen: (i: nu
 }
 
 function Features() {
-  // The six that sell it. Everything else is listed in Pricing.
+  // The ones that sell it. Everything else is listed in Pricing.
   const items: FeatureItem[] = [
     {
       slug: "email",
@@ -1786,6 +1787,11 @@ function Features() {
       title: "Lane price analytics",
       body: "See how many times a load was posted today and how its price changed during the day — know when to call and what to ask.",
       visual: "analytics",
+    },
+    {
+      slug: "saved",
+      title: "Saved loads",
+      body: "Star a load and it stays after the posting is gone — with your own notes, a pickup calendar and what the lane pays now. Email the broker days later without hunting for it again.",
     },
     {
       slug: "mailboxes",

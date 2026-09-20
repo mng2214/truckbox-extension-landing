@@ -1,10 +1,12 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ApiError, api } from "../../lib/api";
 import type { AccountContext } from "./types";
 import { ConfirmDialog } from "./ConfirmDialog";
 
 /** Backend: "User does not have an active subscription" — no Stripe customer or subscription yet. */
 const NO_SUBSCRIPTION = 1013;
+/** Backend: the subscription is already set to stop at the end of the period. */
+const ALREADY_CANCELLING = 1012;
 
 type PlatformStats = {
   platform: string;
@@ -20,6 +22,11 @@ type MyStats = {
 };
 
 type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
+type UserStatus = {
+  trialEnd: string | null;
+  planExpiresAt: string | null;
+  cancelAtPeriodEnd: boolean;
+};
 type TeamStats = { dispatchers: { total: Win }[] };
 
 /**
@@ -53,7 +60,7 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   const [checkoutLoading, setCheckoutLoading] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [notice, setNotice] = useState<string | null>(null);
-  const [trialEnd, setTrialEnd] = useState<string | null>(null);
+  const [plan, setPlan] = useState<UserStatus | null>(null);
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
   /** Trials take no card, so there is no Stripe customer behind these buttons yet. */
@@ -66,14 +73,25 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
       .catch(() => setStatsError(true));
   }, []);
 
-  // How much trial is left. Only asked for on a trial; a failure just leaves the badge off.
+  // Trial countdown + whether the subscription is already winding down. Org members manage
+  // billing in the Team tab, so this is only asked for on a personal plan.
+  const loadPlan = useCallback(
+    () =>
+      api
+        .get<UserStatus>("/api/v1/user/status")
+        .then((status) => {
+          setPlan(status);
+          // A stale "could not cancel" is wrong once we know the plan is already winding down.
+          if (status.cancelAtPeriodEnd) setError(null);
+        })
+        .catch(() => {}),
+    [],
+  );
+
   useEffect(() => {
-    if (!onTrial) return;
-    api
-      .get<{ trialEnd: string | null }>("/api/v1/user/status")
-      .then((s) => setTrialEnd(s.trialEnd))
-      .catch(() => {});
-  }, [onTrial]);
+    if (ctx.org) return;
+    loadPlan();
+  }, [ctx.org, loadPlan]);
 
   useEffect(() => {
     if (!isManager) return;
@@ -135,20 +153,31 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     setBusy(true);
     try {
       await api.post("/api/v1/billing/cancel-subscription");
-      setNotice("Your subscription will cancel at the end of the billing period.");
+      // Re-read the plan so the page flips to "ends <date>" straight away instead of waiting
+      // for a reload — the cancellation is real the moment the call returns.
+      await loadPlan();
+      setNotice("Cancelled. You keep full access until the end of the billing period.");
     } catch (e) {
-      setError(
-        e instanceof ApiError && e.code === NO_SUBSCRIPTION
-          ? "You don't have a paid subscription yet, so there is nothing to cancel."
-          : "Could not cancel subscription. Please try again.",
-      );
+      if (e instanceof ApiError && e.code === ALREADY_CANCELLING) {
+        // Someone cancelled already (here, in the extension, or in Stripe) — reflect the truth.
+        setNotice("Your subscription is already set to end at the end of the billing period.");
+        loadPlan();
+      } else {
+        setError(
+          e instanceof ApiError && e.code === NO_SUBSCRIPTION
+            ? "You don't have a paid subscription yet, so there is nothing to cancel."
+            : "Could not cancel subscription. Please try again.",
+        );
+      }
     } finally {
       setBusy(false);
       setConfirmCancel(false);
     }
   };
 
-  const trialLeft = onTrial && trialEnd ? fmtTrialLeft(trialEnd) : null;
+  const trialLeft = onTrial && plan?.trialEnd ? fmtTrialLeft(plan.trialEnd) : null;
+  /** Already cancelled: it runs to the end of the period, so there is nothing left to cancel. */
+  const endingOn = plan?.cancelAtPeriodEnd ? plan.planExpiresAt : null;
 
   const totalActions = stats
     ? stats.emailSentCount + stats.mapViewedCount + stats.phoneCallCount
@@ -165,6 +194,15 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
             <>
               {" · "}
               <span style={{ color: "var(--accent)" }}>{trialLeft}</span>
+            </>
+          ) : null}
+          {endingOn ? (
+            <>
+              {" · "}
+              <span style={{ color: "var(--danger, #c0392b)" }}>
+                cancelled, ends{" "}
+                {new Date(endingOn).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+              </span>
             </>
           ) : null}
         </p>
@@ -274,14 +312,23 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
                 <span>Billing &amp; invoices</span>
               )}
             </button>
-            <button
-              className="ed-btn"
-              disabled={busy || !!notice}
-              onClick={() => setConfirmCancel(true)}
-            >
-              <span>Cancel subscription</span>
-            </button>
+            {!endingOn && (
+              <button
+                className="ed-btn"
+                disabled={busy || !!notice}
+                onClick={() => setConfirmCancel(true)}
+              >
+                <span>Cancel subscription</span>
+              </button>
+            )}
           </div>
+          )}
+          {endingOn && !onTrial && (
+            <p style={{ color: "var(--muted)", fontSize: "0.85rem" }}>
+              Subscription ends{" "}
+              {new Date(endingOn).toLocaleDateString("en-US", { month: "long", day: "numeric" })} —
+              you keep full access until then.
+            </p>
           )}
           {error && <p style={{ color: "var(--danger, #c0392b)" }}>{error}</p>}
           {notice && <p style={{ color: "var(--sub)", fontSize: "0.85rem" }}>{notice}</p>}
