@@ -1176,7 +1176,7 @@ function Hero() {
                 <span>TRY FREE</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Book Demo</span>
+                <span>Book Live Demo</span>
               </a>
             </div>
             <div className="mt-7 flex flex-col gap-3.5">
@@ -2376,7 +2376,7 @@ function Pricing() {
                 <span>Start Free Trial</span> <ArrowUpRight className="h-4 w-4" />
               </a>
               <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Book Demo</span>
+                <span>Book Live Demo</span>
               </a>
             </div>
             </div>
