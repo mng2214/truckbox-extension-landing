@@ -883,6 +883,7 @@ const PLAN_FEATURES = [
     "Factoring credit check (RTS, Apex, Triumph)",
     "Built-in Google Maps route",
     "Rate-per-mile calculator",
+    "Profit calculator (fuel, tolls, driver pay)",
     "Copy & share load info",
     "Click-to-call broker numbers",
     "FMCSA broker report",
@@ -1400,13 +1401,13 @@ const BA_VIEWS = {
     label: "DAT",
     before: "/compare/before.webp",
     after: "/compare/after.webp",
-    ratio: "1999 / 1094",
+    ratio: "1927 / 1103",
   },
   darkmode: {
     label: "Day / Night",
     before: "/compare/day.webp",
     after: "/compare/night.webp",
-    ratio: "1751 / 791",
+    ratio: "1924 / 1068",
   },
   truckstop: {
     label: "Truckstop",
@@ -1792,6 +1793,11 @@ function Features() {
       slug: "saved",
       title: "Saved loads",
       body: "Star a load and it stays after the posting is gone — with your own notes, a pickup calendar and what the lane pays now. Email the broker days later without hunting for it again.",
+    },
+    {
+      slug: "profit",
+      title: "Profit calculator",
+      body: "The rate minus fuel, tolls and the driver's cut, right where the rate is — plus the break-even you can't go below. Diesel fills in from the national average, miles with or without deadhead.",
     },
     {
       slug: "mailboxes",
