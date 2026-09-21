@@ -23,6 +23,34 @@
   color: var(--vx-ink);
 }
 
+.vx.is-day {
+  --vx-bg: #f4f7fb;
+  --vx-panel: #ffffff;
+  --vx-panel-2: #eef2f8;
+  --vx-line: #d5deea;
+  --vx-line-soft: #e6ebf3;
+  --vx-ink: #16202f;
+  --vx-dim: #55637a;
+  --vx-faint: #8493a9;
+  --vx-accent: #2f5fe0;
+  --vx-ok: #1a8a5d;
+  --vx-warn: #a86a05;
+  --vx-bad: #c8382c;
+
+  background:
+    linear-gradient(180deg, rgba(47, 95, 224, 0.05), transparent 220px),
+    var(--vx-bg);
+}
+
+.vx.is-day .vx-detail {
+  background: #f7f9fc;
+}
+
+.vx.is-day .vx-mark.is-blocked {
+  background: var(--vx-bad);
+  color: #fff;
+}
+
 .vx ::selection {
   background: rgba(110, 168, 254, 0.3);
 }
@@ -604,4 +632,27 @@
 .vx-candidate-why {
   font-size: 11.5px;
   color: var(--vx-dim);
+}
+
+.vx-theme {
+  margin-left: auto;
+  border: 1px solid var(--vx-line);
+  background: var(--vx-panel);
+  padding: 6px 12px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--vx-dim);
+}
+
+.vx-theme::before {
+  content: "◐ ";
+  color: var(--vx-warn);
+}
+
+.vx-theme:hover {
+  border-color: var(--vx-accent);
+  color: var(--vx-accent);
 }

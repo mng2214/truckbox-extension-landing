@@ -49,6 +49,8 @@ type VisitorEvent = {
   viewport: string | null;
 };
 
+const THEME_KEY = "tb-visits-theme";
+
 const PAGE = 300;
 
 const EVENTS_SHOWN = 200;
@@ -130,6 +132,24 @@ export default function VisitsPanel() {
   const [flaggedOnly, setFlaggedOnly] = useState(false);
   const [byRisk, setByRisk] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
+  const [day, setDay] = useState(() => {
+    try {
+      return localStorage.getItem(THEME_KEY) === "day";
+    } catch {
+      return false;
+    }
+  });
+
+  const flipTheme = () => {
+    setDay((was) => {
+      try {
+        localStorage.setItem(THEME_KEY, was ? "night" : "day");
+      } catch {
+        /* storage blocked */
+      }
+      return !was;
+    });
+  };
   const [blockList, setBlockList] = useState(false);
 
   const remember = (what: string) => {
@@ -251,7 +271,7 @@ export default function VisitsPanel() {
 
   if (error === "signin" || error === "forbidden") {
     return (
-      <div className="vx vx-blank">
+      <div className={"vx vx-blank" + (day ? " is-day" : "")}>
         <b className="vx-blank-code">404</b>
         <p className="vx-blank-text">This page does not exist.</p>
         <Link className="vx-back" to="/">
@@ -262,13 +282,16 @@ export default function VisitsPanel() {
   }
 
   return (
-    <div className="vx">
+    <div className={"vx" + (day ? " is-day" : "")}>
       <div className="vx-bar">
         <Link className="vx-back" to="/">
           ← TruckBox
         </Link>
         <b className="vx-title">Demo traffic</b>
         <span className="vx-sub">Who opens truckbox.app/demo</span>
+        <button type="button" className="vx-theme" onClick={flipTheme}>
+          {day ? "night" : "day"}
+        </button>
       </div>
 
       <div className="vx-controls">
