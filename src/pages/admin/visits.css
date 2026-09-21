@@ -14,9 +14,7 @@
 
   min-height: 100vh;
   padding: 22px 22px 70px;
-  background:
-    linear-gradient(180deg, rgba(110, 168, 254, 0.05), transparent 220px),
-    var(--vx-bg);
+  background: var(--vx-bg);
   font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, Menlo, monospace);
   font-size: 12.5px;
   line-height: 1.55;
@@ -37,9 +35,7 @@
   --vx-warn: #a86a05;
   --vx-bad: #c8382c;
 
-  background:
-    linear-gradient(180deg, rgba(47, 95, 224, 0.05), transparent 220px),
-    var(--vx-bg);
+  background: var(--vx-bg);
 }
 
 .vx.is-day .vx-detail {
@@ -82,12 +78,6 @@
   font-weight: 600;
   letter-spacing: 0.02em;
   color: var(--vx-ink);
-}
-
-.vx-title::before {
-  content: "truckbox@demo:~$ ";
-  color: var(--vx-ok);
-  font-weight: 400;
 }
 
 .vx-sub {
@@ -201,11 +191,6 @@
   color: var(--vx-faint);
 }
 
-.vx-count::before {
-  content: "› ";
-  color: var(--vx-ok);
-}
-
 .vx-truncated {
   margin: 0 0 10px;
   padding: 9px 12px;
@@ -298,14 +283,13 @@
 
 .vx-events i,
 .vx-tag {
-  font-size: 9.5px;
-  line-height: 1.7;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-size: 11px;
   font-style: normal;
-  padding: 0 5px;
-  border: 1px solid rgba(110, 168, 254, 0.28);
-  color: var(--vx-accent);
+  color: var(--vx-dim);
+}
+
+.vx-events i:not(:last-child)::after {
+  content: ",";
 }
 
 .vx-when {
@@ -320,17 +304,16 @@
   align-items: center;
   justify-content: center;
   flex: 0 0 auto;
-  width: 18px;
-  height: 18px;
-  font-size: 10px;
+  min-width: 17px;
+  padding: 0 4px;
+  font-size: 10.5px;
   font-style: normal;
-  background: rgba(232, 176, 75, 0.18);
+  background: transparent;
   border: 1px solid var(--vx-warn);
   color: var(--vx-warn);
 }
 
 .vx-level-high .vx-mark {
-  background: rgba(255, 107, 94, 0.16);
   border-color: var(--vx-bad);
   color: var(--vx-bad);
 }
@@ -341,11 +324,6 @@
 
 .vx-level-high .vx-line {
   box-shadow: inset 3px 0 0 var(--vx-bad);
-  background: rgba(255, 107, 94, 0.05);
-}
-
-.vx-level-high .vx-line:hover {
-  background: rgba(255, 107, 94, 0.09);
 }
 
 .vx-mark.is-blocked {
@@ -364,14 +342,11 @@
 .vx-why {
   margin: 0 0 12px;
   padding: 10px 13px;
-  border: 1px solid rgba(232, 176, 75, 0.3);
-  border-left-width: 3px;
-  background: rgba(232, 176, 75, 0.06);
+  border-left: 2px solid var(--vx-warn);
 }
 
 .vx-why-high {
-  border-color: rgba(255, 107, 94, 0.35);
-  background: rgba(255, 107, 94, 0.06);
+  border-left-color: var(--vx-bad);
 }
 
 .vx-why b {
@@ -440,10 +415,7 @@
 }
 
 .vx-block code {
-  padding: 3px 8px;
-  border: 1px solid rgba(78, 201, 141, 0.35);
-  background: rgba(78, 201, 141, 0.08);
-  color: var(--vx-ok);
+  color: var(--vx-ink);
 }
 
 .vx-block-note {
@@ -647,30 +619,12 @@
   color: var(--vx-dim);
 }
 
-.vx-theme::before {
-  content: "◐ ";
-  color: var(--vx-warn);
-}
-
 .vx-theme:hover {
   border-color: var(--vx-accent);
   color: var(--vx-accent);
 }
 
-.vx-range-warn.is-on {
-  background: rgba(232, 176, 75, 0.16);
-  color: var(--vx-warn);
-  box-shadow: inset 0 -2px 0 var(--vx-warn);
-}
-
-.vx-range-bot.is-on {
-  background: rgba(78, 201, 141, 0.14);
-  color: var(--vx-ok);
-  box-shadow: inset 0 -2px 0 var(--vx-ok);
-}
-
 .vx-mark.is-robot {
-  background: rgba(78, 201, 141, 0.14);
-  border-color: var(--vx-ok);
-  color: var(--vx-ok);
+  border-color: var(--vx-line);
+  color: var(--vx-dim);
 }

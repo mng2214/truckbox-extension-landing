@@ -363,7 +363,7 @@ export default function VisitsPanel() {
       {blockList && targets.length > 0 && (
         <div className="vx-blocklist">
           <div className="vx-blocklist-head">
-            <b>Ready to paste</b>
+            <b>Block list</b>
             <span>
               {mode === "recent" ? "everything currently listed" : `the ${mode} list`} ·{" "}
               {targets.length} address{targets.length === 1 ? "" : "es"}
@@ -468,7 +468,11 @@ export default function VisitsPanel() {
             >
               <button type="button" className="vx-line" onClick={() => toggle(r.visitorKey)}>
                 <span className="vx-when">
-                  {r.automated && <i className="vx-mark is-robot" title="Automated client">⚙</i>}
+                  {r.automated && (
+                    <i className="vx-mark is-robot" title="Automated client">
+                      bot
+                    </i>
+                  )}
                   {r.blocked && <i className="vx-mark is-blocked">B</i>}
                   {r.level !== "none" && (
                     <i className="vx-mark" title={r.flags.join(" · ")}>
@@ -519,7 +523,7 @@ export default function VisitsPanel() {
                 <div className="vx-detail">
                   {r.flags.length > 0 && (
                     <div className={"vx-why vx-why-" + r.level}>
-                      <b>{r.level === "high" ? "Well past normal interest" : "A closer look than most"}</b>
+                      <b>Why this is flagged</b>
                       <ul>
                         {r.flags.map((f) => (
                           <li key={f}>{f}</li>
