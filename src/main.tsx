@@ -3,6 +3,7 @@ import ReactDOM from "react-dom/client";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
+import { captureSource } from "./lib/demoTrack";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
 import { applyLandingTheme, setLandingTheme } from "./lib/theme";
 import PrivacyPage from "./pages/Privacy";
@@ -28,6 +29,8 @@ function LandingThemeSync() {
   useEffect(() => applyLandingTheme(pathname), [pathname]);
   return null;
 }
+
+captureSource();
 
 installPageGuard();
 
