@@ -49,7 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/update" element={<UpdatePage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/demo" element={<DemoPage />} />
-        <Route path="/admin/visits" element={<VisitsPanel />} />
+        <Route path="/admin2214/visits" element={<VisitsPanel />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business/start" element={<TeamStart />} />

@@ -119,7 +119,7 @@ export default function VisitsPanel() {
   usePageMeta({
     title: "Demo traffic — TruckBox",
     description: "Internal view of who opens the public demo.",
-    path: "/admin/visits",
+    path: "/admin2214/visits",
     noindex: true,
   });
 
