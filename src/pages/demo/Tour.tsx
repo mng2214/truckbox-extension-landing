@@ -27,6 +27,7 @@ type Box = { top: number; left: number; width: number; height: number };
 
 const PAD = 7;
 const GRACE = 900;
+const REVEAL_EVERY = 1200;
 const DWELL = 350;
 const HOLD = 700;
 const GUTTER_MIN = 264;
@@ -61,9 +62,24 @@ function reveal(el: Element) {
   }
 }
 
+function frameBox(el: Element): Box | null {
+  const win = el.ownerDocument.defaultView;
+  const frame = win && win !== window ? win.frameElement : null;
+  if (!frame) return null;
+  const r = frame.getBoundingClientRect();
+  return { top: r.top, left: r.left, width: r.width, height: r.height };
+}
+
 function onScreen(el: Element) {
   const box = viewportRect(el);
-  return box.top >= 0 && box.top + box.height <= window.innerHeight;
+  if (box.top < 0 || box.top + box.height > window.innerHeight) return false;
+
+  // Inside the extension popup the page is not the only thing that scrolls. An element can sit
+  // within the window and still be hidden, scrolled out of the frame that holds it — which is how
+  // a step ended up pointing at a button nobody could see.
+  const frame = frameBox(el);
+  if (!frame) return true;
+  return box.top >= frame.top - 1 && box.top + box.height <= frame.top + frame.height + 1;
 }
 
 function visible(el: Element) {
@@ -88,6 +104,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
   const clicked = useRef(false);
   const scrolled = useRef(false);
   const lostAt = useRef(0);
+  const revealedAt = useRef(0);
   const startedAt = useRef(performance.now());
   const indexRef = useRef(0);
   const onStepRef = useRef(onStep);
@@ -105,6 +122,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
     lastBox.current = null;
     doneAt.current = 0;
     lostAt.current = 0;
+    revealedAt.current = 0;
     scrolled.current = false;
     clicked.current = false;
     setSettled(false);
@@ -280,9 +298,13 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
         bound.current = { el, fn };
       }
 
-      const young = performance.now() - startedAt.current < 1500;
-      if (!paused && el && (!scrolled.current || (young && !onScreen(el)))) {
+      // Bring the target back whenever it drifts out of sight, not only in the first moment of the
+      // step: the popup finishes rendering, content grows, someone scrolls — and the ring used to
+      // stay on a button that had left the screen, with the tour waiting for a click on it.
+      const settled = performance.now() - revealedAt.current > REVEAL_EVERY;
+      if (!paused && el && (!scrolled.current || (settled && !onScreen(el)))) {
         scrolled.current = true;
+        revealedAt.current = performance.now();
         reveal(el);
       }
 
