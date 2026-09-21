@@ -121,6 +121,18 @@ export default function VisitsPanel() {
 
   const repeat = rows?.filter((r) => r.visits > 1).length ?? 0;
 
+  if (error === "signin" || error === "forbidden") {
+    return (
+      <div className="vx vx-blank">
+        <b className="vx-blank-code">404</b>
+        <p className="vx-blank-text">This page does not exist.</p>
+        <Link className="vx-back" to="/">
+          ← TruckBox
+        </Link>
+      </div>
+    );
+  }
+
   return (
     <div className="vx">
       <div className="vx-bar">
@@ -160,12 +172,6 @@ export default function VisitsPanel() {
         </button>
       </div>
 
-      {error === "signin" && (
-        <p className="vx-note">
-          Sign in as an admin first — <Link to="/business">open the cabinet</Link>, then come back.
-        </p>
-      )}
-      {error === "forbidden" && <p className="vx-note">This account is not an admin.</p>}
       {error === "failed" && <p className="vx-note">Could not load the list. Try again.</p>}
 
       {rows && rows.length > 0 && (
@@ -196,8 +202,12 @@ export default function VisitsPanel() {
                 <span>{when(r.lastSeen)}</span>
                 <span className={r.visits > 1 ? "vx-hot" : ""}>{r.visits}</span>
                 <span>{r.days}</span>
-                <span className="vx-mono">{r.ip}</span>
-                <span className="vx-host">{r.ipHost || r.ipPrefix || "—"}</span>
+                <span className="vx-mono" title={r.ip}>
+                  {r.ip}
+                </span>
+                <span className="vx-host" title={r.ipHost || r.ipPrefix || ""}>
+                  {r.ipHost || r.ipPrefix || "—"}
+                </span>
                 <span>{r.device}</span>
                 <span>
                   {r.timezone || "—"}
