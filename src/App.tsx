@@ -2406,6 +2406,20 @@ export function Privacy() {
                 <li><b>Account or subscription information.</b> If Truck Box uses a backend for account status, subscription verification, abuse prevention, support, or product security, limited account-level information may be processed for those purposes.</li>
               </ul>
 
+              <h3>The public demo at truckbox.app/demo</h3>
+              <p>
+                The demo is open to anyone, with no sign-up. Because it is public, we keep a server
+                log of the traffic it receives so we can see how it is used and protect it from
+                abuse.
+              </p>
+              <ul>
+                <li><b>What is logged.</b> The IP address the request came from, the browser's user agent, screen and window size, language, time zone, the page address and the referring page, and which demo actions were used (opened the demo, signed into the demo account, sent a demo email, saved a demo load). A random identifier is stored in the browser so repeat visits from the same browser can be counted.</li>
+                <li><b>What is not logged.</b> No real name, no real email address, no account and no payment data — the demo has none of these. We do not use canvas, audio or other device fingerprinting, and we do not track you across other websites.</li>
+                <li><b>Why.</b> To understand how the demo performs, to size the product, and to identify automated abuse of a page that anyone can open.</li>
+                <li><b>Retention.</b> Demo traffic logs are deleted automatically after 180 days.</li>
+                <li><b>Not tied to your account.</b> These logs are not linked to a Truck Box account, and they are not sold, shared or used for advertising.</li>
+              </ul>
+
               <h3>Information we do not collect from your mailbox</h3>
               <ul>
                 <li>We do <b>not</b> collect or store Gmail or Outlook inbox messages.</li>

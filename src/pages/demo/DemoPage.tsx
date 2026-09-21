@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import BrowserChrome from "./BrowserChrome";
+import { enableDemoTracking, trackDemo } from "../../lib/demoTrack";
 import SentMail from "./SentMail";
 import Tour, { type TourStep } from "./Tour";
 import { mountBoard, type BoardHandle } from "./board/board";
@@ -88,6 +89,13 @@ export default function DemoPage() {
   }, [booting]);
 
   useEffect(() => {
+    const live = !embedded && !handheld;
+    enableDemoTracking(live);
+    if (live) trackDemo("open");
+    return () => enableDemoTracking(false);
+  }, [embedded, handheld]);
+
+  useEffect(() => {
     if (!embedded) return;
     document.documentElement.classList.add("tb-demo-embed");
     return () => document.documentElement.classList.remove("tb-demo-embed");
@@ -127,6 +135,7 @@ export default function DemoPage() {
           if (!/credit check/i.test(button.textContent || "")) return;
           button.dataset.demoChecked = "1";
           button.click();
+          trackDemo("credit");
         });
     };
     const observer = new MutationObserver(run);
@@ -141,10 +150,12 @@ export default function DemoPage() {
         if (event.kind === "email") {
           emailSeen.current = true;
           setEmail(event);
+          trackDemo("email");
         }
 
         if (event.kind === "signin") {
           setSignedIn(true);
+          trackDemo("signin");
           setPopupNonce((n) => n + 1);
         }
         if (event.kind === "signout") {
@@ -181,8 +192,7 @@ export default function DemoPage() {
         },
         target: () => popupEl("#login"),
         done: () => signedInRef.current,
-        success: "Signed in — that is the whole setup of a mailbox",
-        hold: 2600,
+        hold: 0,
       },
       {
         id: "template",
@@ -326,6 +336,7 @@ export default function DemoPage() {
   }, [embedded, handheld, booting, disclaimer]);
 
   const closeTour = () => {
+    trackDemo("tour_done");
     setTourOn(false);
     try {
       localStorage.setItem(TOUR_KEY, "done");

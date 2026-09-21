@@ -50,29 +50,18 @@ function viewportRect(el: Element): Box {
 }
 
 function reveal(el: Element) {
-  el.scrollIntoView({ block: "center", inline: "center" });
+  el.scrollIntoView({ block: "center", inline: "nearest" });
 
   const box = viewportRect(el);
   const h = window.innerHeight;
-  const w = window.innerWidth;
-  const next: ScrollToOptions = {};
   if (box.top < 8 || box.top + box.height > h - 8) {
-    next.top = Math.max(0, window.scrollY + box.top - (h / 2 - box.height / 2));
+    window.scrollTo({ top: Math.max(0, window.scrollY + box.top - (h / 2 - box.height / 2)) });
   }
-  if (box.left < 8 || box.left + box.width > w - 8) {
-    next.left = Math.max(0, window.scrollX + box.left - (w / 2 - box.width / 2));
-  }
-  if (next.top !== undefined || next.left !== undefined) window.scrollTo(next);
 }
 
 function onScreen(el: Element) {
   const box = viewportRect(el);
-  return (
-    box.top >= 0 &&
-    box.top + box.height <= window.innerHeight &&
-    box.left >= 0 &&
-    box.left + box.width <= window.innerWidth
-  );
+  return box.top >= 0 && box.top + box.height <= window.innerHeight;
 }
 
 function visible(el: Element) {
@@ -294,6 +283,10 @@ export default function Tour({ steps, paused = false, stage, onClose }: Props) {
       const ready = performance.now() - startedAt.current > DWELL;
 
       if (ready && !current.manual && (clicked.current || current.done?.(el))) {
+        if ((current.hold ?? HOLD) <= 0) {
+          setIndex((n) => (n === indexRef.current ? n + 1 : n));
+          return;
+        }
         doneAt.current = performance.now();
         setSettled(true);
       }

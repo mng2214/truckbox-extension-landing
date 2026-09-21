@@ -1,0 +1,224 @@
+.vx {
+  min-height: 100vh;
+  padding: 22px 26px 60px;
+  background: #eef1f8;
+  font: 13px/1.5 "Inter", -apple-system, "Segoe UI", sans-serif;
+  color: #1b2437;
+}
+
+.vx-bar {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 18px;
+}
+
+.vx-back {
+  font: 700 10px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #5f6b85;
+}
+
+.vx-title {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+}
+
+.vx-sub {
+  font-size: 12.5px;
+  color: #6b7590;
+}
+
+.vx-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 14px;
+}
+
+.vx-ranges {
+  display: flex;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  background: #fff;
+}
+
+.vx-range {
+  border: 0;
+  background: transparent;
+  padding: 9px 14px;
+  cursor: pointer;
+  font: 700 10px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #5f6b85;
+}
+
+.vx-range + .vx-range {
+  border-left: 1px solid rgba(17, 24, 39, 0.1);
+}
+
+.vx-range.is-on {
+  background: #2f5fe0;
+  color: #fff;
+}
+
+.vx-search {
+  flex: 1;
+  min-width: 260px;
+  padding: 9px 13px;
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  background: #fff;
+  font: 13px/1.4 "Inter", sans-serif;
+  color: #1b2437;
+}
+
+.vx-refresh {
+  border: 1px solid rgba(17, 24, 39, 0.14);
+  background: #fff;
+  padding: 9px 18px;
+  cursor: pointer;
+  font: 700 10px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #1b2437;
+}
+
+.vx-refresh:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.vx-note {
+  margin: 14px 0;
+  font-size: 13px;
+  color: #6b7590;
+}
+
+.vx-note a {
+  color: #2f5fe0;
+  text-decoration: underline;
+}
+
+.vx-count {
+  margin: 0 0 10px;
+  font: 700 10px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #6b7590;
+}
+
+.vx-table {
+  background: #fff;
+  border: 1px solid rgba(17, 24, 39, 0.12);
+  overflow-x: auto;
+}
+
+.vx-head,
+.vx-line {
+  display: grid;
+  grid-template-columns: 132px 62px 54px 132px 1fr 150px 168px 130px 190px;
+  gap: 10px;
+  align-items: center;
+  padding: 9px 14px;
+  text-align: left;
+  min-width: 1180px;
+}
+
+.vx-head {
+  border-bottom: 1px solid rgba(17, 24, 39, 0.1);
+  font: 700 9.5px/1.3 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #8a93ab;
+  background: #f7f9fd;
+}
+
+.vx-line {
+  width: 100%;
+  border: 0;
+  border-top: 1px solid rgba(17, 24, 39, 0.06);
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  color: inherit;
+}
+
+.vx-row:first-child .vx-line {
+  border-top: 0;
+}
+
+.vx-line:hover {
+  background: #f5f8ff;
+}
+
+.vx-row.is-open .vx-line {
+  background: #eef3ff;
+}
+
+.vx-mono {
+  font: 12px/1.4 "Space Mono", ui-monospace, Menlo, monospace;
+}
+
+.vx-host {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #4a5570;
+}
+
+.vx-hot {
+  font-weight: 700;
+  color: #b4530a;
+}
+
+.vx-events {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.vx-events i,
+.vx-tag {
+  font: 700 9px/1.6 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-style: normal;
+  padding: 1px 6px;
+  background: #eef2fb;
+  color: #2f5fe0;
+}
+
+.vx-detail {
+  padding: 12px 16px 16px;
+  border-top: 1px solid rgba(17, 24, 39, 0.1);
+  background: #fbfcff;
+  min-width: 1180px;
+}
+
+.vx-detail-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 18px;
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #6b7590;
+}
+
+.vx-ua {
+  flex-basis: 100%;
+  font: 11.5px/1.5 "Space Mono", ui-monospace, Menlo, monospace;
+  word-break: break-all;
+}
+
+.vx-event {
+  display: grid;
+  grid-template-columns: 132px 96px 132px 100px 1fr 90px;
+  gap: 10px;
+  padding: 5px 0;
+  font-size: 12px;
+  color: #4a5570;
+  border-top: 1px dashed rgba(17, 24, 39, 0.08);
+}

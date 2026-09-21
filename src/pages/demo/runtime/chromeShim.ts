@@ -1,3 +1,4 @@
+import { trackDemo } from "../../../lib/demoTrack";
 import {
   DEMO_LOADS,
   DEMO_MAILBOXES,
@@ -322,6 +323,7 @@ class DemoRuntime {
         };
 
         this.savedLoads = [row, ...this.savedLoads];
+        trackDemo("save");
         this.persist();
         return { ok: true, data: row };
       }
