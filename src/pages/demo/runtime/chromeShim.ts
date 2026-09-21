@@ -631,8 +631,11 @@ export function installChromeShim(target: Window & typeof globalThis): void {
   target.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     const apiPath = url.match(/\/api\/v1(\/.*)$/)?.[1];
-    if (!apiPath) return realFetch ? realFetch(input as RequestInfo, init) : Promise.reject(new Error("offline"));
-    const answer = runtime.api(apiPath, { method: init?.method });
+    const mocked = apiPath && !apiPath.startsWith("/public/");
+    if (!mocked) {
+      return realFetch ? realFetch(input as RequestInfo, init) : Promise.reject(new Error("offline"));
+    }
+    const answer = runtime.api(apiPath as string, { method: init?.method });
     return new Response(JSON.stringify(answer.body), {
       status: answer.status,
       headers: { "Content-Type": "application/json" },

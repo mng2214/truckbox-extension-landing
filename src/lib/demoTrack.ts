@@ -18,6 +18,9 @@ export type DemoEventName =
 
 const sentThisLoad = new Set<string>();
 
+const nativeFetch =
+  typeof window !== "undefined" && window.fetch ? window.fetch.bind(window) : fetch;
+
 let enabled = false;
 
 export function enableDemoTracking(on: boolean): void {
@@ -85,7 +88,7 @@ export function trackDemo(event: DemoEventName, detail?: string): void {
     const body = JSON.stringify(payload(event, detail));
     const url = API_BASE + "/api/v1/public/demo/visit";
 
-    void fetch(url, {
+    void nativeFetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body,
