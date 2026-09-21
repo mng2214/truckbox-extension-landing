@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState, Fragment, type ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState, Fragment, Suspense, lazy, type ReactNode } from "react";
 import { usePageMeta } from "./lib/meta";
 import { ProviderLogo } from "./components/ProviderLogo";
 import { getLandingTheme, setLandingTheme, THEME_EVENT, type LandingTheme } from "./lib/theme";
@@ -33,9 +33,10 @@ import {
   ZoomIn,
 } from "lucide-react";
 
-type NavItem = { href: string; label: string; route?: boolean };
+type NavItem = { href: string; label: string; route?: boolean; desktopOnly?: boolean };
 
 const NAV: NavItem[] = [
+  { href: "/demo", label: "Demo", route: true, desktopOnly: true },
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
   { href: "/business/start", label: "Teams", route: true },
@@ -468,7 +469,7 @@ export function Header() {
             </span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-5 xl:gap-8">
+          <nav className="hidden lg:flex items-center gap-5 xl:gap-8">
             {NAV.map((n) => (
               <Link
                 key={n.href}
@@ -480,14 +481,14 @@ export function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center gap-3">
+          <div className="hidden lg:flex items-center gap-3">
             <ThemeToggle />
             <Link className="ed-btn ed-btn-accent whitespace-nowrap" to="/business">
               <span>{accountLabel}</span> <ArrowUpRight className="h-4 w-4" />
             </Link>
           </div>
 
-          <div className="md:hidden flex items-center gap-3">
+          <div className="lg:hidden flex items-center gap-3">
             <ThemeToggle />
             <Link
               className="ed-btn ed-btn-accent"
@@ -526,7 +527,7 @@ export function Header() {
               </button>
             </div>
             <div className="ed-container flex-1 flex flex-col justify-center gap-2">
-              {NAV.map((n, i) => {
+              {NAV.filter((n) => !n.desktopOnly).map((n, i) => {
                 const inner = (
                   <motion.span
                     initial={{ y: "110%" }}
@@ -562,312 +563,6 @@ export function Header() {
    flourishes resolve. Reduced motion renders the resolved frame.
    ============================================================ */
 
-const HM_ROWS = [
-  { o: "Bolingbrook, IL", d: "Allentown, PA", rate: "$2,850", age: "2m", pin: "#93a7f2" },
-  { o: "Chicago, IL", d: "Columbus, OH", rate: "$1,420", age: "5m", pin: "#b9a8ee" },
-  { o: "Joliet, IL", d: "Nashville, TN", rate: "$2,100", age: "8m", pin: "#34d399" },
-  { o: "Gary, IN", d: "Atlanta, GA", rate: "$2,640", age: "11m", pin: "#f59e0b" },
-];
-
-function HeroMockup() {
-  const reduced =
-    typeof window !== "undefined" &&
-    !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-  const [phase, setPhase] = useState(reduced ? 5 : 0);
-  const [rpm, setRpm] = useState(1.78);
-
-  // Scripted loop — dwell (ms) per phase 0..5, then repeat.
-  useEffect(() => {
-    if (reduced) return;
-    const SEQ = [850, 1000, 1650, 950, 650, 2050];
-    let i = 0;
-    let t: ReturnType<typeof setTimeout>;
-    const run = () => {
-      setPhase(i);
-      t = setTimeout(() => {
-        i = (i + 1) % SEQ.length;
-        run();
-      }, SEQ[i]);
-    };
-    run();
-    return () => clearTimeout(t);
-  }, [reduced]);
-
-  // Count the deadhead-adjusted RPM up once the email is composed.
-  useEffect(() => {
-    if (phase < 3) {
-      setRpm(1.78);
-      return;
-    }
-    let v = 1.78;
-    const id = setInterval(() => {
-      v = Math.min(2.64, v + 0.055);
-      setRpm(v);
-      if (v >= 2.64) clearInterval(id);
-    }, 26);
-    return () => clearInterval(id);
-  }, [phase]);
-
-  const panelOpen = phase >= 2 && phase <= 5;
-  const composed = phase >= 2;
-  const sending = phase === 4;
-  const sent = phase === 5;
-  const filtersOn = reduced || phase >= 3;
-
-  const cursorPos =
-    phase <= 0
-      ? { left: "82%", top: "88%" }
-      : phase === 1
-      ? { left: "33%", top: "33%" }
-      : { left: "12%", top: "83%" };
-
-  const lineWidths = ["86%", "62%", "92%", "46%"];
-
-  return (
-    <div className="hm-wrap" data-cursor>
-      <div className="hm-glow" aria-hidden />
-      <div className="hm-board">
-        <div className="hm-chrome">
-          <div className="hm-dots">
-            <i style={{ background: "#ff5f57" }} />
-            <i style={{ background: "#febc2e" }} />
-            <i style={{ background: "#28c840" }} />
-          </div>
-          <div className="hm-url">one.dat.com/search</div>
-          <span className="hm-badge">★ Truck&nbsp;Box</span>
-        </div>
-
-        <div className="hm-grid">
-          <div className="hm-rowhead">
-            <span>Origin</span>
-            <span>Destination</span>
-            <span style={{ textAlign: "right" }}>Rate</span>
-            <span style={{ textAlign: "right" }}>Age</span>
-          </div>
-          {HM_ROWS.map((r, idx) => (
-            <div key={idx} className={`hm-row${idx === 0 && phase >= 1 ? " is-active" : ""}`}>
-              <span className="hm-lane">
-                <i className="hm-pin" style={{ background: r.pin }} />
-                {r.o}
-              </span>
-              <span className="hm-dest">{r.d}</span>
-              <span className="hm-rate">{r.rate}</span>
-              <span className="hm-age">{r.age}</span>
-            </div>
-          ))}
-
-          <AnimatePresence>
-            {panelOpen && (
-              <motion.div
-                className="hm-panel"
-                initial={{ y: 28, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                exit={{ y: 28, opacity: 0 }}
-                transition={{ duration: 0.5, ease: EASE }}
-              >
-                <div className="hm-panel-head">
-                  <span className="hm-panel-to">
-                    To <b>broker@pumpcargo.com</b>
-                  </span>
-                  <span className="hm-tb-tag">Auto-filled</span>
-                </div>
-                {lineWidths.map((w, li) => (
-                  <motion.div
-                    key={li}
-                    className={`hm-line${li === 2 ? " hm-line-accent" : ""}`}
-                    style={{ width: w }}
-                    initial={{ scaleX: 0 }}
-                    animate={{ scaleX: composed ? 1 : 0 }}
-                    transition={{ duration: 0.45, delay: 0.15 + li * 0.12, ease: EASE }}
-                  />
-                ))}
-                <div className={`hm-send${sent ? " is-sent" : ""}`}>
-                  {sent ? (
-                    <>
-                      <Check className="h-3.5 w-3.5" strokeWidth={3} /> Sent
-                    </>
-                  ) : sending ? (
-                    <>
-                      <RotateCw className="h-3.5 w-3.5 tb-spin" /> Sending
-                    </>
-                  ) : (
-                    <>
-                      <Send className="h-3.5 w-3.5" /> Send email
-                    </>
-                  )}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {!reduced && (
-          <div
-            className={`hm-cursor${sending ? " is-click" : ""}`}
-            style={{
-              ...cursorPos,
-              transition:
-                "left .6s cubic-bezier(.16,1,.3,1), top .6s cubic-bezier(.16,1,.3,1)",
-            }}
-            aria-hidden
-          >
-            <svg viewBox="0 0 24 24" width="22" height="22" fill="#fff" stroke="#0a0e18" strokeWidth="1.5">
-              <path d="M5 3l14 8-6 1.6L9.4 19z" strokeLinejoin="round" />
-            </svg>
-          </div>
-        )}
-
-        <AnimatePresence>
-          {sent && !reduced && (
-            <motion.div
-              className="hm-plane"
-              style={{ position: "absolute" }}
-              initial={{ left: "27%", top: "78%", opacity: 0, scale: 0.6 }}
-              animate={{ left: "92%", top: "8%", opacity: [0, 1, 1, 0], scale: 1, rotate: -18 }}
-              transition={{ duration: 1.3, ease: EASE }}
-              aria-hidden
-            >
-              <Send className="h-5 w-5" />
-            </motion.div>
-          )}
-        </AnimatePresence>
-      </div>
-
-      <div className="hm-chip hm-chip-rpm">
-        <div className="hm-chip-label">RPM · deadhead-adj.</div>
-        <div className="hm-rpm-val">
-          ${rpm.toFixed(2)}
-          <small>/mi</small>
-        </div>
-      </div>
-
-      <AnimatePresence>
-        {composed && (
-          <motion.div
-            className="hm-chip hm-chip-map"
-            initial={{ opacity: 0, x: -16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -16 }}
-            transition={{ duration: 0.5, ease: EASE }}
-          >
-            <div className="hm-chip-label">Google Map</div>
-            <div className="hm-map-canvas">
-              <svg viewBox="0 0 160 92" preserveAspectRatio="xMidYMid slice">
-                {/* terrain base */}
-                <rect width="160" height="92" fill="#e7ecdf" />
-                {/* parks / national forests */}
-                <ellipse cx="92" cy="20" rx="44" ry="15" fill="#c7e0ae" />
-                <ellipse cx="66" cy="70" rx="34" ry="16" fill="#cbe3b4" />
-                <ellipse cx="138" cy="64" rx="20" ry="12" fill="#c7e0ae" />
-                {/* ocean + lake (water) */}
-                <path d="M0 78 Q10 86 18 92 L0 92 Z" fill="#a9d6f5" />
-                <ellipse cx="132" cy="48" rx="6" ry="3.2" fill="#a9d6f5" />
-                {/* faint road network */}
-                <g stroke="#ffffff" strokeWidth="1.1" fill="none" opacity="0.9">
-                  <path d="M40 0 L50 42 L42 92" />
-                  <path d="M104 0 L98 44 L116 92" />
-                  <path d="M0 60 L70 52 L160 40" />
-                </g>
-                {/* highway */}
-                <path d="M0 84 L70 74 L120 82 L160 70" stroke="#f7c95b" strokeWidth="1.6" fill="none" opacity="0.85" />
-                {/* selected route — white casing + google blue, draws in */}
-                <motion.path
-                  d="M28 70 C 66 64, 78 44, 108 40 C 130 37, 144 30, 150 24"
-                  fill="none" stroke="#ffffff" strokeWidth="5" strokeLinecap="round"
-                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.1, ease: EASE }}
-                />
-                <motion.path
-                  d="M28 70 C 66 64, 78 44, 108 40 C 130 37, 144 30, 150 24"
-                  fill="none" stroke="#4285f4" strokeWidth="2.6" strokeLinecap="round"
-                  initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-                  transition={{ duration: 1.1, ease: EASE }}
-                />
-                {/* A / B markers */}
-                <g>
-                  <path d="M28 71 C24.6 66.8 23 64.6 23 62 a5 5 0 1 1 10 0 c0 2.6 -1.6 4.8 -5 9 z" fill="#ea4335" />
-                  <circle cx="28" cy="62" r="2.3" fill="#fff" />
-                  <text x="28" y="63.9" textAnchor="middle" fontSize="4.2" fontWeight="700" fontFamily="Inter, sans-serif" fill="#ea4335">A</text>
-                </g>
-                <g>
-                  <path d="M150 25 C146.6 20.8 145 18.6 145 16 a5 5 0 1 1 10 0 c0 2.6 -1.6 4.8 -5 9 z" fill="#ea4335" />
-                  <circle cx="150" cy="16" r="2.3" fill="#fff" />
-                  <text x="150" y="17.9" textAnchor="middle" fontSize="4.2" fontWeight="700" fontFamily="Inter, sans-serif" fill="#ea4335">B</text>
-                </g>
-                {/* labels */}
-                <text x="20" y="83" fontSize="4.6" fontFamily="Inter, sans-serif" fill="#5f6368">Los Angeles</text>
-                <text x="120" y="14" fontSize="4.6" fontFamily="Inter, sans-serif" fill="#5f6368">Kingman</text>
-              </svg>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {composed && (
-          <motion.div
-            className="hm-chip hm-chip-rts"
-            initial={{ opacity: 0, scale: 0.85 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.85 }}
-            transition={{ duration: 0.45, ease: EASE, delay: 0.1 }}
-          >
-            <div className="hm-rts-grade">A</div>
-            <div className="hm-rts-meta">
-              RTS credit
-              <br />
-              <span>pays in 22 days</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {composed && (
-          <motion.div
-            className="hm-chip hm-chip-filter"
-            initial={{ opacity: 0, x: 16 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 16 }}
-            transition={{ duration: 0.45, ease: EASE, delay: 0.18 }}
-          >
-            <div className="hm-chip-label">Load filter</div>
-            <div className="hm-filter-row">
-              <span>Duplicate loads</span>
-              <span className={`hm-switch${filtersOn ? " is-on" : ""}`} aria-hidden>
-                <i />
-              </span>
-            </div>
-            <div className="hm-filter-row">
-              <span>Short loads</span>
-              <span className={`hm-switch${filtersOn ? " is-on" : ""}`} aria-hidden>
-                <i />
-              </span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {sent && (
-          <motion.div
-            className="hm-chip hm-chip-speed"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 14 }}
-            transition={{ duration: 0.5, ease: EASE }}
-          >
-            <span className="hm-speed-old">~30 sec</span>
-            <span className="hm-speed-new">
-              0.2s <small>to send</small>
-            </span>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </div>
-  );
-}
-
 /** Everything the $7 plan includes — the count is quoted on the page, so keep them together. */
 const PLAN_FEATURES = [
     "7-day free trial (No Credit Card)",
@@ -900,33 +595,71 @@ const PLAN_FEATURE_COUNT = PLAN_FEATURES.length;
    ============================================================ */
 
 const NEWS_KEY = "tb-news-2026-09";
+/**
+ * Closing the bar snoozes it rather than burying it: a dispatcher who dismissed the announcement
+ * in September should see the next one when they come back in October, and "dismissed forever"
+ * quietly disabled the only channel the landing has for saying what shipped.
+ */
+const NEWS_SNOOZE_DAYS = 14;
+
+/** The bar carries two things now: what shipped, and the board anyone can try without installing. */
+const NEWS_ITEMS = [
+  {
+    tag: "New",
+    text: "Outlook & Microsoft 365, multiple mailboxes, and teams from $7 a seat",
+    cta: "See what's new →",
+    to: "/#features",
+  },
+  {
+    tag: "Live",
+    text: "Try TruckBox on a simulated load board — no install, no account",
+    cta: "Open the demo →",
+    to: "/demo",
+  },
+];
+
+const NEWS_ROTATE_MS = 7000;
 
 function AnnouncementBar() {
   const [open, setOpen] = useState(() => {
     try {
-      return localStorage.getItem(NEWS_KEY) !== "dismissed";
+      const dismissedAt = Number(localStorage.getItem(NEWS_KEY));
+      // Missing, or the old permanent "dismissed" marker, which is not a number.
+      if (!Number.isFinite(dismissedAt) || dismissedAt <= 0) return true;
+      return Date.now() - dismissedAt > NEWS_SNOOZE_DAYS * 86400000;
     } catch {
       return true; // private mode: just show it
     }
   });
 
+  const [item, setItem] = useState(0);
+
+  useEffect(() => {
+    if (!open) return;
+    const id = window.setInterval(
+      () => setItem((i) => (i + 1) % NEWS_ITEMS.length),
+      NEWS_ROTATE_MS,
+    );
+    return () => clearInterval(id);
+  }, [open]);
+
   if (!open) return null;
   const close = () => {
     setOpen(false);
     try {
-      localStorage.setItem(NEWS_KEY, "dismissed");
+      localStorage.setItem(NEWS_KEY, String(Date.now()));
     } catch {
       /* ignore */
     }
   };
+  const current = NEWS_ITEMS[item];
   return (
     <div className="tb-news">
-      <Link to="/#features" className="tb-news-body">
-        <span className="tb-news-tag">New</span>
-        <span>
-          Outlook &amp; Microsoft 365, multiple mailboxes, and teams from $7 a seat
-        </span>
-        <span className="tb-news-go">See what's new →</span>
+      {/* Keyed so each message fades in on its own rather than swapping mid-sentence. */}
+      <Link key={item} to={current.to} className="tb-news-body tb-news-in">
+        <span className="tb-news-tag">{current.tag}</span>
+        <span>{current.text}</span>
+        <span className="tb-news-go">{current.cta}</span>
       </Link>
       <button type="button" className="tb-news-x" onClick={close} aria-label="Dismiss">
         <X className="h-3.5 w-3.5" />
@@ -1099,34 +832,13 @@ function Integrations() {
   );
 }
 
-/* ============================================================
-   Hero media — the product demo clip, with the animation as fallback
-   ============================================================ */
+const HeroDemo = lazy(() => import("./pages/demo/HeroDemo"));
 
-/**
- * Shows a screen recording of the extension working inside DAT when
- * `public/demos/hero.mp4` exists; until then (or if the file fails to load, e.g. a browser that
- * refuses autoplay) it falls back to the scripted HeroMockup animation. Muted + playsInline so
- * mobile browsers allow autoplay; `poster` keeps the first frame sharp while it buffers.
- */
-function HeroMedia() {
-  const [failed, setFailed] = useState(false);
-  if (failed) return <HeroMockup />;
+function HeroVisual() {
   return (
-    <div className="tb-hero-video" data-cursor>
-      <video
-        src="/demos/hero.mp4"
-        poster="/demos/hero.webp"
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="metadata"
-        aria-label="Truck Box sending a broker email from a DAT load"
-        onError={() => setFailed(true)}
-      />
-      <span className="tb-hero-video-live">● Live in DAT</span>
-    </div>
+    <Suspense fallback={<div className="tb-hero-demo-skeleton" />}>
+      <HeroDemo />
+    </Suspense>
   );
 }
 
@@ -1150,7 +862,7 @@ function Hero() {
       <motion.div style={{ y, opacity: op }} className="ed-container">
         <div className="flex items-center justify-between gap-6 mb-6">
           <span className="ed-label">[ 01 ] — Chrome Extension · DAT + Truckstop — for truck dispatchers</span>
-          <span className="ed-label hidden sm:block">TruckBox LLC — Chicago, USA · Est. 2025</span>
+          <span className="ed-label hidden sm:block">Chicago, USA · Est. 2025</span>
         </div>
 
         <MaskLines
@@ -1200,7 +912,7 @@ function Hero() {
 
           <Reveal delay={0.35}>
             <motion.div style={{ y: mockY }}>
-              <HeroMedia />
+              <HeroVisual />
             </motion.div>
           </Reveal>
         </div>
@@ -1452,7 +1164,6 @@ function BeforeAfter() {
       window.removeEventListener("pointermove", move);
       window.removeEventListener("pointerup", up);
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Auto-hint: when the slider scrolls into view, sweep the handle once so the
@@ -3949,25 +3660,20 @@ export function Footer() {
         >
           <div className="mt-8 grid gap-6 md:grid-cols-[1fr_auto] md:items-end">
             <div className="flex flex-wrap justify-center md:justify-start gap-x-8 gap-y-3">
-              {NAV.map((n) =>
-                  n.route ? (
-                      <Link
-                          key={n.href}
-                          to={n.href}
-                          className="ed-label hover:text-[color:var(--ink)] transition-colors"
-                      >
-                        {n.label}
-                      </Link>
-                  ) : (
-                      <a
-                          key={n.href}
-                          href={n.href}
-                          className="ed-label hover:text-[color:var(--ink)] transition-colors"
-                      >
-                        {n.label}
-                      </a>
-                  )
-              )}
+              {NAV.map((n) => {
+                const cls =
+                    "ed-label hover:text-[color:var(--ink)] transition-colors" +
+                    (n.desktopOnly ? " hidden lg:inline" : "");
+                return n.route ? (
+                    <Link key={n.href} to={n.href} className={cls}>
+                      {n.label}
+                    </Link>
+                ) : (
+                    <a key={n.href} href={n.href} className={cls}>
+                      {n.label}
+                    </a>
+                );
+              })}
             </div>
 
             <div className="flex justify-center md:justify-end gap-3">

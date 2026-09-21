@@ -7,7 +7,8 @@
     "build": "vite build && node scripts/prerender.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
-    "lint": "eslint src"
+    "lint": "eslint src",
+    "sync:ext": "node scripts/sync-ext.mjs"
   },
   "dependencies": {
     "@formspree/react": "^3.0.0",

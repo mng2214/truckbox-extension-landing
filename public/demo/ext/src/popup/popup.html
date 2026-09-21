@@ -1,0 +1,738 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <title>Truck Box</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+    <!-- Web fonts are attached by popup-core.js after first paint: a remote stylesheet here is
+         render-blocking and made the popup slow (or not open) on a slow network. -->
+    <link rel="stylesheet" href="../styles/popup.css">
+</head>
+<body>
+<div class="wrap">
+    <h3>
+        <span class="pill">v2.0.0</span>
+        <span class="app-meta">
+            <span class="works-on">Works on</span>
+            <img class="plat-logo" src="../../icons/dat.png" alt="DAT" title="Works on DAT" />
+            <img class="plat-logo" src="../../icons/truckstop.png" alt="Truckstop" title="Works on Truckstop" />
+        </span>
+    </h3>
+
+    <div class="tabs">
+        <button class="tab active" data-tab="setup">Login</button>
+        <button class="tab highlight" data-tab="help">Help</button>
+        <button class="tab highlight" data-tab="subscription">Subscription</button>
+        <button class="tab highlight" data-tab="template">Template</button>
+        <button class="tab" data-tab="filter">Filters</button>
+        <button class="tab" data-tab="factoring">Factoring</button>
+        <button class="tab" data-tab="stats">Stats</button>
+    </div>
+
+    <!-- Help Tab -->
+    <div class="tab-content" id="help-tab">
+        <div class="card">
+            <div class="setup-title">Help & Support</div>
+
+            <div class="muted setup-desc">
+                Most issues are fixed in under a minute — please try these 3 steps first.
+            </div>
+
+            <!-- Self-help steps (try these first) -->
+            <ol class="help-steps">
+                <li>
+                    <div class="help-step-title">Update the extension</div>
+                    <div class="help-step-text">
+                        Make sure you're on the latest version, then follow the quick instructions at
+                        <a href="https://truckbox.app/update" target="_blank" rel="noopener">truckbox.app/update</a>.
+                    </div>
+                </li>
+                <li>
+                    <div class="help-step-title">Logout, then login again</div>
+                    <div class="help-step-text">
+                        When signing back in, make sure you <b>tick the checkbox</b> that lets us send email on
+                        your behalf — otherwise your emails won't go out.
+                    </div>
+                </li>
+                <li>
+                    <div class="help-step-title">Refresh the DAT page</div>
+                    <div class="help-step-text">
+                        Reload your DAT One tab (or just press <kbd class="help-key">F5</kbd>) so the extension
+                        reconnects.
+                    </div>
+                </li>
+            </ol>
+
+            <!-- Guide + FAQ -->
+            <div class="actions help-actions">
+                <a href="https://truckbox.app/guide" target="_blank" rel="noopener" class="btn-faq">
+                    Guide
+                </a>
+                <a href="https://truckbox.app/faq" target="_blank" rel="noopener" class="btn-faq">
+                    FAQ
+                </a>
+            </div>
+
+            <!-- Still need help? -->
+            <div class="help-contact">
+                <div class="help-contact-title">Still need help?</div>
+
+                <a href="https://t.me/mngartur" target="_blank" rel="noopener" class="btn-support">
+                    <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M9.999 15.875 9.937 19a.625.625 0 0 0 1.001.516l2.125-1.562 3.441 2.563a1.249 1.249 0 0 0 1.98-.766L21.962 5.91a1.25 1.25 0 0 0-1.67-1.379L3.372 10.485a1.25 1.25 0 0 0 .055 2.382l4.662 1.466 8.637-5.84-6.727 7.382Z"/>
+                    </svg>
+                    Telegram Support
+                </a>
+
+                <div class="row" style="margin-top:14px;">
+                    <label>Session ID</label>
+
+                    <div class="session-box">
+                        <code id="sessionIdValue">Not available</code>
+                        <button id="copySessionIdBtn" type="button" class="btn-secondary">Copy</button>
+                    </div>
+
+                    <div id="sessionCopyMsg" style="margin-top:8px;font-size:12px;color:#16a34a;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Setup/Login Tab -->
+    <div class="tab-content active" id="setup-tab">
+        <div class="card setup-simple">
+            <div class="setup-title">
+                Sign in
+            </div>
+
+            <div class="muted setup-desc" id="setupDesc">
+                Sign in with Google to send emails from your Gmail account.
+            </div>
+
+            <div class="setup-actions">
+                <div class="signin-buttons">
+                    <button id="login" class="btn-primary btn-signin">
+                        <span class="signin-logo" aria-hidden="true">
+                            <svg viewBox="0 0 18 18" focusable="false">
+                                <path fill="#4285F4" d="M17.64 9.2045c0-.6381-.0573-1.2518-.1636-1.8409H9v3.4814h4.8436c-.2086 1.125-.8427 2.0782-1.7959 2.7164v2.2581h2.9087c1.7018-1.5668 2.6836-3.874 2.6836-6.615z"/>
+                                <path fill="#34A853" d="M9 18c2.43 0 4.4673-.806 5.9564-2.1818l-2.9087-2.2581c-.806.54-1.8368.8591-3.0477.8591-2.344 0-4.3282-1.5831-5.0364-3.7104H.9573v2.3318C2.4382 15.9832 5.4818 18 9 18z"/>
+                                <path fill="#FBBC05" d="M3.9636 10.71c-.18-.54-.2823-1.1168-.2823-1.71s.1023-1.17.2823-1.71V4.9582H.9573C.3477 6.1732 0 7.5477 0 9s.3477 2.8268.9573 4.0418L3.9636 10.71z"/>
+                                <path fill="#EA4335" d="M9 3.5795c1.3214 0 2.5077.4541 3.4405 1.346l2.5813-2.5814C13.4632.8918 11.426 0 9 0 5.4818 0 2.4382 2.0168.9573 4.9582L3.9636 7.29C4.6718 5.1627 6.656 3.5795 9 3.5795z"/>
+                            </svg>
+                        </span>
+                        <span class="btn-label">Sign in with Google</span>
+                    </button>
+                    <button id="loginMicrosoft" class="btn-secondary btn-signin" hidden>
+                        <span class="signin-logo" aria-hidden="true">
+                            <svg viewBox="0 0 21 21" focusable="false">
+                                <rect x="1" y="1" width="9" height="9" fill="#F25022"/>
+                                <rect x="11" y="1" width="9" height="9" fill="#7FBA00"/>
+                                <rect x="1" y="11" width="9" height="9" fill="#00A4EF"/>
+                                <rect x="11" y="11" width="9" height="9" fill="#FFB900"/>
+                            </svg>
+                        </span>
+                        <span class="btn-label">Sign in with Microsoft</span>
+                    </button>
+                </div>
+                <div class="signin-consent muted">
+                    By signing in, you agree to the
+                    <a href="https://truckbox.app/privacy"
+                       target="_blank"
+                       rel="noopener"
+                       class="setup-link">Privacy Policy & Terms</a>.
+                </div>
+                <div class="signin-status">
+                    <button id="logoutBtn" class="btn-secondary">Logout</button>
+                    <span id="status" class="status muted"></span>
+                </div>
+                <!-- Shown once signed in: same back-office page as the Template tab's link. -->
+                <div class="signin-links">
+                    <a href="#" id="loginManageMailboxes" class="setup-link" data-cabinet-link hidden>Manage mailboxes ↗</a>
+                </div>
+            </div>
+
+            <div id="deviceSignedOutNotice" class="device-notice" role="status" hidden>
+                <b>You were signed out.</b> Your TruckBox account was signed in on another computer —
+                one subscription works on one computer at a time. Sign in again to use it here.
+                <a href="#" id="deviceNoticeTeamLink">Need TruckBox for more people? Start a team ↗</a>
+            </div>
+
+            <a id="teamInviteNotice" class="team-invite-notice" href="#" hidden></a>
+
+            <div id="phoneVerifiedRow" class="phone-row" hidden>
+                <span class="phone-row-label"><span class="phone-check">✓</span> Phone verified <strong id="phoneMaskedText"></strong></span>
+                <button type="button" id="changePhoneBtn" class="btn-secondary phone-row-btn">Change</button>
+            </div>
+
+            <div class="setup-help">
+                <div class="muted">
+                    Need help signing in?
+                </div>
+                <a href="https://truckbox.app/guide#4"
+                   target="_blank"
+                   rel="noopener"
+                   class="setup-link">
+                    View step-by-step guide →
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Subscription Tab -->
+    <div class="tab-content" id="subscription-tab">
+        <div class="card" id="subscriptionCard">
+            <div class="setup-title">Subscription</div>
+
+            <div class="muted setup-desc">
+                Manage your access and billing.
+            </div>
+
+            <div class="subscription-content" id="subscriptionContent">
+                <div class="row">
+                    <label>Status</label>
+                    <span id="planStatusText" class="status muted">Loading...</span>
+                </div>
+
+                <div class="row">
+                    <label>Access</label>
+                    <span id="planAccessText" class="muted">—</span>
+                </div>
+
+                <div class="row">
+                    <label>Next billing / access until</label>
+                    <span id="planDateText" class="muted">—</span>
+                </div>
+
+                <div class="actions" style="display:flex;gap:10px;flex-wrap:wrap;">
+                    <button id="startSubscriptionBtn" type="button" class="btn-primary">
+                        Start Subscription
+                    </button>
+
+                    <button id="cancelSubscriptionBtn" type="button" class="btn-secondary" style="display:none;">
+                        Cancel Subscription
+                    </button>
+
+                    <button id="cancelTeamSubscriptionBtn" type="button" class="btn-secondary" style="display:none;">
+                        Cancel Team Subscription
+                    </button>
+                </div>
+            </div>
+
+            <div id="subscriptionLoginRequiredBox" class="login-required-box" style="display:none;">
+                <div class="muted login-required-text">
+                    Login first to view and manage your subscription.
+                </div>
+                <button id="subscriptionLoginBtn" class="btn-primary force-enabled" type="button">
+                    Login
+                </button>
+            </div>
+
+            <div id="subscriptionMsg" style="margin-top:8px;font-size:12px;"></div>
+        </div>
+    </div>
+
+    <!-- Template Tab -->
+    <div class="tab-content" id="template-tab">
+        <div class="card">
+
+            <!-- Top explanation -->
+            <div style="
+            margin-bottom:14px;
+            padding:12px 14px;
+            border-radius:12px;
+            background:#eef2ff;
+            border:1px solid #c7d2fe;
+            color:#3730a3;
+            font-size:13px;
+            line-height:1.5;
+        ">
+                <b>Fully customizable template.</b><br>
+                Your email is generated automatically using load data from DAT.<br>
+                Click any <b>{{placeholder}}</b> below to insert it into your template.
+                <br><br>
+                <b>Each template is tied to one sender email.</b>
+                This template always sends from the email you pick below. One email can have one or
+                several templates (for example, per lane or equipment).
+                <br>
+                Fill in <b>the name (or company), MC number and phone that belong to this email</b> —
+                brokers see them in the signature, so a different email means a different company and
+                contact details.
+            </div>
+
+            <!-- Template switcher (saved in your account; one per sender) -->
+            <p class="tpl-hint">Pick your default template:</p>
+            <div class="tpl-switcher">
+                <div class="tpl-chips" id="tplChips"></div>
+                <button type="button" id="tplAddBtn" class="tpl-add" title="Add a template">+ Add</button>
+            </div>
+
+            <div class="row">
+                <label>Template name</label>
+                <input id="tplName" maxlength="40" placeholder="e.g. Larkin · Reefer"/>
+            </div>
+
+            <!-- This template's sender (multi-mailbox; hidden unless enabled for this account) -->
+            <div class="row sender-row" id="senderBox" hidden>
+                <label id="senderLabel">Send from</label>
+                <div class="sender-picker" id="senderPicker">
+                    <button type="button" class="sender-trigger" id="senderTrigger"
+                            aria-haspopup="listbox" aria-expanded="false" aria-controls="senderList"
+                            aria-labelledby="senderLabel senderFace">
+                        <span class="sender-face" id="senderFace"></span>
+                        <svg class="sender-caret" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M6 9l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2"
+                                  stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <ul class="sender-list" id="senderList" role="listbox" tabindex="-1"
+                        aria-labelledby="senderLabel" hidden></ul>
+                </div>
+                <div class="sender-warn" id="senderWarn" role="status" hidden>
+                    <span id="senderWarnText">Mailbox disconnected — </span><a href="#" data-cabinet-link>Reconnect ↗</a>
+                </div>
+                <div class="sender-links">
+                    <a href="#" id="senderAddLink" data-cabinet-link hidden>Add Gmail or Outlook ↗</a>
+                    <a href="#" id="manageMailboxesLink" data-cabinet-link>Manage mailboxes ↗</a>
+                </div>
+            </div>
+
+            <!-- User inputs -->
+            <div class="row">
+                <label>Your Name</label>
+                <input id="myName" maxlength="80" placeholder="John Doe"/>
+            </div>
+
+            <div class="row">
+                <label>Your MC</label>
+                <input id="myMc" maxlength="10" inputmode="numeric" placeholder="1234567"/>
+            </div>
+
+            <div class="row">
+                <label>Your Phone</label>
+                <input id="myPhone" maxlength="20" inputmode="tel" placeholder="(555) 555-5555"/>
+            </div>
+
+            <!-- Subject -->
+            <div class="row">
+                <label>
+                    Subject
+                    <span class="muted">(dynamic using {{placeholders}})</span>
+                </label>
+                <input id="templateSubject"
+                       maxlength="200"
+                       placeholder="e.g. Truck available from {{origin}} to {{destination}}"/>
+            </div>
+
+            <!-- Body -->
+            <div class="row">
+                <label>
+                    Body
+                    <span class="muted">(click placeholders below to insert)</span>
+                </label>
+
+                <div style="
+                margin:6px 0 10px;
+                padding:10px 12px;
+                border-radius:10px;
+                background:#fff7ed;
+                border:1px solid #fdba74;
+                color:#9a3412;
+                font-size:12px;
+                line-height:1.5;
+                font-weight:600;
+            ">
+                    This is a sample template. Customize it before sending emails.
+                </div>
+
+                <textarea id="templateBody"
+                          rows="10"
+                          maxlength="5000"
+                          placeholder="Hi, I have a truck available from {{origin}} to {{destination}} on {{pickupDate}}."></textarea>
+
+                <!-- Placeholders -->
+                <div class="ph-bank">
+                    <div class="title">Placeholders — click to insert</div>
+
+                    <div class="ph-list" id="phList">
+                        <button type="button" class="ph-chip" data-ph="origin"><kbd>{{origin}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="destination"><kbd>{{destination}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="pickupDate"><kbd>{{pickupDate}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="equipment"><kbd>{{equipment}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="length"><kbd>{{length}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="weight"><kbd>{{weight}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="referenceId"><kbd>{{referenceId}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="myName"><kbd>{{myName}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="myMc"><kbd>{{myMc}}</kbd></button>
+                        <button type="button" class="ph-chip" data-ph="myPhone"><kbd>{{myPhone}}</kbd></button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="actions">
+                <button id="saveBtn" type="button" class="btn-primary">Save Template</button>
+                <span id="saveMsg" aria-live="polite"></span>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Map & Filter Tab -->
+    <div class="tab-content" id="filter-tab">
+        <!-- Section 1: Map -->
+        <div class="card" style="margin-bottom:20px;">
+            <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                Route Map
+            </h4>
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="mapEnabled" style="margin:0;min-width:120px">
+                    Show route map
+                </label>
+
+                <label class="switch">
+                    <input id="mapEnabled" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
+
+                <span id="mapToggleMsg" style="margin-left:8px;font-size:12px;color:#0a7;"></span>
+            </div>
+
+            <div class="muted" style="margin-top:10px;font-size:13px;line-height:1.5;">
+                Turn the map off to keep load details compact. The RPM stats, Copy,
+                rate calculator and FMCSA report stay.
+            </div>
+        </div>
+
+        <!-- Section 2: Duplicate load filter -->
+        <div class="card" style="margin-bottom:20px;">
+            <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                Duplicate Load Filter
+            </h4>
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="dupFilterEnabled" style="margin:0;min-width:120px">
+                    Grey out duplicates
+                </label>
+
+                <label class="switch">
+                    <input id="dupFilterEnabled" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
+
+                <span id="dupToggleMsg" style="margin-left:8px;font-size:12px;color:#0a7;"></span>
+            </div>
+
+            <div class="muted" style="margin-top:10px;font-size:13px;line-height:1.5;">
+                Dims repeated loads (same lane, date, rate &amp; broker) so you
+                only act on each one once.
+            </div>
+        </div>
+
+        <!-- Section 3: Profit calculator -->
+        <div class="card" style="margin-bottom:20px;">
+            <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                Profit Calculator
+            </h4>
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="profitCalcEnabled" style="margin:0;min-width:120px">
+                    Show calculator
+                </label>
+
+                <label class="switch">
+                    <input id="profitCalcEnabled" type="checkbox" checked>
+                    <span class="slider round"></span>
+                </label>
+
+                <span id="profitCalcMsg" style="margin-left:8px;font-size:12px;color:#0a7;"></span>
+            </div>
+
+            <div class="muted" style="margin-top:10px;font-size:13px;line-height:1.5;">
+                Rate minus fuel, tolls and driver pay, with your break-even, inside
+                the load's Rate column. Turn it off and the column goes back to the
+                way the board draws it.
+            </div>
+        </div>
+
+        <!-- Section 4: DAT's own email button -->
+        <div class="card" style="margin-bottom:20px;">
+            <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                DAT's Email Button
+            </h4>
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="datOwnEmailBtnEnabled" style="margin:0;min-width:120px">
+                    Show DAT's button
+                </label>
+
+                <label class="switch">
+                    <input id="datOwnEmailBtnEnabled" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+
+                <span id="datOwnEmailBtnMsg" style="margin-left:8px;font-size:12px;color:#0a7;"></span>
+            </div>
+
+            <div class="muted" style="margin-top:10px;font-size:13px;line-height:1.5;">
+                DAT draws its own send-email icon next to ours. It's hidden by
+                default so there's only one button to hit &mdash; turn this on if you
+                want both. The broker's email address stays visible either way.
+            </div>
+        </div>
+
+        <!-- Section 5: Filter -->
+        <div class="card">
+            <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                Hide Short Trips
+            </h4>
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="tripFilterEnabled" style="margin:0;min-width:120px">
+                    Enable filter
+                </label>
+
+                <label class="switch">
+                    <input id="tripFilterEnabled" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+            </div>
+
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="tripMinMiles" style="margin:0;min-width:120px">
+                    Hide loads under
+                </label>
+
+                <input id="tripMinMiles"
+                       type="number"
+                       min="0"
+                       max="5000"
+                       step="50"
+                       placeholder="e.g. 500"
+                       style="max-width:120px">
+
+                <span class="muted">miles</span>
+            </div>
+
+            <div class="actions">
+                <button id="filterApplyBtn" class="btn-primary" type="button">Save</button>
+                <button id="filterClearBtn" type="button">Reset</button>
+                <span id="filterMsg" style="margin-left:8px;font-size:12px;color:#0a7;"></span>
+            </div>
+
+            <div class="muted" style="margin-top:10px;font-size:13px;line-height:1.5;">
+                Loads with trip miles lower than the selected value will be hidden.
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Tab -->
+    <div class="tab-content" id="stats-tab">
+        <div class="card stats-card" id="statsCard">
+
+            <!-- Logged-in content -->
+            <div class="stats-content" id="statsContent">
+                <div class="stats-head">
+                    <div class="stats-title">Statistics</div>
+                    <div class="stats-sub muted">Your usage from this extension</div>
+                </div>
+
+                <div class="stats-breakdown">
+                    <div class="sbk-row sbk-row--head">
+                        <span class="sbk-plat"></span>
+                        <span>Emails</span>
+                        <span>Maps</span>
+                        <span>Calls</span>
+                    </div>
+                    <div class="sbk-row">
+                        <span class="sbk-plat">DAT</span>
+                        <span class="sbk-v" id="stat-dat-email">0</span>
+                        <span class="sbk-v" id="stat-dat-map">0</span>
+                        <span class="sbk-v" id="stat-dat-call">0</span>
+                    </div>
+                    <div class="sbk-row">
+                        <span class="sbk-plat">Truckstop</span>
+                        <span class="sbk-v" id="stat-ts-email">0</span>
+                        <span class="sbk-v" id="stat-ts-map">0</span>
+                        <span class="sbk-v" id="stat-ts-call">0</span>
+                    </div>
+                    <div class="sbk-row sbk-row--total">
+                        <span class="sbk-plat">Total</span>
+                        <span class="sbk-v" id="stat-total">0</span>
+                        <span class="sbk-v" id="stat-map-viewed">0</span>
+                        <span class="sbk-v" id="stat-call">0</span>
+                    </div>
+                </div>
+
+                <div class="sbk-timesaved">
+                    <b id="stat-time-saved">0 min</b> saved
+                </div>
+
+                <!-- Review block (hidden by default) -->
+                <div id="reviewBlock" style="display:none; margin-top:22px; text-align:center;">
+                    <div class="muted review-title">
+                        Enjoying TruckBox?
+                    </div>
+
+                    <a href="https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd/reviews"
+                       target="_blank"
+                       rel="noopener"
+                       class="review-btn">
+                        Leave a review
+                    </a>
+                </div>
+
+                <!-- Manager team stats (organization owners only; hidden otherwise) -->
+                <div id="teamStatsBlock" style="display:none; margin-top:24px;">
+                    <div class="stats-head">
+                        <div class="stats-title">Team</div>
+                        <div class="stats-sub muted" id="teamStatsSub">Your dispatchers' activity</div>
+                    </div>
+                    <div id="teamStatsBody"></div>
+                </div>
+            </div>
+
+            <!-- Logged-out content -->
+            <div id="statsLoginRequiredBox" class="login-required-box" style="display:none;">
+                <div class="muted login-required-text">
+                    Login first to view your stats.
+                </div>
+                <button id="statsLoginBtn" class="btn-primary force-enabled" type="button">
+                    Login
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Factoring Tab -->
+    <div class="tab-content" id="factoring-tab">
+
+        <!-- Shown until the user is signed in to the extension -->
+        <div id="factoringLoginRequiredBox" class="login-required-box" style="display:none;">
+            <div class="muted login-required-text">
+                Log in first to connect a factoring account.
+            </div>
+            <button id="factoringLoginBtn" class="btn-primary force-enabled" type="button">Login</button>
+        </div>
+
+        <!-- Intro (grid screen only) -->
+        <div id="factoringIntro" class="muted" style="font-size:12px;line-height:1.55;margin-bottom:14px;">
+            Connect your factoring account to check a broker's credit rating right in DAT.
+            Log in once at your factoring and we'll reuse your session — no password stored.
+            You can use the factoring check only if you have an account with a factoring company.
+        </div>
+
+        <!-- Provider grid -->
+        <div id="factoringGrid" class="fct-grid">
+            <button type="button" class="fct-tile" id="fctTileRts" data-provider="rts">
+                <span class="fct-tile-selected" id="fctRtsSelected" hidden>Selected</span>
+                <span class="fct-tile-badge" id="fctRtsBadge">Not connected</span>
+                <img class="fct-tile-logo" src="../../icons/rts-logo.png" alt="RTS" />
+            </button>
+            <button type="button" class="fct-tile" id="fctTileTriumph" data-provider="triumph">
+                <span class="fct-tile-selected" id="fctTriumphSelected" hidden>Selected</span>
+                <span class="fct-tile-badge" id="fctTriumphBadge">Not connected</span>
+                <img class="fct-tile-logo" src="../../icons/triumph-logo.png" alt="Triumph" />
+            </button>
+            <button type="button" class="fct-tile" id="fctTileApex" data-provider="apex">
+                <span class="fct-tile-selected" id="fctApexSelected" hidden>Selected</span>
+                <span class="fct-tile-badge" id="fctApexBadge">Not connected</span>
+                <img class="fct-tile-logo fct-tile-logo--wide" src="../../icons/apexcapital.png" alt="Apex Capital" />
+            </button>
+            <div class="fct-tile fct-tile-soon"><span class="fct-soon">Soon</span></div>
+        </div>
+
+        <!-- Provider detail (opens over the grid) -->
+        <div id="factoringDetail" class="fct-detail" style="display:none;">
+            <button type="button" class="fct-back" id="fctBackBtn" aria-label="Back to providers">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                    <path d="M15 5l-7 7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <span>Back</span>
+            </button>
+
+            <div class="card" id="fctCardRts">
+                <div class="setup-title" style="display:flex;align-items:center;gap:8px;">
+                    <img src="../../icons/rts-logo.png" alt="" style="height:22px;width:auto;" />
+                    RTS Factoring
+                </div>
+
+                <div id="rtsStatus" class="setup-template">Checking RTS connection…</div>
+
+                <div class="actions">
+                    <button id="rtsLoginBtn" class="btn-primary" type="button">Login to RTS</button>
+                    <button id="rtsDisconnectBtn" class="btn-secondary" type="button" style="display:none;">Disconnect</button>
+                </div>
+
+
+                <div class="row fct-show-row" id="rtsShowRow" style="display:none;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(16,32,58,.10);">
+                    <label for="rtsShow" style="margin:0;min-width:150px">Show in load panel</label>
+                    <label class="switch">
+                        <input id="rtsShow" type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card" id="fctCardTriumph" style="display:none;">
+                <div class="setup-title" style="display:flex;align-items:center;gap:8px;">
+                    <img src="../../icons/triumph-logo.png" alt="" style="height:22px;width:auto;" />
+                    Triumph Factoring
+                </div>
+
+                <div id="triumphStatus" class="setup-template">Checking Triumph connection…</div>
+
+                <div class="actions">
+                    <button id="triumphLoginBtn" class="btn-primary" type="button">Login to Triumph</button>
+                    <button id="triumphDisconnectBtn" class="btn-secondary" type="button" style="display:none;">Disconnect</button>
+                </div>
+
+                <div class="row fct-show-row" id="triumphShowRow" style="display:none;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(16,32,58,.10);">
+                    <label for="triumphShow" style="margin:0;min-width:150px">Show in load panel</label>
+                    <label class="switch">
+                        <input id="triumphShow" type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="card" id="fctCardApex" style="display:none;">
+                <div class="setup-title" style="display:flex;align-items:center;gap:8px;">
+                    <img src="../../icons/apexcapital.png" alt="" style="height:22px;width:auto;" />
+                    Apex Capital
+                </div>
+
+                <div id="apexStatus" class="setup-template">Checking Apex connection…</div>
+
+                <div class="actions">
+                    <button id="apexLoginBtn" class="btn-primary" type="button">Open Apex</button>
+                    <button id="apexDisconnectBtn" class="btn-secondary" type="button" style="display:none;">Disconnect</button>
+                </div>
+
+                <div class="row fct-show-row" id="apexShowRow" style="display:none;align-items:center;gap:10px;margin-top:14px;padding-top:12px;border-top:1px solid rgba(16,32,58,.10);">
+                    <label for="apexShow" style="margin:0;min-width:150px">Show in load panel</label>
+                    <label class="switch">
+                        <input id="apexShow" type="checkbox" checked>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script src="modules/popup-core.js"></script>
+<script src="modules/auth-subscription.js"></script>
+<script src="modules/stats-template-actions.js"></script>
+<script src="modules/trip-filter-settings.js"></script>
+<script src="modules/manager-team-stats.js"></script>
+<script src="modules/template-manager.js"></script>
+<script src="modules/factoring.js"></script>
+<script src="modules/placeholder-bank.js"></script>
+<script src="modules/mailboxes.js"></script>
+<script src="modules/microsoft-login.js"></script>
+<script src="modules/team-invite.js"></script>
+<script src="modules/device-notice.js"></script>
+<script src="modules/input-guards.js"></script>
+<script src="modules/popup-init.js"></script>
+<script src="modules/embed-autosize.js"></script>
+</body>
+</html>

@@ -2625,7 +2625,10 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 9px 44px 9px 16px;
+  /* Fixed height, shared with the header's offset below: the two used to be set separately and
+     drifted three pixels apart, leaving a slit of the page between them. */
+  height: var(--tb-news-h, 36px);
+  padding: 0 44px 0 16px;
   background: var(--accent-grad, linear-gradient(90deg, #6d28d9, #4f46e5));
   color: #fff;
   font: 600 13px/1.3 "Inter", system-ui, sans-serif;
@@ -2639,6 +2642,13 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   text-transform: uppercase;
 }
 .tb-news-go { opacity: .85; text-decoration: underline; text-underline-offset: 3px; }
+/* Each message arrives on its own instead of the text changing under the reader's eye. */
+.tb-news-in { animation: tb-news-in .45s cubic-bezier(.16,1,.3,1) both; }
+@keyframes tb-news-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) { .tb-news-in { animation: none; } }
 .tb-news-body:hover .tb-news-go { opacity: 1; }
 .tb-news-x {
   position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
@@ -2646,12 +2656,12 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   width: 26px; height: 26px; color: #fff; opacity: .8;
 }
 .tb-news-x:hover { opacity: 1; background: rgba(255, 255, 255, .16); }
-/* The bar sits above the fixed header, which keeps its own offset. */
-body:has(.tb-news) header.fixed { top: 38px; }
+/* The bar sits above the fixed header, which starts exactly where the bar ends. */
+body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
 @media (max-width: 640px) {
-  .tb-news { font-size: 11.5px; padding: 8px 40px 8px 12px; }
+  :root { --tb-news-h: 32px; }
+  .tb-news { font-size: 11.5px; padding: 0 40px 0 12px; }
   .tb-news-go { display: none; }
-  body:has(.tb-news) header.fixed { top: 34px; }
 }
 
 .tb-numbers-wrap { padding: 8px 0 56px; }
@@ -2826,25 +2836,10 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   .tb-marquee-track { animation: none; flex-wrap: wrap; width: 100%; justify-content: center; }
 }
 
-/* Hero demo clip — framed like the app window, same footprint as the animation it replaces. */
-.tb-hero-video {
-  position: relative;
-  overflow: hidden;
+.tb-hero-demo-skeleton {
+  aspect-ratio: 16 / 10;
   border: 1px solid var(--line);
-  background: #0b0820;
-  box-shadow: 0 40px 90px -40px rgba(0, 0, 0, .65), 0 0 0 1px rgba(255, 255, 255, .04);
-}
-.tb-hero-video video { display: block; width: 100%; height: auto; }
-.tb-hero-video-live {
-  position: absolute; top: 12px; right: 12px;
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 6px 10px;
-  background: rgba(10, 7, 25, .72);
-  color: #fff;
-  font: 700 11px/1 "Inter", system-ui, sans-serif;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  backdrop-filter: blur(6px);
+  background: linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .25));
 }
 
 /* Before/After view switcher: the active tab is filled, the others light up under the cursor. */

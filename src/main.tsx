@@ -16,6 +16,8 @@ import CancelPage from "./pages/Cancel";
 const Cabinet = lazy(() => import("./pages/business/Cabinet"));
 const TeamStart = lazy(() => import("./pages/business/TeamStart"));
 const MicrosoftCallback = lazy(() => import("./pages/business/MicrosoftCallback"));
+// The interactive demo boots the extension itself — kept out of every other page's bundle.
+const DemoPage = lazy(() => import("./pages/demo/DemoPage"));
 
 // Landing theme: ?theme=light|dark sets and remembers it; otherwise stored/default.
 {
@@ -47,6 +49,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/guide" element={<GuidePage />} />
         <Route path="/update" element={<UpdatePage />} />
         <Route path="/faq" element={<FAQPage />} />
+        <Route path="/demo" element={<DemoPage />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business/start" element={<TeamStart />} />

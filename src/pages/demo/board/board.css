@@ -1,0 +1,471 @@
+.db-board {
+  --db-ink: #1b2437;
+  --db-muted: #6b7280;
+  --db-line: #e3e7ef;
+  --db-bg: #ffffff;
+  --db-alt: #f7f9fc;
+  --db-accent: #2f5fe0;
+  --db-head: #f1f4fa;
+  --db-track: 28px 52px 96px 58px 134px 48px 36px 142px 48px 74px 40px 58px 92px 74px 168px minmax(170px, 1fr) 146px;
+
+  font: 13px/1.35 "Inter", -apple-system, "Segoe UI", sans-serif;
+  color: var(--db-ink);
+  background: var(--db-bg);
+  min-width: 1380px;
+}
+
+.db-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--db-line);
+}
+
+.db-count b {
+  display: block;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.db-count span {
+  font-size: 11.5px;
+  color: var(--db-muted);
+}
+
+.db-sortby {
+  font-size: 12.5px;
+  color: var(--db-muted);
+}
+
+.db-sortby b {
+  color: var(--db-accent);
+  font-weight: 600;
+}
+
+.db-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--db-line);
+  background: var(--db-head);
+}
+
+.db-field {
+  position: relative;
+  flex: 1 1 260px;
+  min-width: 0;
+  border: 1px solid var(--db-line);
+  border-radius: 4px;
+  background: var(--db-bg);
+  padding: 15px 11px 6px;
+}
+
+.db-field-narrow {
+  flex: 0 0 92px;
+}
+
+.db-field-label {
+  position: absolute;
+  top: 5px;
+  left: 11px;
+  font: 500 10.5px/1 "Inter", sans-serif;
+  color: var(--db-muted);
+}
+
+.db-field-input {
+  width: 100%;
+  border: 0;
+  background: transparent;
+  color: var(--db-ink);
+  padding: 0;
+  font: 13.5px/1.3 "Inter", sans-serif;
+}
+
+.db-field-input:focus {
+  outline: none;
+}
+
+.db-field:focus-within {
+  border-color: var(--db-accent);
+}
+
+.db-field-input[readonly] {
+  cursor: default;
+}
+
+.db-pill {
+  pointer-events: none;
+}
+
+.db-swap {
+  cursor: pointer;
+  border: 1px solid var(--db-line);
+  border-radius: 4px;
+  background: var(--db-bg);
+  color: var(--db-accent);
+  width: 34px;
+  height: 34px;
+  font-size: 15px;
+}
+
+.db-pills {
+  display: flex;
+  gap: 8px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--db-line);
+  background: var(--db-bg);
+}
+
+.db-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  cursor: pointer;
+  border: 1px solid var(--db-line);
+  border-radius: 4px;
+  background: var(--db-bg);
+  color: var(--db-ink);
+  padding: 7px 12px;
+  font: 600 11px/1 "Inter", sans-serif;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.db-pill:hover {
+  border-color: var(--db-accent);
+  color: var(--db-accent);
+}
+
+.db-pill-caret {
+  color: var(--db-muted);
+  font-size: 9px;
+}
+
+.db-search-go {
+  cursor: pointer;
+  border: 0;
+  border-radius: 4px;
+  background: var(--db-accent);
+  color: #fff;
+  padding: 9px 22px;
+  font: 600 12.5px/1 "Inter", sans-serif;
+  letter-spacing: 0.02em;
+}
+
+.db-search-go:hover {
+  filter: brightness(1.06);
+}
+
+.db-actions {
+  display: flex;
+  gap: 18px;
+  margin-left: auto;
+}
+
+.db-action {
+  font: 600 11px/1 "Inter", sans-serif;
+  letter-spacing: 0.06em;
+  color: var(--db-muted);
+  white-space: nowrap;
+}
+
+.db-head,
+.row-cells {
+  display: grid;
+  grid-template-columns: var(--db-track);
+  align-items: center;
+  column-gap: 0;
+}
+
+.db-head {
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--db-line);
+  background: var(--db-bg);
+}
+
+.db-th {
+  font: 600 12px/1 "Inter", sans-serif;
+  color: var(--db-muted);
+}
+
+.db-th.is-sortable {
+  cursor: pointer;
+}
+
+.db-th.is-sortable:hover {
+  color: var(--db-accent);
+}
+
+.db-row {
+  border-bottom: 1px solid var(--db-line);
+  cursor: pointer;
+}
+
+.db-row:nth-child(odd) {
+  background: var(--db-alt);
+}
+
+.db-row:hover {
+  background: color-mix(in srgb, var(--db-accent) 7%, transparent);
+}
+
+.db-row.is-open {
+  background: color-mix(in srgb, var(--db-accent) 10%, transparent);
+  border-bottom-color: var(--db-accent);
+}
+
+.db-row .row-cells {
+  padding: 9px 14px;
+  min-height: 44px;
+}
+
+.db-cell {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  padding-right: 8px;
+}
+
+.db-cell-dtp,
+.db-cell-contact {
+  overflow: visible;
+}
+
+.db-cell-rate b {
+  font-weight: 700;
+}
+
+.db-cell-rate i {
+  display: block;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--db-muted);
+}
+
+.db-cell-rate .db-dash,
+.db-cell-dhd {
+  color: var(--db-muted);
+  font-weight: 400;
+}
+
+.db-cell-trip,
+.db-cell-origin,
+.db-cell-destination {
+  font-weight: 600;
+}
+
+.db-cell-trip {
+  color: var(--db-accent);
+}
+
+.db-cell-dho,
+.db-cell-arrow {
+  color: var(--db-muted);
+  font-size: 12px;
+}
+
+.db-cell-timing {
+  font-size: 11.5px;
+  line-height: 1.25;
+  white-space: normal;
+}
+
+.db-cell-company {
+  color: var(--db-accent);
+  font-weight: 500;
+}
+
+.db-link {
+  color: var(--db-accent);
+  text-decoration: none;
+}
+
+.db-link:hover {
+  text-decoration: underline;
+}
+
+.db-check {
+  accent-color: var(--db-accent);
+}
+
+.db-detail {
+  border-bottom: 2px solid var(--db-line);
+  background: var(--db-bg);
+}
+
+.db-detail-inner {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  align-items: flex-start;
+  gap: 22px;
+  padding: 16px 18px 22px;
+}
+
+.db-detail-inner > * {
+  flex: 1 1 0 !important;
+  min-width: 0;
+}
+
+.db-detail-inner > .db-col-trip {
+  flex: 0 0 280px !important;
+}
+
+.db-detail-inner > .db-col-company {
+  flex: 0 0 250px !important;
+}
+
+.db-detail-inner > .tb-map-col {
+  flex: 1 1 380px !important;
+}
+
+.details-header {
+  display: flex;
+  align-items: center;
+  background: var(--db-head);
+  border-bottom: 1px solid var(--db-line);
+  padding: 6px 10px;
+  margin-bottom: 10px;
+}
+
+.details-header .label {
+  font: 600 12px/1 "Inter", sans-serif;
+  letter-spacing: 0.02em;
+  color: var(--db-muted);
+}
+
+.db-block-title {
+  font: 600 11px/1 "Inter", sans-serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--db-muted);
+  margin: 16px 0 7px;
+}
+
+.db-mileage {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--db-muted);
+  margin-bottom: 6px;
+}
+
+.db-route .city {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.db-route .date {
+  font-size: 12px;
+  color: var(--db-muted);
+  margin: 2px 0 10px;
+}
+
+.db-data-row {
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 8px;
+  padding: 2px 0;
+  font-size: 12.5px;
+}
+
+.db-data-row .data-label {
+  color: var(--db-muted);
+}
+
+.db-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 8px;
+  font-size: 12.5px;
+}
+
+.db-contacts .db-block-title {
+  flex: 1 0 100%;
+  margin-bottom: 0;
+}
+
+.db-comment-text {
+  font-size: 12.5px;
+  color: var(--db-ink);
+  max-width: 44ch;
+}
+
+.db-rate-line {
+  display: grid;
+  grid-template-columns: 110px minmax(0, 1fr);
+  padding: 4px 10px;
+  font-size: 13px;
+}
+
+.db-rate-line .data-label {
+  color: var(--db-muted);
+}
+
+.db-rate-line .data-item-total {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.db-rate-line .data-item {
+  font-weight: 600;
+}
+
+.db-market {
+  border: 1px solid var(--db-line);
+  padding: 10px 12px;
+  margin-top: 14px;
+}
+
+.db-market .db-block-title {
+  margin-top: 0;
+}
+
+.db-market-spot b {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.db-market-spot i {
+  font-style: normal;
+  color: var(--db-muted);
+}
+
+.db-market-spot span {
+  display: block;
+  font-size: 12px;
+  color: var(--db-muted);
+  margin-top: 3px;
+}
+
+.db-company-name {
+  font-size: 15px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.db-company-line {
+  font-size: 12.5px;
+  margin-bottom: 2px;
+}
+
+.db-muted {
+  color: var(--db-muted);
+}
+
+.db-ratings {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  font-size: 12.5px;
+}
+
+.db-stars {
+  color: #e0a325;
+  letter-spacing: 2px;
+}
