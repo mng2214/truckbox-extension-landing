@@ -175,6 +175,10 @@
   color: var(--vx-dim);
 }
 
+.vx-note.is-bad {
+  color: var(--vx-bad);
+}
+
 .vx-note a {
   color: var(--vx-accent);
 }

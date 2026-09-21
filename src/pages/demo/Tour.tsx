@@ -26,6 +26,7 @@ type Props = {
 type Box = { top: number; left: number; width: number; height: number };
 
 const PAD = 7;
+const GRACE = 900;
 const DWELL = 350;
 const HOLD = 700;
 const GUTTER_MIN = 264;
@@ -86,6 +87,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
   const bound = useRef<{ el: Element; fn: EventListener } | null>(null);
   const clicked = useRef(false);
   const scrolled = useRef(false);
+  const lostAt = useRef(0);
   const startedAt = useRef(performance.now());
   const indexRef = useRef(0);
   const onStepRef = useRef(onStep);
@@ -102,6 +104,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
     held.current = null;
     lastBox.current = null;
     doneAt.current = 0;
+    lostAt.current = 0;
     scrolled.current = false;
     clicked.current = false;
     setSettled(false);
@@ -283,9 +286,16 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
         reveal(el);
       }
 
-      lastBox.current = el ? viewportRect(el) : null;
+      if (el) {
+        lostAt.current = 0;
+        lastBox.current = viewportRect(el);
+      } else {
+        if (lastBox.current && !lostAt.current) lostAt.current = performance.now();
+        if (!lastBox.current || performance.now() - lostAt.current > GRACE) lastBox.current = null;
+      }
+
       place(lastBox.current);
-      setMissing(!el);
+      setMissing(!el && !lastBox.current);
 
       const ready = performance.now() - startedAt.current > DWELL;
 

@@ -5,37 +5,4 @@
  * or used as input or training data for any AI or code-generation system.
  * Licensing: info@truckbox.app
  */
-// embed-autosize.js
-// When the popup is rendered inside an in-page iframe (the "Open TruckBox"
-// modal injected into DAT), it reports its real content height to the parent
-// so the modal can shrink/grow to fit the active tab instead of using a fixed
-// height. When the popup runs normally in the Chrome toolbar there is no
-// parent frame, so this does nothing.
-(function () {
-    // Not embedded (toolbar popup) → nothing to do.
-    if (window.parent === window) return;
-
-    const measure = () => {
-        const wrap = document.querySelector('.wrap');
-        const h = wrap
-            ? Math.ceil(wrap.getBoundingClientRect().height)
-            : document.documentElement.scrollHeight;
-
-        window.parent.postMessage({ source: 'truckbox-popup', type: 'height', height: h }, '*');
-    };
-
-    // Re-measure whenever the content box changes size — covers tab switches,
-    // async content loading, and login/logout state changes automatically.
-    const target = document.querySelector('.wrap') || document.body;
-    if (window.ResizeObserver) {
-        new ResizeObserver(measure).observe(target);
-    }
-
-    window.addEventListener('load', measure);
-    // First measure once the DOM is ready.
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', measure);
-    } else {
-        measure();
-    }
-})();
+(function(){if(window.parent===window)return;const e=()=>{const t=document.querySelector(".wrap"),o=t?Math.ceil(t.getBoundingClientRect().height):document.documentElement.scrollHeight;window.parent.postMessage({source:"truckbox-popup",type:"height",height:o},"*")},n=document.querySelector(".wrap")||document.body;window.ResizeObserver&&new ResizeObserver(e).observe(n),window.addEventListener("load",e),document.readyState==="loading"?document.addEventListener("DOMContentLoaded",e):e()})();

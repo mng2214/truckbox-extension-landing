@@ -688,11 +688,21 @@ export default function DemoPage() {
             className="demo-primary"
             onClick={() => {
               demoRuntime.signIn();
-              setChooser(null);
+              setChooser("signed-in");
             }}
           >
             Continue as demo@truckbox.app
           </button>
+        </Modal>
+      )}
+
+      {chooser === "signed-in" && (
+        <Modal lit onClose={() => setChooser(null)} title="Signed in as demo@truckbox.app">
+          <p>
+            The board is live now — the rows, the side panel and the buttons all work. Nothing here
+            touches a real mailbox: the demo account only exists inside this page.
+          </p>
+          <p>Close this window when you are ready to carry on.</p>
         </Modal>
       )}
 
@@ -737,11 +747,13 @@ function Modal({
   title,
   children,
   wide = false,
+  lit = false,
   onClose,
 }: {
   title: string;
   children: React.ReactNode;
   wide?: boolean;
+  lit?: boolean;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -760,11 +772,11 @@ function Modal({
           <b>{title}</b>
           <button
             type="button"
-            className={wide ? "demo-close is-lit" : "demo-close"}
+            className={wide || lit ? "demo-close is-lit" : "demo-close"}
             onClick={onClose}
             aria-label="Close"
           >
-            {wide && <span>Close</span>}×
+            {(wide || lit) && <span>Close</span>}×
           </button>
         </div>
         {children}

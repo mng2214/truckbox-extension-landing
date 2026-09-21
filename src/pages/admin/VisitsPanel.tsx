@@ -158,6 +158,13 @@ export default function VisitsPanel() {
   };
   const [events, setEvents] = useState<Record<string, VisitorEvents>>({});
 
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    const t = window.setTimeout(() => setQuery(search), 350);
+    return () => window.clearTimeout(t);
+  }, [search]);
+
   const load = useCallback(() => {
     if (!auth.getToken()) {
       setError("signin");
@@ -203,7 +210,15 @@ export default function VisitsPanel() {
       (prev) =>
         prev?.map((row) => (blockTarget(row) === value ? { ...row, blocked } : row)) ?? prev,
     );
-    call.catch(() => load());
+    call.catch(() => {
+      setRows(
+        (prev) =>
+          prev?.map((row) =>
+            blockTarget(row) === value ? { ...row, blocked: !blocked } : row,
+          ) ?? prev,
+      );
+      setError(blocked ? "block-failed" : "unblock-failed");
+    });
   };
 
   const toggle = (key: string) => {
@@ -213,12 +228,18 @@ export default function VisitsPanel() {
     }
     setOpen(key);
     if (events[key]) return;
+    const empty = { total: 0, events: [] };
     api
       .get<VisitorEvents>(
         `/api/v1/admin/demo-visits/${encodeURIComponent(key)}?limit=${EVENTS_SHOWN}`,
       )
-      .then((data) => setEvents((prev) => ({ ...prev, [key]: data })))
-      .catch(() => setEvents((prev) => ({ ...prev, [key]: { total: 0, events: [] } })));
+      .then((data) =>
+        setEvents((prev) => ({
+          ...prev,
+          [key]: { total: data?.total ?? 0, events: data?.events ?? [] },
+        })),
+      )
+      .catch(() => setEvents((prev) => ({ ...prev, [key]: empty })));
   };
 
   const repeat = rows?.filter((r) => r.visits > 1).length ?? 0;
@@ -226,8 +247,10 @@ export default function VisitsPanel() {
   const robots = rows?.filter((r) => r.automated) ?? [];
   const shown = rows ?? [];
 
+  const candidates = shown.filter((r) => mode !== "recent" || r.level !== "none" || r.automated);
+
   const byTarget = new Map<string, Visitor[]>();
-  shown.forEach((r) => {
+  candidates.forEach((r) => {
     const value = blockTarget(r);
     byTarget.set(value, [...(byTarget.get(value) ?? []), r]);
   });
@@ -334,11 +357,11 @@ export default function VisitsPanel() {
 
         <input
           className="vx-search"
-          value={query}
+          value={search}
           placeholder="IP, network, host, user agent, referrer, time zone"
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={(e) => setSearch(e.target.value)}
           onKeyDown={(e) => {
-            if (e.key === "Enter") load();
+            if (e.key === "Enter") setQuery(e.currentTarget.value);
           }}
         />
 
@@ -358,6 +381,12 @@ export default function VisitsPanel() {
       </div>
 
       {error === "failed" && <p className="vx-note">Could not load the list. Try again.</p>}
+      {error === "block-failed" && (
+        <p className="vx-note is-bad">Not blocked — the request failed. Nothing was recorded.</p>
+      )}
+      {error === "unblock-failed" && (
+        <p className="vx-note is-bad">Still blocked — the request failed. Nothing was removed.</p>
+      )}
 
       {busy && <div className="vx-progress" aria-label="Loading" />}
 
@@ -366,7 +395,7 @@ export default function VisitsPanel() {
           <div className="vx-blocklist-head">
             <b>Block list</b>
             <span>
-              {mode === "recent" ? "everything currently listed" : `the ${mode} list`} ·{" "}
+              {mode === "recent" ? "flagged and automated only" : `the ${mode} list`} ·{" "}
               {targets.length} address{targets.length === 1 ? "" : "es"}
             </span>
             <button
@@ -600,7 +629,7 @@ export default function VisitsPanel() {
                   </div>
 
                   {!events[r.visitorKey] && <p className="vx-note">Loading…</p>}
-                  {events[r.visitorKey]?.events.length === 0 && (
+                  {events[r.visitorKey]?.events?.length === 0 && (
                     <p className="vx-note">No rows.</p>
                   )}
                   {(events[r.visitorKey]?.total ?? 0) > EVENTS_SHOWN && (
@@ -609,7 +638,7 @@ export default function VisitsPanel() {
                     </p>
                   )}
 
-                  {events[r.visitorKey]?.events.map((e, i) => (
+                  {events[r.visitorKey]?.events?.map((e, i) => (
                     <div className="vx-event" key={i}>
                       <span>{when(e.at)}</span>
                       <span className="vx-tag">{e.event}</span>

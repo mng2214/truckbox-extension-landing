@@ -5,8 +5,7 @@
     <title>Truck Box</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    <!-- Web fonts are attached by popup-core.js after first paint: a remote stylesheet here is
-         render-blocking and made the popup slow (or not open) on a slow network. -->
+    
     <link rel="stylesheet" href="../styles/popup.css">
 </head>
 <body>
@@ -30,7 +29,7 @@
         <button class="tab" data-tab="stats">Stats</button>
     </div>
 
-    <!-- Help Tab -->
+    
     <div class="tab-content" id="help-tab">
         <div class="card">
             <div class="setup-title">Help & Support</div>
@@ -39,7 +38,7 @@
                 Most issues are fixed in under a minute — please try these 3 steps first.
             </div>
 
-            <!-- Self-help steps (try these first) -->
+            
             <ol class="help-steps">
                 <li>
                     <div class="help-step-title">Update the extension</div>
@@ -64,7 +63,7 @@
                 </li>
             </ol>
 
-            <!-- Guide + FAQ -->
+            
             <div class="actions help-actions">
                 <a href="https://truckbox.app/guide" target="_blank" rel="noopener" class="btn-faq">
                     Guide
@@ -74,7 +73,7 @@
                 </a>
             </div>
 
-            <!-- Still need help? -->
+            
             <div class="help-contact">
                 <div class="help-contact-title">Still need help?</div>
 
@@ -99,7 +98,7 @@
         </div>
     </div>
 
-    <!-- Setup/Login Tab -->
+    
     <div class="tab-content active" id="setup-tab">
         <div class="card setup-simple">
             <div class="setup-title">
@@ -146,7 +145,7 @@
                     <button id="logoutBtn" class="btn-secondary">Logout</button>
                     <span id="status" class="status muted"></span>
                 </div>
-                <!-- Shown once signed in: same back-office page as the Template tab's link. -->
+                
                 <div class="signin-links">
                     <a href="#" id="loginManageMailboxes" class="setup-link" data-cabinet-link hidden>Manage mailboxes ↗</a>
                 </div>
@@ -179,7 +178,7 @@
         </div>
     </div>
 
-    <!-- Subscription Tab -->
+    
     <div class="tab-content" id="subscription-tab">
         <div class="card" id="subscriptionCard">
             <div class="setup-title">Subscription</div>
@@ -232,11 +231,11 @@
         </div>
     </div>
 
-    <!-- Template Tab -->
+    
     <div class="tab-content" id="template-tab">
         <div class="card">
 
-            <!-- Top explanation -->
+            
             <div style="
             margin-bottom:14px;
             padding:12px 14px;
@@ -260,7 +259,7 @@
                 contact details.
             </div>
 
-            <!-- Template switcher (saved in your account; one per sender) -->
+            
             <p class="tpl-hint">Pick your default template:</p>
             <div class="tpl-switcher">
                 <div class="tpl-chips" id="tplChips"></div>
@@ -272,7 +271,7 @@
                 <input id="tplName" maxlength="40" placeholder="e.g. Larkin · Reefer"/>
             </div>
 
-            <!-- This template's sender (multi-mailbox; hidden unless enabled for this account) -->
+            
             <div class="row sender-row" id="senderBox" hidden>
                 <label id="senderLabel">Send from</label>
                 <div class="sender-picker" id="senderPicker">
@@ -297,7 +296,7 @@
                 </div>
             </div>
 
-            <!-- User inputs -->
+            
             <div class="row">
                 <label>Your Name</label>
                 <input id="myName" maxlength="80" placeholder="John Doe"/>
@@ -313,7 +312,7 @@
                 <input id="myPhone" maxlength="20" inputmode="tel" placeholder="(555) 555-5555"/>
             </div>
 
-            <!-- Subject -->
+            
             <div class="row">
                 <label>
                     Subject
@@ -324,7 +323,7 @@
                        placeholder="e.g. Truck available from {{origin}} to {{destination}}"/>
             </div>
 
-            <!-- Body -->
+            
             <div class="row">
                 <label>
                     Body
@@ -350,7 +349,7 @@
                           maxlength="5000"
                           placeholder="Hi, I have a truck available from {{origin}} to {{destination}} on {{pickupDate}}."></textarea>
 
-                <!-- Placeholders -->
+                
                 <div class="ph-bank">
                     <div class="title">Placeholders — click to insert</div>
 
@@ -369,7 +368,7 @@
                 </div>
             </div>
 
-            <!-- Actions -->
+            
             <div class="actions">
                 <button id="saveBtn" type="button" class="btn-primary">Save Template</button>
                 <span id="saveMsg" aria-live="polite"></span>
@@ -378,9 +377,9 @@
         </div>
     </div>
 
-    <!-- Map & Filter Tab -->
+    
     <div class="tab-content" id="filter-tab">
-        <!-- Section 1: Map -->
+        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Route Map
@@ -404,7 +403,7 @@
             </div>
         </div>
 
-        <!-- Section 2: Duplicate load filter -->
+        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Duplicate Load Filter
@@ -428,7 +427,7 @@
             </div>
         </div>
 
-        <!-- Section 3: Profit calculator -->
+        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Profit Calculator
@@ -453,7 +452,7 @@
             </div>
         </div>
 
-        <!-- Section 4: DAT's own email button -->
+        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 DAT's Email Button
@@ -478,7 +477,7 @@
             </div>
         </div>
 
-        <!-- Section 5: Filter -->
+        
         <div class="card">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Hide Short Trips
@@ -522,11 +521,11 @@
         </div>
     </div>
 
-    <!-- Stats Tab -->
+    
     <div class="tab-content" id="stats-tab">
         <div class="card stats-card" id="statsCard">
 
-            <!-- Logged-in content -->
+            
             <div class="stats-content" id="statsContent">
                 <div class="stats-head">
                     <div class="stats-title">Statistics</div>
@@ -564,7 +563,7 @@
                     <b id="stat-time-saved">0 min</b> saved
                 </div>
 
-                <!-- Review block (hidden by default) -->
+                
                 <div id="reviewBlock" style="display:none; margin-top:22px; text-align:center;">
                     <div class="muted review-title">
                         Enjoying TruckBox?
@@ -578,7 +577,7 @@
                     </a>
                 </div>
 
-                <!-- Manager team stats (organization owners only; hidden otherwise) -->
+                
                 <div id="teamStatsBlock" style="display:none; margin-top:24px;">
                     <div class="stats-head">
                         <div class="stats-title">Team</div>
@@ -588,7 +587,7 @@
                 </div>
             </div>
 
-            <!-- Logged-out content -->
+            
             <div id="statsLoginRequiredBox" class="login-required-box" style="display:none;">
                 <div class="muted login-required-text">
                     Login first to view your stats.
@@ -601,10 +600,10 @@
         </div>
     </div>
 
-    <!-- Factoring Tab -->
+    
     <div class="tab-content" id="factoring-tab">
 
-        <!-- Shown until the user is signed in to the extension -->
+        
         <div id="factoringLoginRequiredBox" class="login-required-box" style="display:none;">
             <div class="muted login-required-text">
                 Log in first to connect a factoring account.
@@ -612,14 +611,14 @@
             <button id="factoringLoginBtn" class="btn-primary force-enabled" type="button">Login</button>
         </div>
 
-        <!-- Intro (grid screen only) -->
+        
         <div id="factoringIntro" class="muted" style="font-size:12px;line-height:1.55;margin-bottom:14px;">
             Connect your factoring account to check a broker's credit rating right in DAT.
             Log in once at your factoring and we'll reuse your session — no password stored.
             You can use the factoring check only if you have an account with a factoring company.
         </div>
 
-        <!-- Provider grid -->
+        
         <div id="factoringGrid" class="fct-grid">
             <button type="button" class="fct-tile" id="fctTileRts" data-provider="rts">
                 <span class="fct-tile-selected" id="fctRtsSelected" hidden>Selected</span>
@@ -639,7 +638,7 @@
             <div class="fct-tile fct-tile-soon"><span class="fct-soon">Soon</span></div>
         </div>
 
-        <!-- Provider detail (opens over the grid) -->
+        
         <div id="factoringDetail" class="fct-detail" style="display:none;">
             <button type="button" class="fct-back" id="fctBackBtn" aria-label="Back to providers">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">

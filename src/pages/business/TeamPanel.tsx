@@ -52,6 +52,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [portalLoading, setPortalLoading] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [buySeats, setBuySeats] = useState<{ needed: number; email: string; today: number } | null>(null);
+  const [addSeat, setAddSeat] = useState(false);
   const [removing, setRemoving] = useState<Member | null>(null);
   const [releaseSeat, setReleaseSeat] = useState(true);
 
@@ -168,7 +169,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             type="button"
             className="ed-btn"
             aria-label="Add a seat"
-            onClick={() => guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats + 1 }))}
+            onClick={() => setAddSeat(true)}
             disabled={busy}
           >
             <span>+</span>
@@ -389,6 +390,25 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         busy={busy}
         onConfirm={() => buySeats && addMember(buySeats.email, true)}
         onClose={() => setBuySeats(null)}
+      />
+
+      <ConfirmDialog
+        open={addSeat}
+        title="Add a seat?"
+        message={
+          <>
+            Your plan goes from {team.seats} to {team.seats + 1} seats: +{money(unit)}/mo. Stripe
+            charges the rest of this billing period today.
+          </>
+        }
+        confirmLabel="Add seat"
+        cancelLabel="Cancel"
+        busy={busy}
+        onConfirm={async () => {
+          await guard(() => api.patch("/api/v1/manager/team/seats", { seats: team.seats + 1 }));
+          setAddSeat(false);
+        }}
+        onClose={() => setAddSeat(false)}
       />
 
       <ConfirmDialog

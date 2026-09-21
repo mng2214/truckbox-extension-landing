@@ -5,30 +5,4 @@
  * or used as input or training data for any AI or code-generation system.
  * Licensing: info@truckbox.app
  */
-// Shows why the popup is signed out when the account was taken over by another computer
-// (background/modules/device-session.js stores signedOutReason). Hidden again after sign-in.
-(function () {
-    const TEAM_URL = 'https://truckbox.app/business/start';
-
-    function render() {
-        const el = document.getElementById('deviceSignedOutNotice');
-        if (!el) return;
-        chrome.storage.local.get(['signedOutReason', 'backendToken'], (d) => {
-            el.hidden = !(d && d.signedOutReason === 'other_device' && !d.backendToken);
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const link = document.getElementById('deviceNoticeTeamLink');
-        if (link) {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                chrome.tabs.create({url: TEAM_URL});
-            });
-        }
-        render();
-        chrome.storage.onChanged.addListener((changes, area) => {
-            if (area === 'local' && (changes.signedOutReason || changes.backendToken)) render();
-        });
-    });
-})();
+(function(){const o="https://truckbox.app/business/start";function t(){const n=document.getElementById("deviceSignedOutNotice");n&&chrome.storage.local.get(["signedOutReason","backendToken"],e=>{n.hidden=!(e&&e.signedOutReason==="other_device"&&!e.backendToken)})}document.addEventListener("DOMContentLoaded",()=>{const n=document.getElementById("deviceNoticeTeamLink");n&&n.addEventListener("click",e=>{e.preventDefault(),chrome.tabs.create({url:o})}),t(),chrome.storage.onChanged.addListener((e,d)=>{d==="local"&&(e.signedOutReason||e.backendToken)&&t()})})})();

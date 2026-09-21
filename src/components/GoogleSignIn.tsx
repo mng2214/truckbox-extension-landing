@@ -43,7 +43,6 @@ export function GoogleSignIn({
               onNoAccount();
               return;
             }
-            console.error("Google sign-in exchange failed:", err);
             setError("Sign-in failed. Please try again.");
           } finally {
             setBusy(false);

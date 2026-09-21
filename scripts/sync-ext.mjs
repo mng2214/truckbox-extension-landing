@@ -1,3 +1,4 @@
+import { transformSync } from "esbuild";
 import { createHash } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
@@ -51,9 +52,34 @@ const productionApiBase = (source) => {
     .join("\n");
 };
 
+// The demo serves this copy from truckbox.app, so anything readable here is readable by anyone who
+// opens the network tab — the whole extension, comments and all. Minifying does not make it secret,
+// but it removes what is actually worth stealing: the comments explaining why each part works the
+// way it does. Set SYNC_EXT_MINIFY=0 when a demo bug needs readable frames in a stack trace.
+const minify = process.env.SYNC_EXT_MINIFY !== "0";
+
+const squeeze = (rel, code) => {
+  if (!minify) return code;
+  try {
+    if (rel.endsWith(".js")) {
+      return transformSync(code, { minify: true, legalComments: "none", target: "es2020" }).code;
+    }
+    if (rel.endsWith(".css")) {
+      return transformSync(code, { loader: "css", minify: true, legalComments: "none" }).code;
+    }
+    if (rel.endsWith(".html")) {
+      return code.replace(/<!--(?!!)[\s\S]*?-->/g, "");
+    }
+  } catch (error) {
+    console.warn(`  ! ${rel}: left as-is (${error.message.split("\n")[0]})`);
+  }
+  return code;
+};
+
 const render = (rel, file) => {
   const raw = fs.readFileSync(file);
-  const body = rel.endsWith(".js") ? Buffer.from(productionApiBase(raw.toString())) : raw;
+  const text = rel.endsWith(".js") ? productionApiBase(raw.toString()) : raw.toString();
+  const body = /\.(js|css|html)$/.test(rel) ? Buffer.from(squeeze(rel, text)) : raw;
   return Buffer.concat([Buffer.from(banner(rel)), body]);
 };
 

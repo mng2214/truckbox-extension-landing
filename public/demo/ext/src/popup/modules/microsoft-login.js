@@ -5,42 +5,4 @@
  * or used as input or training data for any AI or code-generation system.
  * Licensing: info@truckbox.app
  */
-// "Sign in with Microsoft" in the Login tab. Hidden unless the backend has Microsoft switched on.
-(function () {
-    function refreshAfterLogin() {
-        setTimeout(async () => {
-            if (typeof updateAuthStatus === 'function') await updateAuthStatus();
-            if (typeof loadUserSubscriptionStatus === 'function') await loadUserSubscriptionStatus();
-            if (typeof loadSessionId === 'function') loadSessionId();
-        }, 250);
-    }
-
-    document.addEventListener('DOMContentLoaded', () => {
-        const btn = document.getElementById('loginMicrosoft');
-        if (!btn) return;
-
-        chrome.runtime.sendMessage({type: 'auth_providers'}, (r) => {
-            if (chrome.runtime.lastError || !r?.ok || !r.data?.microsoft) return;
-            btn.hidden = false;
-            const desc = document.getElementById('setupDesc');
-            if (desc) desc.textContent = 'Sign in with Google or Microsoft to send emails from your Gmail or Outlook account.';
-        });
-
-        btn.addEventListener('click', () => {
-            btn.disabled = true;
-            setSignInLabel(btn, 'Signing in...');
-            chrome.runtime.sendMessage({type: 'auth_login_microsoft'}, (r) => {
-                btn.disabled = false;
-                setSignInLabel(btn, 'Sign in with Microsoft');
-                const ok = !chrome.runtime.lastError && r?.ok;
-                const message = ok
-                    ? 'Signed in successfully'
-                    : r?.error === 'email_taken'
-                        ? 'This email already has a TruckBox account. Sign in with Google, then link Microsoft in the cabinet Settings.'
-                        : 'Sign-in failed';
-                if (typeof say === 'function') say(message, !ok);
-                refreshAfterLogin();
-            });
-        });
-    });
-})();
+(function(){function i(){setTimeout(async()=>{typeof updateAuthStatus=="function"&&await updateAuthStatus(),typeof loadUserSubscriptionStatus=="function"&&await loadUserSubscriptionStatus(),typeof loadSessionId=="function"&&loadSessionId()},250)}document.addEventListener("DOMContentLoaded",()=>{const t=document.getElementById("loginMicrosoft");t&&(chrome.runtime.sendMessage({type:"auth_providers"},e=>{if(chrome.runtime.lastError||!e?.ok||!e.data?.microsoft)return;t.hidden=!1;const n=document.getElementById("setupDesc");n&&(n.textContent="Sign in with Google or Microsoft to send emails from your Gmail or Outlook account.")}),t.addEventListener("click",()=>{t.disabled=!0,setSignInLabel(t,"Signing in..."),chrome.runtime.sendMessage({type:"auth_login_microsoft"},e=>{t.disabled=!1,setSignInLabel(t,"Sign in with Microsoft");const n=!chrome.runtime.lastError&&e?.ok,o=n?"Signed in successfully":e?.error==="email_taken"?"This email already has a TruckBox account. Sign in with Google, then link Microsoft in the cabinet Settings.":"Sign-in failed";typeof say=="function"&&say(o,!n),i()})}))})})();

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { api, ApiError } from "../../lib/api";
 import { getAuthProviders, microsoftAuthCode, MICROSOFT_REDIRECT_URI, type AuthProviders } from "../../lib/microsoft";
 import { ProviderLogo } from "../../components/ProviderLogo";
+import { ConfirmDialog } from "./ConfirmDialog";
 
 type Mailbox = {
   id: number;
@@ -27,6 +28,7 @@ export function MailboxesPanel() {
   const [data, setData] = useState<Mailboxes | null>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [removing, setRemoving] = useState<Mailbox | null>(null);
   const clientRef = useRef<{ requestCode: () => void } | null>(null);
   const [providers, setProviders] = useState<AuthProviders | null>(null);
   useEffect(() => {
@@ -86,12 +88,18 @@ export function MailboxesPanel() {
     }
   };
 
-  const remove = (id: number) => {
+  const remove = (mailbox: Mailbox) => {
+    if (busy) return;
+    setBusy(true);
     setError(null);
     api
-      .del<Mailboxes>(`/api/v1/mailboxes/${id}`)
+      .del<Mailboxes>(`/api/v1/mailboxes/${mailbox.id}`)
       .then(setData)
-      .catch((e) => setError(messageFor(e)));
+      .catch((e) => setError(messageFor(e)))
+      .finally(() => {
+        setBusy(false);
+        setRemoving(null);
+      });
   };
 
   const extra = data ? data.mailboxes.filter((m) => !m.loginMailbox).length : 0;
@@ -143,7 +151,12 @@ export function MailboxesPanel() {
                 </button>
               )}
               {!m.loginMailbox && (
-                <button type="button" className="ed-btn" onClick={() => remove(m.id)}>
+                <button
+                  type="button"
+                  className="ed-btn"
+                  disabled={busy}
+                  onClick={() => setRemoving(m)}
+                >
                   Remove
                 </button>
               )}
@@ -182,6 +195,26 @@ export function MailboxesPanel() {
         )}
       </div>
       {error && <p style={{ color: "var(--danger)", fontSize: "0.85rem", marginTop: 10 }}>{error}</p>}
+
+      <ConfirmDialog
+        open={removing !== null}
+        title="Disconnect this mailbox?"
+        message={
+          removing && (
+            <>
+              <b>{removing.address}</b> stops being available as a sender, in the cabinet and in the
+              extension. Templates that send from it need another mailbox picked. You can connect it
+              again later.
+            </>
+          )
+        }
+        confirmLabel="Disconnect"
+        cancelLabel="Keep it"
+        destructive
+        busy={busy}
+        onConfirm={() => removing && remove(removing)}
+        onClose={() => setRemoving(null)}
+      />
     </section>
   );
 }

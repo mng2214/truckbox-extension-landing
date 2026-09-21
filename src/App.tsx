@@ -2416,8 +2416,20 @@ export function Privacy() {
                 <li><b>What is logged.</b> The IP address the request came from, the browser's user agent, screen and window size, language, time zone, the page address and the referring page, and which demo actions were used (opened the demo, signed into the demo account, sent a demo email, saved a demo load). A random identifier is stored in the browser so repeat visits from the same browser can be counted.</li>
                 <li><b>What is not logged.</b> No real name, no real email address, no account and no payment data — the demo has none of these. We do not use canvas, audio or other device fingerprinting, and we do not track you across other websites.</li>
                 <li><b>Why.</b> To understand how the demo performs, to size the product, and to identify automated abuse of a page that anyone can open.</li>
+                <li><b>What we do with it.</b> We review the log by hand. Where the traffic is a scanner or a scripted client, we may look up the network name the address belongs to and block that address or its network from the demo. No decision about a Truck Box account is made from these logs.</li>
                 <li><b>Retention.</b> Demo traffic logs are deleted automatically after 180 days.</li>
                 <li><b>Not tied to your account.</b> These logs are not linked to a Truck Box account, and they are not sold, shared or used for advertising.</li>
+              </ul>
+
+              <h3>Website analytics and support chat</h3>
+              <p>
+                Two third-party services run on truckbox.app itself — not in the extension, and not
+                inside your mailbox or load board.
+              </p>
+              <ul>
+                <li><b>Google Analytics.</b> Measures page views and where visitors arrive from, so we can tell which pages are worth keeping. It sets its own cookies and receives your IP address and user agent. It is not used for advertising, and we do not build profiles or remarketing audiences from it.</li>
+                <li><b>Crisp.</b> Runs the chat bubble on the site. It stores an identifier for your chat session so a conversation survives a page reload, and it receives whatever you type into the chat.</li>
+                <li><b>Turning them off.</b> Browser settings, tracking protection and content blockers all stop both, and the site keeps working without them. The public demo, the extension and the cabinet do not depend on either.</li>
               </ul>
 
               <h3>Information we do not collect from your mailbox</h3>

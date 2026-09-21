@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { captureSource } from "./lib/demoTrack";
+import { clearStaleMicrosoftResult } from "./lib/microsoft";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
 import { applyLandingTheme, setLandingTheme } from "./lib/theme";
 import PrivacyPage from "./pages/Privacy";
@@ -31,6 +32,7 @@ function LandingThemeSync() {
 }
 
 captureSource();
+clearStaleMicrosoftResult();
 
 installPageGuard();
 

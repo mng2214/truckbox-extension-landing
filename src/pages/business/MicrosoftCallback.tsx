@@ -11,6 +11,7 @@ export default function MicrosoftCallback() {
           code: q.get("code"),
           state: q.get("state"),
           error: q.get("error_description") || q.get("error"),
+          at: Date.now(),
         }),
       );
     } catch {
