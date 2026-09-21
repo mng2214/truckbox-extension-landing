@@ -24,6 +24,26 @@ const tourTaken = () => {
   }
 };
 
+const ROBOT_AGENTS =
+  /headless|phantom|puppeteer|playwright|selenium|bot\b|crawler|spider|curl|wget|python|scrapy|postman|http-client/i;
+
+/**
+ * A robot, as far as a browser can tell: the automation flag every driver sets, an agent that says
+ * so outright, or a browser with no languages and no screen. It stops the crawlers and the casual
+ * script; someone determined can still hide, and that is fine — the demo holds nothing secret.
+ */
+const isAutomated = () => {
+  try {
+    if (navigator.webdriver) return true;
+    if (ROBOT_AGENTS.test(navigator.userAgent)) return true;
+    if (!navigator.languages || navigator.languages.length === 0) return true;
+    if (!screen.width || !screen.height) return true;
+    return false;
+  } catch {
+    return false;
+  }
+};
+
 const demoStage = () => document.querySelector(".demo-window");
 
 const laneOf = (row: Element | null) => {
@@ -56,6 +76,7 @@ export default function DemoPage() {
   );
   const [narrowNotice, setNarrowNotice] = useState(false);
   const [handheld, setHandheld] = useState(() => !embedded && isHandheld());
+  const [automated] = useState(() => !embedded && isAutomated());
   const [popupOpen, setPopupOpen] = useState(!embedded);
   const [popupDoc, setPopupDoc] = useState<string | null>(null);
   const [popupHeight, setPopupHeight] = useState(520);
@@ -103,9 +124,9 @@ export default function DemoPage() {
   useEffect(() => {
     const live = !embedded && !handheld;
     enableDemoTracking(live);
-    if (live) trackDemo("open");
+    if (live) trackDemo("open", automated ? "closed to automation" : undefined);
     return () => enableDemoTracking(false);
-  }, [embedded, handheld]);
+  }, [embedded, handheld, automated]);
 
   useEffect(() => {
     if (!embedded) return;
@@ -413,6 +434,28 @@ export default function DemoPage() {
       /* storage blocked */
     }
   };
+
+  if (automated) {
+    return (
+      <div className="demo-page demo-desktop-only">
+        <div className="demo-desktop-only-card">
+          <span className="demo-gate-eyebrow">Live demo</span>
+          <b className="demo-desktop-only-title">Closed to bots</b>
+          <p className="demo-desktop-only-text">
+            This page is a hands-on demo for people. Automated clients &mdash; crawlers, scanners
+            and headless browsers &mdash; are not let in.
+          </p>
+          <p className="demo-note">
+            If you are a person and landed here by mistake, open truckbox.app/demo in a normal
+            browser window.
+          </p>
+          <a className="ed-btn tb-back-btn demo-gate-cta" href="/">
+            Back to TruckBox
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   if (handheld) {
     return (
