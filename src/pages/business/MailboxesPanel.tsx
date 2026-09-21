@@ -1,6 +1,12 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api, ApiError } from "../../lib/api";
-import { getAuthProviders, microsoftAuthCode, MICROSOFT_REDIRECT_URI, type AuthProviders } from "../../lib/microsoft";
+import {
+  getAuthProviders,
+  microsoftAuthCode,
+  microsoftFailure,
+  MICROSOFT_REDIRECT_URI,
+  type AuthProviders,
+} from "../../lib/microsoft";
 import { ProviderLogo } from "../../components/ProviderLogo";
 import { ConfirmDialog } from "./ConfirmDialog";
 
@@ -82,7 +88,7 @@ export function MailboxesPanel() {
         await api.post<Mailboxes>("/api/v1/mailboxes/microsoft", { code, redirectUri: MICROSOFT_REDIRECT_URI }),
       );
     } catch (e) {
-      if (!(e instanceof Error && e.message === "cancelled")) setError(messageFor(e));
+      setError(microsoftFailure(e) ?? messageFor(e));
     } finally {
       setBusy(false);
     }

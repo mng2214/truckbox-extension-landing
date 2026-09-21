@@ -18,6 +18,18 @@ const SCOPES = "openid profile email offline_access User.Read Mail.Send";
 
 type Result = { code: string | null; state: string | null; error: string | null; at?: number };
 
+export type MicrosoftAuthReason = "cancelled" | "denied" | "popup_blocked" | "failed";
+
+export class MicrosoftAuthError extends Error {
+  constructor(
+    public reason: MicrosoftAuthReason,
+    message?: string,
+  ) {
+    super(message ?? reason);
+    this.name = "MicrosoftAuthError";
+  }
+}
+
 const RESULT_TTL_MS = 120_000;
 
 function takeResult(): Result | null {
@@ -48,6 +60,20 @@ export function clearStaleMicrosoftResult(): void {
   }
 }
 
+export function microsoftFailure(e: unknown): string | null {
+  if (!(e instanceof MicrosoftAuthError)) return null;
+  if (e.reason === "popup_blocked") {
+    return "The Microsoft window was blocked by the browser. Allow pop-ups for truckbox.app and try again.";
+  }
+  if (e.reason === "denied") {
+    return `Microsoft refused the request: ${e.message}`;
+  }
+  if (e.reason === "cancelled") {
+    return "The Microsoft window closed before it came back, so nothing was connected. If it showed \u201cNeed admin approval\u201d, your Microsoft administrator has to approve TruckBox first.";
+  }
+  return "Microsoft sent back an answer we could not read. Try again.";
+}
+
 export function microsoftAuthCode(clientId: string): Promise<string> {
   const state = crypto.randomUUID();
   takeResult();
@@ -61,14 +87,15 @@ export function microsoftAuthCode(clientId: string): Promise<string> {
     state,
   });
   const popup = window.open(`${AUTHORIZE_URL}?${params}`, "tb-ms-oauth", "width=520,height=680");
-  if (!popup) return Promise.reject(new Error("popup_blocked"));
+  if (!popup) return Promise.reject(new MicrosoftAuthError("popup_blocked"));
 
   return new Promise((resolve, reject) => {
     const finish = (r: Result | null) => {
       window.clearInterval(timer);
       window.removeEventListener("storage", onStorage);
-      if (!r) return reject(new Error("cancelled"));
-      if (r.state !== state || !r.code) return reject(new Error(r.error || "failed"));
+      if (!r) return reject(new MicrosoftAuthError("cancelled"));
+      if (r.error) return reject(new MicrosoftAuthError("denied", r.error));
+      if (r.state !== state || !r.code) return reject(new MicrosoftAuthError("failed"));
       resolve(r.code);
     };
     const onStorage = (e: StorageEvent) => {

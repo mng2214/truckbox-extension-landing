@@ -6,6 +6,7 @@ import {
   microsoftAuthCode,
   MICROSOFT_REDIRECT_URI,
   type AuthProviders,
+  microsoftFailure,
 } from "../lib/microsoft";
 import { ProviderLogo } from "./ProviderLogo";
 import { isNoAccount } from "../lib/authErrors";
@@ -47,8 +48,8 @@ export function MicrosoftSignIn({
         onNoAccount();
       } else if (e instanceof ApiError && e.code === 1055) {
         setError("This email already has a TruckBox account. Sign in with Google, then link Microsoft in Accounts.");
-      } else if (!(e instanceof Error && e.message === "cancelled")) {
-        setError("Microsoft sign-in failed. Please try again.");
+      } else {
+        setError(microsoftFailure(e) ?? "Microsoft sign-in failed. Please try again.");
       }
     } finally {
       setBusy(false);

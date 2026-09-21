@@ -1,7 +1,13 @@
 import { useEffect, useState } from "react";
 import { X } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
-import { getAuthProviders, microsoftAuthCode, MICROSOFT_REDIRECT_URI, type AuthProviders } from "../../lib/microsoft";
+import {
+  getAuthProviders,
+  microsoftAuthCode,
+  microsoftFailure,
+  MICROSOFT_REDIRECT_URI,
+  type AuthProviders,
+} from "../../lib/microsoft";
 import { ConfirmDialog } from "./ConfirmDialog";
 import { ProviderLogo } from "../../components/ProviderLogo";
 
@@ -102,7 +108,7 @@ export function LinkedAccounts() {
     } catch (e) {
       const sourceEmail = mergeSource(e);
       if (sourceEmail) setMerge({ provider: "microsoft", sourceEmail });
-      else if (!(e instanceof Error && e.message === "cancelled")) setError(messageFor(e));
+      else setError(microsoftFailure(e) ?? messageFor(e));
     } finally {
       setBusy(false);
     }
@@ -143,7 +149,7 @@ export function LinkedAccounts() {
         setMerge({ provider: "microsoft", sourceEmail });
       } else {
         setMerge(null);
-        if (!(e instanceof Error && e.message === "cancelled")) setError(messageFor(e));
+        setError(microsoftFailure(e) ?? messageFor(e));
       }
     } finally {
       setBusy(false);
