@@ -289,7 +289,6 @@ export default function VisitsPanel() {
           ← TruckBox
         </Link>
         <b className="vx-title">Demo traffic</b>
-        <span className="vx-sub">Who opens truckbox.app/demo</span>
         <button type="button" className="vx-theme" onClick={flipTheme}>
           {day ? "night" : "day"}
         </button>

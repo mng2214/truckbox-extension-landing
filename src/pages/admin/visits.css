@@ -80,11 +80,6 @@
   color: var(--vx-ink);
 }
 
-.vx-sub {
-  font-size: 11.5px;
-  color: var(--vx-faint);
-}
-
 .vx-controls {
   display: flex;
   align-items: center;
