@@ -15,9 +15,7 @@ export function GoogleSignIn({
   signup = false,
 }: {
   onSignedIn: (res: GoogleAuthResult) => void;
-  /** Called when this Google account has no TruckBox account yet (web sign-in only). */
   onNoAccount?: () => void;
-  /** Team signup page: allowed to create a brand-new account. */
   signup?: boolean;
 }) {
   const clientRef = useRef<any>(null);

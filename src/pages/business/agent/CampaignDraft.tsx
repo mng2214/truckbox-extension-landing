@@ -4,10 +4,6 @@ import { confirmCampaign, createDraft } from "./AgentApi";
 import { ConsentCard } from "./ConsentCard";
 import type { CampaignDraft as Draft } from "./types";
 
-/**
- * The single consent moment of a campaign: the ranked broker list (agent's pre-checks), the MC
- * gate when the profile has none, and one Start button. After Start the agent runs unattended.
- */
 export function CampaignDraftScreen({
   requestId,
   connected,

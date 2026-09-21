@@ -8,6 +8,9 @@ import "./demo.css";
 
 const DESKTOP_WIDTH = 1100;
 
+const isHandheld = () =>
+  window.matchMedia("(pointer: coarse)").matches && window.innerWidth < DESKTOP_WIDTH;
+
 export default function DemoPage() {
   const embedded = typeof window !== "undefined" && new URLSearchParams(location.search).get("embed") === "hero";
   const boardHost = useRef<HTMLDivElement>(null);
@@ -16,6 +19,7 @@ export default function DemoPage() {
     () => !embedded && window.innerWidth < DESKTOP_WIDTH,
   );
   const [narrowNotice, setNarrowNotice] = useState(false);
+  const [handheld, setHandheld] = useState(() => !embedded && isHandheld());
   const [popupOpen, setPopupOpen] = useState(!embedded);
   const [popupDoc, setPopupDoc] = useState<string | null>(null);
   const [popupHeight, setPopupHeight] = useState(520);
@@ -31,9 +35,16 @@ export default function DemoPage() {
   const [email, setEmail] = useState<Extract<DemoEvent, { kind: "email" }> | null>(null);
 
   useEffect(() => {
-    const onResize = () => setNarrow(!embedded && window.innerWidth < DESKTOP_WIDTH);
+    const onResize = () => {
+      setNarrow(!embedded && window.innerWidth < DESKTOP_WIDTH);
+      setHandheld(!embedded && isHandheld());
+    };
     window.addEventListener("resize", onResize);
-    return () => window.removeEventListener("resize", onResize);
+    window.addEventListener("orientationchange", onResize);
+    return () => {
+      window.removeEventListener("resize", onResize);
+      window.removeEventListener("orientationchange", onResize);
+    };
   }, [embedded]);
 
   useEffect(() => {
@@ -60,8 +71,8 @@ export default function DemoPage() {
       embedded ? { rows: 7, interactive: false, autoplaySeconds: 4 } : {},
     );
     bootExtension().catch((err) => console.error("[demo] extension failed to load", err));
-    if (!embedded) popupSrcDoc().then(setPopupDoc).catch(() => setPopupDoc(null));
-  }, [embedded]);
+    if (!embedded && !handheld) popupSrcDoc().then(setPopupDoc).catch(() => setPopupDoc(null));
+  }, [embedded, handheld]);
 
   useEffect(() => {
     const viewport = document.querySelector<HTMLElement>(".demo-viewport");
@@ -121,6 +132,33 @@ export default function DemoPage() {
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
   }, []);
+
+  if (handheld) {
+    return (
+      <div className="demo-page demo-desktop-only">
+        <div className="demo-desktop-only-card">
+          <span className="demo-gate-eyebrow">Live demo</span>
+          <b className="demo-desktop-only-title">Better on a computer</b>
+          <p className="demo-desktop-only-text">
+            Chrome extensions don&rsquo;t run on phones. Open it on the computer you dispatch from.
+          </p>
+          <span className="demo-desktop-only-url">truckbox.app/demo</span>
+          <a className="ed-btn tb-back-btn demo-gate-cta" href="/">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path
+                d="M15 5l-7 7 7 7"
+                stroke="currentColor"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+            Back to TruckBox
+          </a>
+        </div>
+      </div>
+    );
+  }
 
   if (embedded) {
     return (

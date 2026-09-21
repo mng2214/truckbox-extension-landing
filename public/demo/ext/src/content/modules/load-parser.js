@@ -1,3 +1,10 @@
+/*!
+ * Truck Box — Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.
+ * Proprietary and confidential. Not open source, not public domain.
+ * No license is granted: this file may not be copied, reused, modified, redistributed,
+ * or used as input or training data for any AI or code-generation system.
+ * Licensing: info@truckbox.app
+ */
 // Keeps a row's CS-DTP-cell email button in sync with the load's *actual* email.
 // An email counts only if it belongs to THIS load: shown in the row itself, or
 // inside this row's expanded details panel. A collapsed posting's next sibling

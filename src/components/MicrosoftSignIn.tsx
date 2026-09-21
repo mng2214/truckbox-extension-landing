@@ -10,16 +10,13 @@ import {
 import { ProviderLogo } from "./ProviderLogo";
 import { isNoAccount } from "../lib/authErrors";
 
-/** "Sign in with Microsoft" — rendered only when the backend has Microsoft switched on. */
 export function MicrosoftSignIn({
   onSignedIn,
   onNoAccount,
   signup = false,
 }: {
   onSignedIn: () => void;
-  /** Called when this Microsoft account has no TruckBox account yet (web sign-in only). */
   onNoAccount?: () => void;
-  /** Team signup page: allowed to create a brand-new account. */
   signup?: boolean;
 }) {
   const [providers, setProviders] = useState<AuthProviders | null>(null);

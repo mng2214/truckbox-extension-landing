@@ -1,12 +1,6 @@
 @import "tailwindcss" source(none);
 @source "../src";
 
-/* ------------------------------------------------------------
-   Cosmetic copy-deterrent: block text selection page-wide.
-   NOT security — purely "look, don't touch". Form fields and
-   anything contentEditable are exempted so the contact form,
-   typing, and pasting keep working normally.
-   ------------------------------------------------------------ */
 html {
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -24,11 +18,6 @@ select,
   user-select: text;
 }
 
-/* ============================================================
-   Truck Box — editorial / kinetic redesign (mad.ac-inspired)
-   Near-black canvas · bone type · one signal accent
-   ============================================================ */
-
 @theme inline {
   --color-bg: #0a0c13;
   --color-ink: #edf0fa;
@@ -40,30 +29,27 @@ select,
 }
 
 :root {
-  /* ---- The Freight Desk: asphalt & brass ---- */
+
   --bg: #0a0c13;
   --bg-2: #10131e;
-  --paper: #edf0fa;     /* light — used for inverted blocks */
+  --paper: #edf0fa;
   --ink: #edf0fa;
   --muted: #99a2bc;
   --faint: #626b85;
   --line: rgba(200, 214, 255, 0.10);
-  /* Glow inside the integrations lens — white glass on light, a violet pool on dark. */
+
   --lens-glow: color-mix(in oklab, var(--accent) 34%, transparent);
   --line-strong: rgba(200, 214, 255, 0.26);
 
-  /* brand accent — brass, the only accent on the page */
   --accent: #93a7f2;
   --accent-2: #b9a8ee;
   --accent-3: #8fc4ee;
   --accent-grad: linear-gradient(110deg, #8fc4ee 0%, #93a7f2 40%, #b9a8ee 62%, #93a7f2 100%);
   --header-bg: rgba(9, 11, 18, 0.72);
-  --on-accent: #0d1020;   /* text on accent fills */
+  --on-accent: #0d1020;
 
-  /* semantic state tokens */
   --danger: #ef6a6a;
 
-  /* legacy compatibility tokens (privacy/terms reuse these) */
   --hairline: var(--line);
   --pri: var(--accent);
   --pri-soft: rgba(147, 167, 242, 0.14);
@@ -74,7 +60,6 @@ select,
 
   --ease: cubic-bezier(0.16, 1, 0.3, 1);
 
-  /* cabinet theme overlays — flipped by [data-theme="light"] (cabinet only) */
   --tb-cabinet-bg:
     radial-gradient(130% 90% at 50% -20%, #18181d 0%, #0e0e12 42%, #0a0a0c 100%) no-repeat fixed,
     #0a0a0c;
@@ -86,7 +71,6 @@ select,
   --tb-loader-dot: #fff;
 }
 
-/* Light mode — scoped to the cabinet; data-theme is set on <html> only while in the back office. */
 [data-theme="light"] {
   --bg: #f5f7fb;
   --bg-2: #ffffff;
@@ -109,7 +93,6 @@ select,
 
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-/* Lenis drives scroll; keep native smooth as fallback only when reduced motion */
 
 body {
   margin: 0;
@@ -125,14 +108,12 @@ a { text-decoration: none; color: inherit; }
 img { max-width: 100%; height: auto; display: block; }
 ::selection { background: var(--accent); color: #0a0a09; }
 
-/* Lenis */
 html.lenis, html.lenis body { height: auto; }
 .lenis.lenis-smooth { scroll-behavior: auto !important; }
 .lenis.lenis-stopped { overflow: hidden; }
 
 ::-webkit-scrollbar { width: 0; height: 0; }
 
-/* ------------------------------------------------------------ layout */
 .ed-container { width: 100%; max-width: 1320px; margin: 0 auto; padding: 0 32px; }
 @media (max-width: 720px) {
   .ed-container {
@@ -144,12 +125,10 @@ html.lenis, html.lenis body { height: auto; }
 .ed-section { padding: 140px 0; position: relative; }
 @media (max-width: 768px) { .ed-section { padding: 88px 0; } }
 
-/* legacy layout aliases (privacy page) */
 .tb-container { width: 100%; max-width: 920px; margin: 0 auto; padding: 0 32px; }
 .tb-section { padding: 120px 0; scroll-margin-top: 90px; }
 @media (max-width: 720px) { .tb-container { padding: 0 18px; } .tb-section { padding: 80px 0; } }
 
-/* ------------------------------------------------------------ type */
 .ed-display {
   font-family: var(--font-display);
   font-weight: 800;
@@ -183,8 +162,6 @@ html.lenis, html.lenis body { height: auto; }
 .tb-spin { animation: tb-spin360 0.8s linear infinite; }
 @keyframes tb-spin360 { to { transform: rotate(360deg); } }
 
-/* feature flipbook (pricing) — 3D page-flip carousel */
-
 .ed-accent {
   background: var(--accent-grad);
   background-size: 220% auto;
@@ -199,16 +176,13 @@ html.lenis, html.lenis body { height: auto; }
   50%      { background-position: 100% 50%; }
 }
 
-/* outline (stroked) text */
 .ed-outline {
   -webkit-text-stroke: 1.4px var(--ink);
   color: transparent;
 }
 
-/* line clip-reveal: child <span> animated by framer */
 .ed-mask { display: block; overflow: hidden; }
 
-/* ------------------------------------------------------------ buttons */
 .ed-btn {
   position: relative;
   isolation: isolate;
@@ -239,11 +213,9 @@ html.lenis, html.lenis body { height: auto; }
 .ed-btn:hover::before { transform: translateY(0); }
 .ed-btn:disabled { opacity: .45; cursor: not-allowed; }
 .ed-btn:disabled::before { transform: translateY(101%); }
-/* Disabled buttons keep their resting colors on hover: the dark fill above is suppressed for
-   :disabled, so the hover text color (var(--bg)) would otherwise vanish into the background. */
+
 .ed-btn:disabled:hover { color: var(--ink); border-color: var(--line-strong); }
 
-/* small inline loading spinner (cabinet actions) */
 @keyframes tb-spin { to { transform: rotate(360deg); } }
 .tb-spinner {
   display: inline-block;
@@ -255,13 +227,11 @@ html.lenis, html.lenis body { height: auto; }
   animation: tb-spin .7s linear infinite;
 }
 
-/* Premium near-black cabinet background (slightly warm-neutral, subtle top glow). */
 body.tb-cabinet-bg {
   background: var(--tb-cabinet-bg);
   color: var(--ink);
 }
 
-/* cabinet sidebar */
 .tb-aside {
   background: var(--tb-panel);
   backdrop-filter: blur(6px);
@@ -288,11 +258,10 @@ body.tb-cabinet-bg {
   border-left-color: var(--accent);
 }
 
-/* Discovery range slider — thin line + small round thumb (accent fill left of thumb). */
 .tb-range {
   -webkit-appearance: none;
   appearance: none;
-  height: 13px;            /* hit area; the visible track is the 2px line below */
+  height: 13px;
   background: transparent;
   cursor: pointer;
 }
@@ -312,7 +281,7 @@ body.tb-cabinet-bg {
   border-radius: 50%;
   background: var(--accent);
   border: none;
-  margin-top: -5px;        /* center the thumb on the 2px track */
+  margin-top: -5px;
 }
 .tb-range::-moz-range-track {
   height: 2px;
@@ -334,18 +303,9 @@ body.tb-cabinet-bg {
   outline-offset: 6px;
 }
 
-/* Discovery: sharp (square) input corners — editorial look, not pill-rounded. */
 .ed-input.tb-sharp { border-radius: 0; }
 select.ed-input { appearance: none; -webkit-appearance: none; cursor: pointer; }
 
-/* ============================================================
-   BACK-OFFICE SWISS SYSTEM
-   Scoped to body.tb-cabinet-bg so the (dark editorial) landing is never touched.
-   Stark, grid-driven, heavy sans, sharp corners, one electric accent + a purple
-   note reserved for premium features (Oracle, Agent). Light is default; dark is a toggle.
-   ============================================================ */
-
-/* Dark cabinet (default = no data-theme on <html>) */
 body.tb-cabinet-bg {
   --bg: #0d0d0f;
   --bg-2: #141416;
@@ -365,14 +325,11 @@ body.tb-cabinet-bg {
   --tb-panel: #141416;
   --tb-topbar-bg: #141416;
   --tb-hover: rgba(255, 255, 255, 0.06);
-  /* Swiss cabinet = one type family. Remap the mono token to sans so every
-     var(--font-mono) usage inside the cabinet (segmented toggles, +EQUIPMENT,
-     RADIUS, "100 mi", codes) renders in Instrument Sans, inline styles included.
-     Landing has no .tb-cabinet-bg, so its mono treatment is untouched. */
+
   --font-mono: var(--font-sans);
   background: var(--tb-cabinet-bg);
 }
-/* Light cabinet (the default theme; data-theme set on <html> while mounted) */
+
 [data-theme="light"] body.tb-cabinet-bg {
   --bg: #f4f4f5;
   --bg-2: #ffffff;
@@ -394,7 +351,6 @@ body.tb-cabinet-bg {
   --tb-hover: #f3f3f5;
 }
 
-/* Typography — one sans, fixed scale, no display font, no mono labels */
 body.tb-cabinet-bg .ed-display {
   font-family: var(--font-sans);
   font-weight: 700;
@@ -411,22 +367,18 @@ body.tb-cabinet-bg .ed-label {
   text-transform: uppercase;
   color: var(--muted);
 }
-/* Page titles — ONE calm size across every panel, so the back office reads as one
-   system instead of each screen shouting at its own scale. Overrides the divergent
-   per-panel sizes (text-[8vw], inline 2.5–4rem, etc). Section headings are h3/h4 and
-   keep their own smaller step. */
+
 body.tb-cabinet-bg h1.ed-display {
   font-size: clamp(1.6rem, 1.2rem + 1.5vw, 2rem) !important;
   letter-spacing: -0.025em;
   line-height: 1.06;
   text-wrap: balance;
 }
-/* Section headings — normalize the 1.0–1.2rem drift into two clean steps */
+
 body.tb-cabinet-bg h2.ed-display { font-size: 1.35rem !important; letter-spacing: -0.02em; }
 body.tb-cabinet-bg h3.ed-display { font-size: 1.15rem !important; letter-spacing: -0.015em; }
 body.tb-cabinet-bg h4.ed-display { font-size: 1rem !important; letter-spacing: -0.01em; }
 
-/* Buttons — sharp, uppercase bold; kill the editorial slide-fill */
 body.tb-cabinet-bg .ed-btn {
   border-radius: 0;
   justify-content: center;
@@ -448,12 +400,11 @@ body.tb-cabinet-bg .ed-btn-accent:hover { background: var(--accent-ink); border-
 body.tb-cabinet-bg .ed-btn:disabled { opacity: .5; }
 body.tb-cabinet-bg .ed-btn:disabled:hover { background: transparent; color: var(--ink); }
 body.tb-cabinet-bg .ed-btn-accent:disabled:hover { background: var(--accent); color: #fff; }
-/* Destructive fill — darker red so white label stays legible (~4.9:1) */
+
 body.tb-cabinet-bg .ed-btn.is-danger { background: #c53030; border-color: #c53030; color: #fff; }
 body.tb-cabinet-bg .ed-btn.is-danger:hover { background: #a82626; border-color: #a82626; color: #fff; }
 body.tb-cabinet-bg .ed-btn.is-danger:disabled:hover { background: #c53030; color: #fff; }
 
-/* Inputs — sharp, hairline, accent focus */
 body.tb-cabinet-bg .ed-input {
   border-radius: 0;
   border: 1px solid var(--line-strong);
@@ -466,7 +417,6 @@ body.tb-cabinet-bg .ed-input:focus-visible {
   box-shadow: 0 0 0 3px var(--accent-tint);
 }
 
-/* Nav — uppercase bold, icon + label, no side-stripe; active = accent tint */
 body.tb-cabinet-bg .tb-nav {
   display: flex;
   align-items: center;
@@ -480,9 +430,9 @@ body.tb-cabinet-bg .tb-nav {
   padding: 9px 11px;
 }
 body.tb-cabinet-bg .tb-nav svg { width: 16px; height: 16px; flex-shrink: 0; }
-/* Oracle's own mark on the panel heading: accent-coloured, aligned to the text. */
+
 .tb-oracle-mark { color: var(--accent); flex: 0 0 auto; }
-/* Two-line nav item: the name plus a plain-English gloss ("Oracle · Find brokers on your lane"). */
+
 body.tb-cabinet-bg .tb-nav .tb-nav-text {
   display: flex;
   flex-direction: column;
@@ -499,9 +449,7 @@ body.tb-cabinet-bg .tb-nav .tb-nav-sub {
 body.tb-cabinet-bg .tb-nav.is-active .tb-nav-sub { color: inherit; opacity: 0.75; }
 body.tb-cabinet-bg .tb-nav:hover { background: var(--tb-hover); color: var(--ink); border-left: none; }
 body.tb-cabinet-bg .tb-nav.is-active { background: var(--accent-tint); color: var(--accent); border-left: none; }
-/* Premium features (Oracle, Agent): purple icon + marker, purple hover */
-/* Heading for a group of nav items (Dashboard / Settings / Management / Tools). The hairline
-   above it is the group's divider, so the first group starts clean (.is-first). */
+
 .tb-nav-label {
   margin: 0.9rem 0.6rem 0.35rem;
   padding: 0.9rem 0.15rem 0;
@@ -518,7 +466,6 @@ body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark svg { width: 12px; height: 
 body.tb-cabinet-bg .tb-nav.is-premium:hover { background: var(--pp-tint); color: var(--pp-ink); }
 body.tb-cabinet-bg .tb-nav.is-premium:hover svg { color: var(--pp-ink); }
 
-/* Cabinet building blocks — used by the panels (sharp, hairline, tabular) */
 body.tb-cabinet-bg .tb-card {
   background: var(--bg-2);
   border: 1px solid var(--line);
@@ -536,8 +483,6 @@ body.tb-cabinet-bg .tb-metric-v { font-size: clamp(1.55rem, 1.15rem + 1.4vw, 1.9
 body.tb-cabinet-bg .tb-metric-v small { font-size: 0.85rem; color: var(--muted); font-weight: 600; }
 body.tb-cabinet-bg .tb-meter { margin-top: 9px; height: 5px; background: var(--tb-hover); }
 
-/* Team panel: the plan, the people and the billing read as three separate objects instead of one
-   run-on column. Squares everywhere — the cabinet has no rounded corners. */
 body.tb-cabinet-bg .tb-plan-strip {
   display: flex;
   align-items: center;
@@ -557,7 +502,7 @@ body.tb-cabinet-bg .tb-plan-strip-v {
 }
 body.tb-cabinet-bg .tb-plan-strip-v b { font-weight: 700; }
 body.tb-cabinet-bg .tb-plan-strip-sub { margin-top: 3px; font-size: 0.78rem; color: var(--muted); }
-/* Seat count with its own − / + on either side. */
+
 body.tb-cabinet-bg .tb-seat-stepper { display: flex; align-items: center; gap: 0.5rem; }
 body.tb-cabinet-bg .tb-seat-stepper .ed-btn { padding: 6px 13px; }
 body.tb-cabinet-bg .tb-seat-stepper-v {
@@ -593,7 +538,6 @@ body.tb-cabinet-bg .tb-meter i { display: block; height: 100%; background: var(-
   body.tb-cabinet-bg .tb-metrics > div:nth-child(2) { border-right: 1px solid var(--line); }
 }
 
-/* Chips — sharp, uppercase micro; role-coded */
 body.tb-cabinet-bg .tb-chip {
   font-size: 0.66rem;
   font-weight: 700;
@@ -608,7 +552,6 @@ body.tb-cabinet-bg .tb-chip {
 body.tb-cabinet-bg .tb-chip.is-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
 body.tb-cabinet-bg .tb-chip.is-ink { background: var(--ink); border-color: var(--ink); color: var(--bg-2); }
 
-/* Seat switch — sharp square knob, accent when on */
 body.tb-cabinet-bg .tb-switch {
   position: relative;
   width: 38px;
@@ -636,12 +579,8 @@ body.tb-cabinet-bg .tb-switch:focus-visible { outline: 2px solid var(--accent); 
   body.tb-cabinet-bg .ed-btn, body.tb-cabinet-bg .tb-nav { transition: none; }
 }
 
-/* Swiss cabinet: sharp corners EVERYWHERE. Neutralizes stray inline/rounded radii
-   in panels not yet hand-converted so the whole back office reads sharp at once.
-   Scoped to the cabinet (landing keeps its own rounded system); spinner stays circular. */
 body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 
-/* Discovery: City/State segmented switch */
 .tb-seg { display: inline-flex; border: 1px solid var(--line); }
 .tb-seg button {
   font-family: var(--font-mono);
@@ -657,7 +596,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .tb-seg button + button { border-left: 1px solid var(--line); }
 .tb-seg button.is-active { color: var(--bg); background: var(--accent); }
 
-/* Discovery: city autocomplete menu */
 .tb-ac-menu {
   position: absolute;
   top: calc(100% + 4px);
@@ -686,7 +624,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   outline: none;
 }
 
-/* Discovery: equipment multi-select chips */
 .tb-eq {
   display: inline-flex;
   align-items: center;
@@ -718,7 +655,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 }
 .tb-eq-add:hover { color: var(--accent); border-color: var(--accent); }
 
-/* Discovery: tiny copy button */
 .tb-copy {
   display: inline-flex;
   align-items: center;
@@ -733,7 +669,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .tb-copy:hover { color: var(--accent); }
 .tb-copy.is-done { color: var(--accent); }
 
-/* Oracle "thinking" loader (scoped to Oracle only) */
 .tb-oracle-loader {
   --size: 1px;
   width: calc(48 * var(--size));
@@ -783,9 +718,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   100% { transform: translate(0, 0) rotateX(0) rotateY(360deg); }
 }
 
-/* cabinet mobile top bar — shown only below the md breakpoint. Visibility is
-   handled here (not via Tailwind's md:hidden) because this rule sets `display`
-   in unlayered CSS, which would otherwise win over the layered utility. */
 .tb-topbar {
   position: sticky;
   top: 0;
@@ -806,7 +738,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   .tb-topbar { display: none; }
 }
 
-/* square icon button used in the top bar + drawer */
 .tb-icon-btn {
   display: inline-flex;
   align-items: center;
@@ -822,7 +753,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 }
 .tb-icon-btn:hover { background: var(--tb-icon-bg-hover); }
 
-/* cabinet mobile off-canvas drawer */
 .tb-drawer-scrim {
   position: fixed;
   inset: 0;
@@ -854,7 +784,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .ed-btn-accent::before { background: var(--ink); }
 .ed-btn-accent:hover { color: var(--bg); border-color: var(--ink); }
 
-/* ------------------------------------------------------------ link rows (contact/nav) */
 .ed-row {
   position: relative;
   display: flex;
@@ -877,7 +806,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .ed-row:hover .ed-row-title { color: var(--accent); }
 .ed-row-title { transition: color .4s var(--ease); }
 
-/* ------------------------------------------------------------ contact form */
 .ed-form { display: flex; flex-direction: column; gap: 20px; }
 .ed-field { display: flex; flex-direction: column; gap: 9px; }
 .ed-input {
@@ -922,7 +850,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   padding: 32px;
 }
 
-/* ------------------------------------------------------------ footer social links */
 .ed-social {
   display: inline-flex;
   align-items: center;
@@ -944,8 +871,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 }
 .ed-social:hover svg { transform: scale(1.12) rotate(-6deg); }
 
-/* placeholder shown until a recording is dropped in /public/demos */
-
 .ed-fcard-ph-note {
   font-family: var(--font-mono);
   font-size: 0.66rem;
@@ -954,7 +879,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   color: var(--muted);
 }
 
-/* ------------------------------------------------------------ generic panel (legacy tb-card) */
 .tb-card {
   position: relative;
   background: var(--bg-2);
@@ -964,7 +888,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 }
 .tb-card:hover { border-color: var(--line-strong); }
 
-/* ------------------------------------------------------------ prose (privacy/terms) */
 .tb-prose h3 { font-family: var(--font-display); font-size: 1.25rem; font-weight: 700; margin: 30px 0 12px; color: var(--ink); letter-spacing: -0.01em; }
 .tb-prose p, .tb-prose li { color: var(--muted); line-height: 1.75; font-size: 0.97rem; }
 .tb-prose ul { padding-left: 20px; margin: 12px 0; list-style: disc; }
@@ -987,8 +910,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   margin: 18px 0;
   color: var(--ink);
 }
-
-/* ------------------------------------------------------------ noise + vignette bg (legacy classes kept) */
 
 .tb-bg-blobs {
   position: fixed; inset: 0; z-index: -2; pointer-events: none; overflow: hidden;
@@ -1020,13 +941,10 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
 }
 
-/* ------------------------------------------------------------ responsive */
 @media (max-width: 640px) {
   .tb-card { width: 100%; border-radius: 4px; }
   .tb-prose { overflow-wrap: anywhere; word-break: break-word; }
 }
-
-/* ------------------------------------------------------------ features bento */
 
 .tb-bento-card {
   position: relative;
@@ -1134,7 +1052,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   color: var(--muted);
 }
 
-/* ------------------------------------------------------------ features carousel */
 .tb-caro-wrap { position: relative; }
 .tb-caro {
   display: flex;
@@ -1203,7 +1120,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   width: 22px;
 }
 
-/* ------------------------------------------------------------ features lightbox */
 .tb-lb {
   position: fixed;
   inset: 0;
@@ -1215,7 +1131,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   background: rgba(4, 6, 13, 0.88);
   backdrop-filter: blur(8px);
   cursor: zoom-out;
-  /* mobile: block one-finger scroll-through to the page behind, keep pinch-zoom */
+
   touch-action: pinch-zoom;
   overscroll-behavior: contain;
 }
@@ -1298,8 +1214,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   .tb-lb-next { right: 22%; }
 }
 
-/* ------------------------------------------------------------ get started guide */
-/* vertical numbered stepper */
 .tb-steps { position: relative; display: flex; flex-direction: column; }
 .tb-step {
   position: relative;
@@ -1310,7 +1224,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   scroll-margin-top: 90px;
 }
 .tb-step:last-child { padding-bottom: 0; }
-/* connecting line down the rail */
+
 .tb-step::before {
   content: "";
   position: absolute;
@@ -1351,7 +1265,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   font-size: clamp(1.3rem, 3.2vw, 1.95rem);
 }
 
-/* screenshot slot + placeholder */
 .tb-step-shots { display: flex; flex-direction: column; gap: 14px; margin-top: 20px; }
 .tb-shot {
   position: relative;
@@ -1387,7 +1300,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   border-radius: 6px;
 }
 
-/* tap-to-zoom (mobile only) */
 .tb-shot--zoomable { cursor: zoom-in; }
 .tb-shot--zoomable img { cursor: zoom-in; }
 .tb-shot-zoom {
@@ -1408,7 +1320,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   pointer-events: none;
 }
 
-/* fullscreen image viewer */
 .tb-zoom {
   position: fixed;
   inset: 0;
@@ -1418,7 +1329,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   justify-content: center;
   padding: 16px;
   background: rgba(2, 4, 8, 0.94);
-  touch-action: none;            /* gestures handled in JS; freezes background */
+  touch-action: none;
   overscroll-behavior: contain;
   animation: tb-zoom-in 0.18s ease;
 }
@@ -1452,11 +1363,9 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   backdrop-filter: blur(6px);
 }
 
-/* note tone variants (extends .tb-note) */
 .tb-note--warn { background: rgba(245, 158, 11, 0.09); border-left-color: #f5b54a; }
 .tb-note--calm { background: rgba(52, 211, 153, 0.08); border-left-color: #34d399; }
 
-/* reassurance banner */
 .tb-guide-calm {
   display: flex;
   align-items: flex-start;
@@ -1468,14 +1377,10 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   background: linear-gradient(135deg, var(--bg-2), #12151f);
 }
 
-/* ------------------------------------------------------------ journey rail
-   One continuous line with the 8 steps as numbered dots; phase names sit
-   above their segment. No card boxes — reads as a single path. */
 .tb-rail { overflow-x: auto; scrollbar-width: none; }
 .tb-rail::-webkit-scrollbar { display: none; }
 .tb-rail-inner { min-width: 660px; }
 
-/* phase labels above the rail */
 .tb-rail-phases { display: flex; }
 .tb-rail-phase {
   flex: 1 1 0;
@@ -1484,11 +1389,10 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--accent);
-  /* nudge each label to sit over its segment's first dot */
+
   padding-left: calc(100% / 16);
 }
 
-/* the line + dots */
 .tb-rail-track {
   position: relative;
   display: flex;
@@ -1497,7 +1401,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .tb-rail-track::before {
   content: "";
   position: absolute;
-  top: 18px;            /* vertical center of the 36px dots */
+  top: 18px;
   left: calc(100% / 16);
   right: calc(100% / 16);
   height: 2px;
@@ -1526,7 +1430,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   color: var(--accent);
   background: var(--bg-2);
   border: 1px solid var(--line-strong);
-  box-shadow: 0 0 0 5px var(--bg);   /* cuts the line behind the dot */
+  box-shadow: 0 0 0 5px var(--bg);
   transition: border-color .2s ease, box-shadow .2s ease, transform .2s ease;
 }
 .tb-rail-label {
@@ -1545,8 +1449,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 }
 .tb-rail-node:hover .tb-rail-label { color: var(--ink); }
 
-/* ------------------------------------------------------------ phase divider
-   Splits the vertical step rail into Set up / Connect / Send. */
 .tb-phase {
   display: flex;
   align-items: center;
@@ -1574,7 +1476,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   background: linear-gradient(90deg, var(--line-strong), transparent);
 }
 
-/* anchored step targets clear the sticky header when jumped to */
 .tb-step { scroll-margin-top: 96px; }
 
 @media (max-width: 640px) {
@@ -1582,10 +1483,9 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   .tb-step::before { left: 21px; top: 48px; }
   .tb-step-num { width: 44px; height: 44px; font-size: 1.15rem; }
   .tb-guide-calm { padding: 22px; }
-  
+
 }
 
-/* ------------------------------------------------------------ reduced motion */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: smooth; }
   *, *::before, *::after {
@@ -1595,13 +1495,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   }
 }
 
-/* The Crisp launcher is left exactly as Crisp ships it: our recolor/scale made the icon blurry. */
-
-/* ============================================================
-   $20k upgrade — Phase 1: global motion system + hero mockup
-   ============================================================ */
-
-/* ---- cursor-reactive spotlight ---- */
 .tb-spotlight {
   position: fixed; inset: 0; z-index: -2; pointer-events: none;
   --mx: 50vw; --my: 30vh;
@@ -1611,7 +1504,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   transition: opacity .8s ease;
 }
 
-/* ---- scroll progress bar ---- */
 .tb-progress {
   position: fixed; top: 0; left: 0; right: 0; height: 2.5px;
   transform-origin: 0 50%;
@@ -1622,7 +1514,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   box-shadow: 0 0 12px rgba(147, 167, 242,.6);
 }
 
-/* ---- magnetic CTA sheen sweep ---- */
 .ed-btn-accent { will-change: transform; }
 .ed-btn-accent::after {
   content: ""; position: absolute; inset: 0; z-index: 0;
@@ -1634,7 +1525,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .ed-btn-accent:hover::after { animation: tb-sheen .9s var(--ease); }
 @keyframes tb-sheen { to { transform: translateX(130%); } }
 
-/* ---- sticky conversion pill ---- */
 .tb-sticky-cta {
   position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
   z-index: 70; display: inline-flex; align-items: center; gap: 14px;
@@ -1657,12 +1547,9 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   font-family: var(--font-mono); font-size: .72rem; letter-spacing: .14em;
   text-transform: uppercase; font-weight: 700;
 }
-/* floating pill is desktop-only */
+
 @media (max-width: 768px) { .tb-sticky-cta { display: none !important; } }
 
-/* ============================================================
-   Hero mockup — stylized DAT board + TruckBox compose loop
-   ============================================================ */
 .hm-wrap {
   position: relative;
   perspective: 1600px;
@@ -1688,7 +1575,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   transform: rotateY(-9deg) rotateX(3deg);
   transform-style: preserve-3d;
 }
-/* browser chrome */
+
 .hm-chrome {
   display: flex; align-items: center; gap: 10px;
   padding: 11px 14px; border-bottom: 1px solid var(--line);
@@ -1712,7 +1599,7 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   animation: ed-pan 7s ease infinite;
   box-shadow: 0 4px 14px rgba(147, 167, 242,.4);
 }
-/* board grid */
+
 .hm-grid { padding: 8px; display: flex; flex-direction: column; gap: 6px; position: relative; }
 .hm-rowhead, .hm-row {
   display: grid; grid-template-columns: 1.5fr 1.5fr .7fr .6fr;
@@ -1740,7 +1627,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .hm-age { font-family: var(--font-mono); font-size: .6rem; color: var(--faint); text-align: right; }
 .hm-row.is-active .hm-dest { color: var(--ink); }
 
-/* compose panel */
 .hm-panel {
   position: absolute; left: 8px; right: 8px; bottom: 8px; z-index: 3;
   border-radius: 12px; padding: 14px;
@@ -1770,7 +1656,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 }
 .hm-send.is-sent { background: #1c2a1e; color: #4ade80; box-shadow: none; animation: none; }
 
-/* floating cursor */
 .hm-cursor {
   position: absolute; z-index: 6; top: 0; left: 0; pointer-events: none;
   width: 22px; height: 22px;
@@ -1783,7 +1668,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .hm-cursor.is-click::after { animation: hm-click .5s var(--ease); }
 @keyframes hm-click { 0% { transform: scale(.4); opacity: .8; } 100% { transform: scale(1.5); opacity: 0; } }
 
-/* floating chips */
 .hm-chip {
   position: absolute; z-index: 5;
   border-radius: 12px; padding: 11px 13px;
@@ -1815,7 +1699,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .hm-speed-new { font-family: var(--font-display); font-weight: 800; font-size: 1.1rem; color: var(--accent-2); letter-spacing: -.01em; }
 .hm-speed-new small { font-size: .6rem; color: var(--muted); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; }
 
-/* mini route map chip */
 .hm-chip-map {
   top: -10px;
   left: -46px;
@@ -1826,7 +1709,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
   border: 1px solid var(--line); overflow: hidden; }
 .hm-map-canvas svg { display: block; width: 100%; height: 100%; }
 
-/* load filter chip — two toggles */
 .hm-chip-filter { top: 150px; right: -34px; width: 176px; }
 .hm-filter-row {
   display: flex; align-items: center; justify-content: space-between; gap: 14px;
@@ -1844,10 +1726,8 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .hm-switch.is-on { background: var(--accent); box-shadow: 0 0 12px -2px rgba(147, 167, 242,.7); }
 .hm-switch.is-on i { transform: translateX(13px); }
 
-/* paper plane */
 .hm-plane { position: absolute; z-index: 7; pointer-events: none; color: var(--accent-2); }
 
-/* trust strip under CTAs */
 .hm-trust {
   display: inline-flex; align-items: center; gap: 10px;
   font-family: var(--font-mono); font-size: .88rem; letter-spacing: .08em; color: var(--muted);
@@ -1868,7 +1748,6 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 .hm-plane { animation: none !important; }
 }
 
-/* Report PDF export: window.print() shows only the report block, hides the app chrome. */
 @media print {
   body * { visibility: hidden; }
   #tb-report-print, #tb-report-print * { visibility: visible; }
@@ -1888,31 +1767,19 @@ body.tb-cabinet-bg *:not(.tb-spinner) { border-radius: 0 !important; }
 #tb-report-print { display: none; }
 @media print { #tb-report-print { display: block; } }
 
-/* Guide — "How to update version" */
-
 .tb-update-steps { list-style: decimal; padding-left: 1.4rem; display: grid; gap: .5rem; font-size: 1.05rem; line-height: 1.6; }
 .tb-update-steps b { color: var(--fg, inherit); }
 .tb-copy-url { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; background: none; border: 0; padding: 0; font: inherit; }
 .tb-copy-url-hint { color: var(--muted); font-size: .9em; }
 
-/* ============================================================
-   Light landing theme (experiment) — html.tb-light, toggled by ?theme=light.
-   Strategy: full palette, brand-led. Indigo carries the brand, violet is its
-   companion, amber (headlights / road signage) is the rare warm spark.
-   Neutrals are tinted toward the brand hue (280), never plain gray.
-   Rhythm: light hero with an aurora wash → tinted bands for compare/pricing →
-   one drenched indigo band for the walkthrough video. Product screenshots and
-   the hero mock stay dark on purpose — they read as app windows.
-   The cabinet keeps its own theme.
-   ============================================================ */
 html.tb-light {
   color-scheme: light;
   --lens-glow: rgba(255, 255, 255, .92);
   --bg:          oklch(0.975 0.009 280);
   --bg-2:        oklch(1 0 0);
-  --band:        oklch(0.95 0.022 280);          /* tinted section band */
+  --band:        oklch(0.95 0.022 280);
   --ink:         oklch(0.21 0.035 280);
-  --muted:       oklch(0.47 0.035 280);          /* 6.3:1 on --bg */
+  --muted:       oklch(0.47 0.035 280);
   --faint:       oklch(0.62 0.03 280);
   --line:        oklch(0.89 0.022 280);
   --line-strong: oklch(0.78 0.04 280);
@@ -1920,8 +1787,8 @@ html.tb-light {
   --accent-2:    oklch(0.53 0.2 300);
   --accent-3:    oklch(0.58 0.15 245);
   --accent-grad: linear-gradient(110deg, oklch(0.56 0.15 245) 0%, oklch(0.52 0.19 272) 40%, oklch(0.53 0.2 300) 62%, oklch(0.52 0.19 272) 100%);
-  --warm:        oklch(0.8 0.15 70);             /* amber spark — fills/decoration only */
-  --warm-ink:    oklch(0.5 0.13 60);             /* amber text that passes on light */
+  --warm:        oklch(0.8 0.15 70);
+  --warm-ink:    oklch(0.5 0.13 60);
   --pri-soft:    oklch(0.52 0.19 272 / 0.1);
   --on-accent:   oklch(1 0 0);
   --header-bg:   oklch(0.975 0.009 280 / 0.8);
@@ -1933,7 +1800,6 @@ html.tb-light {
   --color-accent: var(--accent);
 }
 
-/* ---- atmosphere: aurora wash instead of dark vignette ---- */
 html.tb-light .tb-bg-vignette {
   background:
     radial-gradient(60% 45% at 85% -5%, oklch(0.85 0.09 280 / 0.55), transparent 70%),
@@ -1943,7 +1809,6 @@ html.tb-light .tb-bg-vignette {
 html.tb-light .tb-bg-blobs::before { background: radial-gradient(circle, oklch(0.75 0.14 272 / 0.28), transparent 64%); }
 html.tb-light .tb-bg-blobs::after  { background: radial-gradient(circle, oklch(0.85 0.12 70 / 0.22), transparent 64%); }
 
-/* ---- hero: a lit stage behind the product mock ---- */
 html.tb-light #top::before {
   content: "";
   position: absolute; z-index: -1; pointer-events: none;
@@ -1954,8 +1819,7 @@ html.tb-light #top::before {
   filter: blur(30px);
 }
 html.tb-light .hm-board { box-shadow: var(--shadow-lg), 0 0 0 1px oklch(0.4 0.1 280 / 0.12); }
-/* The hero mock is an app window and stays dark in the light theme — so it keeps the dark
-   palette too, otherwise its text inherits the light theme's dark ink on a dark surface. */
+
 html.tb-light .hm-wrap {
   --bg: #0a0c13;
   --bg-2: #10131e;
@@ -1973,14 +1837,12 @@ html.tb-light .hm-wrap {
 
 html.tb-light .hm-trust .hm-stars { color: var(--warm); }
 
-/* ---- section rhythm: tinted bands ---- */
 html.tb-light #compare,
 html.tb-light #pricing {
   background:
     linear-gradient(180deg, transparent, var(--band) 14%, var(--band) 86%, transparent);
 }
 
-/* ---- the one drenched band: walkthrough video ---- */
 html.tb-light #walkthrough {
   --ink: oklch(0.97 0.01 280);
   --muted: oklch(0.82 0.04 280);
@@ -1992,7 +1854,6 @@ html.tb-light #walkthrough {
   color: var(--ink);
 }
 
-/* ---- depth: soft brand-tinted shadows instead of flat hairlines ---- */
 html.tb-light .tb-bento-card { background: var(--bg-2); box-shadow: var(--shadow-sm); }
 html.tb-light .tb-bento-card:hover { box-shadow: var(--shadow-lg); border-color: oklch(0.78 0.08 272); }
 html.tb-light .tb-bento-media::after { background: linear-gradient(to top, oklch(0.3 0.1 280 / 0.12), transparent 45%); }
@@ -2004,22 +1865,18 @@ html.tb-light .tb-sticky-pill-btn {
 html.tb-light .ed-btn-accent:hover { color: var(--bg); }
 html.tb-light .ed-btn:not(.ed-btn-accent) { background: oklch(1 0 0 / 0.7); }
 
-/* ---- amber spark: rating stars, NEW badges ---- */
 html.tb-light .tb-star {
   background: none;
   -webkit-text-fill-color: var(--warm);
   color: var(--warm);
 }
 
-/* ---- calm/info surfaces pick up the brand tint ---- */
 html.tb-light .tb-guide-calm,
 html.tb-light .ed-form-done { background: var(--bg-2); box-shadow: var(--shadow-sm); }
 html.tb-light .tb-note { background: oklch(0.52 0.19 272 / 0.06); }
 
 html.tb-light footer { background: var(--band); }
 
-/* Carousel: the strip scrolls (overflow-x), which clips anything outside its
-   box — give card shadows room so hover depth isn't cut into a gray slab. */
 html.tb-light .tb-caro {
   padding: 14px 16px 44px;
   margin: -6px -14px -22px;
@@ -2039,12 +1896,11 @@ html.tb-light .tb-sticky-cta {
   border-color: var(--line);
   box-shadow: 0 2px 6px oklch(0.3 0.08 280 / 0.06), 0 18px 44px -14px oklch(0.4 0.16 280 / 0.4);
 }
-/* controls that sit on dark imagery / the lightbox keep light glyphs */
+
 html.tb-light .tb-lb-nav,
 html.tb-light .tb-shot-zoom,
 html.tb-light .tb-zoom-close { color: oklch(0.97 0.01 280); }
 
-/* Landing light/dark switch (header) */
 .tb-theme-toggle {
   display: inline-flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; flex: 0 0 auto;
@@ -2059,7 +1915,6 @@ html.tb-light .tb-zoom-close { color: oklch(0.97 0.01 280); }
 .tb-theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 html.tb-light .tb-theme-toggle { background: var(--bg-2); border-color: var(--line); box-shadow: var(--shadow-sm); }
 
-/* Landing hero: "Works with" / "Sends from" logo grid */
 .tb-hero-logos {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -2104,9 +1959,6 @@ html.tb-light .tb-theme-toggle { background: var(--bg-2); border-color: var(--li
   .tb-hero-logos-row + .tb-hero-logos-label { margin-top: 6px; }
 }
 
-/* ------------------------------------------------------------------
-   Features — desktop expanding panels
-   ------------------------------------------------------------------ */
 .tb-fpanels {
   height: 540px;
   gap: 12px;
@@ -2209,7 +2061,6 @@ html.tb-light .tb-theme-toggle { background: var(--bg-2); border-color: var(--li
   color: var(--muted);
 }
 
-/* Auto-advance progress: a hairline filling along the bottom of the open panel. */
 .tb-fpanel-timer {
   position: absolute;
   left: 0;
@@ -2226,16 +2077,12 @@ html.tb-light .tb-theme-toggle { background: var(--bg-2); border-color: var(--li
   .tb-fpanel, .tb-fpanel-closed, .tb-fpanel-open, .tb-fpanel-media img { transition: none; }
 }
 
-/* Square corners everywhere — landing, wizard and back office alike.
-   Third-party widgets (Crisp) live outside #root and are untouched. */
 #root *,
 #root *::before,
 #root *::after {
   border-radius: 0 !important;
 }
 
-/* "Back to site" (cabinet login, team sign-up): landing-style ink fill rising from the bottom,
-   arrow nudging left. Beats the cabinet's flat .ed-btn override on purpose. */
 html body .ed-btn.tb-back-btn {
   position: relative;
   isolation: isolate;
@@ -2260,7 +2107,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   html body .ed-btn.tb-back-btn, html body .ed-btn.tb-back-btn::before, html body .ed-btn.tb-back-btn svg { transition: none; }
 }
 
-/* Seat stepper in the landing's teams offer */
 .tb-seat-step {
   width: 40px;
   height: 40px;
@@ -2274,7 +2120,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
 }
 .tb-seat-step:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); }
 
-/* Before / After — Truckstop panels side by side */
 .tb-ts-pair {
   display: flex;
   justify-content: center;
@@ -2315,10 +2160,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   .tb-ts-card img { width: 44vw; }
 }
 
-/* ------------------------------------------------------------------
-   Features — visuals drawn in markup (Gmail & Outlook, mailboxes, analytics).
-   Same frame as the /demos screenshots: white card, ~3:2.
-   ------------------------------------------------------------------ */
 .tb-fv {
   width: 100%;
   aspect-ratio: 1447 / 982;
@@ -2362,12 +2203,10 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
 .tb-fv-stats b { font-size: 18px; font-weight: 800; }
 @media (max-width: 560px) {
   .tb-fv { gap: 10px; padding: 5%; }
-  
-  
+
   .tb-fv-note { font-size: 11px; }
 }
 
-/* Partner logos under a feature (factoring: RTS, Triumph, Apex Capital) */
 .tb-feature-logos { display: flex; align-items: center; gap: 10px; margin-top: 12px; flex-wrap: wrap; }
 .tb-feature-logos img {
   height: 30px;
@@ -2377,7 +2216,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   border: 1px solid var(--line);
 }
 
-/* Mobile carousel: drawn visuals keep the screenshots' frame so every card is the same height. */
 .tb-bento-media .tb-fv { gap: 8px; padding: 4% 5%; overflow: hidden; }
 .tb-bento-media .tb-fv-note { display: none; }
 .tb-bento-media .tb-fv-kicker { font-size: 9px; }
@@ -2391,7 +2229,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
 .tb-bento-media .tb-fv-stats b { font-size: 14px; }
 .tb-bento-media .tb-fv-stats span { font-size: 8px; }
 
-/* Reviews: the hovered one lifts into a card and the others step back. */
 .tb-reviews { gap: 0; }
 .tb-review {
   position: relative;
@@ -2452,7 +2289,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   .tb-review, .tb-review::before, .tb-review-mark { transition: none; }
 }
 
-/* 5.0 ★ rating and the review stars grow when pointed at. */
 .tb-rating { cursor: default; transform-origin: right bottom;
   transition: transform .45s var(--ease); }
 .tb-rating .tb-star { display: inline-block; transform-origin: 50% 85%; transition: transform .5s var(--ease); }
@@ -2468,17 +2304,16 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   .tb-rating, .tb-rating .tb-star, .tb-review-stars { transition: none; }
 }
 
-/* How it works: each step draws its hairline, the number rolls up, the text slides in. */
 .tb-hiw { position: relative; }
 .tb-hiw-line {
   position: absolute; left: 0; right: 0; top: 0; height: 1px;
   background: var(--line); transform-origin: left;
 }
-/* Padding keeps the outline and the tilt from being clipped at the edges. */
+
 .tb-hiw-num-mask { display: block; overflow: hidden; padding: .12em .12em .1em; margin: -.12em 0 -.1em -.12em; }
 .tb-hiw-num { display: block; transition: color .5s var(--ease), -webkit-text-stroke-color .5s var(--ease); }
 .tb-hiw-title { transition: translate .5s var(--ease); }
-/* Title colour sweeps from ink to accent, line by line. */
+
 .tb-hiw-fill {
   background: linear-gradient(90deg, var(--accent) 0 50%, var(--ink) 50% 100%);
   background-size: 200% 100%;
@@ -2507,7 +2342,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   .tb-hiw-num, .tb-hiw-title, .tb-hiw-fill, .tb-hiw-desc, .tb-hiw .tb-hiw-bar { transition: none; }
 }
 
-/* Platforms tile: load boards (DAT, Truckstop) above mail providers (Gmail, Outlook). */
 .tb-fv-group { width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; }
 .tb-fv-chips { display: flex; gap: 14px; width: 100%; justify-content: center; }
 .tb-fv-chip {
@@ -2528,7 +2362,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
 .tb-bento-media .tb-fv-chip svg { width: 16px; height: 16px; }
 .tb-bento-media .tb-fv .tb-fv-chip img { height: 18px; }
 
-/* Pricing drum: a scroll wheel of included features, the centred row lit inside a hairline band. */
 .tb-drum-wrap { position: relative; min-width: 0; max-width: 100%; }
 .tb-drum {
   position: relative;
@@ -2546,7 +2379,7 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   height: 52px;
   display: flex;
   align-items: center;
-  /* Centred: the wheel reads as one column of text, not a left-aligned list. */
+
   justify-content: center;
   text-align: center;
   gap: 14px;
@@ -2566,7 +2399,7 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
 .tb-drum-band {
   position: absolute;
   left: 0; right: 0;
-  /* Hairlines and tint fade out towards both ends instead of stopping hard. */
+
   background:
     linear-gradient(90deg, transparent, var(--accent) 22%, var(--accent) 78%, transparent) top / 100% 1px no-repeat,
     linear-gradient(90deg, transparent, var(--accent) 22%, var(--accent) 78%, transparent) bottom / 100% 1px no-repeat,
@@ -2575,7 +2408,7 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   pointer-events: none;
 }
 .tb-drum-foot {
-  /* Counter and arrows centred under the wheel, matching the centred rows. */
+
   display: flex; align-items: center; justify-content: center; gap: 18px;
   margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line);
 }
@@ -2594,7 +2427,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
 .tb-drum-lead { margin-top: 18px; font-size: 1.05rem; line-height: 1.5; color: var(--muted); }
 .tb-drum-lead b { color: var(--ink); font-weight: 700; }
 
-/* $7: each glyph carries its own gradient (a shared one would leave a ghost behind the moving $). */
 .tb-price { display: inline-flex; cursor: default; }
 .tb-price-cur, .tb-price-num {
   display: inline-block;
@@ -2613,10 +2445,6 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   .tb-price-cur, .tb-price-num { transition: none; }
 }
 
-/* ============================================================
-   Announcement bar · numbers · integrations
-   (landing polish: what shipped, proof, and the stack we plug into)
-   ============================================================ */
 .tb-news {
   position: fixed;
   top: 0; left: 0; right: 0;
@@ -2625,8 +2453,7 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   align-items: center;
   justify-content: center;
   gap: 10px;
-  /* Fixed height, shared with the header's offset below: the two used to be set separately and
-     drifted three pixels apart, leaving a slit of the page between them. */
+
   height: var(--tb-news-h, 36px);
   padding: 0 44px 0 16px;
   background: var(--accent-grad, linear-gradient(90deg, #6d28d9, #4f46e5));
@@ -2642,7 +2469,7 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   text-transform: uppercase;
 }
 .tb-news-go { opacity: .85; text-decoration: underline; text-underline-offset: 3px; }
-/* Each message arrives on its own instead of the text changing under the reader's eye. */
+
 .tb-news-in { animation: tb-news-in .45s cubic-bezier(.16,1,.3,1) both; }
 @keyframes tb-news-in {
   from { opacity: 0; transform: translateY(6px); }
@@ -2656,7 +2483,7 @@ html body .ed-btn.tb-back-btn:hover svg { transform: translateX(-4px); }
   width: 26px; height: 26px; color: #fff; opacity: .8;
 }
 .tb-news-x:hover { opacity: 1; background: rgba(255, 255, 255, .16); }
-/* The bar sits above the fixed header, which starts exactly where the bar ends. */
+
 body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
 @media (max-width: 640px) {
   :root { --tb-news-h: 32px; }
@@ -2665,7 +2492,7 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
 }
 
 .tb-numbers-wrap { padding: 8px 0 56px; }
-/* Right-hand note in the heading row: balances the line and sources the numbers. */
+
 .tb-numbers-note {
   font: 500 13px/1.6 "Inter", system-ui, sans-serif;
   color: var(--muted);
@@ -2673,8 +2500,7 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
   margin: 0;
   padding-bottom: 4px;
 }
-/* No frame around the band: the lead stat is wider than the rest and the cells are separated by
-   hairlines that fade out at both ends, so the row reads as one designed object, not five boxes. */
+
 .tb-numbers {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -2686,16 +2512,16 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
   height: 100%;
   transition: background-color .4s var(--ease), transform .4s var(--ease), opacity .3s var(--ease);
 }
-/* The lead stat starts flush with the heading above it. */
+
 .tb-numbers > *:first-child .tb-stat { padding-left: 0; }
-/* Divider between cells — solid in the middle, dissolving into the page at top and bottom. */
+
 .tb-stat::after {
   content: "";
   position: absolute; right: 0; top: 0; bottom: 0; width: 1px;
   background: linear-gradient(180deg, transparent, var(--line) 22%, var(--line) 78%, transparent);
 }
 .tb-numbers > *:last-child .tb-stat::after { display: none; }
-/* Accent hairline draws in from the left on hover and fades out to the right. */
+
 .tb-stat::before {
   content: "";
   position: absolute; left: 0; right: 0; top: 0; height: 2px;
@@ -2712,7 +2538,7 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
   transition: transform .4s var(--ease);
   transform-origin: left bottom;
 }
-/* Hierarchy: the strongest claim is only a touch larger — no fill behind it. */
+
 .tb-numbers > *:first-child .tb-stat-value { font-size: clamp(2.4rem, 3.9vw, 3.1rem); }
 .tb-stat-unit {
   font-size: .46em;
@@ -2732,7 +2558,7 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
 }
 @media (max-width: 900px) {
   .tb-numbers { grid-template-columns: repeat(2, 1fr); }
-  /* The lead stat keeps its own row on phones. */
+
   .tb-numbers > *:first-child { grid-column: 1 / -1; }
   .tb-stat { padding: 20px 16px; border-top: 1px solid var(--line); }
   .tb-numbers > *:first-child .tb-stat { border-top: 0; }
@@ -2743,14 +2569,11 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
   .tb-stat, .tb-stat::before, .tb-stat-value { transition: none; }
 }
 
-/* Integrations marquee: the tools TruckBox plugs into, as one quiet line of marks. Every logo is
-   flattened to the same ink so no single brand shouts over the others; the real colours return
-   under the cursor, which also stops the loop. */
 .tb-marquee {
   position: relative;
   overflow: hidden;
   padding: 34px 0;
-  /* No hard edges: the tint fades out on all four sides so the band melts into the page. */
+
   background:
     radial-gradient(70% 120% at 50% 50%, color-mix(in oklab, var(--accent) 7%, transparent), transparent 72%),
     linear-gradient(180deg, transparent, color-mix(in oklab, var(--accent) 4%, transparent) 40%,
@@ -2758,8 +2581,7 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
   mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
 }
-/* Hairline top and bottom: solid across the middle, dissolving into the page at both ends, so
-   the band is bounded without ever drawing a corner. */
+
 .tb-marquee::before,
 .tb-marquee::after {
   content: "";
@@ -2785,14 +2607,14 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
 }
 @keyframes tb-marquee {
   from { transform: translateX(0); }
-  /* The row is rendered twice, so half a lap is a full seamless loop. */
+
   to { transform: translateX(calc(-50% - 29px)); }
 }
 .tb-int {
   display: flex; align-items: center; gap: 13px;
   flex: 0 0 auto;
 }
-/* One ink for every mark: grey, a touch lighter than the text around it. */
+
 .tb-int-mark {
   flex: 0 0 68px; height: 46px;
   display: flex; align-items: center; justify-content: center;
@@ -2802,7 +2624,7 @@ body:has(.tb-news) header.fixed { top: var(--tb-news-h, 36px); }
 }
 html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1); opacity: .58; }
 .tb-int-mark img { max-width: 64px; max-height: 32px; width: auto; height: auto; display: block; }
-/* The Maps pin is tall and narrow; the FMCSA mark is wide — give each its own fit. */
+
 .tb-int-mark img[src$="gmaps.svg"] { max-width: 28px; max-height: 38px; }
 .tb-int-mark img[src$="fmcsa.svg"] { max-width: 70px; max-height: 38px; }
 .tb-int-name {
@@ -2842,7 +2664,6 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   background: linear-gradient(180deg, rgba(255, 255, 255, .55), rgba(255, 255, 255, .25));
 }
 
-/* Before/After view switcher: the active tab is filled, the others light up under the cursor. */
 .tb-ba-tabs {
   display: inline-flex;
   gap: 4px;
@@ -2858,7 +2679,7 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--ink);
-  /* Accent fills in from the bottom, the way the site's buttons do. */
+
   background-color: transparent;
   background-image: linear-gradient(var(--accent), var(--accent));
   background-repeat: no-repeat;
@@ -2876,7 +2697,6 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   .tb-ba-tab { transition: none; }
 }
 
-/* Header brand: the mark pops once on hover, then a quick wave runs through the letters. */
 .tb-brand-mark { transition: transform .22s cubic-bezier(.34, 1.56, .64, 1); }
 .tb-brand-letter { display: inline-block; will-change: transform; }
 @media (hover: hover) {
@@ -2897,7 +2717,6 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   .tb-brand-mark, .tb-brand:hover .tb-brand-mark, .tb-brand:hover .tb-brand-letter { animation: none; transition: none; }
 }
 
-/* Header nav: the accent hairline sweeps in from the left and the label lifts a hair. */
 .tb-nav-link {
   position: relative;
   padding-bottom: 4px;
@@ -2923,13 +2742,10 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   .tb-nav-link, .tb-nav-link::after { transition: none; }
 }
 
-/* Pricing reassurance — the free week, no card, one-click cancel. Same hairline grid as the
-   numbers band so it reads as part of the page, not a badge sticker. */
-/* Shrink-to-fit: its width comes from the button row, and the strip stretches to match. */
 .tb-plan-cta { display: inline-block; max-width: 100%; }
 .tb-trial {
   display: grid;
-  /* Equal columns: the strip fills the price column instead of leaving a gap on the right. */
+
   grid-template-columns: repeat(3, 1fr);
   gap: 1px;
   width: 100%;
@@ -2965,9 +2781,6 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   .tb-trial-item:last-child { grid-column: span 2; }
 }
 
-
-/* Price block, premium details: light behind the number, a gradient rule over the strip, and
-   cells that answer the cursor. */
 .tb-price-row { position: relative; }
 .tb-price-row::before {
   content: "";
@@ -2980,7 +2793,7 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
   z-index: -1;
 }
 .tb-trial { border-top: 0; }
-/* Hairline that fades out to the right instead of stopping dead. */
+
 .tb-trial::before {
   content: "";
   grid-column: 1 / -1;

@@ -1,12 +1,3 @@
-/**
- * Post-build prerender: snapshots the public marketing routes of the built
- * SPA so crawlers get real HTML (content + per-route meta) instead of an
- * empty #root. The client still boots normally and re-renders on load.
- *
- * Runs after `vite build`. Skips gracefully (exit 0) when a browser can't
- * be launched or PRERENDER=0 is set, so a failed prerender never blocks a
- * deploy — it just falls back to the plain SPA shell.
- */
 import { createServer } from "node:http";
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, extname, dirname } from "node:path";
@@ -36,7 +27,6 @@ if (process.env.PRERENDER === "0") {
   process.exit(0);
 }
 
-// Tiny static server over dist/ with SPA fallback to index.html.
 const shell = await readFile(join(DIST, "index.html"));
 const server = createServer(async (req, res) => {
   const path = new URL(req.url, "http://x").pathname;
@@ -72,13 +62,10 @@ try {
   for (const route of ROUTES) {
     const url = `http://127.0.0.1:${port}${route}`;
     await page.goto(url, { waitUntil: "networkidle2", timeout: 60_000 });
-    // Give the router + meta hook a beat to settle.
     await page.waitForSelector("h1, h2", { timeout: 10_000 }).catch(() => {});
     await new Promise((r) => setTimeout(r, 600));
 
     const html = await page.evaluate(() => {
-      // Snapshot hygiene: drop the devtools-guard overlay (it fires under
-      // CDP), any transient scroll locks, and third-party chat widgets.
       document.querySelectorAll("[data-tb-guard]").forEach((el) => el.remove());
       document.querySelectorAll(".crisp-client, #crisp-chatbox").forEach((el) => el.remove());
       document.body.style.overflow = "";

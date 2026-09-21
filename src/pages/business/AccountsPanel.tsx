@@ -1,7 +1,6 @@
 import { ContactEmail } from "./ContactEmail";
 import { LinkedAccounts } from "./LinkedAccounts";
 
-/** Contact email + the Google/Microsoft logins that open this account. */
 export function AccountsPanel() {
   return (
     <section style={{ maxWidth: 720 }}>

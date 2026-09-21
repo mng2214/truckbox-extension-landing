@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { MICROSOFT_RESULT_KEY } from "../../lib/microsoft";
 
-/** Redirect target of the Microsoft popup: hand the result to the opener tab and close. */
 export default function MicrosoftCallback() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);

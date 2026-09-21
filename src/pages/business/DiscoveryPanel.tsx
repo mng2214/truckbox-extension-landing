@@ -30,9 +30,7 @@ type BrokerRow = {
   brokerId: number | null;
   brokerName: string | null;
   mcNumber: string | null;
-  /** Distinct days the broker was seen anywhere on this corridor — the same on each of its lanes. */
   activeDays30d: number;
-  /** How many times TruckBox saw this lane posted in the last 30 days (not the board's own count). */
   totalReposted30d: number;
   avgPrice: number | null;
   minPrice: number | null;
@@ -61,8 +59,6 @@ type Quota = { used: number; limit: number | null; unlimited: boolean };
 const usd = (n: number | null) =>
   n == null ? "—" : "$" + Math.round(n).toLocaleString("en-US");
 
-// A city picked from the suggestions looks like "Chicago, IL" (ends with ", ST"). Free text
-// like "chicago il" won't geocode — this gates the search client-side.
 const isPickedCity = (v: string) => /,\s*[A-Za-z]{2}\s*$/.test(v.trim());
 
 function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
@@ -109,8 +105,6 @@ export function DiscoveryPanel() {
   const [dValue, setDValue] = useState("");
   const [dRadius, setDRadius] = useState(100);
   const [equipment, setEquipment] = useState<string[]>([]);
-  // Silent quality filter: only brokers seen on the corridor on ≥2 distinct days
-  // in the last 30d. Not user-facing (was confusing); tune here if needed.
   const minActiveDays = 2;
 
   const [rows, setRows] = useState<BrokerRow[] | null>(null);
@@ -121,12 +115,10 @@ export function DiscoveryPanel() {
   const [quota, setQuota] = useState<Quota | null>(null);
   const reduce = useReducedMotion();
 
-  // Agent (outreach) is stealth: UI exists only after the probe returns 200.
   const [agent, setAgent] = useState<{ available: boolean; connected: boolean }>({
     available: false,
     connected: false,
   });
-  // null = search view; {requestId} = draft entry; {requestId: null} = campaigns list
   const [agentView, setAgentView] = useState<{ requestId: number | null } | null>(null);
   useEffect(() => {
     probeAgent().then(setAgent);
@@ -173,8 +165,6 @@ export function DiscoveryPanel() {
       setError("Choose both an origin and a destination.");
       return;
     }
-    // City-mode inputs must be a picked "City, ST" (that's what the suggestions produce) — free
-    // text like "chicago il" can't be geocoded. Guide the user instead of hitting the backend.
     if (oMode === "city" && !isPickedCity(oValue)) {
       setError("Pick the origin city from the suggestions (e.g. Chicago, IL).");
       return;
@@ -198,7 +188,6 @@ export function DiscoveryPanel() {
           minActiveDays,
         },
       );
-      // Hold the "thinking" loader for at least 3s, even if the API is faster.
       const wait = 3000 - (Date.now() - started);
       if (wait > 0) await new Promise((r) => setTimeout(r, wait));
       setRows(result.brokers);
@@ -213,7 +202,6 @@ export function DiscoveryPanel() {
     }
   };
 
-  // Agent views replace the search UI entirely (draft screen / dashboard / campaign list).
   if (agentView) {
     return (
       <section className="flex flex-col">
@@ -277,8 +265,6 @@ export function DiscoveryPanel() {
           </div>
         </div>
       )}
-
-      {/* ---- header ---- */}
 
       <h1
         className="ed-display mt-3"
@@ -354,9 +340,6 @@ export function DiscoveryPanel() {
         </span>
       )}
 
-      {/* Sets expectations before anyone builds a workflow on Oracle: it is a demo, and it will
-          not stay free. The dialog says the same on first open; this panel is the standing
-          reminder, so it carries the accent edge rather than sitting in the page's grey. */}
       <div
         className="mt-3"
         style={{
@@ -378,7 +361,6 @@ export function DiscoveryPanel() {
         </p>
       </div>
 
-      {/* ---- query ---- */}
       <form onSubmit={run} className="mt-9 flex flex-col gap-7">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
           <CorridorSide
@@ -417,7 +399,6 @@ export function DiscoveryPanel() {
         </div>
       </form>
 
-      {/* ---- thinking loader ---- */}
       {loading && (
         <div
           className="flex flex-col items-center justify-center gap-6"
@@ -428,7 +409,6 @@ export function DiscoveryPanel() {
         </div>
       )}
 
-      {/* ---- results ---- */}
       {!loading && rows && (
         <div className="mt-12">
           <div
@@ -711,7 +691,7 @@ function CityAutocomplete({
 }) {
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [open, setOpen] = useState(false);
-  const skip = useRef(false); // skip the fetch triggered by selecting a suggestion
+  const skip = useRef(false);
 
   useEffect(() => {
     if (skip.current) {
@@ -770,13 +750,8 @@ function CityAutocomplete({
   );
 }
 
-// Data-driven from real prod volume (loads.equipment). The Discovery filter matches
-// equipment by EXACT string — `l.equipment IN (:equipment)` — so combo codes like
-// FH / HS / FSD must be listed explicitly; a plain "F" does NOT catch them.
-// COMMON = top 8 by volume (~86% of loads); MORE reaches ~95%. The old 60-code list
-// included 16 codes that never appear in the data at all, plus ~15 near-zero ones.
-const EQ_COMMON = ["V", "F", "R", "FH", "FD", "VR", "HS", "FSD"]; // ~86% of loads
-const EQ_MORE = ["SD", "SB", "PO", "FT", "CONG", "FO", "CN", "RG"]; // → ~95%
+const EQ_COMMON = ["V", "F", "R", "FH", "FD", "VR", "HS", "FSD"];
+const EQ_MORE = ["SD", "SB", "PO", "FT", "CONG", "FO", "CN", "RG"];
 
 function EquipmentSelect({
   value,

@@ -1,5 +1,3 @@
-// Wire types for the Agent (outreach) API — mirrors backend OutreachDtos / CampaignDraft.
-
 export type DraftBrokerRow = {
   brokerId: number;
   brokerName: string;
@@ -14,10 +12,6 @@ export type DraftBrokerRow = {
   preChecked: boolean;
 };
 
-/**
- * Display-only cleanup of an email body: cut the quoted tail ("On … wrote:" + "> …" lines)
- * so the timeline shows just the new text. Raw bodies stay untouched in the DB/API.
- */
 export function stripQuotedTail(body: string | null): string {
   if (!body) return "";
   const lines = body.split("\n");
@@ -30,7 +24,7 @@ export function stripQuotedTail(body: string | null): string {
     }
   }
   const stripped = lines.slice(0, cut).join("\n").trimEnd();
-  return stripped.length > 0 ? stripped : body; // a pure-quote email still shows something
+  return stripped.length > 0 ? stripped : body;
 }
 
 export type CampaignDraft = {

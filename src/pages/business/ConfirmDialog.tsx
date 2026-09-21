@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-/** Swiss-styled confirmation dialog — replaces native confirm()/alert() in the cabinet. */
 export function ConfirmDialog({
   open,
   title,

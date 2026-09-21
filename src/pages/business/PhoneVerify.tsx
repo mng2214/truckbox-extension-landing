@@ -7,7 +7,6 @@ const INSTALL_URL =
   "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd";
 const SUPPORT_TELEGRAM = "https://t.me/mngartur";
 
-// Smaller, centered action button (overrides the default full-width ed-btn in a flex column).
 const ctaStyle: React.CSSProperties = {
   alignSelf: "center",
   padding: "13px 34px",
@@ -16,7 +15,6 @@ const ctaStyle: React.CSSProperties = {
 
 type Country = { iso: string; name: string; dial: string };
 
-// Freight-first ordering (US/CA/MX), then a broad common set.
 const COUNTRIES: Country[] = [
   { iso: "US", name: "United States", dial: "+1" },
   { iso: "CA", name: "Canada", dial: "+1" },
@@ -57,7 +55,6 @@ const flagOf = (iso: string) =>
     .toUpperCase()
     .replace(/./g, (c) => String.fromCodePoint(127397 + c.charCodeAt(0)));
 
-// Pretty-print the national number as you type. +1 → (312) 555-0134; others → groups of 3.
 function formatNational(raw: string, dial: string): string {
   const d = raw.replace(/\D/g, "");
   if (dial === "+1") {
@@ -72,11 +69,6 @@ function formatNational(raw: string, dial: string): string {
   return (d.match(/.{1,3}/g) ?? []).join(" ");
 }
 
-/**
- * Phone verification step shown when login returns a verification-scoped token (unverified user).
- * Uses the verification token (already in storage) to call /auth/phone/start then /confirm; the
- * confirm response carries the full token, after which the cabinet loads normally.
- */
 export function PhoneVerify({
   onVerified,
   onSignOut,
@@ -93,8 +85,6 @@ export function PhoneVerify({
 
   const e164 = country.dial + national.replace(/\D/g, "");
 
-  // Friendly texts for the backend's phone error codes; raw backend messages are technical
-  // (e.g. "Phone number must be in E.164 format").
   const ERR: Record<number, string> = {
     1024: "This number is already linked to another TruckBox account. Sign in with that account and add this Google or Microsoft login under Accounts → Sign-in accounts.",
     1025: "Virtual or temporary numbers are not supported. Use a real mobile number.",
@@ -169,7 +159,6 @@ export function PhoneVerify({
                     value={formatNational(national, country.dial)}
                     onChange={(e) => setNational(e.target.value.replace(/\D/g, ""))}
                     onKeyDown={(e) => {
-                      // Allow only digits + control/navigation keys.
                       if (
                         e.key.length === 1 &&
                         !/\d/.test(e.key) &&

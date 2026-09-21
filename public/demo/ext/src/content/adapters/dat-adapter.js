@@ -1,10 +1,10 @@
-// =========================================================================
-// DAT (one.dat.com) site adapter.
-//
-// Holds every DAT-specific selector and the loads-page detector. These strings
-// were moved verbatim from ui-injector.js so DAT behaviour is unchanged — the
-// modules still read them, now via the globals adapter-loader.js republishes.
-// =========================================================================
+/*!
+ * Truck Box — Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.
+ * Proprietary and confidential. Not open source, not public domain.
+ * No license is granted: this file may not be copied, reused, modified, redistributed,
+ * or used as input or training data for any AI or code-generation system.
+ * Licensing: info@truckbox.app
+ */
 (function () {
     var DAT_SELECTORS = {
         EMAIL_RE: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-z]{2,}/i, // brokers often type addresses in CAPS
@@ -26,24 +26,17 @@
             '.contact-methods a[href^="mailto:"]',
             '.contacts_email a[href^="mailto:"]',
             '.contacts__email a[href^="mailto:"]',
-            // New DAT: the CONTACT INFORMATION email is a web component (no mailto).
             'dat-load-details connected-email-contact-details[recipient-email]',
             '.table-row-detail connected-email-contact-details[recipient-email]'
         ].join(','),
 
-        // DAT list rows no longer carry an <a href="mailto:">: the contact is a
-        // <connected-email-contact-link> web component (visible text in a shadow
-        // root) and the address only lives in its `recipient-email` attribute.
-        // The compose button carries the same attribute (narrow layout).
-        EMAIL_ATTR_SEL: [
+       EMAIL_ATTR_SEL: [
             'connected-email-contact-link[recipient-email][is-email="true"]',
             'connected-email-compose-email-button[recipient-email]',
             '[data-test="connected-email-compose-button"][recipient-email]',
             'connected-email-contact-details[recipient-email]'
         ].join(','),
 
-        // The CONTACT INFORMATION block(s). A free-text email here counts as a
-        // real contact; a free-text email in the COMMENTS block does NOT.
         CONTACT_BLOCK_SEL: [
             'dat-contacts',
             '.contacts',

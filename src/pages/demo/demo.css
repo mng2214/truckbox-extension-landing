@@ -424,3 +424,57 @@ body:has(.demo-page) #crisp-chatbox {
   font-size: 13px;
   color: #7f8ba1;
 }
+
+.demo-desktop-only {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px 20px calc(24px + env(safe-area-inset-bottom));
+  background:
+    radial-gradient(120% 80% at 50% -10%, #ffffff 0%, rgba(255, 255, 255, 0) 60%),
+    #eef1f8;
+}
+
+.demo-desktop-only-card {
+  width: min(460px, 100%);
+  text-align: center;
+  background: #fff;
+  border-top: 3px solid #2f5fe0;
+  box-shadow:
+    0 30px 70px -36px rgba(17, 24, 39, 0.5),
+    0 2px 8px rgba(17, 24, 39, 0.06);
+  padding: 34px 26px 28px;
+}
+
+.demo-desktop-only .demo-gate-eyebrow {
+  margin-bottom: 16px;
+}
+
+.demo-desktop-only-title {
+  display: block;
+  font-size: clamp(34px, 10vw, 46px);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+  color: #131a2b;
+  margin-bottom: 16px;
+}
+
+.demo-desktop-only-text {
+  margin: 0 0 22px;
+  font-size: 16.5px;
+  line-height: 1.55;
+  color: #59617a;
+}
+
+.demo-desktop-only-url {
+  display: block;
+  margin: 0 0 24px;
+  padding: 13px 10px;
+  background: #f3f5fb;
+  border: 1px dashed rgba(47, 95, 224, 0.4);
+  font: 600 15px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.01em;
+  color: #2f5fe0;
+  word-break: break-all;
+}

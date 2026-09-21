@@ -1,9 +1,3 @@
-/**
- * One-off (re-runnable) image optimizer: converts the heavy marketing
- * screenshots in public/ to WebP (q80, max-width 1600) next to the
- * originals. Run `node scripts/optimize-images.mjs --delete-originals`
- * to also remove the source png/jpg once references are updated.
- */
 import sharp from "sharp";
 import { readdir, stat, unlink } from "node:fs/promises";
 import { join, extname } from "node:path";

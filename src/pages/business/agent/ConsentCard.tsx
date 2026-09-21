@@ -7,11 +7,6 @@ declare global {
   }
 }
 
-/**
- * One-time gmail.send consent via the GIS popup code flow. The agent sends emails FROM the
- * user's own Gmail, so this is the "connect Google" moment; the backend stores the refresh
- * token encrypted and resumes any PAUSED_AUTH campaigns.
- */
 export function ConsentCard({ connected, onConnected }: { connected: boolean; onConnected: () => void }) {
   const clientRef = useRef<any>(null);
   const [busy, setBusy] = useState(false);

@@ -22,20 +22,16 @@ import { TeamInviteBanner } from "./TeamInviteBanner";
 import { CompanyInfoPanel } from "./CompanyInfoPanel";
 import { MailboxesPanel } from "./MailboxesPanel";
 
-// Oracle (stealth): lazy-loaded so its code is not in the main bundle for non-entitled users.
 const DiscoveryPanel = lazy(() =>
   import("./DiscoveryPanel").then((m) => ({ default: m.DiscoveryPanel }))
 );
 
-// Agent (outreach): admin-only tab for testing. Lazy for the same stealth reason.
 const AgentPanel = lazy(() =>
   import("./AgentPanel").then((m) => ({ default: m.AgentPanel }))
 );
 
 const SUPPORT_TELEGRAM = "https://t.me/mngartur";
 const EASE = [0.16, 1, 0.3, 1] as const;
-// Backend ErrorCode.PHONE_VERIFICATION_REQUIRED — a distinct 403 that means "verify your phone"
-// (vs a generic 403/expired token, which means "log in again").
 const PHONE_VERIFICATION_REQUIRED = 1023;
 
 function signOut() {
@@ -52,11 +48,9 @@ export default function Cabinet() {
   const section = params.section ?? null;
   const [error, setError] = useState<string | null>(null);
   const [needsPhone, setNeedsPhone] = useState(false);
-  // Web sign-in by someone who never signed up in the extension: show "install first", no account.
   const [noAccount, setNoAccount] = useState(false);
   const [navOpen, setNavOpen] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
-  // Light is the default for the back office; respected as dark only if the user explicitly chose it.
   const [theme, setTheme] = useState<"dark" | "light">(() =>
     typeof localStorage !== "undefined" && localStorage.getItem("tb-theme") === "dark"
       ? "dark"
@@ -69,10 +63,6 @@ export default function Cabinet() {
       setCtx(c);
       setNeedsPhone(false);
     } catch (e) {
-      // A verification-scoped token (unverified phone) is rejected with a DISTINCT 403 code —
-      // route to the phone-verification step. An expired/invalid token gives a generic 401/403
-      // (no phone code), so send the user back to log in — NOT to phone verify (which used to show
-      // even for already-verified users whose session had simply expired).
       if (e instanceof ApiError && e.status === 403 && e.code === PHONE_VERIFICATION_REQUIRED) {
         setNeedsPhone(true);
         return;
@@ -100,8 +90,6 @@ export default function Cabinet() {
     };
   }, []);
 
-  // Light mode is scoped to the cabinet: set data-theme on <html> while mounted,
-  // remove it on unmount so the (dark-only) landing is never affected.
   useEffect(() => {
     const root = document.documentElement;
     if (theme === "light") root.setAttribute("data-theme", "light");
@@ -172,7 +160,6 @@ export default function Cabinet() {
   if (needsPhone) return <PhoneVerify onVerified={load} onSignOut={signOut} />;
   if (!ctx) return <div className="min-h-screen flex items-center justify-center">Loading…</div>;
   if (ctx.verdict === "BOUNCE") {
-    // Org owner with an unpaid/lapsed org: let them resume checkout for the existing org.
     const ownerNeedsPayment = ctx.bounceReason === "PAYMENT" && ctx.org?.role === "OWNER";
     const completeOrgPayment = async () => {
       try {
@@ -218,7 +205,6 @@ export default function Cabinet() {
 
   const navBody = (
     <>
-      {/* Logo row, with the day/night switch sitting opposite it. */}
       <div className="mb-7 px-1 flex items-center justify-between gap-2">
         <span
           style={{
@@ -242,8 +228,6 @@ export default function Cabinet() {
         </button>
       </div>
 
-      {/* Four groups, each named: what you did, how you're set up, running the company, and the
-          premium tools. The headings make a long list scannable at a glance. */}
       <nav className="flex flex-col gap-1">
         {ctx.panels.includes("personal") && (
           <>
@@ -297,7 +281,6 @@ export default function Cabinet() {
         <NavItem label="Company info" icon={<Building2 />} active={section === "company"} onClick={() => goto("company")} />
       </nav>
 
-      {/* Bottom of the sidebar: help, who you are, and the way out — in that order. */}
       <div className="mt-auto pt-8 flex flex-col gap-1">
         <span
           className="px-3 py-2"
@@ -321,7 +304,6 @@ export default function Cabinet() {
 
   return (
     <div className="min-h-screen md:flex" style={{ position: "relative" }}>
-      {/* Static desktop sidebar */}
       <aside
         className="tb-aside hidden md:flex w-60 shrink-0 border-r p-5 flex-col gap-1"
         style={{ borderColor: "var(--hairline)", minHeight: "100vh" }}
@@ -329,7 +311,6 @@ export default function Cabinet() {
         {navBody}
       </aside>
 
-      {/* Mobile top bar */}
       <header className="tb-topbar md:hidden">
         <span
           style={{
@@ -342,7 +323,6 @@ export default function Cabinet() {
         >
           Truck<span style={{ color: "var(--accent)" }}>Box</span>
         </span>
-        {/* Everything that used to live in the avatar menu is in the drawer now. */}
         <button
           type="button"
           className="tb-icon-btn"
@@ -354,7 +334,6 @@ export default function Cabinet() {
         </button>
       </header>
 
-      {/* Mobile off-canvas drawer */}
       <AnimatePresence>
         {navOpen && (
           <div className="md:hidden">
@@ -415,10 +394,6 @@ export default function Cabinet() {
   );
 }
 
-/**
- * What support actually needs: the session id that every request in this tab is stamped with, so a
- * report can be traced in the logs, and one way to reach a human.
- */
 function HelpDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [copied, setCopied] = useState(false);
   const id = sessionId();
@@ -531,7 +506,6 @@ function HelpDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
   );
 }
 
-/** Telegram's paper plane, inline so the dialog needs no network request for one icon. */
 function TelegramMark() {
   return (
     <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
@@ -549,7 +523,6 @@ function NavItem({
   onClick,
 }: {
   label: string;
-  /** One-line plain-English gloss for names nobody can guess, e.g. "Oracle". */
   sub?: string;
   icon: React.ReactNode;
   active: boolean;

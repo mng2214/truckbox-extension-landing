@@ -2,7 +2,6 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { Dispatcher, TeamStats, Win } from "./StatsPanel";
 
-// Brand palette (print-friendly: dark ink on white, accent for highlights).
 const INK: [number, number, number] = [16, 23, 40];
 const MUTED: [number, number, number] = [110, 122, 143];
 const ACCENT: [number, number, number] = [99, 102, 241];
@@ -31,7 +30,6 @@ function sum(wins: Win[]): Win {
 }
 
 function section(doc: jsPDF, title: string, pick: (d: Dispatcher) => Win, stats: TeamStats, y: number): number {
-  // Keep the section label with its table: start a new page if too close to the bottom.
   if (y > doc.internal.pageSize.getHeight() - 140) {
     doc.addPage();
     y = 64;
@@ -68,7 +66,6 @@ function section(doc: jsPDF, title: string, pick: (d: Dispatcher) => Win, stats:
       4: { halign: "right", textColor: ACCENT },
     },
     didParseCell: (data) => {
-      // Bold the "Whole team" totals row.
       if (data.section === "body" && data.row.index === stats.dispatchers.length) {
         data.cell.styles.fontStyle = "bold";
         data.cell.styles.fillColor = [244, 246, 252];
@@ -88,7 +85,6 @@ export function buildTeamReportDoc(stats: TeamStats, generatedAt: Date): jsPDF {
     day: "numeric",
   });
 
-  // Header
   doc.setFont("helvetica", "bold").setFontSize(18).setTextColor(...INK);
   doc.text("TRUCK", MARGIN, 60);
   doc.setTextColor(...ACCENT);
@@ -108,7 +104,6 @@ export function buildTeamReportDoc(stats: TeamStats, generatedAt: Date): jsPDF {
   y = section(doc, "This month", (d) => d.monthToDate, stats, y);
   section(doc, "All time", (d) => d.total, stats, y);
 
-  // Footer with page numbers on every page
   const pages = doc.getNumberOfPages();
   for (let i = 1; i <= pages; i++) {
     doc.setPage(i);

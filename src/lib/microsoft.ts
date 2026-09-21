@@ -4,7 +4,6 @@ export type AuthProviders = { microsoft: boolean; microsoftClientId: string | nu
 
 let providersPromise: Promise<AuthProviders> | null = null;
 
-/** Optional sign-in providers the backend has switched on (cached per page load). */
 export function getAuthProviders(): Promise<AuthProviders> {
   providersPromise ??= api
     .get<AuthProviders>("/api/v1/auth/providers")
@@ -30,14 +29,9 @@ function takeResult(): Result | null {
   }
 }
 
-/**
- * Microsoft sign-in in a popup; resolves with the auth code (the backend exchanges it). The
- * callback page hands the result back through localStorage — Microsoft's pages can sever
- * window.opener (COOP), so postMessage is not reliable.
- */
 export function microsoftAuthCode(clientId: string): Promise<string> {
   const state = crypto.randomUUID();
-  takeResult(); // drop any stale result
+  takeResult();
   const params = new URLSearchParams({
     client_id: clientId,
     response_type: "code",

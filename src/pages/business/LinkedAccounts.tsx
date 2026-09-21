@@ -15,7 +15,6 @@ type Identity = {
 
 const MERGE_CONFIRMATION_REQUIRED = 1060;
 
-/** A login that belongs to another (throwaway) TruckBox account, waiting for the user's OK. */
 type PendingMerge =
   | { provider: "google"; sourceEmail: string; googleToken: string }
   | { provider: "microsoft"; sourceEmail: string };
@@ -38,7 +37,6 @@ function mergeSource(e: unknown): string | null {
   return null;
 }
 
-/** Google accounts that can sign in to this TruckBox account. Link another / unlink. */
 export function LinkedAccounts() {
   const [items, setItems] = useState<Identity[] | null>(null);
   const [busy, setBusy] = useState(false);
@@ -84,7 +82,6 @@ export function LinkedAccounts() {
           })
           .finally(() => setBusy(false));
       },
-      // Popup closed / blocked: GIS reports it here, not via callback.
       error_callback: () => setBusy(false),
     });
     client.requestAccessToken();
@@ -111,7 +108,6 @@ export function LinkedAccounts() {
     }
   };
 
-  /** The user agreed: close the other account and move its login here. */
   const confirmMerge = async () => {
     if (!merge) return;
     setBusy(true);
@@ -122,7 +118,6 @@ export function LinkedAccounts() {
           await api.post<Identity[]>("/api/v1/account/identities/google", {
             googleToken: merge.googleToken,
             confirmMerge: true,
-            // Binds the OK to the account shown: a different resolved account is asked about again.
             mergeSourceEmail: merge.sourceEmail,
           }),
         );
@@ -131,15 +126,12 @@ export function LinkedAccounts() {
           setMerge(null);
           return;
         }
-        // A Microsoft auth code is single-use, so sign in once more (opened from this click).
         const code = await microsoftAuthCode(providers.microsoftClientId);
         setItems(
           await api.post<Identity[]>("/api/v1/account/identities/microsoft", {
             code,
             redirectUri: MICROSOFT_REDIRECT_URI,
             confirmMerge: true,
-            // If this second popup signed into another Microsoft account, the backend closes
-            // nothing and asks again about that account.
             mergeSourceEmail: merge.sourceEmail,
           }),
         );
@@ -148,7 +140,6 @@ export function LinkedAccounts() {
     } catch (e) {
       const sourceEmail = mergeSource(e);
       if (sourceEmail && merge.provider === "microsoft") {
-        // A different Microsoft account was picked: show the account that would really be closed.
         setMerge({ provider: "microsoft", sourceEmail });
       } else {
         setMerge(null);

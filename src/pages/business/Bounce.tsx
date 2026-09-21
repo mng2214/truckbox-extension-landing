@@ -41,7 +41,6 @@ export function Bounce({
   reason: BounceReason;
   onSignOut?: () => void;
   telegram?: string;
-  /** When set, replaces the default CTA — e.g. an org owner completing payment. */
   ctaOverride?: { label: string; onClick: () => void };
   signOutLabel?: string;
 }) {

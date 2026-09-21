@@ -9,7 +9,6 @@ type Member = {
   state: string;
   role: OrgRole;
   hasSeat: boolean;
-  /** Offered to an existing TruckBox account; joins only after they accept. */
   requiresAcceptance: boolean;
 };
 type Team = {
@@ -25,7 +24,6 @@ type Team = {
 const SEAT_LIMIT_REACHED = 1021;
 const money = (n: number) => `$${n.toFixed(n % 1 === 0 ? 0 : 2)}`;
 
-/** Maps backend error codes to human-readable messages. */
 function friendlyError(e: unknown): string {
   if (e instanceof ApiError) {
     switch (e.code) {
@@ -53,9 +51,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
   const [busy, setBusy] = useState(false);
   const [portalLoading, setPortalLoading] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
-  // Adding people past the paid seats: how many seats to buy, and the pending email.
   const [buySeats, setBuySeats] = useState<{ needed: number; email: string; today: number } | null>(null);
-  // Removing someone: who, and whether their seat goes too.
   const [removing, setRemoving] = useState<Member | null>(null);
   const [releaseSeat, setReleaseSeat] = useState(true);
 
@@ -103,7 +99,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
     } catch (e) {
       const needed = e instanceof ApiError && e.code === SEAT_LIMIT_REACHED ? Number(e.details?.needed) : 0;
       if (needed > 0 && !allowSeatIncrease) {
-        // Prorated charge for the rest of the period — an estimate; Stripe computes the exact sum.
         const end = team.planExpiresAt ? new Date(team.planExpiresAt).getTime() : 0;
         const daysLeft = end ? Math.min(30, Math.max(0, (end - Date.now()) / 86_400_000)) : 30;
         setBuySeats({ needed, email, today: (needed * unit * daysLeft) / 30 });
@@ -123,7 +118,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
 
       {err && <p style={{ color: "var(--danger)", fontSize: "0.85rem" }}>{err}</p>}
 
-      {/* Metrics — the state of the team at a glance */}
       <div className="tb-metrics">
         <div>
           <div className="tb-metric-k">Seats used</div>
@@ -145,7 +139,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         </div>
       </div>
 
-      {/* What the team pays, and the control that changes it — one row, away from the people list. */}
       <div className="tb-plan-strip">
         <div className="min-w-0">
           <div className="tb-metric-k">Your plan</div>
@@ -183,7 +176,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         </div>
       </div>
 
-      {/* Members */}
       <div className="tb-card">
         <div className="tb-card-head">
           <h2 className="ed-label" style={{ color: "var(--ink)" }}>Members</h2>
@@ -230,7 +222,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
                 </div>
               </div>
 
-              {/* Seat: dispatchers always have it; owners/managers choose (the billed toggle). */}
               <div className="flex items-center gap-2.5 shrink-0" style={{ minWidth: 150 }}>
                 {m.role === "MEMBER" ? (
                   <span style={{ fontSize: "0.72rem", color: "var(--muted)" }}>Access included</span>
@@ -257,7 +248,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
                 )}
               </div>
 
-              {/* Role / remove — owner is fixed */}
               {m.role !== "OWNER" && (
                 <div className="flex gap-2 shrink-0">
                   <button
@@ -292,7 +282,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
           ))}
         </div>
 
-        {/* Add member */}
         <form
           className="tb-card-foot flex flex-col sm:flex-row gap-2.5"
           onSubmit={async (e) => {
@@ -316,7 +305,6 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
         </form>
       </div>
 
-      {/* Billing */}
       <div className="tb-card">
         <div className="tb-card-head">
           <h2 className="ed-label" style={{ color: "var(--ink)" }}>Billing</h2>
@@ -333,7 +321,7 @@ export function TeamPanel({ onChanged }: { onChanged: () => void }) {
             setPortalLoading(true);
             try {
               const { url } = await api.post<{ url: string }>("/api/v1/billing/portal");
-              window.location.href = url; // navigating away; state stays locked until unload
+              window.location.href = url;
             } catch (e) {
               setErr(e instanceof ApiError ? `Error ${e.code ?? e.status}` : "Error opening billing portal");
               setBusy(false);

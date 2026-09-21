@@ -7,7 +7,6 @@ export type GoogleAuthResult = {
   phoneVerificationRequired: boolean;
 };
 
-/** @param signup true only on the team signup page — elsewhere a newcomer must start in the extension. */
 export async function exchangeGoogleAccessToken(
   accessToken: string,
   signup = false,

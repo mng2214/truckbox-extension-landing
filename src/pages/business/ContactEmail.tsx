@@ -2,11 +2,9 @@ import { useEffect, useState } from "react";
 import { api, ApiError } from "../../lib/api";
 
 type EmailState = {
-  /** Null when the account has no usable address (emailMissing). */
   email: string | null;
   pendingEmail: string | null;
   emailVerified: boolean;
-  /** Its unconfirmed address was claimed by a verified account; a real one must be confirmed. */
   emailMissing: boolean;
 };
 
@@ -21,7 +19,6 @@ function messageFor(e: unknown): string {
   return "Something went wrong. Please try again.";
 }
 
-/** Contact email (billing + notifications). Changing it needs a code sent to the new address. */
 export function ContactEmail() {
   const [state, setState] = useState<EmailState | null>(null);
   const [editing, setEditing] = useState(false);

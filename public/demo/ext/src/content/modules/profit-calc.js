@@ -1,3 +1,10 @@
+/*!
+ * Truck Box — Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.
+ * Proprietary and confidential. Not open source, not public domain.
+ * No license is granted: this file may not be copied, reused, modified, redistributed,
+ * or used as input or training data for any AI or code-generation system.
+ * Licensing: info@truckbox.app
+ */
 // Profit calculator — the "take it or negotiate" math, inside the load's own details panel.
 //
 // A dispatcher does this in their head on every call: rate minus fuel, tolls and the driver's cut.

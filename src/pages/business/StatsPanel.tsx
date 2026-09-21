@@ -38,10 +38,8 @@ export function StatsPanel() {
     if (!stats || pdfBusy) return;
     setPdfBusy(true);
     try {
-      // Lazy chunk: jspdf (~150KB gz) loads only when a manager actually exports.
       const { downloadTeamReportPdf } = await import("./teamReportPdf");
       downloadTeamReportPdf(stats);
-      // The browser saves silently, so the button confirms it happened.
       setPdfDone(true);
       setTimeout(() => setPdfDone(false), 1800);
     } catch {

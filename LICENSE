@@ -1,0 +1,107 @@
+PROPRIETARY SOFTWARE LICENSE
+Truck Box — Website and Interactive Demo
+
+Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+
+1. OWNERSHIP
+
+   This repository and everything in it is the exclusive intellectual
+   property of TruckBox LLC ("the Company"). This includes, without
+   limitation: source code, build and deployment scripts, configuration,
+   database schemas and migrations, API contracts, prompt templates and
+   model instructions, business logic, algorithms, user interface designs,
+   layouts, stylesheets, icons, illustrations, copy and documentation, and
+   any data sets, fixtures or sample data contained herein.
+
+   Nothing in this repository is open source. No part of it has been
+   released into the public domain, and publication of any part of it —
+   including code distributed inside a published browser extension or
+   served by a public website — does not place it in the public domain and
+   grants no rights in it.
+
+2. NO LICENSE GRANTED
+
+   No license, right, title or interest of any kind is granted to any
+   person or entity, by implication, estoppel or otherwise, except under a
+   separate written agreement signed by an authorized officer of the
+   Company.
+
+   Without a signed agreement, you may not: use, copy, reproduce,
+   download, store, modify, translate, adapt, merge, publish, distribute,
+   sublicense, sell, rent, lease, host, or create derivative works of any
+   part of this repository or of the software it produces.
+
+3. REVERSE ENGINEERING AND DERIVATION
+
+   You may not reverse engineer, decompile, disassemble, deobfuscate or
+   otherwise attempt to derive the source code, structure, algorithms,
+   prompts or internal logic of the software, nor use any part of it as a
+   reference, specification or starting point for building a competing or
+   substantially similar product or feature, except where such a
+   restriction is expressly prohibited by applicable law.
+
+4. AUTOMATED INGESTION, TEXT AND DATA MINING, AI TRAINING
+
+   The Company expressly reserves all rights in respect of text and data
+   mining, including the reservation of rights under Article 4(3) of
+   Directive (EU) 2019/790 and any equivalent provision in any other
+   jurisdiction.
+
+   No part of this repository may be collected, scraped, crawled,
+   indexed, ingested, embedded, or used as input, context or training data
+   for any machine learning model, large language model, generative AI
+   system, code assistant, or automated code generation tool, whether for
+   training, fine-tuning, retrieval, evaluation or inference, without the
+   prior written permission of the Company.
+
+5. END USERS OF THE PUBLISHED PRODUCT
+
+   Users of the publicly distributed Truck Box browser extension, website
+   and hosted services receive a limited, personal, revocable,
+   non-exclusive, non-transferable right to use those services as
+   delivered, solely on the terms of the Truck Box Terms of Service.
+
+   That right is a right to use the service. It conveys no right in the
+   source code, assets or underlying materials, and does not permit
+   extraction, redistribution or reuse of any part of them.
+
+6. TRADEMARKS
+
+   "Truck Box", "TruckBox", the Truck Box logo and all related names,
+   marks, logos and trade dress are trademarks of TruckBox LLC. No
+   trademark rights are granted by this license or by any use of the
+   software.
+
+7. THIRD-PARTY COMPONENTS
+
+   This repository may reference or bundle third-party components that are
+   distributed under their own licenses. Those components remain subject to
+   their respective license terms, and nothing in this license modifies,
+   supersedes or restricts those terms. This license applies solely to the
+   original work of TruckBox LLC.
+
+8. CONFIDENTIALITY
+
+   If you have received access to this repository through an employment,
+   contracting, evaluation or other confidential relationship with the
+   Company, its contents are confidential information of the Company and
+   must not be disclosed, published or retained after that relationship
+   ends.
+
+9. NO WARRANTY
+
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+   OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+
+10. ENFORCEMENT AND GOVERNING LAW
+
+   Unauthorized use, reproduction or distribution of this software, in
+   whole or in part, may result in severe civil and criminal penalties, and
+   will be prosecuted to the maximum extent possible under the law. This
+   license is governed by the laws of the State of Illinois, USA, and of
+   the United States of America, without regard to conflict-of-law rules.
+
+11. CONTACT
+
+   Licensing and permission requests: info@truckbox.app

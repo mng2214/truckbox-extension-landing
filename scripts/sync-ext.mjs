@@ -21,7 +21,23 @@ if (!fs.existsSync(source)) {
   process.exit(1);
 }
 
-const digest = (file) => createHash("sha1").update(fs.readFileSync(file)).digest("hex");
+const NOTICE = [
+  "Truck Box \u2014 Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.",
+  "Proprietary and confidential. Not open source, not public domain.",
+  "No license is granted: this file may not be copied, reused, modified, redistributed,",
+  "or used as input or training data for any AI or code-generation system.",
+  "Licensing: info@truckbox.app",
+];
+
+const banner = (rel) => {
+  if (rel.endsWith(".js")) return `/*!\n * ${NOTICE.join("\n * ")}\n */\n`;
+  if (rel.endsWith(".css")) return `/*!\n * ${NOTICE.join("\n * ")}\n */\n`;
+  return "";
+};
+
+const render = (rel, file) => Buffer.concat([Buffer.from(banner(rel)), fs.readFileSync(file)]);
+
+const digest = (buf) => createHash("sha1").update(buf).digest("hex");
 
 function walk(dir, base = dir) {
   if (!fs.existsSync(dir)) return [];
@@ -43,12 +59,13 @@ const removed = [];
 for (const rel of wanted) {
   const from = path.join(source, rel);
   const to = path.join(target, rel);
-  const same = fs.existsSync(to) && digest(from) === digest(to);
+  const content = render(rel, from);
+  const same = fs.existsSync(to) && digest(content) === digest(fs.readFileSync(to));
   if (same) continue;
   changed.push(rel);
   if (checkOnly) continue;
   fs.mkdirSync(path.dirname(to), { recursive: true });
-  fs.copyFileSync(from, to);
+  fs.writeFileSync(to, content);
 }
 
 for (const rel of walk(target)) {

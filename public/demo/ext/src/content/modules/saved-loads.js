@@ -1,3 +1,10 @@
+/*!
+ * Truck Box — Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.
+ * Proprietary and confidential. Not open source, not public domain.
+ * No license is granted: this file may not be copied, reused, modified, redistributed,
+ * or used as input or training data for any AI or code-generation system.
+ * Licensing: info@truckbox.app
+ */
 // Saved loads — a dispatcher stars a row and it stays reachable after the board pulls the posting.
 //
 // Why it exists: a conversation with a broker runs for days, the posting lives for hours. Without

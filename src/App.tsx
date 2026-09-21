@@ -55,11 +55,6 @@ const EASE = [0.16, 1, 0.3, 1] as const;
 
 export { NAV, INSTALL_URL, CALENDLY_URL };
 
-/* ============================================================
-   Global chrome: smooth scroll
-   (mounted once in main.tsx so every route gets it)
-   ============================================================ */
-
 export function SmoothScroll() {
   const location = useLocation();
   const lenisRef = useRef<Lenis | null>(null);
@@ -89,7 +84,6 @@ export function SmoothScroll() {
         ? href.slice(1)
         : "";
       if (hash.length > 1) {
-        // getElementById (not querySelector) so numeric ids like #1 work
         const el = document.getElementById(hash.slice(1));
         if (el) {
           e.preventDefault();
@@ -106,15 +100,11 @@ export function SmoothScroll() {
     };
   }, []);
 
-  // Scroll to a #section after the route renders (e.g. clicking "FAQ" from the
-  // Privacy page navigates home AND lands on the section in one click). Retries
-  // until the target element exists.
   useEffect(() => {
     if (!location.hash) return;
     let tries = 0;
     let timer: ReturnType<typeof setTimeout>;
     const go = () => {
-      // getElementById (not querySelector) so numeric ids like #1 work
       const el = document.getElementById(location.hash.slice(1));
       if (el) {
         if (lenisRef.current) lenisRef.current.scrollTo(el as HTMLElement, { offset: -90 });
@@ -129,10 +119,6 @@ export function SmoothScroll() {
 
   return null;
 }
-
-/* ============================================================
-   Motion primitives
-   ============================================================ */
 
 export function Reveal({
   children,
@@ -161,9 +147,6 @@ export function Reveal({
   );
 }
 
-/** Headline whose lines slide up out of a clip mask.
- *  `play` animates on mount (use for above-the-fold text that must show
- *  immediately); otherwise it triggers when scrolled into view. */
 function MaskLines({
   lines,
   className,
@@ -198,8 +181,6 @@ function MaskLines({
   );
 }
 
-/* Magnetic hover: element leans toward the cursor, springs back on leave.
-   Pointer-fine devices only; respects reduced motion. */
 function useMagnetic<T extends HTMLElement>(strength = 0.38) {
   const ref = useRef<T>(null);
   useEffect(() => {
@@ -232,8 +213,6 @@ function useMagnetic<T extends HTMLElement>(strength = 0.38) {
   return ref;
 }
 
-/* Soft light glow that follows the cursor (lerped). Pointer-fine devices
-   only; on touch / reduced-motion it stays hidden so the orbs are the base. */
 function Spotlight() {
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -272,14 +251,12 @@ function Spotlight() {
   return <div ref={ref} className="tb-spotlight" style={{ opacity: 0 }} aria-hidden />;
 }
 
-/* Thin top scroll-progress bar (accent gradient). */
 function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 130, damping: 30, mass: 0.3 });
   return <motion.div className="tb-progress" style={{ scaleX }} aria-hidden />;
 }
 
-/* Slim conversion pill that appears once the hero scrolls away. */
 function StickyCTA() {
   const [show, setShow] = useState(false);
   useEffect(() => {
@@ -309,10 +286,6 @@ function StickyCTA() {
     </AnimatePresence>
   );
 }
-
-/* ============================================================
-   App shell
-   ============================================================ */
 
 export default function App() {
   usePageMeta({
@@ -347,11 +320,6 @@ export default function App() {
   );
 }
 
-/* ============================================================
-   Header
-   ============================================================ */
-
-/** Light ↔ dark switch for the landing (the back office has its own). */
 function ThemeToggle() {
   const [theme, setTheme] = useState<LandingTheme>(() => getLandingTheme());
   useEffect(() => {
@@ -377,7 +345,6 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [logoFailed, setLogoFailed] = useState(false);
-  // Someone with a live session is not signing in — they're going back to their cabinet.
   const [signedIn] = useState(() => {
     try {
       return auth.isAuthed();
@@ -394,7 +361,6 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Lock background scroll while the mobile menu is open.
   useEffect(() => {
     if (!open) return;
     const prevOverflow = document.body.style.overflow;
@@ -509,7 +475,6 @@ export function Header() {
         </div>
       </header>
 
-      {/* Fullscreen overlay menu */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -556,14 +521,6 @@ export function Header() {
   );
 }
 
-/* ============================================================
-   Hero mockup — stylized DAT board + TruckBox compose loop.
-   A scripted, looping sequence: a load is selected, the email
-   auto-fills, sends, and the deadhead RPM / route / RTS credit
-   flourishes resolve. Reduced motion renders the resolved frame.
-   ============================================================ */
-
-/** Everything the $7 plan includes — the count is quoted on the page, so keep them together. */
 const PLAN_FEATURES = [
     "7-day free trial (No Credit Card)",
     "Cancel anytime (1 click)",
@@ -590,19 +547,9 @@ const PLAN_FEATURES = [
 
 const PLAN_FEATURE_COUNT = PLAN_FEATURES.length;
 
-/* ============================================================
-   Announcement bar — what shipped most recently (dismissible)
-   ============================================================ */
-
 const NEWS_KEY = "tb-news-2026-09";
-/**
- * Closing the bar snoozes it rather than burying it: a dispatcher who dismissed the announcement
- * in September should see the next one when they come back in October, and "dismissed forever"
- * quietly disabled the only channel the landing has for saying what shipped.
- */
 const NEWS_SNOOZE_DAYS = 14;
 
-/** The bar carries two things now: what shipped, and the board anyone can try without installing. */
 const NEWS_ITEMS = [
   {
     tag: "New",
@@ -624,11 +571,10 @@ function AnnouncementBar() {
   const [open, setOpen] = useState(() => {
     try {
       const dismissedAt = Number(localStorage.getItem(NEWS_KEY));
-      // Missing, or the old permanent "dismissed" marker, which is not a number.
       if (!Number.isFinite(dismissedAt) || dismissedAt <= 0) return true;
       return Date.now() - dismissedAt > NEWS_SNOOZE_DAYS * 86400000;
     } catch {
-      return true; // private mode: just show it
+      return true;
     }
   });
 
@@ -655,7 +601,6 @@ function AnnouncementBar() {
   const current = NEWS_ITEMS[item];
   return (
     <div className="tb-news">
-      {/* Keyed so each message fades in on its own rather than swapping mid-sentence. */}
       <Link key={item} to={current.to} className="tb-news-body tb-news-in">
         <span className="tb-news-tag">{current.tag}</span>
         <span>{current.text}</span>
@@ -668,10 +613,6 @@ function AnnouncementBar() {
   );
 }
 
-/* ============================================================
-   Numbers band — counts up when it scrolls into view
-   ============================================================ */
-
 function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
   to: number; decimals?: number; prefix?: string; suffix?: string;
 }) {
@@ -680,7 +621,6 @@ function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
   const [reduced] = useState(
     () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
   );
-  // Reduced motion: show the final number from the start instead of counting to it.
   const [value, setValue] = useState(reduced ? to : 0);
 
   useEffect(() => {
@@ -690,7 +630,6 @@ function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
     const DURATION = 1100;
     const tick = (now: number) => {
       const t = Math.min(1, (now - start) / DURATION);
-      // ease-out: fast first, settles on the number
       setValue(to * (1 - Math.pow(1 - t, 3)));
       if (t < 1) raf = requestAnimationFrame(tick);
     };
@@ -709,7 +648,6 @@ function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
 
 function Numbers() {
   const stats: { value: ReactNode; label: string; sub: string; href?: string }[] = [
-    // Units are set apart from the figure (smaller, quieter) so the number itself carries the line.
     {
       value: (
         <>
@@ -737,7 +675,6 @@ function Numbers() {
       value: <CountUp to={PLAN_FEATURE_COUNT} />,
       label: "Features for $7",
       sub: "no tiers, no add-ons",
-      // Straight to the price section, where the whole feature list lives.
       href: "/#pricing",
     },
   ];
@@ -758,7 +695,6 @@ function Numbers() {
           {stats.map((s, i) => (
             <Reveal key={i} delay={i * 0.06}>
               {s.href ? (
-                // In-page anchors stay in this tab; the store link opens in a new one.
                 <a
                   className="tb-stat tb-stat-link"
                   href={s.href}
@@ -783,10 +719,6 @@ function Numbers() {
   );
 }
 
-/* ============================================================
-   Integrations band — everything TruckBox plugs into
-   ============================================================ */
-
 function Integrations() {
   const items = [
     { img: "/dat.png", alt: "DAT", note: "Load board" },
@@ -810,9 +742,6 @@ function Integrations() {
         </Reveal>
       </div>
 
-        {/* Marquee: one row, duplicated so the loop has no seam. Every logo is set in the same
-            ink so the row reads as one line; the real colours come back under the cursor, which
-            also pauses the loop. */}
         <div className="tb-marquee">
           <div className="tb-marquee-track">
             {[0, 1].map((copy) =>
@@ -841,10 +770,6 @@ function HeroVisual() {
     </Suspense>
   );
 }
-
-/* ============================================================
-   Hero
-   ============================================================ */
 
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
@@ -921,10 +846,6 @@ function Hero() {
   );
 }
 
-/* ============================================================
-   Social proof — real Chrome Web Store reviews
-   ============================================================ */
-
 function SocialProof() {
   const reviews = [
     {
@@ -994,18 +915,12 @@ function SocialProof() {
   );
 }
 
-/* ============================================================
-   Features — horizontal pinned track
-   ============================================================ */
-
 type FeatureVisualKind = "platforms" | "mailboxes" | "analytics";
 type FeatureItem = {
   slug: string;
   title: string;
   body: string;
-  /** Drawn in markup instead of a /demos screenshot (crisp at any size). */
   visual?: FeatureVisualKind;
-  /** Partner logos shown under the description. */
   logos?: { src: string; alt: string }[];
 };
 
@@ -1020,7 +935,6 @@ function FeatureLogos({ item }: { item: FeatureItem }) {
   );
 }
 
-/** The feature's picture: a /demos screenshot, or a visual drawn in markup. */
 function FeatureMedia({ item, alt = "" }: { item: FeatureItem; alt?: string }) {
   if (!item.visual) {
     return <img src={`/demos/${item.slug}.webp`} alt={alt} loading="lazy" decoding="async" draggable={false} />;
@@ -1103,13 +1017,8 @@ function FeatureMedia({ item, alt = "" }: { item: FeatureItem; alt?: string }) {
   );
 }
 
-/* ============================================================
-   Before / After comparison slider
-   ============================================================ */
-
 const BA_VIEWS = {
   details: {
-    // Loads list + an opened load in one frame.
     label: "DAT",
     before: "/compare/before.webp",
     after: "/compare/after.webp",
@@ -1123,7 +1032,6 @@ const BA_VIEWS = {
   },
   truckstop: {
     label: "Truckstop",
-    // Two phone-width panels shown side by side (a slider over tall narrow cards reads poorly).
     pair: { before: "/compare/truckstop-before.webp", after: "/compare/truckstop-after.webp" },
     ratio: "1450 / 950",
   },
@@ -1134,9 +1042,9 @@ function BeforeAfter() {
   const wrapRef = useRef<HTMLDivElement>(null);
   const dragging = useRef(false);
   const hinted = useRef(false);
-  const [pos, setPos] = useState(50); // % revealed of the "before" image
+  const [pos, setPos] = useState(50);
   const [view, setView] = useState<BaView>("details");
-  const [anim, setAnim] = useState(false); // smooth transition during auto-hint
+  const [anim, setAnim] = useState(false);
   const cur = BA_VIEWS[view];
   const pair = "pair" in cur ? cur.pair : undefined;
   const before = "before" in cur ? cur.before : undefined;
@@ -1166,8 +1074,6 @@ function BeforeAfter() {
     };
   }, []);
 
-  // Auto-hint: when the slider scrolls into view, sweep the handle once so the
-  // user sees it's draggable.
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
@@ -1206,10 +1112,7 @@ function BeforeAfter() {
           />
         </div>
 
-
-
         <Reveal>
-          {/* View switch — directly above the photo */}
           <div style={{ display: "flex", justifyContent: "center", marginBottom: 16 }}>
             <div className="tb-ba-tabs">
               {(Object.keys(BA_VIEWS) as BaView[]).map((k) => (
@@ -1226,7 +1129,6 @@ function BeforeAfter() {
             </div>
           </div>
 
-          {/* Before / After labels — above the image (hidden for static single-image views) */}
           {!isStatic && (
           <div className="flex items-center justify-between" style={{ marginBottom: 12 }}>
             <span
@@ -1287,7 +1189,6 @@ function BeforeAfter() {
             }}
           >
             {isStatic ? (
-              /* Truckstop: before / after panels side by side */
               <div className="tb-ts-pair">
                 {[
                   { src: pair!.before, label: "Before", after: false },
@@ -1307,7 +1208,6 @@ function BeforeAfter() {
               </div>
             ) : (
             <>
-            {/* AFTER — full base layer (with TruckBox) */}
             <img loading="lazy" decoding="async"
               src={after}
               alt="With TruckBox"
@@ -1323,7 +1223,6 @@ function BeforeAfter() {
               }}
             />
 
-            {/* BEFORE — clipped to the left of the handle (without TruckBox) */}
             <img loading="lazy" decoding="async"
               src={before}
               alt="Without TruckBox"
@@ -1341,7 +1240,6 @@ function BeforeAfter() {
               }}
             />
 
-            {/* Divider + handle — bold and obvious */}
             <div
               style={{
                 position: "absolute",
@@ -1390,8 +1288,6 @@ function BeforeAfter() {
   );
 }
 
-/* Desktop feature panels: one open, the rest collapsed to a vertical title.
-   Hover (or focus) opens a panel; left alone, they step through on their own. */
 function FeaturePanels({ items, onOpen }: { items: FeatureItem[]; onOpen: (i: number) => void }) {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -1442,8 +1338,6 @@ function FeaturePanels({ items, onOpen }: { items: FeatureItem[]; onOpen: (i: nu
               }
             }}
           >
-            {/* Collapsed layer: number + vertical title. Crossfades, since
-                writing-mode can't animate. */}
             <div className="tb-fpanel-closed" aria-hidden>
               <span className="tb-fpanel-num">/{num}</span>
               <span className="tb-fpanel-vtitle">{it.title}</span>
@@ -1471,7 +1365,6 @@ function FeaturePanels({ items, onOpen }: { items: FeatureItem[]; onOpen: (i: nu
 }
 
 function Features() {
-  // The ones that sell it. Everything else is listed in Pricing.
   const items: FeatureItem[] = [
     {
       slug: "email",
@@ -1524,12 +1417,10 @@ function Features() {
   ];
 
   const total = items.length;
-  // Lightbox: index of the enlarged feature, or null when closed.
   const [lb, setLb] = useState<number | null>(null);
   const lbStep = (delta: number) =>
     setLb((v) => (v == null ? v : (((v + delta) % total) + total) % total));
 
-  // Preload every feature image so the grid and the lightbox feel instant.
   useEffect(() => {
     items.forEach((it) => {
       if (it.visual) return;
@@ -1539,7 +1430,6 @@ function Features() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Lightbox: arrow-key nav + Escape, and lock background scroll while open.
   useEffect(() => {
     if (lb == null) return;
     const onKey = (e: KeyboardEvent) => {
@@ -1557,14 +1447,11 @@ function Features() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lb]);
 
-  // Lightbox touch swipe (mobile) to move between features. Ignores pinch-zoom
-  // and any multi-touch gesture so zooming the image never flips the slide.
   const touchX = useRef<number | null>(null);
   const touchY = useRef<number | null>(null);
   const lbMulti = useRef(false);
   const onLbTouchStart = (e: React.TouchEvent) => {
     if (e.touches.length > 1) {
-      // a second finger → pinch/zoom, not a swipe
       lbMulti.current = true;
       touchX.current = null;
       touchY.current = null;
@@ -1579,7 +1466,6 @@ function Features() {
   };
   const onLbTouchEnd = (e: React.TouchEvent) => {
     const fingersLeft = e.touches.length;
-    // Skip while it was a pinch, while fingers are still down, or with no start.
     if (lbMulti.current || fingersLeft > 0 || touchX.current == null) {
       if (fingersLeft === 0) lbMulti.current = false;
       touchX.current = null;
@@ -1590,19 +1476,15 @@ function Features() {
     const dy = touchY.current == null ? 0 : e.changedTouches[0].clientY - touchY.current;
     touchX.current = null;
     touchY.current = null;
-    // Only a clearly horizontal one-finger swipe counts.
     if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) {
       lbStep(dx < 0 ? 1 : -1);
     }
   };
 
-  // Carousel: page-based so arrows/dots stay correct at any number of visible
-  // cards (1 on mobile, ~3 on desktop). A "page" = one card-stride of scroll.
   const caroRef = useRef<HTMLDivElement>(null);
   const [page, setPage] = useState(0);
   const [pages, setPages] = useState(total);
 
-  // One card's stride (width + gap) — read live so it works at any breakpoint.
   const cardStride = () => {
     const track = caroRef.current;
     if (!track || track.children.length < 2) return track?.clientWidth || 1;
@@ -1611,7 +1493,6 @@ function Features() {
     return b.offsetLeft - a.offsetLeft || a.offsetWidth;
   };
 
-  // Recompute the page count from the layout (and on resize).
   useEffect(() => {
     const update = () => {
       const track = caroRef.current;
@@ -1634,7 +1515,6 @@ function Features() {
     setPage(np);
   };
 
-  // Keep the active page in sync while the user swipes/scrolls the track.
   const rafRef = useRef(0);
   const onCaroScroll = () => {
     cancelAnimationFrame(rafRef.current);
@@ -1664,11 +1544,8 @@ function Features() {
           </div>
         </div>
 
-        {/* Desktop: expanding panels. Hover drives it, a click opens the lightbox. */}
         <FeaturePanels items={items} onOpen={setLb} />
 
-        {/* Below lg: the swipe carousel. The next card peeks at the edge so it
-            always reads as scrollable. */}
         <div className="lg:hidden">
         <div className="tb-caro-wrap">
           <button
@@ -1728,7 +1605,6 @@ function Features() {
         </div>
       </div>
 
-      {/* Lightbox — enlarged preview with prev/next (keys, buttons, swipe). */}
       <AnimatePresence>
         {lb != null && (
           <motion.div
@@ -1787,10 +1663,6 @@ function Features() {
   );
 }
 
-/* ============================================================
-   How it works
-   ============================================================ */
-
 function HowItWorks() {
   const steps = [
     { t: "Install the extension", d: "Add Truck Box to Chrome and pin it for quick access." },
@@ -1817,7 +1689,6 @@ function HowItWorks() {
               key={s.t}
               className="tb-hiw grid md:grid-cols-[auto_1fr] gap-6 md:gap-12 items-start py-10"
             >
-              {/* Hairline draws in from the left. */}
               <motion.span
                 aria-hidden
                 className="tb-hiw-line"
@@ -1826,8 +1697,6 @@ function HowItWorks() {
                 viewport={view}
                 transition={{ duration: 1.1, ease: EASE }}
               />
-              {/* Number: rises out of a mask, like a counter rolling in. */}
-              {/* The mask watches the viewport: the number itself starts clipped, so it never "intersects". */}
               <motion.span
                 className="tb-hiw-num-mask text-[5rem] md:text-[8rem] leading-none"
                 initial="hidden"
@@ -1842,7 +1711,6 @@ function HowItWorks() {
                   {String(i + 1).padStart(2, "0")}
                 </motion.span>
               </motion.span>
-              {/* Text: slides in from the right with a blur, then the description follows. */}
               <div className="md:pt-6">
                 <motion.h3
                   className="tb-hiw-title ed-display text-4xl md:text-6xl"
@@ -1882,17 +1750,9 @@ function HowItWorks() {
   );
 }
 
-/* ============================================================
-   Pricing
-   ============================================================ */
-
-const DRUM_ROW = 52; // px, matches .tb-drum li height
+const DRUM_ROW = 52;
 const DRUM_VISIBLE = 9;
 
-/**
- * The included-features list as a scroll wheel: rows curve away from the centre band and the centred
- * one lights up. It turns by itself while it is on screen and nobody is touching it.
- */
 function FeatureDrum({ items }: { items: string[] }) {
   const box = useRef<HTMLDivElement>(null);
   const [active, setActive] = useState(0);
@@ -1900,7 +1760,6 @@ function FeatureDrum({ items }: { items: string[] }) {
   const paused = useRef(false);
   const visible = useRef(false);
 
-  // Bend each row by its distance from the centre; returns the index nearest the centre.
   const bend = useCallback(() => {
     const el = box.current;
     if (!el) return 0;
@@ -1992,9 +1851,6 @@ function FeatureDrum({ items }: { items: string[] }) {
   );
 }
 
-/* ============================================================
-   Teams offer (inside Pricing): seat stepper, live total, self-serve sign-up
-   ============================================================ */
 function TeamsOffer() {
   const [seats, setSeats] = useState(3);
   const step = (d: number) => setSeats((n) => Math.min(200, Math.max(1, n + d)));
@@ -2065,8 +1921,6 @@ function Pricing() {
               </span>
               <span className="ed-label mt-6">/ per user<br />month</span>
             </div>
-            {/* The three things people check before signing up, set like the numbers band.
-                Wrapper is shrink-to-fit, so the strip ends exactly where the buttons below do. */}
             <div className="tb-plan-cta mt-7">
             <div className="tb-trial">
               <div className="tb-trial-item">
@@ -2117,14 +1971,8 @@ function Pricing() {
   );
 }
 
-/* ============================================================
-   Walkthrough video
-   ============================================================ */
-
 function Walkthrough() {
   const [playing, setPlaying] = useState(false);
-  // Use the hi-res cover (1280×720) — it reflects a custom thumbnail and looks
-  // crisp on the large player. Fall back to hqdefault if a video has no maxres.
   const thumb = `https://i.ytimg.com/vi/${YOUTUBE_ID}/maxresdefault.jpg`;
   const thumbFallback = `https://i.ytimg.com/vi/${YOUTUBE_ID}/hqdefault.jpg`;
 
@@ -2179,10 +2027,6 @@ function Walkthrough() {
     </section>
   );
 }
-
-/* ============================================================
-   FAQ
-   ============================================================ */
 
 const FAQS = [
   {
@@ -2516,10 +2360,6 @@ export function FAQ() {
     </section>
   );
 }
-
-/* ============================================================
-   Privacy (route: /privacy) — content unchanged
-   ============================================================ */
 
 export function Privacy() {
   return (
@@ -2972,17 +2812,6 @@ export function Privacy() {
   );
 }
 
-/* ============================================================
-   Get Started guide (route: /guide)
-   Standalone onboarding walkthrough — NOT part of the homepage scroll.
-   Reachable only via the shared NAV (header / sidebar / footer).
-   ============================================================ */
-
-/** Screenshot slot. Shows the image once it's dropped into /public/guide;
- *  until then (or if it fails to load) it renders a calm labeled placeholder
- *  with the exact filename to upload — see /public/guide/IMAGES.txt. */
-/** True while the viewport is phone-sized. Used to gate the tap-to-zoom
- *  lightbox to mobile only. */
 function useIsMobile(query = "(max-width: 767px)") {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -2995,9 +2824,6 @@ function useIsMobile(query = "(max-width: 767px)") {
   return isMobile;
 }
 
-/** Fullscreen image viewer with pinch-to-zoom, drag-to-pan and double-tap.
- *  Background is frozen while open (fixed overlay + touch-action:none + body
- *  scroll lock). Mobile only — opened from GuideShot. */
 function ImageZoom({ src, alt, onClose }: { src: string; alt: string; onClose: () => void }) {
   const [scale, setScale] = useState(1);
   const [tx, setTx] = useState(0);
@@ -3013,7 +2839,6 @@ function ImageZoom({ src, alt, onClose }: { src: string; alt: string; onClose: (
     lastTap: 0,
   });
 
-  // freeze the page behind the overlay
   useEffect(() => {
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
@@ -3247,17 +3072,12 @@ const GUIDE_STEPS: GuideStep[] = [
 
 const PHASE_ORDER: Phase[] = ["Set up", "Connect", "Send"];
 
-/** At-a-glance end-to-end flow: one continuous rail with the 8 steps as
- *  numbered dots, phase names sitting above their segment — so a new user
- *  sees the whole path before reading the detailed steps below. */
 function JourneyMap() {
   const steps = GUIDE_STEPS.map((s, i) => ({ ...s, n: i + 1 }));
   return (
     <Reveal delay={0.05}>
       <div className="tb-rail">
         <div className="tb-rail-inner">
-          {/* phase labels — flex-grow proportional to each phase's step count,
-              so each label sits above its segment of the rail */}
           <div className="tb-rail-phases">
             {PHASE_ORDER.map((phase) => (
               <span
@@ -3270,7 +3090,6 @@ function JourneyMap() {
             ))}
           </div>
 
-          {/* the rail itself: continuous line + numbered dots */}
           <div className="tb-rail-track">
             {steps.map((s) => (
               <a key={s.n} href={`#${s.n}`} className="tb-rail-node">
@@ -3289,7 +3108,6 @@ export function Guide() {
   return (
     <section id="guide" className="ed-section" style={{ paddingTop: 150 }}>
       <div className="ed-container">
-        {/* ---------- hero ---------- */}
         <Reveal delay={0.2}>
           <div className="max-w-3xl">
             <span className="ed-label">[ Guide ] — From install to first email</span>
@@ -3308,12 +3126,10 @@ export function Guide() {
           </div>
         </Reveal>
 
-        {/* ---------- journey overview (the whole flow at a glance) ---------- */}
         <div className="mt-12 md:mt-16">
           <JourneyMap />
         </div>
 
-        {/* ---------- steps ---------- */}
         <div className="tb-steps mt-16 md:mt-24">
           {GUIDE_STEPS.map((s, i) => {
             const Icon = s.icon;
@@ -3363,7 +3179,6 @@ export function Guide() {
           })}
         </div>
 
-        {/* ---------- reassurance ---------- */}
         <Reveal>
           <div className="tb-guide-calm mt-20">
             <ShieldCheck className="h-7 w-7" style={{ color: "var(--accent)", flex: "0 0 auto" }} aria-hidden />
@@ -3383,8 +3198,6 @@ export function Guide() {
           </div>
         </Reveal>
 
-        {/* ---------- final CTA ---------- */}
-
         <Reveal>
           <a
               href={INSTALL_URL}
@@ -3401,12 +3214,6 @@ export function Guide() {
   );
 }
 
-/* ============================================================
-   How to update version (route: /update)
-   ============================================================ */
-
-/** chrome:// pages can't be opened by a link from a website (Chrome blocks it),
- *  so the address copies to the clipboard for the user to paste. */
 function CopyChromeUrl({ url = "chrome://extensions" }: { url?: string }) {
   const [copied, setCopied] = useState(false);
   const copy = async () => {
@@ -3466,10 +3273,6 @@ export function UpdateGuide() {
   );
 }
 
-/* ============================================================
-   Contact
-   ============================================================ */
-
 function ContactForm() {
   const [state, handleSubmit] = useForm("xnjyvqjv");
 
@@ -3492,7 +3295,6 @@ function ContactForm() {
 
   return (
     <form onSubmit={handleSubmit} className="ed-form" noValidate>
-      {/* Honeypot — bots fill it, humans never see it. Formspree drops these. */}
       <input
         type="text"
         name="_gotcha"
@@ -3622,10 +3424,6 @@ function Contact() {
   );
 }
 
-/* ============================================================
-   Final CTA
-   ============================================================ */
-
 function FinalCTA() {
   return (
     <section className="ed-section" style={{ paddingTop: 0 }}>
@@ -3644,10 +3442,6 @@ function FinalCTA() {
     </section>
   );
 }
-
-/* ============================================================
-   Footer
-   ============================================================ */
 
 export function Footer() {
   return (

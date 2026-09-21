@@ -12,15 +12,9 @@ import { PhoneVerify } from "./PhoneVerify";
 
 type Step = "loading" | "signin" | "phone" | "company" | "redirecting";
 
-// Backend ErrorCode.PHONE_VERIFICATION_REQUIRED — a distinct 403 that means "verify your phone"
-// (vs a generic 403/expired token, which means "log in again"). Same contract as the cabinet.
 const PHONE_VERIFICATION_REQUIRED = 1023;
 const SEAT_PRICE = 7;
 
-/**
- * Where a signed-in visitor continues: the company form, or the phone step while their token is
- * still verification-scoped (403 PHONE_VERIFICATION_REQUIRED). An unusable session signs out.
- */
 async function sessionStep(): Promise<{ step: Step; email: string }> {
   try {
     const ctx = await api.get<{ email: string }>("/api/v1/account/context");
@@ -34,14 +28,12 @@ async function sessionStep(): Promise<{ step: Step; email: string }> {
   }
 }
 
-/** Public team sign-up: sign in → phone → company & seats → Stripe → cabinet. */
 export default function TeamStart() {
   usePageMeta({
     title: "Start a team — TruckBox",
     description: "Set up TruckBox for your dispatch team: one bill, a manager back office, $7 per seat.",
     path: "/business/start",
   });
-  // Signed in already → check the session first; otherwise straight to sign-in.
   const [step, setStep] = useState<Step>(() => (auth.isAuthed() ? "loading" : "signin"));
   const [company, setCompany] = useState({
     companyName: "",
@@ -59,7 +51,6 @@ export default function TeamStart() {
       setStep(r.step);
     });
 
-  // Fresh Google sign-in: the auth response says whether the phone still needs verifying.
   const onGoogleSignedIn = (res: GoogleAuthResult) => {
     setAuthedEmail(res.email);
     setStep(res.phoneVerificationRequired ? "phone" : "company");
@@ -73,7 +64,6 @@ export default function TeamStart() {
 
   const signOutLink =
     authedEmail !== "" ? (
-      // Who you are stays quiet text; the action is a real button, so nobody hunts for it.
       <div
         style={{
           display: "flex",
@@ -147,7 +137,6 @@ export default function TeamStart() {
     );
 
   if (step === "phone")
-    // After confirm, PhoneVerify has swapped the verification-scoped token for a full one.
     return (
       <PhoneVerify
         onVerified={() => {
@@ -165,7 +154,6 @@ export default function TeamStart() {
       </Center>
     );
 
-  // step === "company"
   return (
     <Center>
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem", maxWidth: "20rem", width: "100%" }}>
@@ -316,7 +304,6 @@ export default function TeamStart() {
             company.dispatcherSeats < 1 ||
             isNaN(company.dispatcherSeats)
           }
-          // The form stretches this button full width, so the label needs centering of its own.
           style={{ marginTop: "0.5rem", justifyContent: "center" }}
         >
           Continue to payment

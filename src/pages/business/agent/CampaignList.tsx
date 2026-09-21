@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { listCampaigns } from "./AgentApi";
 import type { CampaignSummary } from "./types";
 
-/** Status colour: green = done, yellow = still running, red = cancelled, orange = needs you. */
 function statusColor(status: CampaignSummary["status"]): string {
   if (status === "COMPLETED") return "#4caf82";
   if (status === "RUNNING") return "#e0b341";
@@ -11,7 +10,6 @@ function statusColor(status: CampaignSummary["status"]): string {
   return "var(--muted)";
 }
 
-/** Campaign history list. Self-contained (fetches on mount); calls onOpen when a row is clicked. */
 export function CampaignList({ onOpen }: { onOpen: (campaignId: number) => void }) {
   const [campaigns, setCampaigns] = useState<CampaignSummary[] | null>(null);
 

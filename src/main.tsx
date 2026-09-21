@@ -11,22 +11,17 @@ import UpdatePage from "./pages/Update";
 import FAQPage from "./pages/FAQ";
 import SuccessPage from "./pages/Success";
 import CancelPage from "./pages/Cancel";
-// Business cabinet is its own app — loaded only on /business/* so landing
-// visitors don't download it.
 const Cabinet = lazy(() => import("./pages/business/Cabinet"));
 const TeamStart = lazy(() => import("./pages/business/TeamStart"));
 const MicrosoftCallback = lazy(() => import("./pages/business/MicrosoftCallback"));
-// The interactive demo boots the extension itself — kept out of every other page's bundle.
 const DemoPage = lazy(() => import("./pages/demo/DemoPage"));
 
-// Landing theme: ?theme=light|dark sets and remembers it; otherwise stored/default.
 {
   const q = new URLSearchParams(location.search).get("theme");
   if (q === "light" || q === "dark") setLandingTheme(q);
   else applyLandingTheme();
 }
 
-/** Re-applies the landing theme on client-side navigation (off on /business). */
 function LandingThemeSync() {
   const { pathname } = useLocation();
   useEffect(() => applyLandingTheme(pathname), [pathname]);
@@ -53,7 +48,6 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business/start" element={<TeamStart />} />
-        {/* The manual invite link and the "email us" request form are gone: both lead to sign-up. */}
         <Route path="/business/invite" element={<Navigate to="/business/start" replace />} />
         <Route path="/business/request" element={<Navigate to="/business/start" replace />} />
         <Route path="/business/oauth/microsoft" element={<MicrosoftCallback />} />

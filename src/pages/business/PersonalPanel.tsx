@@ -3,9 +3,7 @@ import { ApiError, api } from "../../lib/api";
 import type { AccountContext } from "./types";
 import { ConfirmDialog } from "./ConfirmDialog";
 
-/** Backend: "User does not have an active subscription" — no Stripe customer or subscription yet. */
 const NO_SUBSCRIPTION = 1013;
-/** Backend: the subscription is already set to stop at the end of the period. */
 const ALREADY_CANCELLING = 1012;
 
 type PlatformStats = {
@@ -29,10 +27,6 @@ type UserStatus = {
 };
 type TeamStats = { dispatchers: { total: Win }[] };
 
-/**
- * Whole days until the trial ends, as a dispatcher would count them: today counts, so an end date
- * later today still reads "ends today" rather than "0 days".
- */
 function fmtTrialLeft(trialEnd: string): string | null {
   const ms = new Date(trialEnd).getTime() - Date.now();
   if (Number.isNaN(ms)) return null;
@@ -63,7 +57,6 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   const [plan, setPlan] = useState<UserStatus | null>(null);
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
-  /** Trials take no card, so there is no Stripe customer behind these buttons yet. */
   const onTrial = ctx.effectiveStatus === "TRIAL";
 
   useEffect(() => {
@@ -73,15 +66,12 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
       .catch(() => setStatsError(true));
   }, []);
 
-  // Trial countdown + whether the subscription is already winding down. Org members manage
-  // billing in the Team tab, so this is only asked for on a personal plan.
   const loadPlan = useCallback(
     () =>
       api
         .get<UserStatus>("/api/v1/user/status")
         .then((status) => {
           setPlan(status);
-          // A stale "could not cancel" is wrong once we know the plan is already winding down.
           if (status.cancelAtPeriodEnd) setError(null);
         })
         .catch(() => {}),
@@ -119,7 +109,7 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     setPortalLoading(true);
     try {
       const { url } = await api.post<{ url: string }>("/api/v1/billing/portal");
-      window.location.href = url; // navigating away; stays locked until unload
+      window.location.href = url;
     } catch (e) {
       setError(
         e instanceof ApiError && e.code === NO_SUBSCRIPTION
@@ -131,7 +121,6 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     }
   };
 
-  /** Trial users have no other way to pay from here — the extension used to be the only entry. */
   const subscribe = async () => {
     if (busy) return;
     setError(null);
@@ -139,7 +128,7 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     setCheckoutLoading(true);
     try {
       const { url } = await api.post<{ url: string }>("/api/v1/billing/create-checkout-session");
-      window.location.href = url; // navigating away; stays locked until unload
+      window.location.href = url;
     } catch {
       setError("Could not start checkout. Please try again.");
       setBusy(false);
@@ -153,13 +142,10 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
     setBusy(true);
     try {
       await api.post("/api/v1/billing/cancel-subscription");
-      // Re-read the plan so the page flips to "ends <date>" straight away instead of waiting
-      // for a reload — the cancellation is real the moment the call returns.
       await loadPlan();
       setNotice("Cancelled. You keep full access until the end of the billing period.");
     } catch (e) {
       if (e instanceof ApiError && e.code === ALREADY_CANCELLING) {
-        // Someone cancelled already (here, in the extension, or in Stripe) — reflect the truth.
         setNotice("Your subscription is already set to end at the end of the billing period.");
         loadPlan();
       } else {
@@ -176,7 +162,6 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
   };
 
   const trialLeft = onTrial && plan?.trialEnd ? fmtTrialLeft(plan.trialEnd) : null;
-  /** Already cancelled: it runs to the end of the period, so there is nothing left to cancel. */
   const endingOn = plan?.cancelAtPeriodEnd ? plan.planExpiresAt : null;
 
   const totalActions = stats
@@ -250,8 +235,6 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
         ) : null}
       </div>
 
-      {/* Individual billing only — org members/owners manage billing in the Team tab,
-          where the subscription actually lives (this user has no personal subscription). */}
       {!ctx.org && (
         <div
           className="flex flex-col gap-2 p-6 rounded-lg border"
@@ -263,8 +246,6 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
           >
             Billing
           </h2>
-          {/* On the free trial there is no Stripe customer and no subscription, so neither button
-              can do anything — say what the state is instead of offering dead controls. */}
           {onTrial ? (
             <div className="flex flex-col gap-3 items-start">
               <p style={{ color: "var(--muted)", fontSize: "0.9rem" }}>

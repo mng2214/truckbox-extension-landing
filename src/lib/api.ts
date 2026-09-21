@@ -6,7 +6,6 @@ function uuid(): string {
   try {
     return crypto.randomUUID();
   } catch {
-    // Fallback for non-secure contexts (crypto.randomUUID needs HTTPS/localhost).
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, (c) => {
       const n = Number(c);
       return (n ^ (crypto.getRandomValues(new Uint8Array(1))[0] & (15 >> (n / 4)))).toString(16);
@@ -14,9 +13,6 @@ function uuid(): string {
   }
 }
 
-// Persistent device id (localStorage) + per-session id (sessionStorage), sent on every request
-// as X-Device-Id / X-Session-Id — the same contract the extension uses, so the backend's
-// RequestLoggingFilter + device logic light up for the web with no backend change.
 function getDeviceId(): string {
   try {
     let id = localStorage.getItem("tb-device-id");
@@ -30,7 +26,6 @@ function getDeviceId(): string {
   }
 }
 
-/** The id stamped on every request in this tab — what support asks for to find your logs. */
 export function sessionId(): string {
   return getSessionId();
 }
@@ -53,7 +48,6 @@ export class ApiError extends Error {
     public status: number,
     public code?: number,
     msg?: string,
-    /** Extra fields some errors carry (e.g. which account a merge would close). */
     public details?: Record<string, unknown>,
   ) {
     super(msg ?? `HTTP ${status}`);
@@ -77,8 +71,6 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
   const text = await res.text();
   const json = text ? JSON.parse(text) : undefined;
   if (res.status === 401) {
-    // Only flag a real expiry (a token existed) so the sign-in screen can say why they're back
-    // here; a never-authed 401 keeps the default sign-in copy.
     if (auth.getToken()) sessionStorage.setItem("tb-session-expired", "1");
     auth.clearToken();
     window.location.href = "/business";

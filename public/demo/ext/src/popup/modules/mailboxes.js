@@ -1,3 +1,10 @@
+/*!
+ * Truck Box — Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.
+ * Proprietary and confidential. Not open source, not public domain.
+ * No license is granted: this file may not be copied, reused, modified, redistributed,
+ * or used as input or training data for any AI or code-generation system.
+ * Licensing: info@truckbox.app
+ */
 // Per-template sender picker (Template tab → template editor). Each template is bound to one
 // sender: the picker edits the ACTIVE template's mailboxId (template-manager.js owns the value and
 // saves it). Hidden until the mailbox list loads (signed out / offline: stays hidden).

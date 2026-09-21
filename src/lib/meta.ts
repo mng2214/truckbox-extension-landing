@@ -3,9 +3,7 @@ import { useEffect } from "react";
 type PageMeta = {
   title: string;
   description: string;
-  /** Path for the canonical URL, e.g. "/guide". Defaults to current pathname. */
   path?: string;
-  /** Set true on app/service routes that must not be indexed. */
   noindex?: boolean;
 };
 
@@ -31,8 +29,6 @@ function upsertCanonical(href: string) {
   el.setAttribute("href", href);
 }
 
-/** Route-level SEO: title, description, canonical, robots and OG/Twitter mirrors.
-    Runs on mount; the prerender snapshot captures the resolved tags per route. */
 export function usePageMeta({ title, description, path, noindex }: PageMeta) {
   useEffect(() => {
     document.title = title;

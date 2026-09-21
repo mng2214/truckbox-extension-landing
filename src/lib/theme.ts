@@ -4,7 +4,6 @@ const KEY = "tb-landing-theme";
 export const THEME_EVENT = "tb-landing-theme";
 
 const isLandingPath = (path: string) => !path.startsWith("/business");
-// Public team sign-up pages have no theme switch of their own: always the light (day) look.
 const isSignupPath = (path: string) =>
   ["/business/request", "/business/invite", "/business/start"].some((p) => path.startsWith(p));
 

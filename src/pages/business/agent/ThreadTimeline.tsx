@@ -2,10 +2,6 @@ import { useState } from "react";
 import type { AgentMessage, ThreadStatus } from "./types";
 import { isTerminal, stripQuotedTail } from "./types";
 
-/**
- * The agreed progress UX: grey track with event dots, green fill up to the current step, hover a
- * dot to read that email. NEEDS_USER pulses orange; NO_REPLY / final BOUNCED end with a grey ✕.
- */
 export function ThreadTimeline({
   messages,
   status,
@@ -15,7 +11,6 @@ export function ThreadTimeline({
 }) {
   const [hover, setHover] = useState<number | null>(null);
 
-  // Dots = actual events (each message) + one ghost dot for the expected next step while alive.
   const alive = !isTerminal(status);
   const failedEnd = status === "NO_REPLY" || status === "BOUNCED";
   const dots: { label: string; message?: AgentMessage }[] = messages.map((m) => ({

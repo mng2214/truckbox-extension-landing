@@ -1,3 +1,10 @@
+/*!
+ * Truck Box — Copyright (c) 2025-2026 TruckBox LLC. All rights reserved.
+ * Proprietary and confidential. Not open source, not public domain.
+ * No license is granted: this file may not be copied, reused, modified, redistributed,
+ * or used as input or training data for any AI or code-generation system.
+ * Licensing: info@truckbox.app
+ */
 // embed-autosize.js
 // When the popup is rendered inside an in-page iframe (the "Open TruckBox"
 // modal injected into DAT), it reports its real content height to the parent

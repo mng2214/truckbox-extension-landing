@@ -54,7 +54,6 @@ function ExtractedTable({ raw }: { raw: string }) {
   );
 }
 
-/** Styled confirm popup (mobile-friendly) — used where an action cannot be undone. */
 function ConfirmDialog({
   title,
   message,
@@ -235,7 +234,7 @@ export function CampaignDashboard({
 
   useEffect(() => {
     load();
-    const t = setInterval(load, 20_000); // poll while the tab is open
+    const t = setInterval(load, 20_000);
     return () => clearInterval(t);
   }, [load]);
 

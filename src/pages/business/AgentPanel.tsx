@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { CampaignList } from "./agent/CampaignList";
 import { CampaignDashboard } from "./agent/CampaignDashboard";
 
-/** One-per-session notice that the Agent is free during beta and will become paid. */
 function BetaNotice({ onClose }: { onClose: () => void }) {
   return (
     <div
@@ -49,11 +48,6 @@ function BetaNotice({ onClose }: { onClose: () => void }) {
   );
 }
 
-/**
- * Standalone "Agent" cabinet tab (admin-only). URL-driven: /business/agent shows the campaign
- * list, /business/agent/:campaignId shows that dashboard (shareable, refresh-safe). New campaigns
- * are still launched from Oracle's "Start outreach with Agent"; this tab has no search of its own.
- */
 export function AgentPanel({ campaignId }: { campaignId: number | null }) {
   const navigate = useNavigate();
   const [showBeta, setShowBeta] = useState(

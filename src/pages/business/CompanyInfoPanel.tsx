@@ -14,7 +14,6 @@ const FIELD: React.CSSProperties = {
   border: "1px solid var(--hairline)", outline: "none",
 };
 
-/** First name, company and MC number — who the Agent speaks and signs as. */
 export function CompanyInfoPanel() {
   const [mc, setMc] = useState("");
   const [company, setCompany] = useState("");

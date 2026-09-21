@@ -1,4 +1,3 @@
-/** Brand marks for sign-in providers / mailboxes. `chip` puts the mark on a white circle for coloured buttons. */
 export function ProviderLogo({
   provider,
   size = 16,

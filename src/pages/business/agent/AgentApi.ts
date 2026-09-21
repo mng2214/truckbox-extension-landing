@@ -1,7 +1,6 @@
 import { api } from "../../../lib/api";
 import type { CampaignDetail, CampaignDraft, CampaignSummary } from "./types";
 
-// Stealth probe: 404 = user has no Agent entitlement → render nothing agent-related.
 export async function probeAgent(): Promise<{ available: boolean; connected: boolean }> {
   try {
     const res = await api.get<{ connected: boolean }>("/api/v1/outreach/google/status");

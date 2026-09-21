@@ -1,4 +1,3 @@
-
 function isEditable(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
   if (!el || !el.closest) return false;
@@ -42,11 +41,11 @@ export function installPageGuard(): void {
     (e) => {
       const k = e.key.toLowerCase();
       const blocked =
-        e.key === "F12" || // DevTools
-        (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")) || // Inspect / Console
-        ((e.ctrlKey || e.metaKey) && k === "u") || // View source
-        ((e.ctrlKey || e.metaKey) && e.altKey && (k === "i" || k === "j")) || // mac DevTools
-        ((e.ctrlKey || e.metaKey) && k === "s"); // Save page
+        e.key === "F12" ||
+        (e.ctrlKey && e.shiftKey && (k === "i" || k === "j" || k === "c")) ||
+        ((e.ctrlKey || e.metaKey) && k === "u") ||
+        ((e.ctrlKey || e.metaKey) && e.altKey && (k === "i" || k === "j")) ||
+        ((e.ctrlKey || e.metaKey) && k === "s");
       if (blocked) {
         e.preventDefault();
         e.stopPropagation();

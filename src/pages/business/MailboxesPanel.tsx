@@ -18,14 +18,11 @@ function messageFor(e: unknown): string {
   if (e instanceof ApiError) {
     if (e.code === 1050) return "You've reached your mailbox limit. Remove one to add another.";
     if (e.code === 1052) return "Couldn't connect this Gmail. Try again and make sure to allow sending email.";
-    // Templates send from this mailbox: the backend names them ("Used by template X — pick another
-    // sender for it first."). Removing it anyway would silently switch those templates' sender.
     if (e.code === 1064) return e.message || "This mailbox is used by a template. Pick another sender for it first.";
   }
   return "Something went wrong. Please try again.";
 }
 
-/** Extra mailboxes to send from. The Gmail the extension is signed in with is always available. */
 export function MailboxesPanel() {
   const [data, setData] = useState<Mailboxes | null>(null);
   const [busy, setBusy] = useState(false);
@@ -54,8 +51,6 @@ export function MailboxesPanel() {
         scope: "openid email https://www.googleapis.com/auth/gmail.send",
         ux_mode: "popup",
         access_type: "offline",
-        // consent: Google returns a refresh token only on explicit consent.
-        // select_account: let the user pick a different Gmail than the one signed in.
         prompt: "consent select_account",
         callback: (resp: { code?: string; error?: string }) => {
           if (resp.error || !resp.code) {

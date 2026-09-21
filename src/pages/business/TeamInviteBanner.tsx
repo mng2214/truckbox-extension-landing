@@ -3,7 +3,6 @@ import { api, ApiError } from "../../lib/api";
 
 type Invite = { memberId: number; organizationName: string; withSeat: boolean };
 
-/** Shown on every cabinet section while a team is waiting for this user's answer. */
 export function TeamInviteBanner({ onAccepted }: { onAccepted: () => void }) {
   const [invite, setInvite] = useState<Invite | null>(null);
   const [busy, setBusy] = useState(false);

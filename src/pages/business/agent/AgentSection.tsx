@@ -8,10 +8,6 @@ type View =
   | { kind: "draft"; requestId: number }
   | { kind: "dashboard"; campaignId: number };
 
-/**
- * The Agent area inside the Discovery panel: campaign history, the draft/confirm screen (entered
- * from a search result) and the live dashboard. Rendered only after the stealth probe passed.
- */
 export function AgentSection({
   initialRequestId,
   connected,
@@ -21,7 +17,7 @@ export function AgentSection({
   initialRequestId: number | null;
   connected: boolean;
   onConnected: () => void;
-  onClose?: () => void; // absent = standalone Agent tab (no "back to search")
+  onClose?: () => void;
 }) {
   const [view, setView] = useState<View>(
     initialRequestId != null ? { kind: "draft", requestId: initialRequestId } : { kind: "list" },
