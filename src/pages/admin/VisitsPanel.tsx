@@ -15,6 +15,7 @@ type Visitor = {
   loadsOpened: number;
   score: number;
   level: "none" | "watch" | "high";
+  automated: boolean;
   flags: string[];
   ip: string;
   ipPrefix: string | null;
@@ -129,8 +130,7 @@ export default function VisitsPanel() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
-  const [flaggedOnly, setFlaggedOnly] = useState(false);
-  const [byRisk, setByRisk] = useState(false);
+  const [mode, setMode] = useState<"recent" | "suspicious" | "bots">("recent");
   const [copied, setCopied] = useState<string | null>(null);
   const [day, setDay] = useState(() => {
     try {
@@ -167,7 +167,7 @@ export default function VisitsPanel() {
     setBusy(true);
     setError(null);
     const q = query.trim() ? `&q=${encodeURIComponent(query.trim())}` : "";
-    const sort = byRisk ? "&sort=risk" : "";
+    const sort = mode === "recent" ? "" : `&sort=${mode}`;
     api
       .get<Visitor[]>(`/api/v1/admin/demo-visits?days=${days}&limit=${PAGE}${q}${sort}`)
       .then((data) => setRows(data))
@@ -176,7 +176,7 @@ export default function VisitsPanel() {
         setError(e instanceof ApiError && e.status === 403 ? "forbidden" : "failed");
       })
       .finally(() => setBusy(false));
-  }, [days, query, byRisk]);
+  }, [days, query, mode]);
 
   useEffect(() => {
     load();
@@ -223,7 +223,8 @@ export default function VisitsPanel() {
 
   const repeat = rows?.filter((r) => r.visits > 1).length ?? 0;
   const flagged = rows?.filter((r) => r.level !== "none") ?? [];
-  const shown = flaggedOnly ? flagged : (rows ?? []);
+  const robots = rows?.filter((r) => r.automated) ?? [];
+  const shown = rows ?? [];
 
   const byTarget = new Map<string, Visitor[]>();
   shown.forEach((r) => {
@@ -296,20 +297,27 @@ export default function VisitsPanel() {
 
       <div className="vx-controls">
         <div className="vx-ranges">
-          <button
-            type="button"
-            className={"vx-range" + (byRisk ? "" : " is-on")}
-            onClick={() => setByRisk(false)}
-          >
-            Latest
-          </button>
-          <button
-            type="button"
-            className={"vx-range" + (byRisk ? " is-on" : "")}
-            onClick={() => setByRisk(true)}
-          >
-            Risk first
-          </button>
+          {(
+            [
+              ["recent", "Latest"],
+              ["suspicious", "Suspicious"],
+              ["bots", "Bots"],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              className={
+                "vx-range" +
+                (mode === id ? " is-on" : "") +
+                (id === "suspicious" ? " vx-range-warn" : "") +
+                (id === "bots" ? " vx-range-bot" : "")
+              }
+              onClick={() => setMode(id)}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         <div className="vx-ranges">
@@ -335,14 +343,6 @@ export default function VisitsPanel() {
           }}
         />
 
-        <button
-          type="button"
-          className={"vx-refresh vx-toggle" + (flaggedOnly ? " is-on" : "")}
-          onClick={() => setFlaggedOnly((v) => !v)}
-        >
-          Worth a look{flagged.length ? ` (${flagged.length})` : ""}
-        </button>
-
         {targets.length > 0 && (
           <button
             type="button"
@@ -365,7 +365,7 @@ export default function VisitsPanel() {
           <div className="vx-blocklist-head">
             <b>Ready to paste</b>
             <span>
-              {flaggedOnly ? "flagged visitors" : "everything currently listed"} ·{" "}
+              {mode === "recent" ? "everything currently listed" : `the ${mode} list`} ·{" "}
               {targets.length} address{targets.length === 1 ? "" : "es"}
             </span>
             <button
@@ -428,15 +428,18 @@ export default function VisitsPanel() {
 
       {rows && rows.length >= PAGE && (
         <p className="vx-truncated">
-          Showing the first {PAGE}{" "}
-          {byRisk ? "by risk" : "by last visit"} — there are more in this window. Narrow the period
-          or search to see the rest.
+          Showing the first {PAGE} {mode === "recent" ? "by last visit" : "in this view"} — there
+          are more in this window. Narrow the period or search to see the rest.
         </p>
       )}
 
       {rows && rows.length > 0 && (
         <p className="vx-count">
-          {rows.length} visitors · {repeat} came back more than once · {flagged.length} worth a look
+          {mode === "recent"
+            ? `${rows.length} visitors · ${repeat} came back more than once · ${flagged.length} worth a look · ${robots.length} automated`
+            : mode === "suspicious"
+              ? `${rows.length} flagged, worst first`
+              : `${rows.length} automated clients`}
         </p>
       )}
 
@@ -465,6 +468,7 @@ export default function VisitsPanel() {
             >
               <button type="button" className="vx-line" onClick={() => toggle(r.visitorKey)}>
                 <span className="vx-when">
+                  {r.automated && <i className="vx-mark is-robot" title="Automated client">⚙</i>}
                   {r.blocked && <i className="vx-mark is-blocked">B</i>}
                   {r.level !== "none" && (
                     <i className="vx-mark" title={r.flags.join(" · ")}>
