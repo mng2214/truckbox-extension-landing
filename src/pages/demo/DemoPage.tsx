@@ -1,5 +1,7 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import BrowserChrome from "./BrowserChrome";
+import SentMail from "./SentMail";
+import Tour, { type TourStep } from "./Tour";
 import { mountBoard, type BoardHandle } from "./board/board";
 import { demoRuntime, type DemoEvent } from "./runtime/chromeShim";
 import { bootExtension, popupSrcDoc } from "./runtime/loadExtension";
@@ -8,8 +10,29 @@ import "./demo.css";
 
 const DESKTOP_WIDTH = 1100;
 
+const TOUR_KEY = "tbdemo:tour";
+
 const isHandheld = () =>
   window.matchMedia("(pointer: coarse)").matches && window.innerWidth < DESKTOP_WIDTH;
+
+const tourTaken = () => {
+  try {
+    return localStorage.getItem(TOUR_KEY) === "done";
+  } catch {
+    return false;
+  }
+};
+
+const demoStage = () => document.querySelector(".demo-window");
+
+const popupEl = (selector: string) => {
+  const frame = document.querySelector<HTMLIFrameElement>(".demo-popup iframe");
+  try {
+    return frame?.contentDocument?.querySelector(selector) ?? null;
+  } catch {
+    return null;
+  }
+};
 
 export default function DemoPage() {
   const embedded = typeof window !== "undefined" && new URLSearchParams(location.search).get("embed") === "hero";
@@ -33,6 +56,15 @@ export default function DemoPage() {
   const [bootStage, setBootStage] = useState(0);
   const [chooser, setChooser] = useState<string | null>(null);
   const [email, setEmail] = useState<Extract<DemoEvent, { kind: "email" }> | null>(null);
+
+  const [tourOn, setTourOn] = useState(false);
+  const [tourRun, setTourRun] = useState(0);
+  const signedInRef = useRef(signedIn);
+  const popupOpenRef = useRef(popupOpen);
+  const emailSeen = useRef(false);
+
+  signedInRef.current = signedIn;
+  popupOpenRef.current = popupOpen;
 
   useEffect(() => {
     const onResize = () => {
@@ -106,7 +138,10 @@ export default function DemoPage() {
   useEffect(
     () =>
       demoRuntime.on((event) => {
-        if (event.kind === "email") setEmail(event);
+        if (event.kind === "email") {
+          emailSeen.current = true;
+          setEmail(event);
+        }
 
         if (event.kind === "signin") {
           setSignedIn(true);
@@ -132,6 +167,172 @@ export default function DemoPage() {
     window.addEventListener("message", onMessage);
     return () => window.removeEventListener("message", onMessage);
   }, []);
+
+  const tourSteps = useMemo<TourStep[]>(
+    () => [
+      {
+        id: "signin",
+        title: "Start by signing in",
+        text: "TruckBox sends from your own mailbox, so everything begins here. Press Sign in with Google — the demo signs you in as a demo account and never shows a real Google screen.",
+        hint: "Open the TruckBox icon in the toolbar to bring the popup back.",
+        prepare: () => {
+          setPopupOpen(true);
+          if (demoRuntime.signedIn) demoRuntime.signOut();
+        },
+        target: () => popupEl("#login"),
+        done: () => signedInRef.current,
+        success: "Signed in — that is the whole setup of a mailbox",
+        hold: 2600,
+      },
+      {
+        id: "template",
+        title: "Open the Template tab",
+        text: "A template is the email a broker receives. You write it once, and every load fills it in.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl('.tab[data-tab="template"]'),
+        done: () => !!popupEl("#template-tab.active"),
+        success: "Here it is",
+      },
+      {
+        id: "save-template",
+        title: "Save the template",
+        text: "Change the subject or the body if you like — the {{placeholders}} are replaced with the load\u2019s own origin, destination, rate and your MC. Then press Save Template.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl("#saveBtn"),
+        click: true,
+        success: "Template saved",
+      },
+      {
+        id: "filters",
+        title: "Filters — what the board shows you",
+        text: "Turn the route map off to keep the details compact. Grey out duplicates so the same lane, date, rate and broker stop coming back at you. Switch the profit calculator on or off.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl('.tab[data-tab="filter"]'),
+        done: () => !!popupEl("#filter-tab.active"),
+        success: "Filters",
+      },
+      {
+        id: "factoring",
+        title: "Connect your factoring company",
+        text: "RTS, Triumph or Apex — connect once and the broker's credit check appears inside the load. You log in at the factoring company itself, TruckBox stores no password.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl('.tab[data-tab="factoring"]'),
+        done: () => !!popupEl("#factoring-tab.active"),
+        success: "Factoring",
+      },
+      {
+        id: "subscription",
+        title: "Your subscription",
+        text: "Status, what the plan covers and the next billing date — all here. Seven days free, no card to start, and cancelling is one button, not an email to support.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl('.tab[data-tab="subscription"]'),
+        done: () => !!popupEl("#subscription-tab.active"),
+        success: "Subscription",
+      },
+      {
+        id: "stats",
+        title: "What it actually saved you",
+        text: "Emails sent, maps opened and calls placed, split by board — and the hours that adds up to. On a team plan you see every dispatcher.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl('.tab[data-tab="stats"]'),
+        done: () => !!popupEl("#stats-tab.active"),
+        success: "Stats",
+      },
+      {
+        id: "help",
+        title: "Help, when you need it",
+        text: "The step-by-step guide, how to update the extension, and the quick fixes if something stops responding.",
+        prepare: () => setPopupOpen(true),
+        target: () => popupEl('.tab[data-tab="help"]'),
+        done: () => !!popupEl("#help-tab.active"),
+        success: "Help",
+      },
+      {
+        id: "close-popup",
+        title: "Back to the board",
+        text: "That is the whole setup. Close the popup — everything else happens on the load board itself.",
+        target: () => document.querySelector(".tbw-btn.is-on"),
+        done: () => !popupOpenRef.current,
+        success: "Popup closed",
+      },
+      {
+        id: "send",
+        title: "Email a broker in one click",
+        text: "TruckBox adds its own buttons to every row. The envelope writes the email from your template and sends it — no copying, no retyping. On the board you never have to reach for it: pick a row with W and S, then press E to send.",
+        hint: "Move the mouse over a row to bring the buttons up.",
+        target: () => document.querySelector(".row-container .datx-send"),
+        done: () => emailSeen.current,
+        success: "Email written",
+      },
+      {
+        id: "details",
+        title: "Open a load",
+        text: "Click the row itself — or press Space, which opens and closes the details of the row you are on. Inside: the broker, the credit check and the route.",
+        target: () => document.querySelector(".row-container"),
+        done: () => !!document.querySelector("dat-load-details"),
+        success: "Load open",
+      },
+      {
+        id: "credit",
+        title: "Check the broker before you call",
+        text: "TruckBox pulls the broker's credit into the load itself — the grade, days to pay, the credit limit and what is left of it. No second tab, no separate factoring portal.",
+        hint: "Open a load to see the credit block.",
+        target: () => document.querySelector(".tb-board-rts"),
+        manual: true,
+      },
+      {
+        id: "profit",
+        title: "The profit calculator",
+        text: "Rate, miles with and without deadhead, fuel — the math sits inside the load, so you know your number before you pick up the phone.",
+        hint: "Open a load to see the calculator.",
+        target: () => document.querySelector(".tb-profit-col"),
+        manual: true,
+      },
+      {
+        id: "star",
+        title: "Keep the good ones",
+        text: "The star saves a load with the price it had at that moment, so you can see later whether it moved.",
+        target: () => document.querySelector(".row-container .datx-star:not(.is-on)"),
+        done: (el) => !!el?.classList.contains("is-on"),
+        success: "Load saved",
+      },
+      {
+        id: "saved",
+        title: "Your saved loads",
+        text: "Everything you starred lives here — with your notes, the lane price and a calendar of pickup dates.",
+        target: () => document.querySelector(".datx-saved-fab"),
+        done: () => !!document.querySelector(".datx-saved-panel"),
+        success: "There they are",
+      },
+      {
+        id: "saved-panel",
+        title: "The list you come back to",
+        text: "Each saved load keeps the price it had when you starred it, so you can see whether the lane moved. Add a note, open the calendar by pickup date, and clear the ones that are gone.",
+        hint: "Open Saved loads to see the list.",
+        target: () => document.querySelector(".datx-saved-panel"),
+        manual: true,
+      },
+    ],
+    [],
+  );
+
+  const tourStarted = useRef(false);
+
+  useEffect(() => {
+    if (embedded || handheld || booting || disclaimer) return;
+    if (tourStarted.current || tourTaken()) return;
+    tourStarted.current = true;
+    setTourOn(true);
+  }, [embedded, handheld, booting, disclaimer]);
+
+  const closeTour = () => {
+    setTourOn(false);
+    try {
+      localStorage.setItem(TOUR_KEY, "done");
+    } catch {
+      /* storage blocked */
+    }
+  };
 
   if (handheld) {
     return (
@@ -202,6 +403,27 @@ export default function DemoPage() {
           </svg>
           Back to TruckBox
         </a>
+        <span className="demo-corner-group">
+        <button
+          type="button"
+          className="ed-btn tb-back-btn demo-corner demo-guide-btn"
+          onClick={() => {
+            setTourRun((n) => n + 1);
+            setTourOn(true);
+          }}
+        >
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="2" />
+            <path
+              d="M9.5 9.6a2.6 2.6 0 1 1 3.4 2.5c-.6.2-.9.7-.9 1.3v.4"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+            <circle cx="12" cy="17" r="1.1" fill="currentColor" />
+          </svg>
+          Show me around
+        </button>
         <button
           type="button"
           className="ed-btn tb-back-btn demo-corner demo-corner-right"
@@ -221,6 +443,7 @@ export default function DemoPage() {
             />
           </svg>
         </button>
+        </span>
       </div>
 
       <div className="demo-window">
@@ -348,27 +571,27 @@ export default function DemoPage() {
       )}
 
       {email && (
-        <Modal onClose={() => setEmail(null)} title="This is where the email goes out">
-          <div className="demo-email">
-            <div>
-              <span>From</span>
-              {email.from}
-            </div>
-            <div>
-              <span>To</span>
-              {email.to}
-            </div>
-            <div>
-              <span>Subject</span>
-              {email.subject}
-            </div>
-            <pre>{email.body}</pre>
-          </div>
-          <p className="demo-note">
-            In the product this sends from your own mailbox and the broker's reply lands in your
-            inbox. Nothing was sent here.
-          </p>
+        <Modal wide onClose={() => setEmail(null)} title="Sent — this is what the broker gets">
+          <SentMail
+            from={email.from}
+            to={email.to}
+            subject={email.subject}
+            body={email.body}
+            broker={email.broker}
+            template={email.template}
+            sentAt={email.sentAt}
+          />
         </Modal>
+      )}
+
+      {tourOn && (
+        <Tour
+          key={tourRun}
+          steps={tourSteps}
+          stage={demoStage}
+          paused={booting || disclaimer || !!email || !!chooser || !!narrowNotice}
+          onClose={closeTour}
+        />
       )}
     </div>
   );
@@ -377,10 +600,12 @@ export default function DemoPage() {
 function Modal({
   title,
   children,
+  wide = false,
   onClose,
 }: {
   title: string;
   children: React.ReactNode;
+  wide?: boolean;
   onClose: () => void;
 }) {
   useEffect(() => {
@@ -391,7 +616,10 @@ function Modal({
 
   return (
     <div className="demo-modal-backdrop" onClick={onClose}>
-      <div className="demo-modal" onClick={(e) => e.stopPropagation()}>
+      <div
+        className={"demo-modal" + (wide ? " demo-modal-wide" : "")}
+        onClick={(e) => e.stopPropagation()}
+      >
         <div className="demo-modal-head">
           <b>{title}</b>
           <button type="button" onClick={onClose} aria-label="Close">

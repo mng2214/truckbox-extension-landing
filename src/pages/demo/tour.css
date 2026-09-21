@@ -1,0 +1,216 @@
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 5000;
+  pointer-events: none;
+  animation: tour-in 0.3s ease both;
+}
+
+@keyframes tour-in {
+  from {
+    opacity: 0;
+  }
+}
+
+.tour-mask {
+  position: fixed;
+  background: rgba(10, 15, 27, 0.6);
+  backdrop-filter: blur(1.5px);
+  pointer-events: auto;
+  cursor: not-allowed;
+}
+
+.tour-ring {
+  position: fixed;
+  border: 2px solid #6d5ef0;
+  box-shadow:
+    0 0 0 3px rgba(109, 94, 240, 0.28),
+    0 0 26px rgba(109, 94, 240, 0.55);
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+  animation: tour-ring-pulse 1.7s ease-in-out infinite;
+}
+
+@keyframes tour-ring-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 3px rgba(109, 94, 240, 0.3),
+      0 0 24px rgba(109, 94, 240, 0.5);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(109, 94, 240, 0.14),
+      0 0 34px rgba(109, 94, 240, 0.75);
+  }
+}
+
+.tour-card {
+  position: fixed;
+  width: min(360px, calc(100vw - 24px));
+  background: #fff;
+  border-top: 3px solid #6d5ef0;
+  box-shadow:
+    0 28px 64px -28px rgba(10, 15, 27, 0.7),
+    0 2px 10px rgba(10, 15, 27, 0.12);
+  padding: 17px 19px 15px;
+  pointer-events: auto;
+}
+
+.tour-card.is-nudged {
+  animation: tour-card-shake 0.42s ease both;
+}
+
+@keyframes tour-card-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  45% { transform: translateX(5px); }
+  70% { transform: translateX(-3px); }
+}
+
+.tour-step {
+  display: block;
+  font: 700 10px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #6d5ef0;
+  margin-bottom: 9px;
+}
+
+.tour-title {
+  display: block;
+  font-size: 17.5px;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: #131a2b;
+  margin-bottom: 7px;
+}
+
+.tour-text {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: #59617a;
+}
+
+.tour-hint {
+  margin: 9px 0 0;
+  padding: 8px 10px;
+  background: #fdf3e7;
+  font-size: 12.5px;
+  line-height: 1.45;
+  color: #8a5a1b;
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.tour-skip {
+  border: 0;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  font: 600 11px/1 "Inter", sans-serif;
+  letter-spacing: 0.04em;
+  color: #8a93ab;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.tour-skip:hover {
+  color: #59617a;
+}
+
+.tour-next {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  background: #6d5ef0;
+  color: #fff;
+  cursor: pointer;
+  padding: 10px 16px;
+  font: 700 10.5px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.tour-next:hover {
+  background: #5a4ae0;
+}
+
+.tour-wait {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 700 10px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #6d5ef0;
+}
+
+.tour-wait::before {
+  content: "";
+  width: 7px;
+  height: 7px;
+  background: #6d5ef0;
+  animation: tour-blink 1.2s steps(2, end) infinite;
+}
+
+@keyframes tour-blink {
+  50% {
+    opacity: 0.25;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour,
+  .tour-ring,
+  .tour-card,
+  .tour-wait::before {
+    animation: none;
+  }
+}
+
+.tour-card.is-aside {
+  padding: 19px 21px 17px;
+}
+
+.tour-card.is-aside .tour-title {
+  font-size: 19px;
+}
+
+.tour-card.is-aside .tour-text {
+  font-size: 14px;
+}
+
+.tour-ring.is-done {
+  border-color: #2f9e63;
+  animation: none;
+  box-shadow:
+    0 0 0 4px rgba(47, 158, 99, 0.24),
+    0 0 26px rgba(47, 158, 99, 0.5);
+}
+
+.tour-done {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 700 10.5px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #2f9e63;
+  animation: tour-done-in 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes tour-done-in {
+  from {
+    opacity: 0;
+    transform: translateX(-4px);
+  }
+}

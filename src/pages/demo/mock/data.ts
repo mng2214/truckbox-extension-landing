@@ -186,7 +186,8 @@ export function laneIntraday(load: DemoLoad) {
 export const DEMO_USER = {
   email: "demo@truckbox.app",
   name: "Demo Dispatcher",
-  mcNumber: "MC#000000",
+  mcNumber: "3487219",
+  phone: "(555) 010-4477",
   company: "Demo Dispatch LLC",
 };
 
@@ -197,38 +198,42 @@ export const DEMO_TEMPLATES = [
 
     active: true,
     mailboxId: 1,
-    subject: "{origin} → {destination}, {equipment} {length}ft — available?",
+    subject: "{{origin}} → {{destination}} ({{pickupDate}}) — available?",
     body:
-      "Hi,\n\nI have a truck near {origin} for your {origin} → {destination} load ({miles} mi, {weight} lbs).\n" +
-      "Is it still available, and what's the rate?\n\nThanks,\n{name}\n{company} · {mc}",
+      "Hi,\n\nI have a truck near {{origin}} for your {{origin}} → {{destination}} load, " +
+      "picking up {{pickupDate}}.\nEquipment: {{equipment}} {{length}} ft · {{weight}}\n\n" +
+      "Is it still available, and what is the rate?\n\nThanks,\n{{myName}}\n" +
+      "MC {{myMc}} · {{myPhone}}",
   },
   {
     id: 2,
     name: "Short and fast",
     active: false,
     mailboxId: 2,
-    subject: "{origin} → {destination} — still open?",
-    body: "Hi! Is the {origin} → {destination} load still open? Truck is empty nearby.\n\n{name}\n{mc}",
+    subject: "{{origin}} → {{destination}} — still open?",
+    body:
+      "Hi! Is the {{origin}} → {{destination}} load still open? Truck is empty nearby.\n\n" +
+      "{{myName}} · MC {{myMc}}\n{{myPhone}}",
   },
   {
     id: 4,
     name: "Reefer desk",
     active: false,
     mailboxId: 3,
-    subject: "Reefer {origin} → {destination} — temp and rate?",
+    subject: "Reefer {{origin}} → {{destination}} — temp and rate?",
     body:
-      "Hi,\n\nReefer truck open near {origin}. What temp does your {origin} → {destination} run at, " +
-      "and what's it paying?\n\n{name}\n{company} · {mc}",
+      "Hi,\n\nReefer truck open near {{origin}}. What temp does your {{origin}} → {{destination}} " +
+      "run at, and what is it paying?\n\n{{myName}}\nMC {{myMc}} · {{myPhone}}",
   },
   {
     id: 3,
     name: "Lane inquiry",
     active: false,
     mailboxId: 1,
-    subject: "Who covers {origin} → {destination}?",
+    subject: "Who covers {{origin}} → {{destination}}?",
     body:
-      "Hi,\n\nWe run {origin} → {destination} weekly. Who handles this lane for you, and how often does it post?\n\n" +
-      "{name}\n{company}",
+      "Hi,\n\nWe run {{origin}} → {{destination}} weekly. Who handles this lane for you, and how " +
+      "often does it post?\n\n{{myName}}\nMC {{myMc}}",
   },
 ];
 

@@ -40,12 +40,49 @@ const SIGNED_IN: Record<string, unknown> = {
 };
 
 export type DemoEvent =
-  | { kind: "email"; to: string; subject: string; body: string; from: string }
+  | {
+      kind: "email";
+      to: string;
+      subject: string;
+      body: string;
+      from: string;
+      broker: string;
+      template: string;
+      sentAt: string;
+    }
   | { kind: "signin" }
   | { kind: "signout" }
   | { kind: "blocked"; what: string };
 
 type Listener = (event: DemoEvent) => void;
+
+type Template = { id: number; name: string; active?: boolean; subject: string; body: string };
+
+const fill = (template: string | undefined, context: Record<string, unknown>) => {
+  if (!template) return "";
+  const miles = String(context.tripMiles ?? context.miles ?? "").replace(/[^0-9]/g, "");
+  const values: Record<string, string> = {
+    origin: String(context.origin ?? "the pickup"),
+    destination: String(context.destination ?? "the drop"),
+    pickupDate: String(context.pickupDate ?? ""),
+    equipment: String(context.equipment ?? ""),
+    length: String(context.length ?? "").replace(/[^0-9]/g, ""),
+    weight: String(context.weight ?? ""),
+    rate: String(context.rate ?? ""),
+    referenceId: String(context.referenceId ?? ""),
+    miles: miles || "—",
+    broker: String(context.brokerName ?? ""),
+    name: DEMO_USER.name,
+    company: DEMO_USER.company,
+    mc: DEMO_USER.mcNumber,
+    myName: DEMO_USER.name,
+    myMc: DEMO_USER.mcNumber,
+    myPhone: DEMO_USER.phone,
+  };
+  return template.replace(/\{\{?\s*(\w+)\s*\}?\}/g, (whole, key: string) =>
+    key in values ? values[key] : whole,
+  );
+};
 
 class DemoRuntime {
   private data: Record<string, unknown> = { ...SIGNED_OUT };
@@ -408,12 +445,31 @@ class DemoRuntime {
         return { ok: true, demo: true };
 
       case "datx_email_click": {
+        const context = (msg.context ?? payload.context ?? {}) as Record<string, unknown>;
+        const list = ((this.data.templatesCache as { templates?: Template[] })?.templates ??
+          DEMO_TEMPLATES) as Template[];
+        const chosen =
+          list.find((t) => String(t.id) === String(msg.templateId ?? payload.templateId)) ??
+          list.find((t) => t.active) ??
+          list[0];
+
+        const subject = String(msg.customSubject ?? payload.subject ?? "") || fill(chosen?.subject, context);
+        const body = String(msg.customBody ?? payload.body ?? "") || fill(chosen?.body, context);
+
         this.emit({
           kind: "email",
-          to: String(msg.email ?? payload.email ?? ""),
-          subject: String(msg.customSubject ?? payload.subject ?? ""),
-          body: String(msg.customBody ?? payload.body ?? ""),
+          to: String(msg.email ?? payload.email ?? context.email ?? ""),
+          subject,
+          body,
           from: DEMO_USER.email,
+          broker: String(context.brokerName ?? "") || "the broker",
+          template: chosen?.name ?? "Template",
+          sentAt: new Date().toLocaleString("en-US", {
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+          }),
         });
         return { ok: true, dedup: false, demo: true };
       }
