@@ -602,6 +602,18 @@ export default function DemoPage() {
               </li>
             </ul>
 
+            <div className="demo-gate-ship">
+              <b>Version 2.0.0 is with Google for review</b>
+              <p>
+                Everything you are about to use is built and working. The extension you can install
+                today still sends the emails and checks a broker's credit, but{" "}
+                <strong>saved loads, the profit calculator, several mailboxes and the per-row
+                template picker</strong>{" "}
+                arrive with the update. Reviews usually take a few days — we would rather say so
+                than let the demo promise something the install does not have yet.
+              </p>
+            </div>
+
             <button
               type="button"
               className="ed-btn tb-back-btn demo-gate-cta"
