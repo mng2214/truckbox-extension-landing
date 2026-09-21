@@ -33,6 +33,8 @@ type Visitor = {
   eventsSeen: string[];
 };
 
+type VisitorEvents = { total: number; events: VisitorEvent[] };
+
 type VisitorEvent = {
   at: string;
   event: string;
@@ -46,6 +48,10 @@ type VisitorEvent = {
   userAgent: string | null;
   viewport: string | null;
 };
+
+const PAGE = 300;
+
+const EVENTS_SHOWN = 200;
 
 const RANGES = [
   { days: 1, label: "24 h" },
@@ -122,6 +128,7 @@ export default function VisitsPanel() {
   const [busy, setBusy] = useState(false);
   const [open, setOpen] = useState<string | null>(null);
   const [flaggedOnly, setFlaggedOnly] = useState(false);
+  const [byRisk, setByRisk] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
   const [blockList, setBlockList] = useState(false);
 
@@ -129,7 +136,7 @@ export default function VisitsPanel() {
     setCopied(what);
     window.setTimeout(() => setCopied((v) => (v === what ? null : v)), 1600);
   };
-  const [events, setEvents] = useState<Record<string, VisitorEvent[]>>({});
+  const [events, setEvents] = useState<Record<string, VisitorEvents>>({});
 
   const load = useCallback(() => {
     if (!auth.getToken()) {
@@ -140,15 +147,16 @@ export default function VisitsPanel() {
     setBusy(true);
     setError(null);
     const q = query.trim() ? `&q=${encodeURIComponent(query.trim())}` : "";
+    const sort = byRisk ? "&sort=risk" : "";
     api
-      .get<Visitor[]>(`/api/v1/admin/demo-visits?days=${days}&limit=300${q}`)
+      .get<Visitor[]>(`/api/v1/admin/demo-visits?days=${days}&limit=${PAGE}${q}${sort}`)
       .then((data) => setRows(data))
       .catch((e: unknown) => {
         setRows([]);
         setError(e instanceof ApiError && e.status === 403 ? "forbidden" : "failed");
       })
       .finally(() => setBusy(false));
-  }, [days, query]);
+  }, [days, query, byRisk]);
 
   useEffect(() => {
     load();
@@ -157,7 +165,18 @@ export default function VisitsPanel() {
   const setBlocked = (r: Visitor, blocked: boolean) => {
     const value = blockTarget(r);
     const call = blocked
-      ? api.post("/api/v1/admin/demo-visits/blocked", { value, note: r.flags.join("; ") })
+      ? api.post("/api/v1/admin/demo-visits/blocked", {
+          value,
+          note: [
+            `score ${r.score}`,
+            r.ipHost || r.ipPrefix || r.ip,
+            r.device,
+            r.flags.join("; "),
+          ]
+            .filter(Boolean)
+            .join(" · ")
+            .slice(0, 255),
+        })
       : api.del(`/api/v1/admin/demo-visits/blocked?value=${encodeURIComponent(value)}`);
 
     setRows(
@@ -175,18 +194,60 @@ export default function VisitsPanel() {
     setOpen(key);
     if (events[key]) return;
     api
-      .get<VisitorEvent[]>(`/api/v1/admin/demo-visits/${encodeURIComponent(key)}`)
+      .get<VisitorEvents>(
+        `/api/v1/admin/demo-visits/${encodeURIComponent(key)}?limit=${EVENTS_SHOWN}`,
+      )
       .then((data) => setEvents((prev) => ({ ...prev, [key]: data })))
-      .catch(() => setEvents((prev) => ({ ...prev, [key]: [] })));
+      .catch(() => setEvents((prev) => ({ ...prev, [key]: { total: 0, events: [] } })));
   };
 
   const repeat = rows?.filter((r) => r.visits > 1).length ?? 0;
   const flagged = rows?.filter((r) => r.level !== "none") ?? [];
   const shown = flaggedOnly ? flagged : (rows ?? []);
 
-  const targets = [...new Set(shown.map(blockTarget))];
+  const byTarget = new Map<string, Visitor[]>();
+  shown.forEach((r) => {
+    const value = blockTarget(r);
+    byTarget.set(value, [...(byTarget.get(value) ?? []), r]);
+  });
+
+  const entries = [...byTarget.entries()]
+    .map(([value, visitors]) => ({
+      value,
+      visitors,
+      score: Math.max(...visitors.map((v) => v.score)),
+      level: visitors.some((v) => v.level === "high")
+        ? "high"
+        : visitors.some((v) => v.level === "watch")
+          ? "watch"
+          : "none",
+      lastSeen: visitors.map((v) => v.lastSeen).sort().at(-1) as string,
+      host: visitors.map((v) => v.ipHost).find(Boolean) ?? null,
+      why: [...new Set(visitors.flatMap((v) => v.flags))],
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  const targets = entries.map((e) => e.value);
   const plainList = targets.join("\n");
   const cloudflareRule = targets.length ? `(ip.src in {${targets.join(" ")}})` : "";
+
+  const annotated = [
+    `# TruckBox demo — block candidates, ${new Date().toLocaleString("en-US")}`,
+    `# ${entries.length} address${entries.length === 1 ? "" : "es"} from the last ${days} day(s)`,
+    "",
+    ...entries.flatMap((e) => {
+      const first = e.visitors[0];
+      return [
+        `${e.value}   score ${e.score} (${e.level})   last seen ${when(e.lastSeen)}`,
+        `    network  ${e.host || "no reverse DNS"}`,
+        `    device   ${first.device} · ${first.timezone || "—"} · ${first.language || "—"}`,
+        `    source   ${first.utmSource || host(first.referrer) || "direct"}`,
+        `    did      ${[...new Set(e.visitors.flatMap((v) => v.eventsSeen))].join(", ") || "—"}`,
+        `    why      ${e.why.join("; ") || "nothing unusual — listed because it is in view"}`,
+        "",
+      ];
+    }),
+  ].join("\n");
 
   if (error === "signin" || error === "forbidden") {
     return (
@@ -211,6 +272,23 @@ export default function VisitsPanel() {
       </div>
 
       <div className="vx-controls">
+        <div className="vx-ranges">
+          <button
+            type="button"
+            className={"vx-range" + (byRisk ? "" : " is-on")}
+            onClick={() => setByRisk(false)}
+          >
+            Latest
+          </button>
+          <button
+            type="button"
+            className={"vx-range" + (byRisk ? " is-on" : "")}
+            onClick={() => setByRisk(true)}
+          >
+            Risk first
+          </button>
+        </div>
+
         <div className="vx-ranges">
           {RANGES.map((r) => (
             <button
@@ -287,9 +365,34 @@ export default function VisitsPanel() {
             >
               {copied === "cf" ? "Copied" : "Copy Cloudflare rule"}
             </button>
+            <button
+              type="button"
+              className="vx-action"
+              onClick={() => {
+                copy(annotated);
+                remember("why");
+              }}
+            >
+              {copied === "why" ? "Copied" : "Copy with reasons"}
+            </button>
           </div>
 
-          <pre className="vx-blocklist-body">{plainList}</pre>
+          <div className="vx-blocklist-body">
+            {entries.map((e) => (
+              <div key={e.value} className={"vx-candidate vx-level-" + e.level}>
+                <code>{e.value}</code>
+                <span className="vx-candidate-meta">
+                  {e.score > 0 && <i className="vx-mark">{e.score}</i>}
+                  {e.host || "no reverse DNS"} · {e.visitors[0].device} ·{" "}
+                  {e.visitors[0].utmSource || host(e.visitors[0].referrer) || "direct"} · last seen{" "}
+                  {when(e.lastSeen)}
+                </span>
+                <span className="vx-candidate-why">
+                  {e.why.join(" · ") || "nothing unusual — listed because it is in view"}
+                </span>
+              </div>
+            ))}
+          </div>
 
           <p className="vx-blocklist-note">
             Vercel → Firewall → IP Blocking: one entry per line, Host <code>truckbox.app</code>.
@@ -298,6 +401,14 @@ export default function VisitsPanel() {
             catch unrelated people.
           </p>
         </div>
+      )}
+
+      {rows && rows.length >= PAGE && (
+        <p className="vx-truncated">
+          Showing the first {PAGE}{" "}
+          {byRisk ? "by risk" : "by last visit"} — there are more in this window. Narrow the period
+          or search to see the rest.
+        </p>
       )}
 
       {rows && rows.length > 0 && (
@@ -395,7 +506,11 @@ export default function VisitsPanel() {
                       { id: "ip", label: "Copy IP", value: r.ip },
                       { id: "net", label: "Copy network", value: r.ipPrefix || r.ip },
                       { id: "ua", label: "Copy user agent", value: r.userAgent || "" },
-                      { id: "all", label: "Copy everything", value: dossier(r, events[r.visitorKey]) },
+                      {
+                        id: "all",
+                        label: "Copy everything",
+                        value: dossier(r, events[r.visitorKey]?.events),
+                      },
                     ].map((action) => (
                       <button
                         key={action.id}
@@ -443,9 +558,16 @@ export default function VisitsPanel() {
                   </div>
 
                   {!events[r.visitorKey] && <p className="vx-note">Loading…</p>}
-                  {events[r.visitorKey]?.length === 0 && <p className="vx-note">No rows.</p>}
+                  {events[r.visitorKey]?.events.length === 0 && (
+                    <p className="vx-note">No rows.</p>
+                  )}
+                  {(events[r.visitorKey]?.total ?? 0) > EVENTS_SHOWN && (
+                    <p className="vx-note">
+                      Showing the last {EVENTS_SHOWN} of {events[r.visitorKey]?.total}.
+                    </p>
+                  )}
 
-                  {events[r.visitorKey]?.map((e, i) => (
+                  {events[r.visitorKey]?.events.map((e, i) => (
                     <div className="vx-event" key={i}>
                       <span>{when(e.at)}</span>
                       <span className="vx-tag">{e.event}</span>
