@@ -703,8 +703,13 @@ function Modal({
       >
         <div className="demo-modal-head">
           <b>{title}</b>
-          <button type="button" onClick={onClose} aria-label="Close">
-            ×
+          <button
+            type="button"
+            className={wide ? "demo-close is-lit" : "demo-close"}
+            onClick={onClose}
+            aria-label="Close"
+          >
+            {wide && <span>Close</span>}×
           </button>
         </div>
         {children}

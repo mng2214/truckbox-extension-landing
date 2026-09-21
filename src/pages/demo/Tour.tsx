@@ -86,7 +86,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
   const bound = useRef<{ el: Element; fn: EventListener } | null>(null);
   const clicked = useRef(false);
   const scrolled = useRef(false);
-  const startedAt = useRef(0);
+  const startedAt = useRef(performance.now());
   const indexRef = useRef(0);
   const onStepRef = useRef(onStep);
   onStepRef.current = onStep;
@@ -94,7 +94,10 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
   const step: TourStep | undefined = steps[index];
   const last = index >= steps.length;
 
-  useEffect(() => {
+  // Layout effect, and declared before the loop below, so a step's prepare() always runs before the
+  // first tick evaluates its done(). As a plain effect it ran after, and a step that undoes state
+  // in prepare (signing out for step one) was judged complete before it had undone anything.
+  useLayoutEffect(() => {
     indexRef.current = index;
     held.current = null;
     lastBox.current = null;
@@ -137,7 +140,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
   }, [onClose]);
 
   useLayoutEffect(() => {
-    if (paused || last) return;
+    if (last) return;
 
     const place = (box: Box | null) => {
       const w = window.innerWidth;
@@ -275,7 +278,7 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
       }
 
       const young = performance.now() - startedAt.current < 1500;
-      if (el && (!scrolled.current || (young && !onScreen(el)))) {
+      if (!paused && el && (!scrolled.current || (young && !onScreen(el)))) {
         scrolled.current = true;
         reveal(el);
       }
@@ -311,12 +314,14 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
     };
   }, [paused, last, steps, stage]);
 
-  if (paused || last) return null;
+  if (last) return null;
 
   if (!step) return null;
 
+  // While a demo modal is up the tour stays mounted but invisible and inert: it keeps advancing
+  // behind the modal, so closing one does not flash the step you already finished.
   return (
-    <div className="tour" ref={root}>
+    <div className={"tour" + (paused ? " is-hidden" : "")} ref={root}>
       {[0, 1, 2, 3].map((n) => (
         <div
           key={n}

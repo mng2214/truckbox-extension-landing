@@ -497,3 +497,38 @@ body:has(.demo-page) #crisp-chatbox {
 .demo-guide-btn:hover svg {
   transform: scale(1.12) !important;
 }
+
+.demo-close {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.demo-close span {
+  font: 700 9.5px/1 "Space Mono", ui-monospace, Menlo, monospace;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.demo-close.is-lit {
+  padding: 7px 12px;
+  border: 2px solid #2f5fe0;
+  color: #2f5fe0;
+  animation: demo-close-pulse 2s ease-in-out infinite;
+}
+
+@keyframes demo-close-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(47, 95, 224, 0.4);
+  }
+  55% {
+    box-shadow: 0 0 0 7px rgba(47, 95, 224, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .demo-close.is-lit {
+    animation: none;
+  }
+}

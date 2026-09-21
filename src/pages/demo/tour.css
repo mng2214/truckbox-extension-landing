@@ -214,3 +214,12 @@
     transform: translateX(-4px);
   }
 }
+
+.tour.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.tour.is-hidden * {
+  pointer-events: none !important;
+}
