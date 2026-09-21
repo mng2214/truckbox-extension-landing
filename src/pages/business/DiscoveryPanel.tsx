@@ -39,6 +39,8 @@ type BrokerRow = {
   avgRatePerMile: number | null;
   brokerEmails: string | null;
   brokerPhones: string | null;
+  brokerLanes30d: number;
+  brokerReposted30d: number;
 };
 
 type BrokerGroup = {
@@ -48,6 +50,7 @@ type BrokerGroup = {
   emails: string | null;
   phones: string | null;
   lanes: BrokerRow[];
+  totalLanes: number;
   totalReposts: number;
   activeDays: number;
   minPrice: number | null;
@@ -79,6 +82,7 @@ function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
         emails: r.brokerEmails,
         phones: r.brokerPhones,
         lanes: [],
+        totalLanes: 0,
         totalReposts: 0,
         activeDays: 0,
         minPrice: null,
@@ -87,7 +91,8 @@ function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
       map.set(key, g);
     }
     g.lanes.push(r);
-    g.totalReposts += r.totalReposted30d;
+    g.totalLanes = r.brokerLanes30d;
+    g.totalReposts = r.brokerReposted30d;
     g.activeDays = Math.max(g.activeDays, r.activeDays30d);
     if (r.minPrice != null) g.minPrice = g.minPrice == null ? r.minPrice : Math.min(g.minPrice, r.minPrice);
     if (r.maxPrice != null) g.maxPrice = g.maxPrice == null ? r.maxPrice : Math.max(g.maxPrice, r.maxPrice);
@@ -110,6 +115,7 @@ export function DiscoveryPanel() {
   const [rows, setRows] = useState<BrokerRow[] | null>(null);
   const [requestId, setRequestId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
+  const [waited, setWaited] = useState(0);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [quota, setQuota] = useState<Quota | null>(null);
@@ -120,6 +126,19 @@ export function DiscoveryPanel() {
     connected: false,
   });
   const [agentView, setAgentView] = useState<{ requestId: number | null } | null>(null);
+  useEffect(() => {
+    if (!loading) {
+      setWaited(0);
+      return;
+    }
+    const started = Date.now();
+    const timer = window.setInterval(
+      () => setWaited(Math.round((Date.now() - started) / 1000)),
+      1000,
+    );
+    return () => window.clearInterval(timer);
+  }, [loading]);
+
   useEffect(() => {
     probeAgent().then(setAgent);
   }, []);
@@ -406,6 +425,21 @@ export function DiscoveryPanel() {
         >
           <span className="tb-oracle-loader" />
           <span className="ed-label">Reading the lanes…</span>
+          <span
+            style={{
+              color: "var(--muted)",
+              fontSize: "0.85rem",
+              maxWidth: 440,
+              textAlign: "center",
+              lineHeight: 1.5,
+            }}
+          >
+            {waited < 6
+              ? "Going through every posting on this corridor from the last 30 days."
+              : waited < 15
+                ? `Still reading — ${waited}s. A whole state on either side covers thousands of lanes, so a wide search takes longer than a city pair.`
+                : `Still reading — ${waited}s. This corridor is a big one. It will finish; the first search after a quiet spell is always the slowest. Narrowing a side to a city with a radius makes it quicker next time.`}
+          </span>
         </div>
       )}
 
@@ -506,7 +540,11 @@ export function DiscoveryPanel() {
                       className="flex items-center gap-2.5 mt-1.5 flex-wrap"
                       style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "var(--muted)" }}
                     >
-                      <span>{g.lanes.length} lane{g.lanes.length === 1 ? "" : "s"}</span>
+                      <span>
+                        {g.totalLanes > g.lanes.length
+                          ? `${g.lanes.length} of ${g.totalLanes} lanes`
+                          : `${g.lanes.length} lane${g.lanes.length === 1 ? "" : "s"}`}
+                      </span>
                       <Dot />
                       <span>seen {g.totalReposts}×</span>
                       <Dot />
