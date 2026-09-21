@@ -32,6 +32,8 @@ export class MicrosoftAuthError extends Error {
 
 const RESULT_TTL_MS = 120_000;
 
+const SETTLE_MS = 3_000;
+
 function takeResult(): Result | null {
   try {
     const raw = localStorage.getItem(MICROSOFT_RESULT_KEY);
@@ -90,7 +92,12 @@ export function microsoftAuthCode(clientId: string): Promise<string> {
   if (!popup) return Promise.reject(new MicrosoftAuthError("popup_blocked"));
 
   return new Promise((resolve, reject) => {
+    let settled = false;
+    let goneSince = 0;
+
     const finish = (r: Result | null) => {
+      if (settled) return;
+      settled = true;
       window.clearInterval(timer);
       window.removeEventListener("storage", onStorage);
       if (!r) return reject(new MicrosoftAuthError("cancelled"));
@@ -98,12 +105,28 @@ export function microsoftAuthCode(clientId: string): Promise<string> {
       if (r.state !== state || !r.code) return reject(new MicrosoftAuthError("failed"));
       resolve(r.code);
     };
+
+    const tick = () => {
+      const result = takeResult();
+      if (result) return finish(result);
+
+      if (!popup.closed) {
+        goneSince = 0;
+        return;
+      }
+      // The window looks gone — but so it does the moment it lands back on our own callback,
+      // because that navigation changes the browsing context group and severs this reference
+      // (Cross-Origin-Opener-Policy). The answer is written a beat later, so wait before
+      // calling it a cancellation; a window that really was closed only costs this delay.
+      if (!goneSince) goneSince = Date.now();
+      if (Date.now() - goneSince > SETTLE_MS) finish(null);
+    };
+
     const onStorage = (e: StorageEvent) => {
       if (e.key === MICROSOFT_RESULT_KEY && e.newValue) finish(takeResult());
     };
-    const timer = window.setInterval(() => {
-      if (popup.closed) finish(takeResult());
-    }, 500);
+
+    const timer = window.setInterval(tick, 200);
     window.addEventListener("storage", onStorage);
   });
 }
