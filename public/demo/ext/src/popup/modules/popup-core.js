@@ -27,11 +27,11 @@ function loadsUrlForTab(tab) {
 }
 
 
-//    const API_BASE_URL = 'https://platform.truckbox.app/api/v1';
+    const API_BASE_URL = 'https://platform.truckbox.app/api/v1';
 
-//  const API_BASE_URL = 'https://truckbox-app-6lcca.ondigitalocean.app/api/v1';
-    const API_BASE_URL = 'http://localhost:8080/api/v1'; // local
-//  const API_BASE_URL = 'https://api.truckbox.app/api/v1'; // prod
+// const API_BASE_URL = 'https://truckbox-app-6lcca.ondigitalocean.app/api/v1';
+// const API_BASE_URL = 'http://localhost:8080/api/v1'; // local
+// const API_BASE_URL = 'https://api.truckbox.app/api/v1'; // prod
 
 
 

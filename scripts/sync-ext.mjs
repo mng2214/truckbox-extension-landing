@@ -35,7 +35,27 @@ const banner = (rel) => {
   return "";
 };
 
-const render = (rel, file) => Buffer.concat([Buffer.from(banner(rel)), fs.readFileSync(file)]);
+const PROD_API = "https://platform.truckbox.app/api/v1";
+const API_LINE = /^(\s*)(?:\/\/\s*)?const API_BASE_URL = '[^']*';(.*)$/;
+
+const productionApiBase = (source) => {
+  if (!source.includes("API_BASE_URL = ")) return source;
+  return source
+    .split("\n")
+    .map((line) => {
+      const match = API_LINE.exec(line);
+      if (!match) return line;
+      if (line.includes(PROD_API)) return `${match[1]}const API_BASE_URL = '${PROD_API}';${match[2]}`;
+      return `${match[1]}// ${line.trim().replace(/^\/\/\s*/, "")}`;
+    })
+    .join("\n");
+};
+
+const render = (rel, file) => {
+  const raw = fs.readFileSync(file);
+  const body = rel.endsWith(".js") ? Buffer.from(productionApiBase(raw.toString())) : raw;
+  return Buffer.concat([Buffer.from(banner(rel)), body]);
+};
 
 const digest = (buf) => createHash("sha1").update(buf).digest("hex");
 
