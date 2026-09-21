@@ -13,6 +13,7 @@ type Visitor = {
   visits: number;
   days: number;
   ip: string;
+  ipPrefix: string | null;
   ipHost: string | null;
   userAgent: string | null;
   device: string;
@@ -27,6 +28,7 @@ type Visitor = {
 type VisitorEvent = {
   at: string;
   event: string;
+  detail: string | null;
   path: string | null;
   ip: string;
   ipHost: string | null;
@@ -146,7 +148,7 @@ export default function VisitsPanel() {
         <input
           className="vx-search"
           value={query}
-          placeholder="IP, host, user agent, referrer, time zone"
+          placeholder="IP, network, host, user agent, referrer, time zone"
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === "Enter") load();
@@ -195,7 +197,7 @@ export default function VisitsPanel() {
                 <span className={r.visits > 1 ? "vx-hot" : ""}>{r.visits}</span>
                 <span>{r.days}</span>
                 <span className="vx-mono">{r.ip}</span>
-                <span className="vx-host">{r.ipHost || "—"}</span>
+                <span className="vx-host">{r.ipHost || r.ipPrefix || "—"}</span>
                 <span>{r.device}</span>
                 <span>
                   {r.timezone || "—"}
@@ -225,8 +227,8 @@ export default function VisitsPanel() {
                     <div className="vx-event" key={i}>
                       <span>{when(e.at)}</span>
                       <span className="vx-tag">{e.event}</span>
+                      <span className="vx-what">{e.detail || "—"}</span>
                       <span className="vx-mono">{e.ip}</span>
-                      <span>{e.viewport || "—"}</span>
                       <span className="vx-host">{e.path || "—"}</span>
                       <span className="vx-mono">{e.sessionId?.slice(0, 8) || "—"}</span>
                     </div>

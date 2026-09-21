@@ -19,6 +19,7 @@ type Props = {
   steps: TourStep[];
   paused?: boolean;
   stage?: () => Element | null;
+  onStep?: (step: TourStep, index: number) => void;
   onClose: () => void;
 };
 
@@ -69,7 +70,7 @@ function visible(el: Element) {
   return r.width > 0 && r.height > 0;
 }
 
-export default function Tour({ steps, paused = false, stage, onClose }: Props) {
+export default function Tour({ steps, paused = false, stage, onStep, onClose }: Props) {
   const [index, setIndex] = useState(0);
   const [missing, setMissing] = useState(false);
   const [settled, setSettled] = useState(false);
@@ -87,6 +88,8 @@ export default function Tour({ steps, paused = false, stage, onClose }: Props) {
   const scrolled = useRef(false);
   const startedAt = useRef(0);
   const indexRef = useRef(0);
+  const onStepRef = useRef(onStep);
+  onStepRef.current = onStep;
 
   const step: TourStep | undefined = steps[index];
   const last = index >= steps.length;
@@ -105,6 +108,7 @@ export default function Tour({ steps, paused = false, stage, onClose }: Props) {
     }
     startedAt.current = performance.now();
     step?.prepare?.();
+    if (step) onStepRef.current?.(step, index);
   }, [index, step]);
 
   const shake = () => {

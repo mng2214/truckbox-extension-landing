@@ -323,7 +323,10 @@ class DemoRuntime {
         };
 
         this.savedLoads = [row, ...this.savedLoads];
-        trackDemo("save");
+        trackDemo(
+          "save",
+          load.origin && load.destination ? `${load.origin} → ${load.destination}` : undefined,
+        );
         this.persist();
         return { ok: true, data: row };
       }

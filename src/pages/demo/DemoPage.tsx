@@ -26,6 +26,18 @@ const tourTaken = () => {
 
 const demoStage = () => document.querySelector(".demo-window");
 
+const laneOf = (row: Element | null) => {
+  if (!row) return undefined;
+  const cell = (test: string) =>
+    row.querySelector(`[data-test="load-${test}-cell"]`)?.textContent?.trim();
+  const from = cell("origin");
+  const to = cell("destination");
+  return from && to ? `${from} → ${to}` : undefined;
+};
+
+const brokerOf = (row: Element | null) =>
+  row?.querySelector(".db-cell-company")?.textContent?.trim();
+
 const popupEl = (selector: string) => {
   const frame = document.querySelector<HTMLIFrameElement>(".demo-popup iframe");
   try {
@@ -115,6 +127,60 @@ export default function DemoPage() {
   }, [embedded, handheld]);
 
   useEffect(() => {
+    if (embedded || handheld) return;
+
+    const board = document.querySelector(".demo-board-host");
+    if (!board) return;
+
+    const onClick = (e: Event) => {
+      const target = e.target as Element | null;
+      const row = target?.closest(".row-container");
+      if (!row) return;
+
+      if (target?.closest(".datx-send, .datx-star")) {
+        return;
+      }
+      if (target?.closest(".datx-map-btn, .tb-map-corner")) {
+        trackDemo("map", laneOf(row));
+        return;
+      }
+      if (target?.closest(".datx-copy-phone, a[href^='tel:']")) {
+        trackDemo("phone", brokerOf(row));
+        return;
+      }
+      trackDemo("load_open", laneOf(row));
+    };
+
+    board.addEventListener("click", onClick, true);
+    return () => board.removeEventListener("click", onClick, true);
+  }, [embedded, handheld, signedIn]);
+
+  useEffect(() => {
+    if (embedded || handheld || !popupOpen) return;
+    const frame = document.querySelector<HTMLIFrameElement>(".demo-popup iframe");
+    if (!frame) return;
+
+    const attach = () => {
+      const doc = frame.contentDocument;
+      if (!doc) return;
+      const onTab = (e: Event) => {
+        const tab = (e.target as Element | null)?.closest<HTMLElement>(".tab");
+        if (tab) trackDemo("tab", tab.dataset.tab || tab.textContent?.trim());
+      };
+      doc.addEventListener("click", onTab, true);
+      cleanup = () => doc.removeEventListener("click", onTab, true);
+    };
+
+    let cleanup = () => {};
+    attach();
+    frame.addEventListener("load", attach);
+    return () => {
+      cleanup();
+      frame.removeEventListener("load", attach);
+    };
+  }, [embedded, handheld, popupOpen, popupDoc, popupNonce]);
+
+  useEffect(() => {
     const viewport = document.querySelector<HTMLElement>(".demo-viewport");
     if (!viewport) return;
     const adopt = () => {
@@ -135,7 +201,10 @@ export default function DemoPage() {
           if (!/credit check/i.test(button.textContent || "")) return;
           button.dataset.demoChecked = "1";
           button.click();
-          trackDemo("credit");
+          const row =
+            button.closest(".table-row-detail")?.previousElementSibling ??
+            document.querySelector(".datx-row-active");
+          trackDemo("credit", brokerOf(row) || laneOf(row));
         });
     };
     const observer = new MutationObserver(run);
@@ -150,7 +219,7 @@ export default function DemoPage() {
         if (event.kind === "email") {
           emailSeen.current = true;
           setEmail(event);
-          trackDemo("email");
+          trackDemo("email", `${event.broker} · ${event.subject}`);
         }
 
         if (event.kind === "signin") {
@@ -599,6 +668,7 @@ export default function DemoPage() {
         <Tour
           key={tourRun}
           steps={tourSteps}
+          onStep={(step, index) => trackDemo("tour_step", `${index + 1}. ${step.id}`)}
           stage={demoStage}
           paused={booting || disclaimer || !!email || !!chooser || !!narrowNotice}
           onClose={closeTour}

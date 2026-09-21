@@ -1,4 +1,4 @@
-const BASE = import.meta.env.VITE_API_BASE_URL ?? "https://api.truckbox.app";
+import { API_BASE } from "./api";
 const DEVICE_KEY = "tb-device-id";
 const SESSION_KEY = "tb-demo-session";
 
@@ -9,9 +9,14 @@ export type DemoEventName =
   | "email"
   | "save"
   | "credit"
+  | "load_open"
+  | "tab"
+  | "map"
+  | "phone"
+  | "tour_step"
   | "tour_done";
 
-const sentThisLoad = new Set<DemoEventName>();
+const sentThisLoad = new Set<string>();
 
 let enabled = false;
 
@@ -48,10 +53,11 @@ function params() {
   }
 }
 
-function payload(event: DemoEventName) {
+function payload(event: DemoEventName, detail?: string) {
   const q = params();
   return {
     event,
+    detail: detail ? detail.slice(0, 160) : null,
     deviceId: stored(DEVICE_KEY, localStorage),
     sessionId: stored(SESSION_KEY, sessionStorage),
     path: location.pathname + location.search.slice(0, 80),
@@ -68,14 +74,16 @@ function payload(event: DemoEventName) {
   };
 }
 
-export function trackDemo(event: DemoEventName, once = true): void {
+export function trackDemo(event: DemoEventName, detail?: string): void {
   if (!enabled) return;
-  if (once && sentThisLoad.has(event)) return;
-  sentThisLoad.add(event);
+
+  const key = event + "|" + (detail ?? "");
+  if (sentThisLoad.has(key)) return;
+  sentThisLoad.add(key);
 
   try {
-    const body = JSON.stringify(payload(event));
-    const url = BASE + "/api/v1/public/demo/visit";
+    const body = JSON.stringify(payload(event, detail));
+    const url = API_BASE + "/api/v1/public/demo/visit";
 
     void fetch(url, {
       method: "POST",

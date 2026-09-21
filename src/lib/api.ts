@@ -1,6 +1,6 @@
 import { auth } from "./auth";
 
-const BASE = import.meta.env.VITE_API_BASE_URL ?? "https://api.truckbox.app";
+export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "https://platform.truckbox.app";
 
 function uuid(): string {
   try {
@@ -62,7 +62,7 @@ async function req<T>(method: string, path: string, body?: unknown): Promise<T> 
   };
   const token = auth.getToken();
   if (token) headers.Authorization = `Bearer ${token}`;
-  const res = await fetch(BASE + path, {
+  const res = await fetch(API_BASE + path, {
     method,
     headers,
     body: body === undefined ? undefined : JSON.stringify(body),
