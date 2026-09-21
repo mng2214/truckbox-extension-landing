@@ -13,8 +13,7 @@ const DESKTOP_WIDTH = 1100;
 
 const TOUR_KEY = "tbdemo:tour";
 
-const isHandheld = () =>
-  window.matchMedia("(pointer: coarse)").matches && window.innerWidth < DESKTOP_WIDTH;
+const isHandheld = () => window.matchMedia("(pointer: coarse)").matches;
 
 const tourTaken = () => {
   try {
@@ -464,7 +463,8 @@ export default function DemoPage() {
           <span className="demo-gate-eyebrow">Live demo</span>
           <b className="demo-desktop-only-title">Better on a computer</b>
           <p className="demo-desktop-only-text">
-            Chrome extensions don&rsquo;t run on phones. Open it on the computer you dispatch from.
+            Chrome extensions don&rsquo;t run on phones or tablets. Open it on the computer you
+            dispatch from.
           </p>
           <span className="demo-desktop-only-url">truckbox.app/demo</span>
           <a className="ed-btn tb-back-btn demo-gate-cta" href="/">
