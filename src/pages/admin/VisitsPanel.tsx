@@ -359,6 +359,8 @@ export default function VisitsPanel() {
 
       {error === "failed" && <p className="vx-note">Could not load the list. Try again.</p>}
 
+      {busy && <div className="vx-progress" aria-label="Loading" />}
+
       {blockList && targets.length > 0 && (
         <div className="vx-blocklist">
           <div className="vx-blocklist-head">
@@ -442,10 +444,20 @@ export default function VisitsPanel() {
         </p>
       )}
 
-      {rows && rows.length === 0 && !error && <p className="vx-note">Nothing in this window yet.</p>}
+      {rows && rows.length === 0 && !error && !busy && (
+        <p className="vx-note">Nothing in this window yet.</p>
+      )}
+
+      {busy && !rows?.length && (
+        <div className="vx-table vx-skeleton">
+          {[0, 1, 2, 3, 4].map((n) => (
+            <span key={n} />
+          ))}
+        </div>
+      )}
 
       {rows && rows.length > 0 && (
-        <div className="vx-table">
+        <div className={"vx-table" + (busy ? " is-busy" : "")}>
           <div className="vx-head">
             <span>Last seen</span>
             <span>Visits</span>
