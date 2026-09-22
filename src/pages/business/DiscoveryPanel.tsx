@@ -39,8 +39,8 @@ type BrokerRow = {
   avgRatePerMile: number | null;
   brokerEmails: string | null;
   brokerPhones: string | null;
-  brokerLanes30d: number;
-  brokerReposted30d: number;
+  brokerLanes30d?: number;
+  brokerReposted30d?: number;
 };
 
 type BrokerGroup = {
@@ -91,8 +91,8 @@ function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
       map.set(key, g);
     }
     g.lanes.push(r);
-    g.totalLanes = r.brokerLanes30d;
-    g.totalReposts = r.brokerReposted30d;
+    g.totalLanes = r.brokerLanes30d ?? g.lanes.length;
+    g.totalReposts = r.brokerReposted30d ?? g.totalReposts + r.totalReposted30d;
     g.activeDays = Math.max(g.activeDays, r.activeDays30d);
     if (r.minPrice != null) g.minPrice = g.minPrice == null ? r.minPrice : Math.min(g.minPrice, r.minPrice);
     if (r.maxPrice != null) g.maxPrice = g.maxPrice == null ? r.maxPrice : Math.max(g.maxPrice, r.maxPrice);

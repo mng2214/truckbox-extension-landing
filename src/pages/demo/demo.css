@@ -536,28 +536,3 @@ body:has(.demo-page) #crisp-chatbox {
   }
 }
 
-.demo-gate-ship {
-  margin: 0 0 22px;
-  padding: 13px 15px;
-  border-left: 3px solid #e8a33d;
-  background: #fdf6ea;
-}
-
-.demo-gate-ship b {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 13.5px;
-  color: #7a3b10;
-}
-
-.demo-gate-ship p {
-  margin: 0;
-  font-size: 13px;
-  line-height: 1.6;
-  color: #59617a;
-}
-
-.demo-gate-ship strong {
-  color: #131a2b;
-  font-weight: 700;
-}
