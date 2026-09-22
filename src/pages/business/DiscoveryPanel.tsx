@@ -505,8 +505,25 @@ export function DiscoveryPanel() {
             className="flex items-baseline justify-between pb-3"
             style={{ borderBottom: "1px solid var(--ink)" }}
           >
-            <span className="ed-label" style={{ color: "var(--ink)" }}>
-              {groups.length} broker{groups.length === 1 ? "" : "s"}
+            <span className="flex items-baseline gap-3 flex-wrap">
+              <span className="ed-label" style={{ color: "var(--ink)" }}>
+                {groups.length} broker{groups.length === 1 ? "" : "s"}
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: "0.64rem",
+                  letterSpacing: "0.12em",
+                  textTransform: "uppercase",
+                  color: "var(--accent)",
+                  border: "1px solid var(--accent)",
+                  borderRadius: "999px",
+                  padding: "0.16rem 0.6rem",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                Last 30 days
+              </span>
             </span>
             <span className="flex items-baseline gap-4">
               {agent.available && requestId != null && groups.length > 0 && (
@@ -600,13 +617,26 @@ export function DiscoveryPanel() {
                         {details[g.key]
                           ? `${details[g.key].lanes.length} lane${details[g.key].lanes.length === 1 ? "" : "s"}`
                           : g.totalLanes > g.lanes.length
-                            ? `${g.lanes.length} of ${g.totalLanes} lanes`
+                            ? `${g.totalLanes} lanes (${g.lanes.length} shown)`
                             : `${g.lanes.length} lane${g.lanes.length === 1 ? "" : "s"}`}
                       </span>
                       <Dot />
-                      <span>seen {g.totalReposts}×</span>
+                      <span title="Times we recorded this broker posting in this corridor over the last 30 days. Reposts and price changes each count; a load re-seen unchanged within 30 minutes does not.">
+                        {g.totalReposts} postings
+                      </span>
                       <Dot />
-                      <span>{g.activeDays} days active</span>
+                      <span
+                        title="Separate days, out of the last 30, on which this broker posted somewhere in this corridor. This is the number that tells you they run it regularly."
+                        style={{
+                          color: "var(--accent)",
+                          fontWeight: 600,
+                          background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+                          borderRadius: "3px",
+                          padding: "0.1rem 0.4rem",
+                        }}
+                      >
+                        posted on {g.activeDays} days
+                      </span>
                       {g.minPrice != null && (
                         <>
                           <Dot />
@@ -653,7 +683,13 @@ export function DiscoveryPanel() {
                             <thead>
                               <tr style={{ color: "var(--muted)" }}>
                                 <th className="text-left font-normal py-1.5" style={thLabel}>Lane</th>
-                                <th className="text-right font-normal py-1.5" style={thLabel}>Times seen</th>
+                                <th
+                                  className="text-right font-normal py-1.5"
+                                  style={thLabel}
+                                  title="Postings we recorded on this lane over the last 30 days."
+                                >
+                                  Postings
+                                </th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>Avg</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>Last</th>
                                 <th className="text-right font-normal py-1.5" style={thLabel}>RPM</th>
