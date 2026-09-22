@@ -116,6 +116,7 @@ export function DiscoveryPanel() {
   const [requestId, setRequestId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [waited, setWaited] = useState(0);
+  const [slow, setSlow] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [quota, setQuota] = useState<Quota | null>(null);
@@ -129,14 +130,20 @@ export function DiscoveryPanel() {
   useEffect(() => {
     if (!loading) {
       setWaited(0);
+      setSlow(false);
       return;
     }
     const started = Date.now();
+    // A search that answers in under a quarter of a second should not flash a spinner on the way.
+    const appear = window.setTimeout(() => setSlow(true), 250);
     const timer = window.setInterval(
       () => setWaited(Math.round((Date.now() - started) / 1000)),
       1000,
     );
-    return () => window.clearInterval(timer);
+    return () => {
+      window.clearTimeout(appear);
+      window.clearInterval(timer);
+    };
   }, [loading]);
 
   useEffect(() => {
@@ -194,7 +201,6 @@ export function DiscoveryPanel() {
     }
     setLoading(true);
     setError(null);
-    const started = Date.now();
     try {
       const result = await api.post<{ requestId: number | null; brokers: BrokerRow[] }>(
         "/api/v1/discovery/search",
@@ -207,8 +213,6 @@ export function DiscoveryPanel() {
           minActiveDays,
         },
       );
-      const wait = 3000 - (Date.now() - started);
-      if (wait > 0) await new Promise((r) => setTimeout(r, wait));
       setRows(result.brokers);
       setRequestId(result.requestId ?? null);
       setExpanded(new Set());
@@ -418,7 +422,7 @@ export function DiscoveryPanel() {
         </div>
       </form>
 
-      {loading && (
+      {slow && (
         <div
           className="flex flex-col items-center justify-center gap-6"
           style={{ padding: "4rem 0" }}
