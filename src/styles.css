@@ -354,7 +354,7 @@ body.tb-cabinet-bg {
 body.tb-cabinet-bg {
   --heat-1: #7d97b8;
   --heat-2: #7fb0f0;
-  --heat-3: #a5a59c;
+  --heat-3: #bd8ae8;
   --heat-4: #e5a25f;
   --heat-5: #f28080;
   --heat-top-bg: #f2564f;
@@ -364,7 +364,7 @@ body.tb-cabinet-bg {
 [data-theme="light"] body.tb-cabinet-bg {
   --heat-1: #40608a;
   --heat-2: #1259b8;
-  --heat-3: #5f5e5a;
+  --heat-3: #7b3fae;
   --heat-4: #954d0b;
   --heat-5: #b82323;
   --heat-top-bg: #a81f1f;

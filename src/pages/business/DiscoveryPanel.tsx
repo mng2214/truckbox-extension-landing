@@ -135,7 +135,7 @@ const heatStyle = (activeDays: number): React.CSSProperties => {
 
 const HEAT_TITLE =
   "Separate days, out of the last 30, on which this broker posted somewhere in this corridor. " +
-  `Colour runs cold to hot: under 5 and 5-9 days blue, 10-14 grey, 15-19 amber, 20-24 red, ${HEAT_TOP}+ filled — ` +
+  `Colour runs cold to hot: under 5 and 5-9 days blue, 10-14 violet, 15-19 amber, 20-24 red, ${HEAT_TOP}+ filled — ` +
   "a broker who posts this corridor almost every day.";
 
 function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
