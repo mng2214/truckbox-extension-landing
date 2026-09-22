@@ -23,6 +23,8 @@ const STATES: { code: string; name: string }[] = [
   ["WA", "Washington"], ["WV", "West Virginia"], ["WI", "Wisconsin"], ["WY", "Wyoming"],
 ].map(([code, name]) => ({ code, name }));
 
+const ORACLE_BUSY = 1073;
+
 type BrokerRow = {
   origin: string;
   destination: string;
@@ -219,7 +221,8 @@ export function DiscoveryPanel() {
       fetchQuota();
     } catch (err) {
       setError(err instanceof ApiError && err.message ? err.message : "Search failed. Try again.");
-      setRows(null);
+      // "Busy, try again in a minute" is not a reason to throw away what is already on screen.
+      if (!(err instanceof ApiError && err.code === ORACLE_BUSY)) setRows(null);
     } finally {
       setLoading(false);
     }
