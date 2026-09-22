@@ -45,6 +45,33 @@ type BrokerRow = {
   brokerReposted30d?: number;
 };
 
+type CorridorQuery = {
+  origin: string;
+  destination: string;
+  originRadius: number | null;
+  destRadius: number | null;
+  equipment: string[] | null;
+  minActiveDays: number;
+};
+
+type BrokerDetails = {
+  brokerId: number | null;
+  lanes: {
+    origin: string;
+    destination: string;
+    equipment: string | null;
+    activeDays: number;
+    reposted: number;
+    avgPrice: number | null;
+    minPrice: number | null;
+    maxPrice: number | null;
+    lastPrice: number | null;
+    avgRatePerMile: number | null;
+  }[];
+  emails: { email: string; uses: number }[];
+  phones: string[];
+};
+
 type BrokerGroup = {
   key: string;
   name: string;
@@ -119,6 +146,9 @@ export function DiscoveryPanel() {
   const [loading, setLoading] = useState(false);
   const [waited, setWaited] = useState(0);
   const [slow, setSlow] = useState(false);
+  const [lastQuery, setLastQuery] = useState<CorridorQuery | null>(null);
+  const [details, setDetails] = useState<Record<string, BrokerDetails>>({});
+  const [detailsBusy, setDetailsBusy] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [expanded, setExpanded] = useState<Set<string>>(new Set());
   const [quota, setQuota] = useState<Quota | null>(null);
@@ -180,6 +210,22 @@ export function DiscoveryPanel() {
 
   const groups = useMemo(() => (rows ? groupByBroker(rows) : []), [rows]);
 
+  const loadDetails = async (key: string, brokerId: number | null) => {
+    if (!lastQuery || brokerId == null || details[key] || detailsBusy) return;
+    setDetailsBusy(key);
+    try {
+      const full = await api.post<BrokerDetails>(
+        `/api/v1/discovery/brokers/${brokerId}`,
+        lastQuery,
+      );
+      setDetails((prev) => ({ ...prev, [key]: full }));
+    } catch (err) {
+      setError(err instanceof ApiError && err.message ? err.message : "Could not load the broker.");
+    } finally {
+      setDetailsBusy(null);
+    }
+  };
+
   const toggle = (k: string) =>
     setExpanded((prev) => {
       const next = new Set(prev);
@@ -204,17 +250,20 @@ export function DiscoveryPanel() {
     setLoading(true);
     setError(null);
     try {
+      const query: CorridorQuery = {
+        origin: oValue.trim(),
+        destination: dValue.trim(),
+        originRadius: oMode === "city" ? oRadius : null,
+        destRadius: dMode === "city" ? dRadius : null,
+        equipment: equipment.length ? equipment : null,
+        minActiveDays,
+      };
       const result = await api.post<{ requestId: number | null; brokers: BrokerRow[] }>(
         "/api/v1/discovery/search",
-        {
-          origin: oValue.trim(),
-          destination: dValue.trim(),
-          originRadius: oMode === "city" ? oRadius : null,
-          destRadius: dMode === "city" ? dRadius : null,
-          equipment: equipment.length ? equipment : null,
-          minActiveDays,
-        },
+        query,
       );
+      setLastQuery(query);
+      setDetails({});
       setRows(result.brokers);
       setRequestId(result.requestId ?? null);
       setExpanded(new Set());
@@ -548,9 +597,11 @@ export function DiscoveryPanel() {
                       style={{ fontFamily: "var(--font-mono)", fontSize: "0.72rem", color: "var(--muted)" }}
                     >
                       <span>
-                        {g.totalLanes > g.lanes.length
-                          ? `${g.lanes.length} of ${g.totalLanes} lanes`
-                          : `${g.lanes.length} lane${g.lanes.length === 1 ? "" : "s"}`}
+                        {details[g.key]
+                          ? `${details[g.key].lanes.length} lane${details[g.key].lanes.length === 1 ? "" : "s"}`
+                          : g.totalLanes > g.lanes.length
+                            ? `${g.lanes.length} of ${g.totalLanes} lanes`
+                            : `${g.lanes.length} lane${g.lanes.length === 1 ? "" : "s"}`}
                       </span>
                       <Dot />
                       <span>seen {g.totalReposts}×</span>
@@ -588,7 +639,14 @@ export function DiscoveryPanel() {
                       style={{ overflow: "hidden" }}
                     >
                       <div className="flex flex-col gap-4 pb-5 pl-4 sm:pl-[3.8rem]">
-                        <ContactList emails={emails} phones={phones} />
+                        {details[g.key] ? (
+                          <RankedContacts
+                            emails={details[g.key].emails}
+                            phones={details[g.key].phones}
+                          />
+                        ) : (
+                          <ContactList emails={emails} phones={phones} />
+                        )}
 
                         <div className="overflow-x-auto">
                           <table className="w-full text-sm" style={{ minWidth: "30rem" }}>
@@ -602,7 +660,18 @@ export function DiscoveryPanel() {
                               </tr>
                             </thead>
                             <tbody>
-                              {g.lanes.map((l, j) => (
+                              {(details[g.key]
+                                ? details[g.key].lanes.map((lane) => ({
+                                    origin: lane.origin,
+                                    destination: lane.destination,
+                                    equipment: lane.equipment,
+                                    totalReposted30d: lane.reposted,
+                                    avgPrice: lane.avgPrice,
+                                    lastPrice: lane.lastPrice,
+                                    avgRatePerMile: lane.avgRatePerMile,
+                                  }))
+                                : g.lanes
+                              ).map((l, j) => (
                                 <tr key={j} style={{ borderTop: "1px solid var(--hairline)" }}>
                                   <td className="py-1.5" style={{ color: "var(--ink)" }}>
                                     <span className="inline-flex items-center gap-1.5">
@@ -628,6 +697,22 @@ export function DiscoveryPanel() {
                             </tbody>
                           </table>
                         </div>
+
+                        {!details[g.key] && g.lanes[0]?.brokerId != null && (
+                          <button
+                            type="button"
+                            className="ed-btn"
+                            style={{ alignSelf: "flex-start", fontSize: "0.8rem" }}
+                            disabled={detailsBusy === g.key}
+                            onClick={() => loadDetails(g.key, g.lanes[0]?.brokerId ?? null)}
+                          >
+                            {detailsBusy === g.key
+                              ? "Loading…"
+                              : g.totalLanes > g.lanes.length
+                                ? `Show all ${g.totalLanes} lanes and contacts`
+                                : "Show all contacts"}
+                          </button>
+                        )}
                       </div>
                     </motion.div>
                   )}
@@ -958,6 +1043,57 @@ function ContactList({ emails, phones }: { emails: string[]; phones: string[] })
             }}
           />
           {showAll ? "Show less" : `+${hidden} more contact${hidden === 1 ? "" : "s"}`}
+        </button>
+      )}
+    </div>
+  );
+}
+
+function RankedContacts({
+  emails,
+  phones,
+}: {
+  emails: { email: string; uses: number }[];
+  phones: string[];
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const PREVIEW = 8;
+  const total = emails.length + phones.length;
+  if (total === 0) return null;
+
+  const visibleEmails = showAll ? emails : emails.slice(0, PREVIEW);
+  const visiblePhones = showAll ? phones : phones.slice(0, Math.max(0, PREVIEW - visibleEmails.length));
+  const hidden = total - visibleEmails.length - visiblePhones.length;
+
+  return (
+    <div className="flex flex-col gap-1.5" style={{ fontSize: "0.83rem" }}>
+      {visibleEmails.map((contact) => (
+        <div key={contact.email} className="flex items-center gap-2">
+          <ContactItem icon={<Mail size={13} />} value={contact.email} />
+          <span style={{ ...mono("var(--muted)"), fontSize: "0.68rem" }}>
+            {contact.uses} posting{contact.uses === 1 ? "" : "s"}
+          </span>
+        </div>
+      ))}
+      {visiblePhones.map((phone) => (
+        <ContactItem key={phone} icon={<Phone size={13} />} value={phone} />
+      ))}
+      {hidden > 0 && !showAll && (
+        <button
+          type="button"
+          onClick={() => setShowAll(true)}
+          className="flex items-center gap-1.5 self-start mt-0.5"
+          style={{
+            background: "transparent",
+            cursor: "pointer",
+            fontFamily: "var(--font-mono)",
+            fontSize: "0.7rem",
+            letterSpacing: "0.04em",
+            color: "var(--muted)",
+          }}
+        >
+          <ChevronDown size={13} />
+          {`+${hidden} more contact${hidden === 1 ? "" : "s"}`}
         </button>
       )}
     </div>
