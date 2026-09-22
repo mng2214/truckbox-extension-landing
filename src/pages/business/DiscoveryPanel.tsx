@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Check, ChevronDown, Copy, Info, MapPin, Mail, Phone, Search } from "lucide-react";
+import { Check, ChevronDown, Copy, Flame, Info, MapPin, Mail, Phone, Search } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { probeAgent } from "./agent/AgentApi";
 import { AgentSection } from "./agent/AgentSection";
@@ -92,6 +92,51 @@ const usd = (n: number | null) =>
   n == null ? "—" : "$" + Math.round(n).toLocaleString("en-US");
 
 const isPickedCity = (v: string) => /,\s*[A-Za-z]{2}\s*$/.test(v.trim());
+
+const HEAT_TOP = 25;
+
+const heatLevel = (activeDays: number) =>
+  activeDays >= HEAT_TOP
+    ? 6
+    : activeDays >= 20
+      ? 5
+      : activeDays >= 15
+        ? 4
+        : activeDays >= 10
+          ? 3
+          : activeDays >= 5
+            ? 2
+            : 1;
+
+const heatStyle = (activeDays: number): React.CSSProperties => {
+  const level = heatLevel(activeDays);
+  const shared: React.CSSProperties = {
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "0.28rem",
+    fontWeight: 600,
+    borderRadius: "3px",
+    padding: "0.1rem 0.42rem",
+  };
+  if (level === 6) {
+    return {
+      ...shared,
+      color: "var(--heat-top-ink)",
+      background: "var(--heat-top-bg)",
+      letterSpacing: "0.01em",
+    };
+  }
+  return {
+    ...shared,
+    color: `var(--heat-${level})`,
+    background: `color-mix(in srgb, var(--heat-${level}) 12%, transparent)`,
+  };
+};
+
+const HEAT_TITLE =
+  "Separate days, out of the last 30, on which this broker posted somewhere in this corridor. " +
+  `Colour runs cold to hot: under 5 and 5-9 days blue, 10-14 grey, 15-19 amber, 20-24 red, ${HEAT_TOP}+ filled — ` +
+  "a broker who posts this corridor almost every day.";
 
 function groupByBroker(rows: BrokerRow[]): BrokerGroup[] {
   const map = new Map<string, BrokerGroup>();
@@ -625,16 +670,8 @@ export function DiscoveryPanel() {
                         {g.totalReposts} postings
                       </span>
                       <Dot />
-                      <span
-                        title="Separate days, out of the last 30, on which this broker posted somewhere in this corridor. This is the number that tells you they run it regularly."
-                        style={{
-                          color: "var(--accent)",
-                          fontWeight: 600,
-                          background: "color-mix(in srgb, var(--accent) 10%, transparent)",
-                          borderRadius: "3px",
-                          padding: "0.1rem 0.4rem",
-                        }}
-                      >
+                      <span title={HEAT_TITLE} style={heatStyle(g.activeDays)}>
+                        {g.activeDays >= HEAT_TOP && <Flame size={11} strokeWidth={2.4} />}
                         posted on {g.activeDays} days
                       </span>
                       {g.minPrice != null && (

@@ -351,6 +351,26 @@ body.tb-cabinet-bg {
   --tb-hover: #f3f3f5;
 }
 
+body.tb-cabinet-bg {
+  --heat-1: #7d97b8;
+  --heat-2: #7fb0f0;
+  --heat-3: #a5a59c;
+  --heat-4: #e5a25f;
+  --heat-5: #f28080;
+  --heat-top-bg: #f2564f;
+  --heat-top-ink: #141416;
+}
+
+[data-theme="light"] body.tb-cabinet-bg {
+  --heat-1: #40608a;
+  --heat-2: #1259b8;
+  --heat-3: #5f5e5a;
+  --heat-4: #954d0b;
+  --heat-5: #b82323;
+  --heat-top-bg: #a81f1f;
+  --heat-top-ink: #ffffff;
+}
+
 body.tb-cabinet-bg .ed-display {
   font-family: var(--font-sans);
   font-weight: 700;
