@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
+import { useEffect, useLayoutEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -80,7 +80,11 @@ export default function Cabinet() {
     if (authed) load();
   }, [authed, load]);
 
-  useEffect(() => {
+  // Before the first paint, not after. The cabinet's palette lives on this class,
+  // and the outline buttons on this page are drawn entirely from it — with the
+  // class arriving a frame late they render in the landing's colours, which on a
+  // phone reads as the second sign-in button appearing after the first.
+  useLayoutEffect(() => {
     const w = window as unknown as { $crisp?: unknown[] };
     document.body.classList.add("tb-cabinet-bg");
     w.$crisp?.push(["do", "chat:hide"]);
@@ -90,7 +94,7 @@ export default function Cabinet() {
     };
   }, []);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const root = document.documentElement;
     if (theme === "light") root.setAttribute("data-theme", "light");
     else root.removeAttribute("data-theme");
