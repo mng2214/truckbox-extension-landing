@@ -23,6 +23,9 @@ const TeamStart = lazy(() => import("./pages/business/TeamStart"));
 const MicrosoftCallback = lazy(() => import("./pages/business/MicrosoftCallback"));
 const DemoPage = lazy(() => import("./pages/demo/DemoPage"));
 const VisitsPanel = lazy(() => import("./pages/admin/VisitsPanel"));
+const AdminHome = lazy(() => import("./pages/admin/AdminHome"));
+const ExtensionPanel = lazy(() => import("./pages/admin/ExtensionPanel"));
+const DirectoryPanel = lazy(() => import("./pages/admin/DirectoryPanel"));
 
 {
   const q = new URLSearchParams(location.search).get("theme");
@@ -56,7 +59,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/update" element={<UpdatePage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/demo" element={<DemoPage />} />
+        <Route path="/admin2214" element={<AdminHome />} />
         <Route path="/admin2214/visits" element={<VisitsPanel />} />
+        <Route path="/admin2214/extension" element={<ExtensionPanel />} />
+        <Route path="/admin2214/accounts" element={<DirectoryPanel />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business/start" element={<TeamStart />} />
