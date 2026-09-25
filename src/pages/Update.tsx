@@ -8,7 +8,7 @@ import { Header, Footer, UpdateGuide } from "../App";
 import { usePageMeta } from "../lib/meta";
 
 export default function UpdatePage() {
-  usePageMeta({ title: "How to Update — TruckBox for DAT & Truckstop", description: "Get the latest TruckBox version right away: open chrome://extensions, turn on Developer mode and click Update.", path: "/update" });
+  usePageMeta({ title: "How to Update — TruckBox for DAT & Truckstop", description: "Update the Truck Box Chrome extension for DAT One and Truckstop: open chrome://extensions, turn on Developer mode and press Update. Screenshots for every step.", path: "/update" });
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);

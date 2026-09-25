@@ -5,6 +5,54 @@
       "destination": "/dat-example.png"
     },
     {
+      "source": "/guide",
+      "destination": "/guide/index.html"
+    },
+    {
+      "source": "/guide/",
+      "destination": "/guide/index.html"
+    },
+    {
+      "source": "/faq",
+      "destination": "/faq/index.html"
+    },
+    {
+      "source": "/faq/",
+      "destination": "/faq/index.html"
+    },
+    {
+      "source": "/update",
+      "destination": "/update/index.html"
+    },
+    {
+      "source": "/update/",
+      "destination": "/update/index.html"
+    },
+    {
+      "source": "/privacy",
+      "destination": "/privacy/index.html"
+    },
+    {
+      "source": "/privacy/",
+      "destination": "/privacy/index.html"
+    },
+    {
+      "source": "/business/start",
+      "destination": "/business/start/index.html"
+    },
+    {
+      "source": "/business/start/",
+      "destination": "/business/start/index.html"
+    },
+    {
+      "source": "/dat-load-board-tools",
+      "destination": "/dat-load-board-tools/index.html"
+    },
+    {
+      "source": "/dat-load-board-tools/",
+      "destination": "/dat-load-board-tools/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/"
     }

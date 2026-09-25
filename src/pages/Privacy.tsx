@@ -19,7 +19,7 @@ export default function PrivacyPage() {
       <div className="tb-bg-vignette" aria-hidden />
       <Header />
       <main style={{ paddingTop: 64 }}>
-        <Privacy />
+        <Privacy lead />
       </main>
       <Footer />
     </div>

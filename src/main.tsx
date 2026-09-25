@@ -24,6 +24,8 @@ const MicrosoftCallback = lazy(() => import("./pages/business/MicrosoftCallback"
 const DemoPage = lazy(() => import("./pages/demo/DemoPage"));
 const VisitsPanel = lazy(() => import("./pages/admin/VisitsPanel"));
 const AdminHome = lazy(() => import("./pages/admin/AdminHome"));
+const NotFoundPage = lazy(() => import("./pages/NotFound"));
+const DatToolsPage = lazy(() => import("./pages/DatTools"));
 const ExtensionPanel = lazy(() => import("./pages/admin/ExtensionPanel"));
 const DirectoryPanel = lazy(() => import("./pages/admin/DirectoryPanel"));
 
@@ -58,6 +60,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/guide" element={<GuidePage />} />
         <Route path="/update" element={<UpdatePage />} />
         <Route path="/faq" element={<FAQPage />} />
+        <Route path="/dat-load-board-tools" element={<DatToolsPage />} />
         <Route path="/demo" element={<DemoPage />} />
         <Route path="/admin2214" element={<AdminHome />} />
         <Route path="/admin2214/visits" element={<VisitsPanel />} />
@@ -72,7 +75,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/business" element={<Cabinet />} />
         <Route path="/business/:section" element={<Cabinet />} />
         <Route path="/business/:section/:id" element={<Cabinet />} />
-        <Route path="*" element={<App />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
       </Suspense>
     </BrowserRouter>

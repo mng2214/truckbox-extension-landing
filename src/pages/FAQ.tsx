@@ -8,7 +8,7 @@ import { Header, Footer, FAQ } from "../App";
 import { usePageMeta } from "../lib/meta";
 
 export default function FAQPage() {
-  usePageMeta({ title: "FAQ — TruckBox", description: "Common questions about TruckBox: getting started, subscription and cancellation, Gmail permissions, supported load boards and team setup.", path: "/faq" });
+  usePageMeta({ title: "FAQ — TruckBox", description: "Answers for dispatchers: how one-click broker emails and Auto Emailer work on the DAT One and Truckstop load boards, Gmail and Outlook permissions, credit checks, the back office, billing and troubleshooting.", path: "/faq" });
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
   }, []);
@@ -19,7 +19,7 @@ export default function FAQPage() {
       <div className="tb-bg-vignette" aria-hidden />
       <Header />
       <main style={{ paddingTop: 64 }}>
-        <FAQ />
+        <FAQ lead />
       </main>
       <Footer />
     </div>

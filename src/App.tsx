@@ -302,7 +302,7 @@ export default function App() {
   usePageMeta({
     title: "TruckBox — One-Click Broker Emails for DAT & Truckstop",
     description:
-      "Chrome extension for truck dispatchers: send broker emails from DAT One and Truckstop in one click, with templates, lane analytics, route maps and factoring credit checks (RTS, Apex, Triumph). $7/mo, 7-day free trial.",
+      "Chrome extension for truck dispatchers: send broker emails from the DAT One and Truckstop load boards in one click, or let Auto Emailer send them for you the moment a load is posted. Templates, broker credit checks (RTS, Apex, Triumph), route maps, profit and rate-per-mile calculator with tolls. $7/mo, 7-day free trial.",
     path: "/",
   });
   return (
@@ -1228,7 +1228,11 @@ function BeforeAfter() {
                       loading="lazy"
                       decoding="async"
                       src={p.src}
-                      alt={p.after ? "Truckstop load with TruckBox" : "Truckstop load without TruckBox"}
+                      alt={
+                        p.after
+                          ? "Truckstop load board with Truck Box: broker email in one click, route map and rate per mile"
+                          : "The same Truckstop load board without Truck Box"
+                      }
                       draggable={false}
                     />
                   </figure>
@@ -1238,7 +1242,7 @@ function BeforeAfter() {
             <>
             <img loading="lazy" decoding="async"
               src={after}
-              alt="With TruckBox"
+              alt="DAT One load board with Truck Box: one-click broker email, route map with deadhead and profit calculator inside the load"
               draggable={false}
               style={{
                 position: "absolute",
@@ -1253,7 +1257,7 @@ function BeforeAfter() {
 
             <img loading="lazy" decoding="async"
               src={before}
-              alt="Without TruckBox"
+              alt="The same DAT One load board without Truck Box"
               draggable={false}
               style={{
                 position: "absolute",
@@ -2419,7 +2423,10 @@ const FAQS = [
 
 /* ===== Section 07 — FAQ ================================================= */
 
-export function FAQ() {
+export function FAQ({ lead = false }: { lead?: boolean }) {
+  // On /faq this section is the page, so its heading is the h1; on the landing it stays an h2
+  // under the hero's h1. Same class either way — the tag changes, the look does not.
+  const Heading = lead ? "h1" : "h2";
   const [activeCat, setActiveCat] = useState<string | null>(null);
   const [openIdx, setOpenIdx] = useState<number | null>(null);
 
@@ -2433,7 +2440,7 @@ export function FAQ() {
       <div className="ed-container">
         <div className="mb-12">
           <span className="ed-label">[ 07 ] — FAQ</span>
-          <h2 className="ed-h2 mt-4">Common questions</h2>
+          <Heading className="ed-h2 mt-4">Common questions</Heading>
         </div>
 
         <div className="tb-faq-body">
@@ -2539,15 +2546,16 @@ export function FAQ() {
 
 /* ===== Privacy page ===================================================== */
 
-export function Privacy() {
+export function Privacy({ lead = false }: { lead?: boolean }) {
+  const Heading = lead ? "h1" : "h2";
   return (
     <section id="privacy" className="tb-section" style={{ paddingTop: 150 }}>
       <div className="tb-container">
         <Reveal>
           <div className="max-w-2xl">
-            <h2 className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
+            <Heading className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
               Privacy Policy &amp; Terms
-            </h2>
+            </Heading>
             <p className="mt-2 ed-label">Last updated — September 19, 2026</p>
           </div>
         </Reveal>
@@ -3674,6 +3682,12 @@ export function Footer() {
                     </a>
                 );
               })}
+              <Link
+                to="/dat-load-board-tools"
+                className="ed-label hover:text-[color:var(--ink)] transition-colors"
+              >
+                Load board tools
+              </Link>
             </div>
 
             <div className="flex justify-center md:justify-end gap-3">
