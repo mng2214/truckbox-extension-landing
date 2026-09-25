@@ -3066,3 +3066,11 @@ body.tb-cabinet-bg .tb-nav-support {
 }
 body.tb-cabinet-bg .tb-nav-support svg { color: var(--accent); }
 body.tb-cabinet-bg .tb-nav-support:hover { color: var(--accent); }
+
+/* ===== Admin — no support chat ========================================== */
+/* Our own dashboards: a chat bubble there is the product watching itself, and it sits on top
+   of the corner of every chart. */
+html.tb-no-crisp .crisp-client,
+html.tb-no-crisp #crisp-chatbox {
+  display: none !important;
+}

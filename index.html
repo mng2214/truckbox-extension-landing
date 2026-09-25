@@ -262,7 +262,21 @@
       gtag('config', 'G-GDTV32WN06');
     </script>
 
-    <script type="text/javascript">if(!/[?&]embed=hero\b/.test(location.search)){window.$crisp=[];window.CRISP_WEBSITE_ID="f1794394-bbcf-442e-9eaa-e73290bf8b64";(function(){d=document;s=d.createElement("script");s.src="https://client.crisp.chat/l.js";s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();}</script>
+    <script type="text/javascript">
+      /* Support chat, for visitors only. The admin dashboards are ours: a chat bubble there is
+         a widget watching our own analytics, and it covers the corner of every chart. */
+      if (!/[?&]embed=hero\b/.test(location.search) && location.pathname.indexOf("/admin2214") !== 0) {
+        window.$crisp = [];
+        window.CRISP_WEBSITE_ID = "f1794394-bbcf-442e-9eaa-e73290bf8b64";
+        (function () {
+          var d = document;
+          var s = d.createElement("script");
+          s.src = "https://client.crisp.chat/l.js";
+          s.async = 1;
+          d.getElementsByTagName("head")[0].appendChild(s);
+        })();
+      }
+    </script>
 
     <script src="https://accounts.google.com/gsi/client" async defer></script>
   </head>

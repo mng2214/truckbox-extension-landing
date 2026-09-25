@@ -41,6 +41,26 @@ function LandingThemeSync() {
   return null;
 }
 
+/**
+ * Keeps the support chat off the admin dashboards. index.html already skips loading Crisp when
+ * the page opens on /admin2214, but a click through from the site loads it before we get here,
+ * so the widget is hidden on the way in and put back on the way out.
+ */
+function CrispOffAdmin() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    const onAdmin = pathname.startsWith("/admin2214");
+    // The class is what actually removes it: Crisp's own hide command only applies once its
+    // widget has finished loading, and on a click through from the site it may already be there.
+    document.documentElement.classList.toggle("tb-no-crisp", onAdmin);
+    (window as unknown as { $crisp?: unknown[] }).$crisp?.push([
+      "do",
+      onAdmin ? "chat:hide" : "chat:show",
+    ]);
+  }, [pathname]);
+  return null;
+}
+
 captureSource();
 clearStaleMicrosoftResult();
 
@@ -53,6 +73,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <BrowserRouter>
       <SmoothScroll />
       <LandingThemeSync />
+      <CrispOffAdmin />
       <Suspense fallback={null}>
       <Routes>
         <Route path="/" element={<App />} />
