@@ -368,6 +368,22 @@ class DemoRuntime {
           data: { pricePerGallon: 6.285, asOf: new Date().toISOString().slice(0, 10), source: "eia" },
         };
 
+      case "toll_estimate_get": {
+        // The demo prices a lane the way the real one does — by distance — so the Calculate
+        // button shows a believable number instead of "unavailable".
+        const miles = Number(payload?.tripMiles) || 500;
+        return {
+          ok: true,
+          data: {
+            tollUsd: Math.round(miles * 0.28),
+            currency: "USD",
+            routeMiles: miles,
+            source: "demo",
+            cached: false,
+          },
+        };
+      }
+
       case "lane_price_history": {
         const load = this.matchLoad(payload);
         const points = laneHistory(load).map((d) => ({
