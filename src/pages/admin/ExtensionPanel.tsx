@@ -20,9 +20,13 @@ type Usage = {
   series: DayCounts[];
   totals: Record<string, number>;
   previousTotals: Record<string, number>;
+  metricSums: Record<string, number>;
   activeUsers: number;
   previousActiveUsers: number;
 };
+
+/** One Auto Emailer run as the detail feed reports it. */
+type RunRow = { at: string | null; email: string; metricValue: number | null; detail: string | null };
 
 const RANGES = [
   { days: 7, label: "7 days" },
@@ -35,20 +39,30 @@ const RANGES = [
 const MANUAL = "EMAIL_SENT";
 const AUTO = "EMAIL_SENT_AUTO";
 
+const SAVED_EMAIL = "EMAIL_SENT_SAVED";
+const SAVED = "LOAD_SAVED";
+const RUN_START = "AUTO_EMAIL_STARTED";
+const RUN_STOP = "AUTO_EMAIL_STOPPED";
+const SESSION = "BOARD_SESSION";
+const CALC = "PROFIT_CALC_USED";
+
 const CREDIT = ["RTS_CREDIT_CHECK", "TRIUMPH_CREDIT_CHECK", "APEX_CREDIT_CHECK"];
 
 type Metric = { id: string; label: string; types: string[]; note?: string };
 
 const TILES: Metric[] = [
-  { id: "emails", label: "Emails sent", types: [MANUAL, AUTO] },
+  { id: "emails", label: "Emails sent", types: [MANUAL, AUTO, SAVED_EMAIL] },
   { id: "auto", label: "By Auto Emailer", types: [AUTO] },
+  { id: "runs", label: "Auto Emailer runs", types: [RUN_START] },
+  { id: "saved", label: "Loads saved", types: [SAVED] },
   { id: "credit", label: "Credit checks", types: CREDIT },
-  { id: "maps", label: "Route maps", types: ["MAP_VIEWED"] },
-  { id: "calls", label: "Calls placed", types: ["PHONE_CALL"] },
-  { id: "lane", label: "Lane analytics", types: ["LANE_ANALYTICS"] },
+  { id: "calc", label: "Profit calculator", types: [CALC] },
 ];
 
 const SMALL: Metric[] = [
+  { id: "saved", label: "Loads saved", types: [SAVED] },
+  { id: "runs", label: "Auto Emailer runs", types: [RUN_START] },
+  { id: "calc", label: "Profit calculator", types: [CALC], note: "loads worked out" },
   { id: "credit", label: "Credit checks", types: CREDIT, note: "RTS · Triumph · Apex" },
   { id: "maps", label: "Route maps", types: ["MAP_VIEWED"] },
   { id: "calls", label: "Calls placed", types: ["PHONE_CALL"] },
@@ -60,6 +74,16 @@ const SMALL: Metric[] = [
 const TABLE_ROWS: Metric[] = [
   { id: "manual", label: "Emails — one click", types: [MANUAL] },
   { id: "auto", label: "Emails — Auto Emailer", types: [AUTO] },
+  { id: "savedEmail", label: "Emails — from saved loads", types: [SAVED_EMAIL] },
+  { id: "saved", label: "Loads saved", types: [SAVED] },
+  { id: "unsaved", label: "Loads unsaved", types: ["LOAD_UNSAVED"] },
+  { id: "savedOpen", label: "Saved list opened", types: ["SAVED_LOADS_OPENED"] },
+  { id: "runStart", label: "Auto Emailer — started", types: [RUN_START] },
+  { id: "runStop", label: "Auto Emailer — finished", types: [RUN_STOP] },
+  { id: "tabShared", label: "Auto Emailer — searches sharing a tab", types: ["AUTO_EMAIL_TAB_SHARED"] },
+  { id: "calc", label: "Profit calculator used", types: [CALC] },
+  { id: "session", label: "Board sessions", types: [SESSION] },
+  { id: "ready", label: "Extension started", types: ["EXTENSION_READY"] },
   { id: "rts", label: "Credit check — RTS", types: ["RTS_CREDIT_CHECK"] },
   { id: "triumph", label: "Credit check — Triumph", types: ["TRIUMPH_CREDIT_CHECK"] },
   { id: "apex", label: "Credit check — Apex", types: ["APEX_CREDIT_CHECK"] },
@@ -69,6 +93,7 @@ const TABLE_ROWS: Metric[] = [
   { id: "today", label: "Today's price", types: ["TODAY_PRICE_ANALYTICS"] },
   { id: "tolls", label: "Toll lookups", types: ["TOLL_ESTIMATE"] },
   { id: "fuel", label: "Diesel price", types: ["FUEL_PRICE"] },
+  { id: "cabinet", label: "Back office opened", types: ["CABINET_OPENED"] },
 ];
 
 const sum = (counts: Record<string, number> | undefined, types: string[]) =>
@@ -88,6 +113,41 @@ function change(now: number, before: number): { text: string; tone: string } {
   if (percent === 0) return { text: "0%", tone: "flat" };
   return { text: (percent > 0 ? "+" : "") + percent + "%", tone: percent > 0 ? "up" : "down" };
 }
+
+/** Seconds into something a person can read at a glance. */
+function spell(seconds: number): string {
+  if (!seconds) return "0";
+  if (seconds < 90) return Math.round(seconds) + "s";
+  const minutes = seconds / 60;
+  if (minutes < 90) return Math.round(minutes) + "m";
+  const hours = minutes / 60;
+  return (hours < 10 ? hours.toFixed(1) : String(Math.round(hours))) + "h";
+}
+
+/** What the runs that ended say about why they ended. */
+function stopReasons(runs: RunRow[]): { reason: string; count: number }[] {
+  const tally = new Map<string, number>();
+  for (const run of runs) {
+    let reason = "unknown";
+    try {
+      const parsed = run.detail ? JSON.parse(run.detail) : null;
+      if (parsed && typeof parsed.reason === "string") reason = parsed.reason;
+    } catch {
+      // A detail we cannot read is still a run that ended; it just does not say why.
+    }
+    tally.set(reason, (tally.get(reason) ?? 0) + 1);
+  }
+  return [...tally.entries()]
+    .map(([reason, count]) => ({ reason, count }))
+    .sort((a, b) => b.count - a.count);
+}
+
+const REASON_WORDS: Record<string, string> = {
+  user: "stopped by hand",
+  finished: "ran its time out",
+  halted: "stopped itself",
+  unknown: "did not say",
+};
 
 /* ===== Chart primitives ================================================= */
 
@@ -128,14 +188,18 @@ function EmailChart({ series, onHover }: { series: DayCounts[]; onHover: (hover:
   const plotW = W - PAD.left - PAD.right;
   const plotH = H - PAD.top - PAD.bottom;
 
-  const top = niceTop(Math.max(...series.map((d) => sum(d.counts, [MANUAL, AUTO])), 0));
+  const EMAIL_TYPES = [MANUAL, AUTO, SAVED_EMAIL];
+  const top = niceTop(Math.max(...series.map((d) => sum(d.counts, EMAIL_TYPES)), 0));
   const slot = plotW / Math.max(series.length, 1);
   const barW = Math.max(3, Math.min(34, slot * 0.62));
   const y = (value: number) => PAD.top + plotH - (value / top) * plotH;
   const ticks = [0, top / 2, top];
 
   const peak = series.reduce(
-    (best, day, index) => (sum(day.counts, [MANUAL, AUTO]) > best.value ? { index, value: sum(day.counts, [MANUAL, AUTO]) } : best),
+    (best, day, index) =>
+      sum(day.counts, EMAIL_TYPES) > best.value
+        ? { index, value: sum(day.counts, EMAIL_TYPES) }
+        : best,
     { index: -1, value: 0 }
   );
 
@@ -160,12 +224,19 @@ function EmailChart({ series, onHover }: { series: DayCounts[]; onHover: (hover:
       {series.map((day, index) => {
         const manual = day.counts[MANUAL] ?? 0;
         const auto = day.counts[AUTO] ?? 0;
-        const total = manual + auto;
+        const saved = day.counts[SAVED_EMAIL] ?? 0;
+        const total = manual + auto + saved;
         const x = PAD.left + slot * index + (slot - barW) / 2;
         const base = PAD.top + plotH;
-        const autoH = (auto / top) * plotH;
-        const manualH = (manual / top) * plotH;
-        const gap = auto > 0 && manual > 0 ? 2 : 0;
+        const height = (value: number) => (value / top) * plotH;
+        const manualH = height(manual);
+        const autoH = height(auto);
+        const savedH = height(saved);
+        // A hairline of surface between segments, only where two of them actually meet.
+        const gapAuto = auto > 0 && manual > 0 ? 2 : 0;
+        const gapSaved = saved > 0 && auto + manual > 0 ? 2 : 0;
+        const autoTop = base - manualH - gapAuto - autoH;
+        const savedTop = autoTop - gapSaved - savedH;
 
         return (
           <g
@@ -180,6 +251,7 @@ function EmailChart({ series, onHover }: { series: DayCounts[]; onHover: (hover:
                 rows: [
                   { label: "One click", value: manual, color: "var(--vx-s1)" },
                   { label: "Auto Emailer", value: auto, color: "var(--vx-s2)" },
+                  { label: "From saved", value: saved, color: "var(--vx-s3)" },
                 ],
               })
             }
@@ -189,19 +261,27 @@ function EmailChart({ series, onHover }: { series: DayCounts[]; onHover: (hover:
             {manual > 0 && (
               <path
                 className="vx-mark"
-                d={barPath(x, base - manualH, barW, manualH, auto > 0 ? 0 : 4)}
+                d={barPath(x, base - manualH, barW, manualH, auto + saved > 0 ? 0 : 4)}
                 fill="var(--vx-s1)"
               />
             )}
             {auto > 0 && (
               <path
                 className="vx-mark"
-                d={barPath(x, base - manualH - gap - autoH, barW, autoH, 4)}
+                d={barPath(x, autoTop, barW, autoH, saved > 0 ? 0 : 4)}
                 fill="var(--vx-s2)"
               />
             )}
+            {saved > 0 && (
+              <path className="vx-mark" d={barPath(x, savedTop, barW, savedH, 4)} fill="var(--vx-s3)" />
+            )}
             {(index === peak.index || index === series.length - 1) && total > 0 && (
-              <text className="vx-point-label" x={x + barW / 2} y={base - manualH - gap - autoH - 8} textAnchor="middle">
+              <text
+                className="vx-point-label"
+                x={x + barW / 2}
+                y={(saved > 0 ? savedTop : autoTop) - 8}
+                textAnchor="middle"
+              >
                 {num(total)}
               </text>
             )}
@@ -320,6 +400,7 @@ export default function ExtensionPanel() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const [table, setTable] = useState(false);
+  const [runs, setRuns] = useState<RunRow[]>([]);
   const [hover, setHover] = useState<Hover | null>(null);
   const [day, setDay] = useState(readAdminTheme);
 
@@ -336,10 +417,17 @@ export default function ExtensionPanel() {
       return;
     }
     setBusy(true);
-    api
-      .get<Usage>(`/api/v1/admin/extension-usage?days=${days}`)
-      .then((data) => {
+    Promise.all([
+      api.get<Usage>(`/api/v1/admin/extension-usage?days=${days}`),
+      // The reason a run ended lives in the event's own detail, so this reads the runs rather
+      // than a counter: a few hundred rows covers the window at this scale.
+      api.get<RunRow[]>(
+        `/api/v1/admin/directory/events?days=${days}&type=AUTO_EMAIL_STOPPED&limit=500`
+      ),
+    ])
+      .then(([data, runRows]) => {
         setUsage(data);
+        setRuns(runRows);
         setError(null);
       })
       .catch((e) => setError(e instanceof ApiError && e.status === 403 ? "forbidden" : "failed"))
@@ -354,6 +442,7 @@ export default function ExtensionPanel() {
     () => ({
       manual: sum(usage?.totals, [MANUAL]),
       auto: sum(usage?.totals, [AUTO]),
+      saved: sum(usage?.totals, [SAVED_EMAIL]),
     }),
     [usage]
   );
@@ -370,8 +459,50 @@ export default function ExtensionPanel() {
     );
   }
 
-  const total = emails.manual + emails.auto;
+  const total = emails.manual + emails.auto + emails.saved;
   const autoShare = total === 0 ? 0 : Math.round((emails.auto / total) * 100);
+
+  // Measured, not counted: these come from what the events carry, so they are only as good as
+  // the runs and sessions the extension actually reported.
+  const boardSeconds = usage?.metricSums?.[SESSION] ?? 0;
+  const runSeconds = usage?.metricSums?.[RUN_STOP] ?? 0;
+  const runsFinished = sum(usage?.totals, [RUN_STOP]);
+  const runsStarted = sum(usage?.totals, [RUN_START]);
+  const reasons = stopReasons(runs);
+  const measured = [
+    {
+      id: "board",
+      label: "Time on the board",
+      value: spell(boardSeconds),
+      note: `${num(sum(usage?.totals, [SESSION]))} sessions`,
+    },
+    {
+      id: "run",
+      label: "Average run",
+      value: runsFinished ? spell(runSeconds / runsFinished) : "—",
+      note: `${num(runsFinished)} runs ended`,
+    },
+    {
+      id: "perRun",
+      label: "Emails per run",
+      value: runsStarted ? String(Math.round((sum(usage?.totals, [AUTO]) / runsStarted) * 10) / 10) : "—",
+      note: `${num(runsStarted)} runs started`,
+    },
+    {
+      id: "tabs",
+      label: "Boards per dispatcher",
+      value: sum(usage?.totals, ["EXTENSION_READY"])
+        ? String(
+            Math.round(
+              ((usage?.metricSums?.["EXTENSION_READY"] ?? 0) /
+                sum(usage?.totals, ["EXTENSION_READY"])) *
+                10
+            ) / 10
+          )
+        : "—",
+      note: "tabs open at startup",
+    },
+  ];
 
   return (
     <div className={"vx" + (day ? " is-day" : "")}>
@@ -456,6 +587,9 @@ export default function ExtensionPanel() {
                 <span>
                   <i style={{ background: "var(--vx-s2)" }} /> Auto Emailer
                 </span>
+                <span>
+                  <i style={{ background: "var(--vx-s3)" }} /> From saved
+                </span>
               </div>
             </header>
             <div className="vx-plot">
@@ -463,6 +597,52 @@ export default function ExtensionPanel() {
               <Tooltip hover={hover} owner="emails" />
             </div>
           </section>
+
+          <div className="vx-kpis">
+            {measured.map((tile) => (
+              <div key={tile.id} className="vx-kpi">
+                <span className="vx-kpi-label">{tile.label}</span>
+                <b className="vx-kpi-value">{tile.value}</b>
+                <span className="vx-kpi-note">{tile.note}</span>
+              </div>
+            ))}
+          </div>
+
+          {reasons.length > 0 && (
+            <section className="vx-card">
+              <header className="vx-card-head">
+                <div>
+                  <b className="vx-card-title">How Auto Emailer runs end</b>
+                  <span className="vx-card-sub">
+                    {num(runs.length)} runs that finished in this window
+                  </span>
+                </div>
+              </header>
+              <table className="vx-table">
+                <thead>
+                  <tr>
+                    <th>Ending</th>
+                    <th>Runs</th>
+                    <th>Share</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {reasons.map((row) => (
+                    <tr key={row.reason}>
+                      <td>{REASON_WORDS[row.reason] ?? row.reason}</td>
+                      <td>{num(row.count)}</td>
+                      <td>
+                        <span className="vx-share">
+                          <i style={{ width: Math.round((row.count / runs.length) * 100) + "%" }} />
+                          <b>{Math.round((row.count / runs.length) * 100)}%</b>
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          )}
 
           <div className="vx-smalls">
             {SMALL.map((metric) => {

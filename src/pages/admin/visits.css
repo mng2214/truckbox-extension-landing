@@ -1063,3 +1063,7 @@
   padding: 26px 0;
   color: var(--vx-dim);
 }
+
+/* Third series: emails sent from the saved list. Slot 3 of the validated palette. */
+.vx { --vx-s3: #199e70; }
+.vx.is-day { --vx-s3: #1baf7a; }

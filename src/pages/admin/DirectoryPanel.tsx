@@ -18,6 +18,9 @@ type Activity = {
   calls: number;
   creditChecks: number;
   laneAnalytics: number;
+  savedLoads: number;
+  autoRuns: number;
+  boardSeconds: number;
   events: number;
 };
 
@@ -58,6 +61,14 @@ const RANGES = [
 ];
 
 const num = (value: number) => value.toLocaleString("en-US");
+
+/** Seconds into something a person can read at a glance. */
+const spell = (seconds: number) => {
+  if (!seconds) return "—";
+  if (seconds < 3600) return Math.round(seconds / 60) + "m";
+  const hours = seconds / 3600;
+  return (hours < 10 ? hours.toFixed(1) : String(Math.round(hours))) + "h";
+};
 
 const when = (iso: string | null) => {
   if (!iso) return "—";
@@ -232,9 +243,9 @@ export default function DirectoryPanel() {
             {[
               ["Emails", detail.org.window.emails],
               ["By Auto Emailer", detail.org.window.autoEmails],
+              ["Auto runs", detail.org.window.autoRuns],
+              ["Loads saved", detail.org.window.savedLoads],
               ["Credit checks", detail.org.window.creditChecks],
-              ["Route maps", detail.org.window.maps],
-              ["Calls", detail.org.window.calls],
               ["All events", detail.org.window.events],
             ].map(([label, value]) => (
               <div key={String(label)} className="vx-kpi">
@@ -253,9 +264,10 @@ export default function DirectoryPanel() {
                 <th>Plan</th>
                 <th>Emails {days}d</th>
                 <th>Auto</th>
+                <th>Runs</th>
+                <th>Saved</th>
+                <th>On board</th>
                 <th>Credit</th>
-                <th>Maps</th>
-                <th>Calls</th>
                 <th>Emails all time</th>
                 <th>Last active</th>
               </tr>
@@ -270,9 +282,10 @@ export default function DirectoryPanel() {
                     <Share value={member.window.emails} top={Math.max(...detail.members.map((m) => m.window.emails), 1)} />
                   </td>
                   <td>{num(member.window.autoEmails)}</td>
+                  <td>{num(member.window.autoRuns)}</td>
+                  <td>{num(member.window.savedLoads)}</td>
+                  <td className="vx-dimmed">{spell(member.window.boardSeconds)}</td>
                   <td>{num(member.window.creditChecks)}</td>
-                  <td>{num(member.window.maps)}</td>
-                  <td>{num(member.window.calls)}</td>
                   <td className="vx-dimmed">{num(member.allTime.emails)}</td>
                   <td className="vx-dimmed">{when(member.lastActiveAt)}</td>
                 </tr>
@@ -300,8 +313,10 @@ export default function DirectoryPanel() {
                   <th>Seats</th>
                   <th>Emails {days}d</th>
                   <th>Auto</th>
+                  <th>Runs</th>
+                  <th>Saved</th>
+                  <th>On board</th>
                   <th>Credit</th>
-                  <th>All events</th>
                   <th>Emails all time</th>
                 </tr>
               </thead>
@@ -321,14 +336,16 @@ export default function DirectoryPanel() {
                       <Share value={org.window.emails} top={topOrg} />
                     </td>
                     <td>{num(org.window.autoEmails)}</td>
+                    <td>{num(org.window.autoRuns)}</td>
+                    <td>{num(org.window.savedLoads)}</td>
+                    <td className="vx-dimmed">{spell(org.window.boardSeconds)}</td>
                     <td>{num(org.window.creditChecks)}</td>
-                    <td>{num(org.window.events)}</td>
                     <td className="vx-dimmed">{num(org.allTime.emails)}</td>
                   </tr>
                 ))}
                 {orgs.length === 0 && (
                   <tr>
-                    <td colSpan={9} className="vx-dimmed">
+                    <td colSpan={11} className="vx-dimmed">
                       No companies.
                     </td>
                   </tr>
@@ -352,10 +369,12 @@ export default function DirectoryPanel() {
                   <th>Plan</th>
                   <th>Emails {days}d</th>
                   <th>Auto</th>
+                  <th>Runs</th>
+                  <th>Saved</th>
+                  <th>On board</th>
                   <th>Credit</th>
                   <th>Maps</th>
                   <th>Calls</th>
-                  <th>Emails all time</th>
                   <th>Version</th>
                   <th>Last active</th>
                 </tr>
@@ -381,17 +400,19 @@ export default function DirectoryPanel() {
                       <Share value={row.window.emails} top={topUser} />
                     </td>
                     <td>{num(row.window.autoEmails)}</td>
+                    <td>{num(row.window.autoRuns)}</td>
+                    <td>{num(row.window.savedLoads)}</td>
+                    <td className="vx-dimmed">{spell(row.window.boardSeconds)}</td>
                     <td>{num(row.window.creditChecks)}</td>
                     <td>{num(row.window.maps)}</td>
                     <td>{num(row.window.calls)}</td>
-                    <td className="vx-dimmed">{num(row.allTime.emails)}</td>
                     <td className="vx-dimmed">{row.extensionVersion ?? "—"}</td>
                     <td className="vx-dimmed">{when(row.lastActiveAt)}</td>
                   </tr>
                 ))}
                 {users.length === 0 && (
                   <tr>
-                    <td colSpan={11} className="vx-dimmed">
+                    <td colSpan={13} className="vx-dimmed">
                       Nobody was active in this window.
                     </td>
                   </tr>
