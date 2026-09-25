@@ -24,20 +24,20 @@ const TOOLS: Tool[] = [
     title: "Emailing the broker — in one click, or without you",
     body: [
       "Every posting ends the same way: somebody has to write the broker. Done by hand it is a copy of the email address, a new tab, a template pasted in, the lane and the MC typed again — a minute a load, and the load is gone in five.",
-      "Truck Box puts the send button on the row itself. One click and the broker has your template with the lane, the equipment, your name, MC and phone already in it, sent from your own Gmail or Outlook, so the reply comes straight back to you.",
-      "Auto Emailer does the same thing without you at the keyboard. Set the minimum rate, the rate per mile, the deadhead and the weight you will take on a DAT search, press Start, and it writes the broker the second a matching load is posted — refreshing the board on its own so you are first in the inbox instead of thirtieth.",
+      "Truck Box puts the send button on the row itself. One click and the broker has your template with the lane, the equipment, your name, MC and phone already in it, sent from your own mailbox — Gmail, Google Workspace, Outlook.com or a Microsoft 365 work address — so the reply comes straight back to you and not to some shared relay.",
+      "Auto Emailer does the same thing without you at the keyboard. Set the minimum rate, the rate per mile, the deadhead and the weight you will take on a DAT search, press Start, and it writes the broker the second a matching load is posted — refreshing the board on its own so you are first in the inbox instead of thirtieth. You can connect several mailboxes and give each one its own template, name and MC, which is what dispatchers running more than one carrier need.",
     ],
-    img: "/demos/email.webp",
-    alt: "One-click broker email on a DAT One load with the template already filled in",
+    img: "/tools/email.webp",
+    alt: "One envelope lifting off a stack of identical ones — a broker email leaving in a single click",
   },
   {
     title: "Checking who you are hauling for",
     body: [
       "A good rate from a broker who pays in ninety days is not a good rate. Credit checks normally live in another tab, behind another login, which is exactly why they get skipped on a busy board.",
-      "Truck Box shows the broker's credit from your own factoring account — RTS Financial, Apex Capital or Triumph — right inside the load, next to the rate you are about to accept. You need an active account with one of them; we only surface what they already tell you.",
+      "Truck Box shows the broker's credit from your own factoring account — RTS Financial, Apex Capital or Triumph — right inside the load on both DAT One and Truckstop, next to the rate you are about to accept. You sign in once with the factoring company you already use; we only surface the score they already give you, and we never see your factoring password. If you factor with somebody else, the rest of the page still works — this is the one piece that needs an account with one of the three.",
     ],
-    img: "/demos/rts.webp",
-    alt: "Broker credit check from RTS shown inside a DAT load",
+    img: "/tools/credit.webp",
+    alt: "A glass shield with a checkmark in front of company records — checking a broker's credit before you haul",
   },
   {
     title: "Knowing what is left after fuel, tolls and driver pay",
@@ -45,46 +45,47 @@ const TOOLS: Tool[] = [
       "Rate per mile on the board is a headline, not a number you can act on. It ignores the deadhead you drive to get there, the diesel the trip burns, the tolls on that corridor and what the driver takes.",
       "The profit calculator sits in the rate column and does that arithmetic on the posted load: rate minus fuel, tolls and driver pay, rate per mile with the deadhead folded in, and the break-even below which the load is not worth the truck. Diesel fills in from the national average, and one click estimates the tolls for that lane for a standard five-axle tractor-trailer — type over either if you know better.",
     ],
-    img: "/demos/profit.webp",
-    alt: "Profit and rate-per-mile calculator with fuel, tolls and deadhead inside a DAT load",
+    img: "/tools/profit.webp",
+    alt: "A stack of discs cut by a break-even line, beside a fuel drop, a toll gate and a steering wheel — what is left after costs",
   },
   {
     title: "Seeing the route before you commit",
     body: [
       "Two loads with the same miles are not the same trip. Truck Box draws the route on a Google map inside the load, with the deadhead to the pickup, so a lane that looks fine in two city names stops looking fine when you see where it actually goes.",
     ],
-    img: "/compare/after.webp",
-    alt: "Route map with deadhead drawn inside an open DAT One load",
+    img: "/tools/route.webp",
+    alt: "A route drawn across a relief map between two pins, with the deadhead leading into the pickup",
   },
   {
     title: "Not losing a load you already liked",
     body: [
       "Postings disappear and come back at a different price. Star a load and it stays with you: you can email that broker days later, after the posting is gone, and lane price history shows what this corridor was paying while you were deciding.",
     ],
-    img: "/demos/saved.webp",
-    alt: "Saved loads in Truck Box with lane price history",
+    img: "/tools/saved.webp",
+    alt: "One starred card held while the others dissolve, over a line of past lane prices — a saved load and its price history",
   },
   {
     title: "Moving through the board without the mouse",
     body: [
       "W and S walk the loads, A and D switch searches, Space opens the detail, Q opens the route, E emails the broker. On a board you work eight hours a day, the mouse is the slow part.",
     ],
-    img: "/demos/keyboard.webp",
-    alt: "Keyboard shortcuts for moving through loads on the DAT board",
+    img: "/tools/keyboard.webp",
+    alt: "Floating keycaps with two of them pressed — moving through the load board from the keyboard",
   },
   {
-    title: "The same set on Truckstop",
+    title: "Both boards, one set of settings",
     body: [
-      "One-click email, credit checks, route maps, the calculator, saved loads and the shortcuts work on Truckstop too, with the same templates and settings. Auto Emailer is the one exception — it runs on DAT One only, because it depends on how that board feeds new postings into the page.",
+      "One-click email, broker credit checks with RTS, Apex and Triumph, route maps, the profit calculator, saved loads and the keyboard shortcuts all work on Truckstop exactly as they do on DAT One — same templates, same sender mailbox, same limits. Nothing to set up twice when you work both boards in the same day.",
+      "Auto Emailer is the one exception: it runs on DAT One only, because it depends on how that board feeds new postings into the page. Everything else is identical on both.",
     ],
   },
 ];
 
 export default function DatToolsPage() {
   usePageMeta({
-    title: "Load board tools for DAT One dispatchers — Truck Box",
+    title: "Load board tools for DAT One and Truckstop dispatchers — Truck Box",
     description:
-      "What a dispatcher needs on the DAT One load board: one-click broker emails, automatic emailing when a load is posted, broker credit checks, a profit and rate-per-mile calculator with tolls and deadhead, route maps and saved loads. Works on Truckstop too.",
+      "What a dispatcher needs on the DAT One and Truckstop load boards: one-click broker emails from Gmail, Google Workspace, Outlook.com or Microsoft 365, automatic emailing when a load is posted, broker credit checks with RTS Financial, Apex Capital and Triumph, a profit and rate-per-mile calculator with tolls and deadhead, route maps and saved loads.",
     path: "/dat-load-board-tools",
   });
 
@@ -103,15 +104,33 @@ export default function DatToolsPage() {
           <div className="ed-container">
             <div className="max-w-3xl">
               <span className="ed-label">[ Load board tools ]</span>
-              <h1 className="ed-h2 mt-4">The tools a dispatcher needs on the DAT load board</h1>
+              <h1 className="ed-h2 mt-4">
+                The tools a dispatcher needs on the DAT and Truckstop load boards
+              </h1>
               <p className="mt-6 text-lg" style={{ color: "var(--muted)" }}>
-                A day on DAT One is the same five moves over and over: read the load, check who
-                posted it, work out whether it pays, write the broker, do it again. Every one of
-                those moves normally costs a tab, a login or a copy-paste. Truck Box is a Chrome
-                extension that puts all of them inside the board itself — here is what each one
+                A day on DAT One or Truckstop is the same five moves over and over: read the load,
+                check who posted it, work out whether it pays, write the broker, do it again. Every
+                one of those moves normally costs a tab, a login or a copy-paste. Truck Box is a
+                Chrome extension that puts all of them inside both boards — here is what each one
                 looks like, and what it changes.
               </p>
             </div>
+
+            <img
+              src="/tools/cover.webp"
+              alt="Glass panels and spheres balanced on a plinth — the pieces of a dispatcher's work on the load board, held in one place"
+              width={1024}
+              height={572}
+              decoding="async"
+              className="mt-14"
+              style={{
+                width: "100%",
+                maxHeight: 420,
+                objectFit: "cover",
+                border: "1px solid var(--line)",
+                display: "block",
+              }}
+            />
 
             <div className="mt-16 grid gap-16">
               {TOOLS.map((tool) => (
@@ -129,6 +148,8 @@ export default function DatToolsPage() {
                     <img
                       src={tool.img}
                       alt={tool.alt}
+                      width={1024}
+                      height={559}
                       loading="lazy"
                       decoding="async"
                       style={{
