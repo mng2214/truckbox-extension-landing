@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { api } from "./api";
 
 export type AuthProviders = { microsoft: boolean; microsoftClientId: string | null };
@@ -56,9 +61,7 @@ export function clearStaleMicrosoftResult(): void {
   } catch {
     try {
       localStorage.removeItem(MICROSOFT_RESULT_KEY);
-    } catch {
-      /* storage blocked */
-    }
+    } catch {}
   }
 }
 
@@ -114,10 +117,6 @@ export function microsoftAuthCode(clientId: string): Promise<string> {
         goneSince = 0;
         return;
       }
-      // The window looks gone — but so it does the moment it lands back on our own callback,
-      // because that navigation changes the browsing context group and severs this reference
-      // (Cross-Origin-Opener-Policy). The answer is written a beat later, so wait before
-      // calling it a cancellation; a window that really was closed only costs this delay.
       if (!goneSince) goneSince = Date.now();
       if (Date.now() - goneSince > SETTLE_MS) finish(null);
     };

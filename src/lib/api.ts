@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { auth } from "./auth";
 
 export const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "https://platform.truckbox.app";

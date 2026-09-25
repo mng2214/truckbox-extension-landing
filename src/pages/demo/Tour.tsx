@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import "./tour.css";
 
@@ -74,9 +79,6 @@ function onScreen(el: Element) {
   const box = viewportRect(el);
   if (box.top < 0 || box.top + box.height > window.innerHeight) return false;
 
-  // Inside the extension popup the page is not the only thing that scrolls. An element can sit
-  // within the window and still be hidden, scrolled out of the frame that holds it — which is how
-  // a step ended up pointing at a button nobody could see.
   const frame = frameBox(el);
   if (!frame) return true;
   return box.top >= frame.top - 1 && box.top + box.height <= frame.top + frame.height + 1;
@@ -113,9 +115,6 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
   const step: TourStep | undefined = steps[index];
   const last = index >= steps.length;
 
-  // Layout effect, and declared before the loop below, so a step's prepare() always runs before the
-  // first tick evaluates its done(). As a plain effect it ran after, and a step that undoes state
-  // in prepare (signing out for step one) was judged complete before it had undone anything.
   useLayoutEffect(() => {
     indexRef.current = index;
     held.current = null;
@@ -298,9 +297,6 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
         bound.current = { el, fn };
       }
 
-      // Bring the target back whenever it drifts out of sight, not only in the first moment of the
-      // step: the popup finishes rendering, content grows, someone scrolls — and the ring used to
-      // stay on a button that had left the screen, with the tour waiting for a click on it.
       const settled = performance.now() - revealedAt.current > REVEAL_EVERY;
       if (!paused && el && (!scrolled.current || (settled && !onScreen(el)))) {
         scrolled.current = true;
@@ -350,8 +346,6 @@ export default function Tour({ steps, paused = false, stage, onStep, onClose }: 
 
   if (!step) return null;
 
-  // While a demo modal is up the tour stays mounted but invisible and inert: it keeps advancing
-  // behind the modal, so closing one does not flash the step you already finished.
   return (
     <div className={"tour" + (paused ? " is-hidden" : "")} ref={root}>
       {[0, 1, 2, 3].map((n) => (

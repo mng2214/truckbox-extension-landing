@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 export type LandingTheme = "light" | "dark";
 
 const KEY = "tb-landing-theme";
@@ -25,9 +30,7 @@ export function applyLandingTheme(path: string = location.pathname): void {
 export function setLandingTheme(theme: LandingTheme): void {
   try {
     localStorage.setItem(KEY, theme);
-  } catch {
-    /* storage blocked — applies for this page view only */
-  }
+  } catch {}
   applyLandingTheme();
   window.dispatchEvent(new Event(THEME_EVENT));
 }

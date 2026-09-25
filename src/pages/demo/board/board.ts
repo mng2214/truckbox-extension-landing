@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { DEMO_LOADS, formatAge, ratePerMile, type DemoLoad } from "../mock/data";
 
 export type BoardOptions = {
@@ -161,13 +166,16 @@ export function mountBoard(host: HTMLElement, options: BoardOptions = {}): Board
     (check.firstChild as HTMLInputElement).type = "checkbox";
 
     const age = el("span", "db-cell db-cell-age cell-age", formatAge(load.ageMinutes));
+    age.setAttribute("data-test", "load-age-cell");
 
     const rate = el("span", "db-cell db-cell-rate cell-rate");
     const rpm = ratePerMile(load);
     rate.innerHTML = load.rate
-      ? `<b>${money(load.rate)}</b><i>${rpm ? usdCents(rpm) + "*/mi" : ""}</i>`
+      ? `<b class="offer">${money(load.rate)}</b>` +
+        `<i class="calculated-rate">${rpm ? usdCents(rpm) + "*/mi" : ""}</i>`
       : `<b class="db-dash">–</b>`;
     rate.setAttribute("data-testid", "posted-rate");
+    rate.setAttribute("data-test", "load-rate-cell");
 
     const trip = el("span", "db-cell db-cell-trip", String(load.tripMiles));
     trip.setAttribute("data-test", "load-trip-cell");
@@ -178,6 +186,7 @@ export function mountBoard(host: HTMLElement, options: BoardOptions = {}): Board
 
     const dho = el("span", "db-cell db-cell-dho", `(${load.deadheadMiles})`);
     dho.setAttribute("data-testid", "origin-deadhead");
+    dho.setAttribute("data-test", "load-dho-cell");
 
     const arrow = el("span", "db-cell db-cell-arrow", "o··▸");
 
@@ -191,11 +200,16 @@ export function mountBoard(host: HTMLElement, options: BoardOptions = {}): Board
     pickup.innerHTML = `${load.pickupFrom} -<br>${load.pickupTo}`;
 
     const eq = el("span", "db-cell db-cell-eq cell-equipment", load.equipment);
+    eq.setAttribute("data-test", "load-eq-cell");
     const length = el("span", "db-cell db-cell-length cell-length", `${load.lengthFt} ft`);
+    length.setAttribute("data-test", "load-length-cell");
     const weight = el("span", "db-cell db-cell-weight cell-weight", `${load.weightLbs.toLocaleString("en-US")} lbs`);
+    weight.setAttribute("data-test", "load-weight-cell");
     const capacity = el("span", "db-cell db-cell-capacity", load.capacity);
+    capacity.setAttribute("data-test", "load-capacity-cell");
 
     const company = el("span", "db-cell db-cell-company cell-company", load.company);
+    company.setAttribute("data-test", "load-company-cell");
 
     const contact = el("span", "db-cell db-cell-contact");
     contact.setAttribute("data-test", "load-contact-cell");

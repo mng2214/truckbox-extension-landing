@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { trackDemo } from "../../../lib/demoTrack";
 import {
   DEMO_LOADS,
@@ -92,6 +97,13 @@ class DemoRuntime {
   private eventListeners: Listener[] = [];
   private savedLoads: Record<string, unknown>[] = [];
 
+  private autoSettings: Record<string, unknown> | null = null;
+  private autoNotices: Record<string, unknown>[] = [];
+  private autoLog: Record<string, unknown>[] = [];
+  private autoLedger = new Set<string>();
+  private autoRuns = new Map<string, Record<string, unknown>>();
+  private sentThisSession = 0;
+
   private cancelAtPeriodEnd = false;
 
   constructor() {
@@ -114,9 +126,7 @@ class DemoRuntime {
     try {
       localStorage.setItem(STORE_KEY, JSON.stringify(this.data));
       localStorage.setItem(SAVED_KEY, JSON.stringify(this.savedLoads));
-    } catch {
-      /* storage blocked */
-    }
+    } catch {}
   }
 
   reset() {
@@ -198,9 +208,7 @@ class DemoRuntime {
         fn(msg, { id: "demo" }, (r) => {
           answer = r;
         });
-      } catch {
-        /* a listener that throws must not break the sender */
-      }
+      } catch {}
     });
     return answer;
   }
@@ -221,6 +229,7 @@ class DemoRuntime {
           : { ok: false, signedIn: false, needLogin: true };
 
       case "token":
+      case "auth_status":
         return { ok: true, signedIn: this.signedIn };
 
       case "templates_get":
@@ -274,14 +283,13 @@ class DemoRuntime {
       }
 
       case "stats_get":
-
         return {
           ok: true,
           data: {
-            total: 486,
+            total: 486 + this.sentThisSession,
             mapViewedCount: 212,
             phoneCallCount: 97,
-            dat: { email: 361, map: 168, call: 74 },
+            dat: { email: 361 + this.sentThisSession, map: 168, call: 74 },
             truckstop: { email: 125, map: 44, call: 23 },
           },
         };
@@ -449,7 +457,90 @@ class DemoRuntime {
         this.emit({ kind: "blocked", what: "factoring sign-in" });
         return { ok: true, demo: true };
 
+      case "auto_state":
+        return {
+          ok: true,
+          data: { settings: this.autoSettings, notices: this.autoNotices, log: this.autoLog },
+        };
+
+      case "auto_settings":
+        if (msg.settings !== undefined) this.autoSettings = msg.settings as Record<string, unknown>;
+        return { ok: true, data: this.autoSettings };
+
+      case "auto_already_sent":
+        return { ok: true, sent: this.autoLedger.has(String(msg.sendKey || "")) };
+
+      case "auto_claim": {
+        const key = String(msg.sendKey || "");
+        if (key && this.autoLedger.has(key)) return { ok: false, reason: "duplicate" };
+        if (key) this.autoLedger.add(key);
+        return { ok: true, hourLeft: 59, dayLeft: 499 };
+      }
+
+      case "auto_manual_send":
+        if (msg.sendKey) this.autoLedger.add(String(msg.sendKey));
+        return { ok: true };
+
+      case "auto_budget":
+        return { ok: true, data: { hour: 60, day: 500 } };
+
+      case "auto_notice":
+        this.autoNotices = [
+          { kind: String(msg.kind || ""), text: String(msg.text || ""), at: Date.now() },
+          ...this.autoNotices,
+        ].slice(0, 50);
+        return { ok: true };
+
+      case "auto_notices_clear":
+        this.autoNotices = [];
+        return { ok: true };
+
+      case "auto_sent":
+        this.autoLog = [
+          { ...((msg.entry as Record<string, unknown>) || {}), at: Date.now() },
+          ...this.autoLog,
+        ].slice(0, 100);
+        return { ok: true };
+
+      case "auto_log_clear":
+        this.autoLog = [];
+        return { ok: true };
+
+      case "auto_runs":
+        return { ok: true, runs: [...this.autoRuns.values()], tabId: 1 };
+
+      case "auto_register": {
+        const key = String(msg.key || "");
+        this.autoRuns.set(key, {
+          key,
+          tabId: 1,
+          until: Number(msg.until) || Date.now(),
+          paused: false,
+          sent: 0,
+          label: String(msg.label || key),
+        });
+        return { ok: true };
+      }
+
+      case "auto_update": {
+        const run = this.autoRuns.get(String(msg.key || ""));
+        if (run) Object.assign(run, (msg.patch as Record<string, unknown>) || {});
+        return { ok: true };
+      }
+
+      case "auto_unregister":
+        this.autoRuns.delete(String(msg.key || ""));
+        return { ok: true };
+
+      case "auto_remote":
+        this.autoRuns.delete(String(msg.key || ""));
+        return { ok: true };
+
+      case "saved_match_notify":
+        return { ok: true };
+
       case "datx_email_click": {
+        this.sentThisSession += 1;
         const context = (msg.context ?? payload.context ?? {}) as Record<string, unknown>;
         const list = ((this.data.templatesCache as { templates?: Template[] })?.templates ??
           DEMO_TEMPLATES) as Template[];

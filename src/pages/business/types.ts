@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 export type Verdict = "ALLOW" | "BOUNCE";
 export type BounceReason = "INSTALL" | "PAYMENT" | "USE_EXTENSION" | "NO_ACCOUNT";
 export type OrgRole = "OWNER" | "MANAGER" | "MEMBER";

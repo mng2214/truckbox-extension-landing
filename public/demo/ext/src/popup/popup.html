@@ -5,13 +5,12 @@
     <title>Truck Box</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-    
     <link rel="stylesheet" href="../styles/popup.css">
 </head>
 <body>
 <div class="wrap">
     <h3>
-        <span class="pill">v2.0.0</span>
+        <span class="pill">v2.0.1</span>
         <span class="app-meta">
             <span class="works-on">Works on</span>
             <img class="plat-logo" src="../../icons/dat.png" alt="DAT" title="Works on DAT" />
@@ -29,7 +28,6 @@
         <button class="tab" data-tab="stats">Stats</button>
     </div>
 
-    
     <div class="tab-content" id="help-tab">
         <div class="card">
             <div class="setup-title">Help & Support</div>
@@ -38,7 +36,6 @@
                 Most issues are fixed in under a minute — please try these 3 steps first.
             </div>
 
-            
             <ol class="help-steps">
                 <li>
                     <div class="help-step-title">Update the extension</div>
@@ -63,7 +60,6 @@
                 </li>
             </ol>
 
-            
             <div class="actions help-actions">
                 <a href="https://truckbox.app/guide" target="_blank" rel="noopener" class="btn-faq">
                     Guide
@@ -73,7 +69,6 @@
                 </a>
             </div>
 
-            
             <div class="help-contact">
                 <div class="help-contact-title">Still need help?</div>
 
@@ -98,7 +93,6 @@
         </div>
     </div>
 
-    
     <div class="tab-content active" id="setup-tab">
         <div class="card setup-simple">
             <div class="setup-title">
@@ -145,7 +139,6 @@
                     <button id="logoutBtn" class="btn-secondary">Logout</button>
                     <span id="status" class="status muted"></span>
                 </div>
-                
                 <div class="signin-links">
                     <a href="#" id="loginManageMailboxes" class="setup-link" data-cabinet-link hidden>Manage mailboxes ↗</a>
                 </div>
@@ -178,7 +171,6 @@
         </div>
     </div>
 
-    
     <div class="tab-content" id="subscription-tab">
         <div class="card" id="subscriptionCard">
             <div class="setup-title">Subscription</div>
@@ -231,11 +223,9 @@
         </div>
     </div>
 
-    
     <div class="tab-content" id="template-tab">
         <div class="card">
 
-            
             <div style="
             margin-bottom:14px;
             padding:12px 14px;
@@ -259,7 +249,6 @@
                 contact details.
             </div>
 
-            
             <p class="tpl-hint">Pick your default template:</p>
             <div class="tpl-switcher">
                 <div class="tpl-chips" id="tplChips"></div>
@@ -271,7 +260,6 @@
                 <input id="tplName" maxlength="40" placeholder="e.g. Larkin · Reefer"/>
             </div>
 
-            
             <div class="row sender-row" id="senderBox" hidden>
                 <label id="senderLabel">Send from</label>
                 <div class="sender-picker" id="senderPicker">
@@ -296,7 +284,6 @@
                 </div>
             </div>
 
-            
             <div class="row">
                 <label>Your Name</label>
                 <input id="myName" maxlength="80" placeholder="John Doe"/>
@@ -312,7 +299,6 @@
                 <input id="myPhone" maxlength="20" inputmode="tel" placeholder="(555) 555-5555"/>
             </div>
 
-            
             <div class="row">
                 <label>
                     Subject
@@ -323,7 +309,6 @@
                        placeholder="e.g. Truck available from {{origin}} to {{destination}}"/>
             </div>
 
-            
             <div class="row">
                 <label>
                     Body
@@ -349,7 +334,6 @@
                           maxlength="5000"
                           placeholder="Hi, I have a truck available from {{origin}} to {{destination}} on {{pickupDate}}."></textarea>
 
-                
                 <div class="ph-bank">
                     <div class="title">Placeholders — click to insert</div>
 
@@ -368,7 +352,6 @@
                 </div>
             </div>
 
-            
             <div class="actions">
                 <button id="saveBtn" type="button" class="btn-primary">Save Template</button>
                 <span id="saveMsg" aria-live="polite"></span>
@@ -377,9 +360,7 @@
         </div>
     </div>
 
-    
     <div class="tab-content" id="filter-tab">
-        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Route Map
@@ -403,7 +384,6 @@
             </div>
         </div>
 
-        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Duplicate Load Filter
@@ -427,7 +407,6 @@
             </div>
         </div>
 
-        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Profit Calculator
@@ -452,7 +431,6 @@
             </div>
         </div>
 
-        
         <div class="card" style="margin-bottom:20px;">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 DAT's Email Button
@@ -477,7 +455,30 @@
             </div>
         </div>
 
-        
+        <div class="card" style="margin-bottom:20px;">
+            <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
+                Desktop Notifications
+            </h4>
+            <div class="row" style="display:flex;align-items:center;gap:10px">
+                <label for="notificationsEnabled" style="margin:0;min-width:120px">
+                    Show notifications
+                </label>
+
+                <label class="switch">
+                    <input id="notificationsEnabled" type="checkbox">
+                    <span class="slider round"></span>
+                </label>
+
+                <span id="notificationsMsg" style="margin-left:8px;font-size:12px;color:#0a7;"></span>
+            </div>
+
+            <div class="muted" style="margin-top:10px;font-size:13px;line-height:1.5;">
+                A small desktop pop-up when an email goes out, when a saved load matches,
+                or when a mailbox needs reconnecting. Chrome asks for permission the first
+                time you turn this on, and turning it off takes the permission away again.
+            </div>
+        </div>
+
         <div class="card">
             <h4 style="margin:0 0 12px;color:#1e293b;display:flex;align-items:center;gap:8px;">
                 Hide Short Trips
@@ -521,11 +522,9 @@
         </div>
     </div>
 
-    
     <div class="tab-content" id="stats-tab">
         <div class="card stats-card" id="statsCard">
 
-            
             <div class="stats-content" id="statsContent">
                 <div class="stats-head">
                     <div class="stats-title">Statistics</div>
@@ -536,24 +535,28 @@
                     <div class="sbk-row sbk-row--head">
                         <span class="sbk-plat"></span>
                         <span>Emails</span>
+                        <span>Auto</span>
                         <span>Maps</span>
                         <span>Calls</span>
                     </div>
                     <div class="sbk-row">
                         <span class="sbk-plat">DAT</span>
                         <span class="sbk-v" id="stat-dat-email">0</span>
+                        <span class="sbk-v" id="stat-dat-auto">0</span>
                         <span class="sbk-v" id="stat-dat-map">0</span>
                         <span class="sbk-v" id="stat-dat-call">0</span>
                     </div>
                     <div class="sbk-row">
                         <span class="sbk-plat">Truckstop</span>
                         <span class="sbk-v" id="stat-ts-email">0</span>
+                        <span class="sbk-v sbk-v--na" id="stat-ts-auto">&ndash;</span>
                         <span class="sbk-v" id="stat-ts-map">0</span>
                         <span class="sbk-v" id="stat-ts-call">0</span>
                     </div>
                     <div class="sbk-row sbk-row--total">
                         <span class="sbk-plat">Total</span>
                         <span class="sbk-v" id="stat-total">0</span>
+                        <span class="sbk-v" id="stat-auto">0</span>
                         <span class="sbk-v" id="stat-map-viewed">0</span>
                         <span class="sbk-v" id="stat-call">0</span>
                     </div>
@@ -563,7 +566,6 @@
                     <b id="stat-time-saved">0 min</b> saved
                 </div>
 
-                
                 <div id="reviewBlock" style="display:none; margin-top:22px; text-align:center;">
                     <div class="muted review-title">
                         Enjoying TruckBox?
@@ -577,7 +579,6 @@
                     </a>
                 </div>
 
-                
                 <div id="teamStatsBlock" style="display:none; margin-top:24px;">
                     <div class="stats-head">
                         <div class="stats-title">Team</div>
@@ -587,7 +588,6 @@
                 </div>
             </div>
 
-            
             <div id="statsLoginRequiredBox" class="login-required-box" style="display:none;">
                 <div class="muted login-required-text">
                     Login first to view your stats.
@@ -600,10 +600,8 @@
         </div>
     </div>
 
-    
     <div class="tab-content" id="factoring-tab">
 
-        
         <div id="factoringLoginRequiredBox" class="login-required-box" style="display:none;">
             <div class="muted login-required-text">
                 Log in first to connect a factoring account.
@@ -611,14 +609,12 @@
             <button id="factoringLoginBtn" class="btn-primary force-enabled" type="button">Login</button>
         </div>
 
-        
         <div id="factoringIntro" class="muted" style="font-size:12px;line-height:1.55;margin-bottom:14px;">
             Connect your factoring account to check a broker's credit rating right in DAT.
             Log in once at your factoring and we'll reuse your session — no password stored.
             You can use the factoring check only if you have an account with a factoring company.
         </div>
 
-        
         <div id="factoringGrid" class="fct-grid">
             <button type="button" class="fct-tile" id="fctTileRts" data-provider="rts">
                 <span class="fct-tile-selected" id="fctRtsSelected" hidden>Selected</span>
@@ -638,7 +634,6 @@
             <div class="fct-tile fct-tile-soon"><span class="fct-soon">Soon</span></div>
         </div>
 
-        
         <div id="factoringDetail" class="fct-detail" style="display:none;">
             <button type="button" class="fct-back" id="fctBackBtn" aria-label="Back to providers">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">

@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { ApiError, api } from "../../lib/api";
@@ -81,9 +86,7 @@ const blockTarget = (r: Visitor) =>
 const copy = (text: string) => {
   try {
     void navigator.clipboard.writeText(text);
-  } catch {
-    /* clipboard blocked */
-  }
+  } catch {}
 };
 
 const dossier = (r: Visitor, events: VisitorEvent[] | undefined) =>
@@ -144,9 +147,7 @@ export default function VisitsPanel() {
     setDay((was) => {
       try {
         localStorage.setItem(THEME_KEY, was ? "night" : "day");
-      } catch {
-        /* storage blocked */
-      }
+      } catch {}
       return !was;
     });
   };

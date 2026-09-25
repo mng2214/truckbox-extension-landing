@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 function isEditable(target: EventTarget | null): boolean {
   const el = target as HTMLElement | null;
   if (!el || !el.closest) return false;

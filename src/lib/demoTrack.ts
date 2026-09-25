@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { API_BASE } from "./api";
 const DEVICE_KEY = "tb-device-id";
 const SESSION_KEY = "tb-demo-session";
@@ -63,11 +68,6 @@ function read(key: string): Source | null {
   }
 }
 
-/**
- * Remembers where a visitor came from the first time they arrive anywhere on the site, so the demo
- * can still name the source after they have clicked around and the parameter is long gone from the
- * address bar. First touch wins: a later visit does not overwrite it.
- */
 export function captureSource(): void {
   try {
     const q = new URLSearchParams(location.search);
@@ -82,9 +82,7 @@ export function captureSource(): void {
       at: new Date().toISOString(),
     };
     localStorage.setItem(SOURCE_KEY, JSON.stringify(value));
-  } catch {
-    /* storage blocked */
-  }
+  } catch {}
 }
 
 function params() {
@@ -136,7 +134,5 @@ export function trackDemo(event: DemoEventName, detail?: string): void {
       body,
       keepalive: true,
     }).catch(() => {});
-  } catch {
-    /* analytics must never break the demo */
-  }
+  } catch {}
 }

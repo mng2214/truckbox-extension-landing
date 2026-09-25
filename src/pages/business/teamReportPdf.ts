@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import type { Dispatcher, TeamStats, Win } from "./StatsPanel";
@@ -22,10 +27,11 @@ function sum(wins: Win[]): Win {
   return wins.reduce(
     (a, w) => ({
       emailsSent: a.emailsSent + w.emailsSent,
+      emailsAuto: a.emailsAuto + w.emailsAuto,
       mapsOpened: a.mapsOpened + w.mapsOpened,
       callsPlaced: a.callsPlaced + w.callsPlaced,
     }),
-    { emailsSent: 0, mapsOpened: 0, callsPlaced: 0 }
+    { emailsSent: 0, emailsAuto: 0, mapsOpened: 0, callsPlaced: 0 }
   );
 }
 

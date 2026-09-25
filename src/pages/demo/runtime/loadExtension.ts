@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { installChromeShim } from "./chromeShim";
 
 const EXT = "/demo/ext";
@@ -19,12 +24,18 @@ const MODULES = [
   "src/content/modules/keyboard-shortcuts.js",
   "src/content/modules/maps-integration.js",
   "src/content/modules/load-capture.js",
+  "src/content/modules/auto-email/rules.js",
+  "src/content/modules/auto-email/store.js",
+  "src/content/modules/auto-email/watcher.js",
+  "src/content/modules/auto-email/panel.js",
 ];
+
+const CACHE_BUST = import.meta.env.DEV ? `?v=${Date.now()}` : "";
 
 function loadScript(path: string): Promise<void> {
   return new Promise((resolve, reject) => {
     const script = document.createElement("script");
-    script.src = `${EXT}/${path}`;
+    script.src = `${EXT}/${path}${CACHE_BUST}`;
     script.async = false;
     script.dataset.demoExt = "1";
     script.onload = () => resolve();
@@ -37,7 +48,7 @@ function loadStyles(path: string) {
   if (document.querySelector(`link[data-demo-ext="${path}"]`)) return;
   const link = document.createElement("link");
   link.rel = "stylesheet";
-  link.href = `${EXT}/${path}`;
+  link.href = `${EXT}/${path}${CACHE_BUST}`;
   link.dataset.demoExt = path;
   document.head.appendChild(link);
 }

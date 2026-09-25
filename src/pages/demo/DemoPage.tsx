@@ -1,6 +1,11 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import BrowserChrome from "./BrowserChrome";
-import { enableDemoTracking, trackDemo } from "../../lib/demoTrack";
+import { enableDemoTracking, trackDemo } from "@/lib/demoTrack.ts";
 import SentMail from "./SentMail";
 import Tour, { type TourStep } from "./Tour";
 import { mountBoard, type BoardHandle } from "./board/board";
@@ -26,11 +31,6 @@ const tourTaken = () => {
 const ROBOT_AGENTS =
   /headless|phantom|puppeteer|playwright|selenium|bot\b|crawler|spider|curl|wget|python|scrapy|postman|http-client/i;
 
-/**
- * A robot, as far as a browser can tell: the automation flag every driver sets, an agent that says
- * so outright, or a browser with no languages and no screen. It stops the crawlers and the casual
- * script; someone determined can still hide, and that is fine — the demo holds nothing secret.
- */
 const isAutomated = () => {
   try {
     if (navigator.webdriver) return true;
@@ -201,10 +201,28 @@ export default function DemoPage() {
   }, [embedded, handheld, popupOpen, popupDoc, popupNonce]);
 
   useEffect(() => {
+    if (!popupOpen) return;
+    const onDown = (event: MouseEvent) => {
+      const target = event.target as Element | null;
+      if (!target) return;
+      if (target.closest(".demo-popup")) return;
+      if (target.closest(".tbw-ext")) return;
+      if (target.closest(".demo-modal-backdrop, .demo-modal, .tour-card, .tour-mask, .tour-ring")) return;
+      setPopupOpen(false);
+    };
+    document.addEventListener("mousedown", onDown, true);
+    return () => document.removeEventListener("mousedown", onDown, true);
+  }, [popupOpen]);
+
+  useEffect(() => {
     const viewport = document.querySelector<HTMLElement>(".demo-viewport");
     if (!viewport) return;
     const adopt = () => {
-      document.body.querySelectorAll<HTMLElement>(":scope > .datx-saved-fab, :scope > .datx-saved-panel")
+      document.body
+        .querySelectorAll<HTMLElement>(
+          ":scope > .datx-saved-fab, :scope > .datx-saved-panel," +
+            ":scope > .datx-auto-fab, :scope > .datx-auto-panel"
+        )
         .forEach((node) => viewport.appendChild(node));
     };
     adopt();
@@ -411,6 +429,48 @@ export default function DemoPage() {
         target: () => document.querySelector(".datx-saved-panel"),
         manual: true,
       },
+      {
+        id: "lane-chart",
+        title: "How the lane moved",
+        text: "Click the price line on a saved load. Two numbers tell you where the lane stands; the chart tells you how it got there \u2014 a lane that drifted down all week and one that dropped yesterday read the same as a single figure.",
+        hint: "Open Saved loads and click a price line.",
+        target: () => document.querySelector(".datx-saved-price-open"),
+        done: () => !!document.querySelector(".datx-saved-chart svg"),
+        success: "There it is",
+      },
+      {
+        id: "auto-open",
+        title: "Let it send for you",
+        text: "Auto Emailer watches the search you are on and writes to the broker the moment a load appears that passes your thresholds. Open it.",
+        target: () => document.querySelector("#datx-auto-fab"),
+        done: () => !!document.querySelector("#datx-auto-panel:not([style*='display: none'])"),
+        success: "Here it is",
+      },
+      {
+        id: "auto-filters",
+        title: "Set the floor",
+        text: "Pick a template, then a minimum \u2014 either a total rate or dollars per mile, one at a time. Deadhead and weight are ceilings. An empty field is not a condition.",
+        hint: "Open Auto Emailer to see the filters.",
+        target: () => document.querySelector("#datx-auto-panel .datx-auto-seg"),
+        manual: true,
+      },
+      {
+        id: "auto-run",
+        title: "It stops by itself",
+        text: "Every run has an end \u2014 five minutes to four hours, an hour by default. That deadline is what makes an unattended bot safe: it cannot outlive it, so a page reload is not what has to stop it.",
+        hint: "Open Auto Emailer to see the dial.",
+        target: () => document.querySelector("#datx-auto-panel .datx-auto-dial"),
+        manual: true,
+      },
+      {
+        id: "auto-start",
+        title: "Start it",
+        text: "Messages go out only for postings that arrive after you press Start \u2014 never the loads already on the board. Hard to start, instant to stop: the Stop button sits on the button itself, so you never have to open anything to end it.",
+        hint: "Open Auto Emailer and press Start.",
+        target: () => document.querySelector("#datx-auto-panel .datx-auto-btn-go"),
+        done: () => !!document.querySelector(".datx-auto-fab.is-sending"),
+        success: "It is running",
+      },
     ],
     [],
   );
@@ -429,9 +489,7 @@ export default function DemoPage() {
     setTourOn(false);
     try {
       localStorage.setItem(TOUR_KEY, "done");
-    } catch {
-      /* storage blocked */
-    }
+    } catch {}
   };
 
   if (automated) {

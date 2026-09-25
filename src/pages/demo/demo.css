@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 .demo-page {
   min-height: 100vh;
   background: #eef1f8;
@@ -97,6 +102,19 @@
 .demo-viewport .datx-saved-panel {
   z-index: 950 !important;
 }
+
+.demo-viewport .datx-auto-fab {
+  right: max(28px, calc(50% - 780px + 28px)) !important;
+  bottom: 74px !important;
+  z-index: 900 !important;
+}
+
+.demo-viewport .datx-auto-panel {
+  right: max(20px, calc(50% - 780px + 20px)) !important;
+  bottom: 124px !important;
+  z-index: 950 !important;
+}
+
 
 .demo-popup iframe {
   width: 100%;
@@ -241,6 +259,8 @@
 
 .tb-demo-embed .datx-saved-fab,
 .tb-demo-embed .datx-saved-panel,
+.tb-demo-embed .datx-auto-fab,
+.tb-demo-embed .datx-auto-panel,
 .tb-demo-embed #datx-nav-toggle-wrap {
   display: none !important;
 }

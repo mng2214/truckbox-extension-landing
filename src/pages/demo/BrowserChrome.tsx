@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import "./browserChrome.css";
 
 type Props = {
@@ -104,7 +109,7 @@ export default function BrowserChrome({
         {onExtensionClick ? (
           <button
             type="button"
-            className={"tbw-btn" + (extensionOpen ? " is-on" : "")}
+            className={"tbw-btn tbw-ext" + (extensionOpen ? " is-on" : "")}
             onClick={onExtensionClick}
             title="TruckBox"
           >

@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useCallback, useEffect, useRef, useState, Fragment, Suspense, lazy, type ReactNode } from "react";
 import { usePageMeta } from "./lib/meta";
 import { ProviderLogo } from "./components/ProviderLogo";
@@ -35,6 +40,8 @@ import {
 
 type NavItem = { href: string; label: string; route?: boolean; desktopOnly?: boolean };
 
+/* ===== Site-wide constants ============================================== */
+
 const NAV: NavItem[] = [
   { href: "/demo", label: "Demo", route: true, desktopOnly: true },
   { href: "/#features", label: "Features" },
@@ -54,6 +61,8 @@ const YOUTUBE_ID = "-_G0P-M1lCA";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 export { NAV, INSTALL_URL, CALENDLY_URL };
+
+/* ===== Motion and scroll primitives ===================================== */
 
 export function SmoothScroll() {
   const location = useLocation();
@@ -287,6 +296,8 @@ function StickyCTA() {
   );
 }
 
+/* ===== Page shell — order of sections on / ============================== */
+
 export default function App() {
   usePageMeta({
     title: "TruckBox — One-Click Broker Emails for DAT & Truckstop",
@@ -319,6 +330,8 @@ export default function App() {
     </div>
   );
 }
+
+/* ===== Header, theme toggle, announcement bar =========================== */
 
 function ThemeToggle() {
   const [theme, setTheme] = useState<LandingTheme>(() => getLandingTheme());
@@ -526,16 +539,18 @@ const PLAN_FEATURES = [
     "Cancel anytime (1 click)",
     "Works on DAT + Truckstop",
     "One-click email sending",
+    "Auto Emailer \u2014 sends for you on a watched search",
     "Multiple email templates (up to 3)",
     "Gmail & Outlook — Google or Microsoft sign-in",
     "Multiple sender mailboxes (up to 3 extra)",
     "Posted load price analytics",
-    "Saved loads with notes",
+    "Saved loads with notes and lane price history",
     "Dedicated loads finder",
     "Factoring credit check (RTS, Apex, Triumph)",
     "Built-in Google Maps route",
     "Rate-per-mile calculator",
     "Profit calculator (fuel, tolls, driver pay)",
+    "Toll estimate for the lane, one click",
     "Copy & share load info",
     "Click-to-call broker numbers",
     "FMCSA broker report",
@@ -546,6 +561,8 @@ const PLAN_FEATURES = [
   ];
 
 const PLAN_FEATURE_COUNT = PLAN_FEATURES.length;
+
+const PLAN_TERMS = ["7-day free trial (No Credit Card)", "Cancel anytime (1 click)"];
 
 const NEWS_KEY = "tb-news-2026-09";
 const NEWS_SNOOZE_DAYS = 14;
@@ -562,6 +579,12 @@ const NEWS_ITEMS = [
     text: "Try TruckBox on a simulated load board — no install, no account",
     cta: "Open the demo →",
     to: "/demo",
+  },
+  {
+    tag: "New",
+    text: "Auto Emailer — set your filters on a DAT search and it emails the broker for you",
+    cta: "See how it works →",
+    to: "/#features",
   },
 ];
 
@@ -594,9 +617,7 @@ function AnnouncementBar() {
     setOpen(false);
     try {
       localStorage.setItem(NEWS_KEY, String(Date.now()));
-    } catch {
-      /* ignore */
-    }
+    } catch {}
   };
   const current = NEWS_ITEMS[item];
   return (
@@ -612,6 +633,8 @@ function AnnouncementBar() {
     </div>
   );
 }
+
+/* ===== Section 01 — Numbers and integrations ============================ */
 
 function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
   to: number; decimals?: number; prefix?: string; suffix?: string;
@@ -762,6 +785,8 @@ function Integrations() {
 }
 
 const HeroDemo = lazy(() => import("./pages/demo/HeroDemo"));
+
+/* ===== Hero and social proof ============================================ */
 
 function HeroVisual() {
   return (
@@ -922,7 +947,10 @@ type FeatureItem = {
   body: string;
   visual?: FeatureVisualKind;
   logos?: { src: string; alt: string }[];
+  plan?: string[];
 };
+
+/* ===== Section 03 — Features: cards, panels, lightbox =================== */
 
 function FeatureLogos({ item }: { item: FeatureItem }) {
   if (!item.logos) return null;
@@ -1022,7 +1050,7 @@ const BA_VIEWS = {
     label: "DAT",
     before: "/compare/before.webp",
     after: "/compare/after.webp",
-    ratio: "1927 / 1103",
+    ratio: "1742 / 1110",
   },
   darkmode: {
     label: "Day / Night",
@@ -1368,11 +1396,13 @@ function Features() {
   const items: FeatureItem[] = [
     {
       slug: "email",
-      title: "One-click email",
-      body: "Email the broker straight from a DAT or Truckstop load with your template filled in — no copy-paste, no extra tab.",
+      plan: ["One-click email sending", "Auto Emailer \u2014 sends for you on a watched search"],
+      title: "One-click email — or none at all",
+      body: "Email the broker straight from a DAT or Truckstop load with your template filled in — no copy-paste, no extra tab. Or set your rate, deadhead and weight limits on a search and let Auto Emailer send it for you, the minute a matching load is posted.",
     },
     {
       slug: "rts",
+      plan: ["Factoring credit check (RTS, Apex, Triumph)"],
       title: "Factoring credit check",
       body: "A broker's credit rating and days-to-pay right on the load, from 3 factoring companies — RTS, Triumph and Apex Capital — with your own account.",
       logos: [
@@ -1383,38 +1413,41 @@ function Features() {
     },
     {
       slug: "platforms",
+      plan: ["Works on DAT + Truckstop", "Gmail & Outlook \u2014 Google or Microsoft sign-in"],
       title: "Multiple platforms",
       body: "Works right inside DAT and Truckstop and sends from your own Gmail or Outlook — personal accounts or Microsoft 365 work mailboxes.",
       visual: "platforms",
     },
     {
       slug: "analytics",
+      plan: ["Posted load price analytics"],
       title: "Lane price analytics",
       body: "See how many times a load was posted today and how its price changed during the day — know when to call and what to ask.",
       visual: "analytics",
     },
     {
       slug: "saved",
+      plan: ["Saved loads with notes and lane price history"],
       title: "Saved loads",
       body: "Star a load and it stays after the posting is gone — with your own notes, a pickup calendar and what the lane pays now. Email the broker days later without hunting for it again.",
     },
     {
       slug: "profit",
+      plan: ["Rate-per-mile calculator", "Profit calculator (fuel, tolls, driver pay)", "Toll estimate for the lane, one click"],
       title: "Profit calculator",
       body: "The rate minus fuel, tolls and the driver's cut, right where the rate is — plus the break-even you can't go below. Diesel fills in from the national average, miles with or without deadhead.",
     },
     {
       slug: "mailboxes",
+      plan: ["Multiple sender mailboxes (up to 3 extra)"],
       title: "Multiple mailboxes",
       body: "Connect several Gmail or Outlook addresses. Each has its own templates, name and MC — pick the sender per load.",
       visual: "mailboxes",
     },
-    {
-      slug: "keyboard",
-      title: "Built for speed",
-      body: "Hands stay on the keyboard: W/S move between loads, E sends, C copies the load, and one click calls the broker.",
-    },
   ];
+
+  const covered = new Set([...items.flatMap((it) => it.plan ?? []), ...PLAN_TERMS]);
+  const extras = PLAN_FEATURES.filter((feature) => !covered.has(feature));
 
   const total = items.length;
   const [lb, setLb] = useState<number | null>(null);
@@ -1603,6 +1636,30 @@ function Features() {
           ))}
         </div>
         </div>
+
+        <div className="tb-extras">
+          <Reveal className="tb-extras-head">
+            <span className="ed-label">Also included</span>
+            <p>
+              All <b>{PLAN_FEATURE_COUNT} features</b> come in the same $7 plan — nothing is held
+              back for a bigger tier.
+            </p>
+          </Reveal>
+          <ul className="tb-extras-list">
+            {extras.map((feature, index) => (
+              <motion.li
+                key={feature}
+                initial={{ opacity: 0, x: -14 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true, margin: "-60px" }}
+                transition={{ duration: 0.5, delay: index * 0.05, ease: EASE }}
+              >
+                <Check className="h-4 w-4" aria-hidden />
+                <span>{feature}</span>
+              </motion.li>
+            ))}
+          </ul>
+        </div>
       </div>
 
       <AnimatePresence>
@@ -1662,6 +1719,8 @@ function Features() {
     </section>
   );
 }
+
+/* ===== Section 04 — How it works ======================================== */
 
 function HowItWorks() {
   const steps = [
@@ -1750,106 +1809,8 @@ function HowItWorks() {
   );
 }
 
-const DRUM_ROW = 52;
-const DRUM_VISIBLE = 9;
 
-function FeatureDrum({ items }: { items: string[] }) {
-  const box = useRef<HTMLDivElement>(null);
-  const [active, setActive] = useState(0);
-  const activeRef = useRef(0);
-  const paused = useRef(false);
-  const visible = useRef(false);
-
-  const bend = useCallback(() => {
-    const el = box.current;
-    if (!el) return 0;
-    const pos = el.scrollTop / DRUM_ROW;
-    el.querySelectorAll<HTMLLIElement>("li").forEach((li, i) => {
-      const d = i - pos;
-      const a = Math.min(Math.abs(d), 5);
-      li.style.transform = `rotateX(${(-d * 11).toFixed(2)}deg) scale(${(1 - a * 0.075).toFixed(3)})`;
-      li.style.opacity = String(Math.max(0.2, 1 - a * 0.16));
-    });
-    return Math.max(0, Math.min(items.length - 1, Math.round(pos)));
-  }, [items.length]);
-
-  useEffect(() => {
-    const el = box.current;
-    if (!el) return;
-    bend();
-    let raf = 0;
-    const onScroll = () => {
-      cancelAnimationFrame(raf);
-      raf = requestAnimationFrame(() => {
-        const i = bend();
-        if (i !== activeRef.current) {
-          activeRef.current = i;
-          setActive(i);
-        }
-      });
-    };
-    el.addEventListener("scroll", onScroll, { passive: true });
-    const io = new IntersectionObserver(([e]) => (visible.current = e.isIntersecting), { threshold: 0.6 });
-    io.observe(el);
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    const timer = reduce
-      ? 0
-      : window.setInterval(() => {
-          if (paused.current || !visible.current || document.hidden) return;
-          const next = (activeRef.current + 1) % items.length;
-          el.scrollTo({ top: next * DRUM_ROW, behavior: "smooth" });
-        }, 2200);
-    return () => {
-      el.removeEventListener("scroll", onScroll);
-      cancelAnimationFrame(raf);
-      io.disconnect();
-      window.clearInterval(timer);
-    };
-  }, [bend, items.length]);
-
-  const go = (i: number) => {
-    const n = Math.max(0, Math.min(items.length - 1, i));
-    box.current?.scrollTo({ top: n * DRUM_ROW, behavior: "smooth" });
-  };
-  const hold = () => (paused.current = true);
-  const release = () => (paused.current = false);
-
-  return (
-    <div className="tb-drum-wrap" onMouseEnter={hold} onMouseLeave={release} onTouchStart={hold} onFocus={hold} onBlur={release}>
-      <div className="tb-drum-band" style={{ top: DRUM_ROW * ((DRUM_VISIBLE - 1) / 2), height: DRUM_ROW }} aria-hidden />
-      <div
-        ref={box}
-        className="tb-drum"
-        style={{ height: DRUM_ROW * DRUM_VISIBLE }}
-        tabIndex={0}
-        role="region"
-        aria-label="Everything included in the subscription"
-        onKeyDown={(e) => {
-          if (e.key === "ArrowDown") { e.preventDefault(); go(active + 1); }
-          if (e.key === "ArrowUp") { e.preventDefault(); go(active - 1); }
-        }}
-      >
-        <ul style={{ paddingBlock: (DRUM_ROW * (DRUM_VISIBLE - 1)) / 2 }}>
-          {items.map((f, i) => (
-            <li key={f} className={i === active ? "is-active" : undefined} onClick={() => go(i)}>
-              <span>{f}</span>
-              <span className="ed-label ed-accent">incl.</span>
-            </li>
-          ))}
-        </ul>
-      </div>
-      <div className="tb-drum-foot">
-        <span className="ed-label">
-          {String(active + 1).padStart(2, "0")} / {String(items.length).padStart(2, "0")} included
-        </span>
-        <span className="tb-drum-nav">
-          <button type="button" aria-label="Previous feature" onClick={() => go(active - 1)} disabled={active === 0}>↑</button>
-          <button type="button" aria-label="Next feature" onClick={() => go(active + 1)} disabled={active === items.length - 1}>↓</button>
-        </span>
-      </div>
-    </div>
-  );
-}
+/* ===== Section 05 — Pricing and teams =================================== */
 
 function TeamsOffer() {
   const [seats, setSeats] = useState(3);
@@ -1898,7 +1859,6 @@ function TeamsOffer() {
 }
 
 function Pricing() {
-  const features = PLAN_FEATURES;
   return (
     <section id="pricing" className="ed-section">
       <div className="ed-container">
@@ -1906,9 +1866,8 @@ function Pricing() {
           <span className="ed-label">[ 05 ] — Pricing</span>
           <h2 className="ed-h2 mt-4">Simple subscription</h2>
           <p className="mt-4 text-lg" style={{ color: "var(--muted)" }}>
-            All <b style={{ color: "var(--ink)" }}>{PLAN_FEATURE_COUNT} features</b> for{" "}
-            <b style={{ color: "var(--ink)" }}>$7 a month</b> — no tiers to compare, nothing locked
-            behind a bigger plan.
+            One plan, <b style={{ color: "var(--ink)" }}>$7 a month</b> — no tiers to compare,
+            nothing locked behind a bigger one.
           </p>
         </div>
 
@@ -1940,9 +1899,9 @@ function Pricing() {
               <a className="ed-btn ed-btn-accent" href={INSTALL_URL} target="_blank" rel="noreferrer">
                 <span>Start Free Trial</span> <ArrowUpRight className="h-4 w-4" />
               </a>
-              <a className="ed-btn" href={CALENDLY_URL} target="_blank" rel="noreferrer">
-                <span>Book Live Demo</span>
-              </a>
+              <Link className="ed-btn" to="/demo">
+                <span>Try before you buy</span>
+              </Link>
             </div>
             </div>
             <p className="mt-6 ed-label" style={{ letterSpacing: "0.14em" }}>
@@ -1951,10 +1910,19 @@ function Pricing() {
           </Reveal>
 
           <Reveal delay={0.1} className="min-w-0">
-            <FeatureDrum items={features} />
-            <p className="tb-drum-lead">
-              <b>Every feature is included.</b> No hidden fees, no paid add-ons, no premium tier.
-            </p>
+            <div className="tb-incl">
+              <span className="tb-incl-num">
+                <CountUp to={PLAN_FEATURE_COUNT} />
+              </span>
+              <span className="tb-incl-cap">features included</span>
+              <p>
+                <b>Every one of them, for everyone.</b> No hidden fees, no paid add-ons, no premium
+                tier — the $7 plan is the only plan.
+              </p>
+              <a className="ed-btn" href="#features">
+                <span>See what you get</span>
+              </a>
+            </div>
           </Reveal>
         </div>
 
@@ -1970,6 +1938,8 @@ function Pricing() {
     </section>
   );
 }
+
+/* ===== Section 06 — Walkthrough ========================================= */
 
 function Walkthrough() {
   const [playing, setPlaying] = useState(false);
@@ -2028,9 +1998,21 @@ function Walkthrough() {
   );
 }
 
+const FAQ_CATEGORIES = [
+  { id: "start", label: "Getting started", note: "Install, sign in, updates" },
+  { id: "email", label: "Email & templates", note: "Mailboxes, senders, placeholders" },
+  { id: "auto", label: "Auto Emailer", note: "Watched searches, tabs, limits" },
+  { id: "board", label: "On the load board", note: "Truckstop, shortcuts, credit checks" },
+  { id: "office", label: "Back office", note: "Mailboxes, logins, seats, reports" },
+  { id: "billing", label: "Plans & billing", note: "Price, trial, teams, cancelling" },
+  { id: "account", label: "Account & privacy", note: "Logins, permissions, safety" },
+  { id: "help", label: "Troubleshooting", note: "When something stops working" },
+];
+
 const FAQS = [
   {
     q: "How do I get started?",
+    cat: "start",
     a: (
       <p>
         Install the Truck Box Chrome extension, open the popup, and click{" "}
@@ -2048,6 +2030,7 @@ const FAQS = [
   },
   {
     q: "How do I update the extension?",
+    cat: "start",
     a: (
       <p>
         Chrome usually updates extensions automatically. You can also open{" "}
@@ -2065,6 +2048,7 @@ const FAQS = [
   },
   {
     q: "Does Truck Box work with Outlook?",
+    cat: "email",
     a: (
       <p>
         Yes. Click <strong>Sign in with Microsoft</strong> in the extension popup and Truck Box
@@ -2076,6 +2060,7 @@ const FAQS = [
   },
   {
     q: "Can I send from more than one email address?",
+    cat: "office",
     a: (
       <p>
         Yes. Open the{" "}
@@ -2090,6 +2075,7 @@ const FAQS = [
   },
   {
     q: "How do I choose which address an email is sent from?",
+    cat: "email",
     a: (
       <p>
         Every template is tied to one sender. In the extension popup open <strong>Template</strong>,
@@ -2100,6 +2086,7 @@ const FAQS = [
   },
   {
     q: "Can I log in with both Google and Microsoft?",
+    cat: "office",
     a: (
       <p>
         Yes. In the{" "}
@@ -2112,7 +2099,101 @@ const FAQS = [
     ),
   },
   {
+    q: "What can I do in the back office?",
+    cat: "office",
+    a: (
+      <div>
+        <p>
+          The{" "}
+          <Link to="/business" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+            back office
+          </Link>{" "}
+          opens with the same login you use in the extension. Under <strong>Settings</strong> you
+          manage <strong>Mailboxes</strong> (the Gmail and Outlook addresses you send from),{" "}
+          <strong>Accounts</strong> (your Google and Microsoft logins) and{" "}
+          <strong>Company info</strong> (the name, MC and phone that fill your templates).{" "}
+          <strong>Overview</strong> shows your own numbers — emails sent, sent automatically, maps
+          opened, calls placed and the time they saved you.
+        </p>
+        <p>
+          If you run a team, a <strong>Management</strong> section appears on top with{" "}
+          <strong>Team</strong> (people, invites and seats) and <strong>Statistics</strong> (the
+          same numbers per dispatcher, plus a PDF report).
+        </p>
+      </div>
+    ),
+  },
+  {
+    q: "How do I invite a dispatcher and add seats?",
+    cat: "office",
+    a: (
+      <p>
+        Open the back office → <strong>Team</strong>, type the dispatcher's email and send the
+        invite; they get a link and sign in with their own Google or Microsoft account. Each person
+        with extension access takes one seat at $7/month. If you invite someone with no free seat
+        left, Truck Box shows what the extra seat costs for the rest of the month and adds it on
+        confirmation. The stepper next to <strong>Seats used</strong> adds or removes seats — you
+        can't drop below the number of people who currently have access, so remove their access
+        first. Dispatchers who already pay for Truck Box themselves keep their plan until its paid
+        period ends, so nobody pays twice.
+      </p>
+    ),
+  },
+  {
+    q: "How do I get a report on my team?",
+    cat: "office",
+    a: (
+      <div>
+        <p>
+          Back office → <strong>Statistics</strong> shows the whole team and each dispatcher: total
+          emails, how many of them Auto Emailer sent, maps opened, calls placed and the time saved.
+          The <strong>Download PDF report</strong> button at the top turns the same numbers into a
+          one-file report you can keep or forward.
+        </p>
+        <p>
+          On top of that, Truck Box emails a weekly summary every Monday — a personal one to each
+          dispatcher, and a team one to the manager.
+        </p>
+      </div>
+    ),
+  },
+  {
+    q: "How does Auto Emailer work?",
+    cat: "auto",
+    a: (
+      <p>
+        Open a DAT <strong>Search Loads</strong> tab, set the search you want to work, then open the{" "}
+        <strong>Auto Emailer</strong> panel and set your limits — minimum rate, rate per mile,
+        deadhead, weight and trip length. Press <strong>Start</strong> and Truck Box watches that
+        board, refreshes it on the interval you pick and emails the broker the moment a load matches.
+        Every send lands in the panel log, and you can stop it at any time.
+      </p>
+    ),
+  },
+  {
+    q: "Do I need more than one browser tab for Auto Emailer?",
+    cat: "auto",
+    a: (
+      <div>
+        <p>
+          Yes, if you want to cover more than one lane. <strong>One browser tab watches one
+          search.</strong> To run a second corridor at the same time, open DAT in another browser
+          tab, set that search up there and press <strong>Start</strong> again — the panel has an{" "}
+          <strong>Open another DAT tab</strong> button for exactly this. Two searches sharing a
+          single tab take turns instead of running together.
+        </p>
+        <p>
+          Leave the watching tab alone while it runs. Scrolling, clicking rows or opening load
+          details pauses the board refresh, so Truck Box stops seeing fresh postings. Keep a second
+          DAT tab open for your own searching and let the Auto Emailer tab sit untouched in the
+          background.
+        </p>
+      </div>
+    ),
+  },
+  {
     q: "Does it work on Truckstop too?",
+    cat: "board",
     a: (
       <p>
         Yes. Truck Box works on both <strong>DAT One</strong> and <strong>Truckstop</strong> — one-click
@@ -2123,6 +2204,7 @@ const FAQS = [
   },
   {
     q: "Does Truck Box read my email? Is it safe?",
+    cat: "account",
     a: (
       <p>
         No, it can't read your email. Truck Box asks Google and Microsoft only for permission to{" "}
@@ -2133,7 +2215,25 @@ const FAQS = [
     ),
   },
   {
+    q: "What does Truck Box store about me?",
+    cat: "account",
+    a: (
+      <p>
+        Your account email and name, the mailboxes you connect (address, provider and the token
+        needed to send from them) and counters of what you used — emails sent, maps opened, calls
+        placed — which is what your stats and your manager's team report are built from. Templates,
+        your MC, phone and filter preferences live in the extension in your browser. No passwords,
+        no inbox content, no load board credentials. The full text is on the{" "}
+        <Link to="/privacy" className="ed-accent" style={{ textDecoration: "underline", textUnderlineOffset: 3 }}>
+          privacy page
+        </Link>
+        .
+      </p>
+    ),
+  },
+  {
     q: "What does it cost? Are there any add-ons?",
+    cat: "billing",
     a: (
       <p>
         $7 per user per month after a free 7-day trial (no credit card needed). Every feature is
@@ -2143,6 +2243,7 @@ const FAQS = [
   },
   {
     q: "Do you have a plan for dispatch companies?",
+    cat: "billing",
     a: (
       <p>
         Yes — $7 per seat per month on one bill, with a manager back office for seats, invites and
@@ -2157,6 +2258,7 @@ const FAQS = [
   },
   {
     q: "Why can't I send from my Outlook address?",
+    cat: "email",
     a: (
       <p>
         Usually the Microsoft account has no Outlook mailbox behind it — for example a work account
@@ -2169,6 +2271,7 @@ const FAQS = [
   },
   {
     q: "How do I subscribe?",
+    cat: "billing",
     a: (
       <p>
         First log in with Google and start the free 7 days trial. After the trial, you can
@@ -2179,6 +2282,7 @@ const FAQS = [
   },
   {
     q: "How do I cancel my subscription?",
+    cat: "billing",
     a: (
       <p>
         You can cancel anytime from your billing or subscription page. After cancelation,
@@ -2189,6 +2293,7 @@ const FAQS = [
   },
   {
     q: "How do I edit my email template?",
+    cat: "email",
     a: (
       <p>
         Open the Truck Box extension popup, go to the <strong>Template</strong> tab,
@@ -2199,6 +2304,7 @@ const FAQS = [
   },
   {
     q: "Can I use placeholders in the template?",
+    cat: "email",
     a: (
       <p>
         Yes. You can use placeholders like <code>{`{{origin}}`}</code>,{" "}
@@ -2211,6 +2317,7 @@ const FAQS = [
   },
   {
     q: "How does keyboard navigation work?",
+    cat: "board",
     a: (
       <div>
         <p>
@@ -2231,6 +2338,7 @@ const FAQS = [
   },
   {
     q: "How do I set up factoring credit checks (RTS, Apex, Triumph)?",
+    cat: "board",
     a: (
         <p>
           Open the TruckBox extension, go to the <strong>Factoring</strong> tab, select your provider
@@ -2241,6 +2349,7 @@ const FAQS = [
   },
   {
     q: "Can I use credit checks if I don't factor with RTS, Apex or Triumph?",
+    cat: "board",
     a: (
         <p>
           No. To use this feature, you must already have an active account with RTS Financial,
@@ -2250,6 +2359,7 @@ const FAQS = [
   },
   {
     q: "Something isn't working — what should I try first?",
+    cat: "help",
     a: (
       <div>
         <p>Before anything else, run these three quick fixes in order:</p>
@@ -2274,6 +2384,7 @@ const FAQS = [
   },
   {
     q: "Why is Google login not working?",
+    cat: "help",
     a: (
       <p>
         Usually this happens if the Google session expired, permissions were revoked, or
@@ -2284,6 +2395,7 @@ const FAQS = [
   },
   {
     q: "Where do I get help?",
+    cat: "help",
     a: (
       <p>
         Use the chat button in the corner of this page to message us directly — it's
@@ -2293,6 +2405,7 @@ const FAQS = [
   },
   {
     q: "I'm logged in but get an error when sending email. How do I fix it?",
+    cat: "help",
     a: (
         <p>
           This happens when Gmail's "Send email on your behalf" permission wasn't
@@ -2304,8 +2417,17 @@ const FAQS = [
   },
 ];
 
+/* ===== Section 07 — FAQ ================================================= */
+
 export function FAQ() {
-  const [openIdx, setOpenIdx] = useState<number | null>(0);
+  const [activeCat, setActiveCat] = useState<string | null>(null);
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
+  const openCategory = (id: string) => {
+    setActiveCat(id);
+    setOpenIdx(0);
+  };
+
   return (
     <section id="faq" className="ed-section">
       <div className="ed-container">
@@ -2314,52 +2436,108 @@ export function FAQ() {
           <h2 className="ed-h2 mt-4">Common questions</h2>
         </div>
 
-        <div>
-          {FAQS.map((f, i) => {
-            const isOpen = openIdx === i;
+        <div className="tb-faq-body">
+          <div className="tb-faq-cats tb-faq-fade" style={{ display: activeCat ? "none" : undefined }}>
+          {FAQ_CATEGORIES.map((c, i) => {
+            const count = FAQS.filter((f) => f.cat === c.id).length;
             return (
-              <div key={f.q} style={{ borderTop: "1px solid var(--line)" }}>
-                <button
-                  type="button"
-                  onClick={() => setOpenIdx(isOpen ? null : i)}
-                  aria-expanded={isOpen}
-                  className="w-full flex items-center justify-between gap-6 py-7 text-left group"
-                >
-                  <span className="flex items-center gap-5">
-                    <span className="ed-label ed-accent">{String(i + 1).padStart(2, "0")}</span>
-                    <span
-                      className="text-xl md:text-3xl transition-colors"
-                      style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em", color: isOpen ? "var(--ink)" : "var(--muted)" }}
-                    >
-                      {f.q}
-                    </span>
-                  </span>
-                  <span className="shrink-0">
-                    {isOpen ? <Minus className="h-6 w-6" style={{ color: "var(--accent)" }} /> : <Plus className="h-6 w-6" />}
-                  </span>
-                </button>
-                <AnimatePresence initial={false}>
-                  {isOpen && (
-                    <motion.div
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.4, ease: EASE }}
-                      className="overflow-hidden"
-                    >
-                      <div className="tb-prose pb-8 md:pl-16 max-w-2xl">{f.a}</div>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
+              <button key={c.id} type="button" className="tb-faq-cat" onClick={() => openCategory(c.id)}>
+                <span className="ed-label ed-accent">{String(i + 1).padStart(2, "0")}</span>
+                <span className="tb-faq-cat-name">{c.label}</span>
+                <span className="tb-faq-cat-note">{c.note}</span>
+                <span className="tb-faq-cat-foot">
+                  <span>{count} {count === 1 ? "question" : "questions"}</span>
+                  <ArrowUpRight className="h-4 w-4" />
+                </span>
+              </button>
             );
           })}
-          <div style={{ borderTop: "1px solid var(--line)" }} />
+        </div>
+
+        {FAQ_CATEGORIES.map((c) => {
+          const on = activeCat === c.id;
+          const items = FAQS.filter((f) => f.cat === c.id);
+          return (
+            <div key={c.id} className="tb-faq-fade" style={{ display: on ? undefined : "none" }}>
+              <div className="tb-faq-bar">
+                <button type="button" className="tb-faq-back" onClick={() => setActiveCat(null)}>
+                  <ArrowUpRight className="h-4 w-4" />
+                  <span>All topics</span>
+                </button>
+                <span className="tb-faq-bar-name">{c.label}</span>
+              </div>
+
+              <div>
+                {items.map((f, i) => {
+                  const isOpen = on && openIdx === i;
+                  return (
+                    <div key={f.q} style={{ borderTop: "1px solid var(--line)" }}>
+                      <button
+                        type="button"
+                        onClick={() => setOpenIdx(isOpen ? null : i)}
+                        aria-expanded={isOpen}
+                        className="w-full flex items-center justify-between gap-6 py-7 text-left group"
+                      >
+                        <span className="flex items-center gap-5">
+                          <span className="ed-label ed-accent">{String(i + 1).padStart(2, "0")}</span>
+                          <span
+                            className="text-xl md:text-3xl transition-colors"
+                            style={{ fontFamily: "var(--font-display)", letterSpacing: "-0.02em", color: isOpen ? "var(--ink)" : "var(--muted)" }}
+                          >
+                            {f.q}
+                          </span>
+                        </span>
+                        <span className="shrink-0">
+                          {isOpen ? <Minus className="h-6 w-6" style={{ color: "var(--accent)" }} /> : <Plus className="h-6 w-6" />}
+                        </span>
+                      </button>
+                      <AnimatePresence initial={false}>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.4, ease: EASE }}
+                            className="overflow-hidden"
+                          >
+                            <div className="tb-prose pb-8 md:pl-16 max-w-2xl">{f.a}</div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                })}
+                <div style={{ borderTop: "1px solid var(--line)" }} />
+              </div>
+            </div>
+          );
+        })}
+        </div>
+
+        <div className="tb-faq-ask">
+          <div>
+            <span className="ed-label ed-accent">Still have a question?</span>
+            <p>Write to us directly — we answer the same day, usually within minutes.</p>
+          </div>
+          <div className="tb-faq-ask-links">
+            <a className="tb-faq-ask-link" href="https://t.me/mngartur" target="_blank" rel="noreferrer">
+              <span className="tb-faq-ask-k">Telegram</span>
+              <span className="tb-faq-ask-v">@mngartur</span>
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+            <a className="tb-faq-ask-link" href="mailto:info@truckbox.app">
+              <span className="tb-faq-ask-k">Email</span>
+              <span className="tb-faq-ask-v">info@truckbox.app</span>
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+          </div>
         </div>
       </div>
     </section>
   );
 }
+
+/* ===== Privacy page ===================================================== */
 
 export function Privacy() {
   return (
@@ -2838,6 +3016,8 @@ export function Privacy() {
   );
 }
 
+/* ===== Guide and update pages =========================================== */
+
 function useIsMobile(query = "(max-width: 767px)") {
   const [isMobile, setIsMobile] = useState(false);
   useEffect(() => {
@@ -3247,9 +3427,7 @@ function CopyChromeUrl({ url = "chrome://extensions" }: { url?: string }) {
       await navigator.clipboard.writeText(url);
       setCopied(true);
       setTimeout(() => setCopied(false), 2500);
-    } catch {
-      /* clipboard blocked — the address is still visible to type */
-    }
+    } catch {}
   };
   return (
     <>
@@ -3298,6 +3476,8 @@ export function UpdateGuide() {
     </section>
   );
 }
+
+/* ===== Section 08 — Contact, final CTA, footer ========================== */
 
 function ContactForm() {
   const [state, handleSubmit] = useForm("xnjyvqjv");

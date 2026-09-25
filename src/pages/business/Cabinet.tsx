@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useEffect, useLayoutEffect, useState, useCallback, useRef, lazy, Suspense } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -80,10 +85,6 @@ export default function Cabinet() {
     if (authed) load();
   }, [authed, load]);
 
-  // Before the first paint, not after. The cabinet's palette lives on this class,
-  // and the outline buttons on this page are drawn entirely from it — with the
-  // class arriving a frame late they render in the landing's colours, which on a
-  // phone reads as the second sign-in button appearing after the first.
   useLayoutEffect(() => {
     const w = window as unknown as { $crisp?: unknown[] };
     document.body.classList.add("tb-cabinet-bg");
@@ -416,9 +417,7 @@ function HelpDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
       await navigator.clipboard.writeText(id);
       setCopied(true);
       setTimeout(() => setCopied(false), 1800);
-    } catch {
-      /* clipboard blocked — the id is on screen to copy by hand */
-    }
+    } catch {}
   };
 
   return (

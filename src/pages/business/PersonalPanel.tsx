@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useCallback, useEffect, useState } from "react";
 import { ApiError, api } from "../../lib/api";
 import type { AccountContext } from "./types";
@@ -19,7 +24,7 @@ type MyStats = {
   platforms: PlatformStats[];
 };
 
-type Win = { emailsSent: number; mapsOpened: number; callsPlaced: number };
+type Win = { emailsSent: number; emailsAuto: number; mapsOpened: number; callsPlaced: number };
 type UserStatus = {
   trialEnd: string | null;
   planExpiresAt: string | null;
@@ -92,10 +97,11 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
           s.dispatchers.reduce(
             (a, d) => ({
               emailsSent: a.emailsSent + d.total.emailsSent,
+              emailsAuto: a.emailsAuto + d.total.emailsAuto,
               mapsOpened: a.mapsOpened + d.total.mapsOpened,
               callsPlaced: a.callsPlaced + d.total.callsPlaced,
             }),
-            { emailsSent: 0, mapsOpened: 0, callsPlaced: 0 }
+            { emailsSent: 0, emailsAuto: 0, mapsOpened: 0, callsPlaced: 0 }
           )
         )
       )
@@ -203,6 +209,7 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
           </h2>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             <StatCard label="Total emails" value={String(company.emailsSent)} />
+            <StatCard label="Sent automatically" value={String(company.emailsAuto)} />
             <StatCard label="Total maps" value={String(company.mapsOpened)} />
             <StatCard label="Total calls" value={String(company.callsPlaced)} />
             <StatCard

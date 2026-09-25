@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, ChevronDown, Copy, Flame, Info, MapPin, Mail, Phone, Search } from "lucide-react";
@@ -211,7 +216,6 @@ export function DiscoveryPanel() {
       return;
     }
     const started = Date.now();
-    // A search that answers in under a quarter of a second should not flash a spinner on the way.
     const appear = window.setTimeout(() => setSlow(true), 250);
     const timer = window.setInterval(
       () => setWaited(Math.round((Date.now() - started) / 1000)),
@@ -247,9 +251,7 @@ export function DiscoveryPanel() {
   const dismissDemo = () => {
     try {
       sessionStorage.setItem("oracle_demo_seen", "1");
-    } catch {
-      /* ignore */
-    }
+    } catch {}
     setShowDemo(false);
   };
 
@@ -315,7 +317,6 @@ export function DiscoveryPanel() {
       fetchQuota();
     } catch (err) {
       setError(err instanceof ApiError && err.message ? err.message : "Search failed. Try again.");
-      // "Busy, try again in a minute" is not a reason to throw away what is already on screen.
       if (!(err instanceof ApiError && err.code === ORACLE_BUSY)) setRows(null);
     } finally {
       setLoading(false);
@@ -1052,9 +1053,7 @@ function CopyButton({ text, label }: { text: string; label?: string }) {
       await navigator.clipboard.writeText(text);
       setDone(true);
       setTimeout(() => setDone(false), 1200);
-    } catch {
-      /* clipboard unavailable */
-    }
+    } catch {}
   };
   return (
     <button

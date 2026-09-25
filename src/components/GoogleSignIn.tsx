@@ -1,3 +1,8 @@
+/*! Truck Box — Website and Interactive Demo
+ *  Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved.
+ *  Proprietary and confidential. See LICENSE.
+ */
+
 import { useRef, useState } from "react";
 import { exchangeGoogleAccessToken, type GoogleAuthResult } from "../lib/google";
 import { isNoAccount } from "../lib/authErrors";
