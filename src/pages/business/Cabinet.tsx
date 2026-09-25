@@ -307,7 +307,7 @@ export default function Cabinet() {
           <TelegramMark />
           <span className="tb-nav-text">
             <span>Support</span>
-            <span className="tb-nav-sub">Telegram · @mngartur</span>
+            <span className="tb-nav-sub">Chat on Telegram</span>
           </span>
         </a>
         <button type="button" className="tb-nav" onClick={() => setHelpOpen(true)}>
