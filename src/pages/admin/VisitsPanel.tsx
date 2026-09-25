@@ -309,8 +309,8 @@ export default function VisitsPanel() {
   return (
     <div className={"vx" + (day ? " is-day" : "")}>
       <div className="vx-bar">
-        <Link className="vx-back" to="/">
-          ← TruckBox
+        <Link className="vx-back" to="/admin2214">
+          ← Admin
         </Link>
         <b className="vx-title">Demo traffic</b>
         <button type="button" className="vx-theme" onClick={flipTheme}>
