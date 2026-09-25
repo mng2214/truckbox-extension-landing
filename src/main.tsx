@@ -28,6 +28,7 @@ const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const DatToolsPage = lazy(() => import("./pages/DatTools"));
 const ExtensionPanel = lazy(() => import("./pages/admin/ExtensionPanel"));
 const DirectoryPanel = lazy(() => import("./pages/admin/DirectoryPanel"));
+const BackOfficePanel = lazy(() => import("./pages/admin/BackOfficePanel"));
 
 {
   const q = new URLSearchParams(location.search).get("theme");
@@ -87,6 +88,7 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/admin2214/visits" element={<VisitsPanel />} />
         <Route path="/admin2214/extension" element={<ExtensionPanel />} />
         <Route path="/admin2214/accounts" element={<DirectoryPanel />} />
+        <Route path="/admin2214/backoffice" element={<BackOfficePanel />} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business/start" element={<TeamStart />} />

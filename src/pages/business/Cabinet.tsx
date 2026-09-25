@@ -13,6 +13,7 @@ import {
 import { api, ApiError, sessionId } from "../../lib/api";
 import { OracleMark } from "../../components/OracleMark";
 import { usePageMeta } from "../../lib/meta";
+import { trackCabinet } from "./track";
 import { auth } from "../../lib/auth";
 import { GoogleSignIn } from "../../components/GoogleSignIn";
 import { MicrosoftSignIn } from "../../components/MicrosoftSignIn";
@@ -84,6 +85,19 @@ export default function Cabinet() {
   useEffect(() => {
     if (authed) load();
   }, [authed, load]);
+
+  // One row per visit to the back office, and one per panel opened in it: enough to answer
+  // "who comes here and what do they use", without following anybody around inside a panel.
+  const openedRef = useRef(false);
+  useEffect(() => {
+    if (!authed || !section) return;
+    if (!openedRef.current) {
+      openedRef.current = true;
+      trackCabinet("CABINET_OPENED", section);
+      return;
+    }
+    trackCabinet("CABINET_PANEL", section);
+  }, [authed, section]);
 
   useLayoutEffect(() => {
     const w = window as unknown as { $crisp?: unknown[] };

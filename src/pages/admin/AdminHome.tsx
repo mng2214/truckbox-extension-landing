@@ -23,6 +23,12 @@ const TILES = [
     tag: "extension",
   },
   {
+    to: "/admin2214/backoffice",
+    name: "Back office",
+    what: "Who opens the cabinet and how often, and which corridors they look for in Oracle.",
+    tag: "cabinet",
+  },
+  {
     to: "/admin2214/accounts",
     name: "Accounts & teams",
     what: "Who is working right now, which company they sit in, and how much each person sends.",
