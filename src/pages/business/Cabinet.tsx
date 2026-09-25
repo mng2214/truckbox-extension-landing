@@ -298,6 +298,18 @@ export default function Cabinet() {
         >
           {ctx.email}
         </span>
+        <a
+          className="tb-nav tb-nav-support"
+          href={SUPPORT_TELEGRAM}
+          target="_blank"
+          rel="noreferrer"
+        >
+          <TelegramMark />
+          <span className="tb-nav-text">
+            <span>Support</span>
+            <span className="tb-nav-sub">Telegram · @mngartur</span>
+          </span>
+        </a>
         <button type="button" className="tb-nav" onClick={() => setHelpOpen(true)}>
           <HelpCircle />
           Need help?

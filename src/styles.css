@@ -3057,3 +3057,11 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
 }
 .tb-faq-body { min-height: 540px; }
 @media (max-width: 1023px) { .tb-faq-body { min-height: 0; } }
+
+/* ===== Cabinet — support link ============================================ */
+body.tb-cabinet-bg .tb-nav-support {
+  text-decoration: none;
+  color: var(--ink);
+}
+body.tb-cabinet-bg .tb-nav-support svg { color: var(--accent); }
+body.tb-cabinet-bg .tb-nav-support:hover { color: var(--accent); }
