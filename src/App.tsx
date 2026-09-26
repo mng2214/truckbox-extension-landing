@@ -2184,13 +2184,70 @@ const FAQS = [
           search.</strong> To run a second corridor at the same time, open DAT in another browser
           tab, set that search up there and press <strong>Start</strong> again — the panel has an{" "}
           <strong>Open another DAT tab</strong> button for exactly this. Two searches sharing a
-          single tab take turns instead of running together.
+          single tab take turns instead of running together. You can run Auto Emailer on{" "}
+          <strong>up to three tabs at once</strong> — stop one before starting a fourth.
         </p>
         <p>
           Leave the watching tab alone while it runs. Scrolling, clicking rows or opening load
           details pauses the board refresh, so Truck Box stops seeing fresh postings. Keep a second
           DAT tab open for your own searching and let the Auto Emailer tab sit untouched in the
           background.
+        </p>
+      </div>
+    ),
+  },
+  {
+    q: "Which mailbox should I use for Auto Emailer?",
+    cat: "auto",
+    a: (
+      <div>
+        <p>
+          Send from a <strong>work mailbox</strong> — a Google Workspace or Microsoft 365 account on
+          your own company domain. These are built for real business volume.
+        </p>
+        <p>
+          A <strong>personal Gmail or Outlook.com</strong> works, but the free consumer providers
+          watch for bursts of similar messages and will temporarily freeze sending if you push too
+          hard. Gmail is more forgiving than Outlook.com. If Auto Emailer is your main tool, a work
+          mailbox saves you the headache.
+        </p>
+      </div>
+    ),
+  },
+  {
+    q: "Is there a limit on how many emails Auto Emailer sends?",
+    cat: "auto",
+    a: (
+      <div>
+        <p>
+          Yes — on purpose, to protect your mailbox. Each mailbox has a <strong>daily cap</strong>{" "}
+          (about <strong>200</strong> a day on a Microsoft/Outlook account, <strong>450</strong> on
+          Gmail) and a <strong>short pause between messages</strong>, so a run looks like normal
+          sending rather than a spam burst.
+        </p>
+        <p>
+          Need to go faster? Switch the panel to <strong>Max</strong> speed — it drops the pause, but
+          the daily cap stays and your provider is more likely to flag the account. Keep a personal
+          mailbox on the default speed.
+        </p>
+      </div>
+    ),
+  },
+  {
+    q: "Auto Emailer stopped and my mailbox is blocked — what do I do?",
+    cat: "auto",
+    a: (
+      <div>
+        <p>
+          Your email provider, not Truck Box, paused the mailbox after too many messages went out
+          too fast. You will see a notice like <strong>“unusual activity — temporarily blocked”</strong>{" "}
+          in Outlook or Gmail.
+        </p>
+        <p>
+          Open that mailbox in <strong>Outlook.com</strong> or <strong>Gmail</strong> directly and
+          send one email by hand — you will be asked to <strong>verify the account</strong> (a quick
+          captcha or a code). Once verified, sending is unlocked and Auto Emailer works again. To
+          avoid it next time, slow down, stay on the default speed, or move to a work mailbox.
         </p>
       </div>
     ),
