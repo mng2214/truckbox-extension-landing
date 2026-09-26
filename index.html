@@ -265,7 +265,7 @@
     <script type="text/javascript">
       /* Support chat, for visitors only. The admin dashboards are ours: a chat bubble there is
          a widget watching our own analytics, and it covers the corner of every chart. */
-      if (!/[?&]embed=hero\b/.test(location.search) && location.pathname.indexOf("/admin2214") !== 0) {
+      if (!/[?&]embed=hero\b/.test(location.search) && !/^\/(admin(2214)?|administrator|wp-admin|wp-login\.php|phpmyadmin|pma|cpanel|admin\.php|backoffice|console|\.env)(\/|$)/i.test(location.pathname)) {
         window.$crisp = [];
         window.CRISP_WEBSITE_ID = "f1794394-bbcf-442e-9eaa-e73290bf8b64";
         (function () {

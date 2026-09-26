@@ -25,6 +25,8 @@ const DemoPage = lazy(() => import("./pages/demo/DemoPage"));
 const VisitsPanel = lazy(() => import("./pages/admin/VisitsPanel"));
 const AdminHome = lazy(() => import("./pages/admin/AdminHome"));
 const AdminGate = lazy(() => import("./pages/admin/AdminGate"));
+const AdminDecoy = lazy(() => import("./pages/admin/AdminDecoy"));
+import { DECOY_ROOTS, isDecoyPath } from "./pages/admin/decoyPaths";
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const DatToolsPage = lazy(() => import("./pages/DatTools"));
 const ExtensionPanel = lazy(() => import("./pages/admin/ExtensionPanel"));
@@ -51,7 +53,7 @@ function LandingThemeSync() {
 function CrispOffAdmin() {
   const { pathname } = useLocation();
   useEffect(() => {
-    const onAdmin = pathname.startsWith("/admin2214");
+    const onAdmin = isDecoyPath(pathname) || pathname.startsWith("/admin2214");
     // The class is what actually removes it: Crisp's own hide command only applies once its
     // widget has finished loading, and on a click through from the site it may already be there.
     document.documentElement.classList.toggle("tb-no-crisp", onAdmin);
@@ -85,6 +87,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/dat-load-board-tools" element={<DatToolsPage />} />
         <Route path="/demo" element={<DemoPage />} />
+        {DECOY_ROOTS.map((root) => (
+          <Route key={root} path={root + "/*"} element={<AdminDecoy />} />
+        ))}
         <Route path="/admin2214" element={<AdminGate><AdminHome /></AdminGate>} />
         <Route path="/admin2214/visits" element={<AdminGate><VisitsPanel /></AdminGate>} />
         <Route path="/admin2214/extension" element={<AdminGate><ExtensionPanel /></AdminGate>} />
