@@ -24,6 +24,7 @@ const MicrosoftCallback = lazy(() => import("./pages/business/MicrosoftCallback"
 const DemoPage = lazy(() => import("./pages/demo/DemoPage"));
 const VisitsPanel = lazy(() => import("./pages/admin/VisitsPanel"));
 const AdminHome = lazy(() => import("./pages/admin/AdminHome"));
+const AdminGate = lazy(() => import("./pages/admin/AdminGate"));
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
 const DatToolsPage = lazy(() => import("./pages/DatTools"));
 const ExtensionPanel = lazy(() => import("./pages/admin/ExtensionPanel"));
@@ -84,11 +85,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/dat-load-board-tools" element={<DatToolsPage />} />
         <Route path="/demo" element={<DemoPage />} />
-        <Route path="/admin2214" element={<AdminHome />} />
-        <Route path="/admin2214/visits" element={<VisitsPanel />} />
-        <Route path="/admin2214/extension" element={<ExtensionPanel />} />
-        <Route path="/admin2214/accounts" element={<DirectoryPanel />} />
-        <Route path="/admin2214/backoffice" element={<BackOfficePanel />} />
+        <Route path="/admin2214" element={<AdminGate><AdminHome /></AdminGate>} />
+        <Route path="/admin2214/visits" element={<AdminGate><VisitsPanel /></AdminGate>} />
+        <Route path="/admin2214/extension" element={<AdminGate><ExtensionPanel /></AdminGate>} />
+        <Route path="/admin2214/accounts" element={<AdminGate><DirectoryPanel /></AdminGate>} />
+        <Route path="/admin2214/backoffice" element={<AdminGate><BackOfficePanel /></AdminGate>} />
         <Route path="/success" element={<SuccessPage />} />
         <Route path="/cancel" element={<CancelPage />} />
         <Route path="/business/start" element={<TeamStart />} />
