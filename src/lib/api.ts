@@ -35,6 +35,10 @@ export function sessionId(): string {
   return getSessionId();
 }
 
+export function deviceId(): string {
+  return getDeviceId();
+}
+
 function getSessionId(): string {
   try {
     let id = sessionStorage.getItem("tb-session-id");

@@ -34,6 +34,12 @@ const TILES = [
     what: "Who is working right now, which company they sit in, and how much each person sends.",
     tag: "people",
   },
+  {
+    to: "/admin2214/intrusions",
+    name: "Suspicious activity",
+    what: "Real people who tried the admin addresses: IP, network, device, account if signed in.",
+    tag: "security",
+  },
 ];
 
 export default function AdminHome() {

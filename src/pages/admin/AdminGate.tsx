@@ -3,10 +3,11 @@
  *  Proprietary and confidential. See LICENSE.
  */
 
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { api } from "../../lib/api";
 import { auth } from "../../lib/auth";
+import { reportPageView } from "../../lib/pageView";
 import { readAdminTheme } from "./theme";
 import "./visits.css";
 
@@ -24,6 +25,13 @@ function initialVerdict(): Verdict {
 
 export default function AdminGate({ children }: { children: ReactNode }) {
   const [verdict, setVerdict] = useState<Verdict>(initialVerdict);
+  const reported = useRef(false);
+
+  useEffect(() => {
+    if (verdict !== "denied" || reported.current) return;
+    reported.current = true;
+    reportPageView("admin_denied");
+  }, [verdict]);
 
   useEffect(() => {
     if (verdict !== "checking") return;

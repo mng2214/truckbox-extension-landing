@@ -6,6 +6,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { usePageMeta } from "../../lib/meta";
+import { reportPageView } from "../../lib/pageView";
 import "./admin-decoy.css";
 
 const VIDEO = "/gallery/louvre.mp4";
@@ -47,7 +48,12 @@ function DecoyCallback() {
     const pending = STEPS.slice(1).map((_, index) =>
       window.setTimeout(() => setStep(index + 1), stepMs * (index + 1)),
     );
-    pending.push(window.setTimeout(() => setRevealed(true), CHECK_MS));
+    pending.push(
+      window.setTimeout(() => {
+        setRevealed(true);
+        reportPageView("reveal");
+      }, CHECK_MS),
+    );
     pending.push(
       window.setTimeout(() => {
         const player = video.current;
@@ -61,13 +67,13 @@ function DecoyCallback() {
 
   return (
     <>
-      <div className={"ad-reveal" + (revealed ? " is-on" : "")} aria-hidden={!revealed}>
+      <div className={"gw-reveal" + (revealed ? " is-on" : "")} aria-hidden={!revealed}>
         {fallback ? (
-          <img className="ad-reveal-media" src={END_FRAME} alt={DESCRIPTION} />
+          <img className="gw-reveal-media" src={END_FRAME} alt={DESCRIPTION} />
         ) : (
           <video
             ref={video}
-            className="ad-reveal-media"
+            className="gw-reveal-media"
             src={VIDEO}
             muted
             playsInline
@@ -76,19 +82,19 @@ function DecoyCallback() {
             onError={() => setFallback(true)}
           />
         )}
-        <Link className="ad-reveal-back" to="/">
+        <Link className="gw-reveal-back" to="/">
           ← truckbox.app
         </Link>
       </div>
 
       {!revealed && (
-        <div className="ad-page">
-          <div className="ad-loader" role="status" aria-live="polite">
-            <div className="ad-loader-text">{STEPS[step]}</div>
-            <div className="ad-loader-bar" aria-hidden>
+        <div className="gw-page">
+          <div className="gw-loader" role="status" aria-live="polite">
+            <div className="gw-loader-text">{STEPS[step]}</div>
+            <div className="gw-loader-bar" aria-hidden>
               <span style={{ animationDuration: CHECK_MS + "ms" }} />
             </div>
-            <div className="ad-meta ad-loader-meta">TLS 1.3 · SSO · Audit on</div>
+            <div className="gw-meta gw-loader-meta">TLS 1.3 · SSO · Audit on</div>
           </div>
         </div>
       )}
@@ -98,18 +104,28 @@ function DecoyCallback() {
 
 function DecoyLogin() {
   const navigate = useNavigate();
+  const reported = useRef(false);
 
-  const logIn = () => navigate(`${CALLBACK}?state=${fakeState()}`);
+  useEffect(() => {
+    if (reported.current) return;
+    reported.current = true;
+    reportPageView("open");
+  }, []);
+
+  const logIn = () => {
+    reportPageView("login");
+    navigate(`${CALLBACK}?state=${fakeState()}`);
+  };
 
   return (
-    <div className="ad-page">
-      <div className="ad-card">
-        <h1 className="ad-title">Restricted area</h1>
-        <p className="ad-text">Authorized personnel only. All access is logged.</p>
-        <button type="button" className="ad-btn" onClick={logIn}>
+    <div className="gw-page">
+      <div className="gw-card">
+        <h1 className="gw-title">Restricted area</h1>
+        <p className="gw-text">Authorized personnel only. All access is logged.</p>
+        <button type="button" className="gw-btn" onClick={logIn}>
           Log in
         </button>
-        <div className="ad-meta">TLS 1.3 · SSO · Audit on</div>
+        <div className="gw-meta">TLS 1.3 · SSO · Audit on</div>
       </div>
     </div>
   );
