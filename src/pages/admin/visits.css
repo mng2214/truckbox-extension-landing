@@ -1108,3 +1108,20 @@
 .vx-row.is-reviewed .vx-line:hover {
   opacity: 0.85;
 }
+
+.vx-table-intrusions .vx-head,
+.vx-table-intrusions .vx-line {
+  grid-template-columns:
+    214px 52px 46px minmax(170px, 1.2fr) minmax(170px, 1.1fr)
+    136px 158px 116px 176px;
+  min-width: 1250px;
+}
+
+.vx-table-intrusions .vx-when {
+  flex-wrap: wrap;
+  row-gap: 5px;
+}
+
+.vx-when-date {
+  white-space: nowrap;
+}

@@ -356,7 +356,7 @@ export default function IntrusionsPanel() {
       )}
 
       {shown.length > 0 && (
-        <div className={"vx-table" + (busy ? " is-busy" : "")}>
+        <div className={"vx-table vx-table-intrusions" + (busy ? " is-busy" : "")}>
           <div className="vx-head">
             <span>Last seen</span>
             <span>Hits</span>
@@ -417,7 +417,7 @@ export default function IntrusionsPanel() {
                       demo
                     </i>
                   )}
-                  {when(visitor.lastSeen)}
+                  <span className="vx-when-date">{when(visitor.lastSeen)}</span>
                 </span>
                 <span className={visitor.hits > 1 ? "vx-hot" : ""}>{visitor.hits}</span>
                 <span>{visitor.days}</span>
