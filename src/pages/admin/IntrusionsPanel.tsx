@@ -20,6 +20,11 @@ type Intruder = {
   ipPrefix: string | null;
   ipHost: string | null;
   country: string | null;
+  city: string | null;
+  region: string | null;
+  asn: number | null;
+  networkType: "tor" | "hosting" | "mobile" | "isp" | null;
+  secondsOnPage: number;
   device: string;
   userAgent: string | null;
   timezone: string | null;
@@ -44,6 +49,9 @@ type IntrusionEvent = {
   ip: string;
   ipHost: string | null;
   country: string | null;
+  city: string | null;
+  asn: number | null;
+  durationSeconds: number | null;
   userEmail: string | null;
   sessionId: string | null;
   deviceId: string | null;
@@ -69,6 +77,9 @@ const EVENT_LABELS: Record<string, string> = {
   login: "pressed log in",
   reveal: "saw the video",
   admin_denied: "real admin, refused",
+  leave: "left",
+  copy: "copied text",
+  devtools: "opened DevTools",
 };
 
 const when = (iso: string) => {
@@ -97,8 +108,28 @@ const levelOf = (visitor: Intruder) =>
       ? "watch"
       : "none";
 
+const NETWORK_LABELS: Record<string, string> = {
+  tor: "Tor",
+  hosting: "hosting / VPN",
+  mobile: "mobile carrier",
+  isp: "home or office ISP",
+};
+
+const place = (visitor: Intruder) =>
+  [visitor.city, visitor.region, visitor.country].filter(Boolean).join(", ") || null;
+
 const network = (visitor: Intruder) =>
-  [visitor.ipHost || visitor.ipPrefix, visitor.country].filter(Boolean).join(" · ") || "—";
+  [
+    place(visitor),
+    visitor.networkType ? NETWORK_LABELS[visitor.networkType] : null,
+    visitor.asn ? `AS${visitor.asn}` : null,
+    visitor.ipHost || visitor.ipPrefix,
+  ]
+    .filter(Boolean)
+    .join(" · ") || "—";
+
+const duration = (seconds: number) =>
+  seconds < 60 ? `${seconds}s` : `${Math.floor(seconds / 60)}m ${seconds % 60}s`;
 
 const dossier = (visitor: Intruder, events: IntrusionEvent[] | undefined) =>
   [
@@ -108,6 +139,7 @@ const dossier = (visitor: Intruder, events: IntrusionEvent[] | undefined) =>
     `First seen    ${visitor.firstSeen}`,
     `Last seen     ${visitor.lastSeen}`,
     `Hits          ${visitor.hits} across ${visitor.days} day(s)`,
+    `Time on page  ${visitor.secondsOnPage ? duration(visitor.secondsOnPage) : "—"}`,
     `Tried         ${visitor.paths.join(", ") || "—"}`,
     `Did           ${visitor.eventsSeen.map((event) => EVENT_LABELS[event] || event).join(", ") || "—"}`,
     `Seen in demo  ${visitor.seenInDemo ? "yes" : "no"}`,
@@ -267,7 +299,7 @@ export default function IntrusionsPanel() {
         <input
           className="vx-search"
           value={search}
-          placeholder="IP, network, account email, address tried, user agent, country"
+          placeholder="IP, network, city, AS number, account email, address tried, user agent"
           onChange={(event) => setSearch(event.target.value)}
           onKeyDown={(event) => {
             if (event.key === "Enter") setQuery(event.currentTarget.value);
@@ -372,6 +404,14 @@ export default function IntrusionsPanel() {
                       new
                     </i>
                   )}
+                  {(visitor.networkType === "tor" || visitor.networkType === "hosting") && (
+                    <i
+                      className="vx-mark"
+                      title={NETWORK_LABELS[visitor.networkType]}
+                    >
+                      {visitor.networkType === "tor" ? "tor" : "vpn"}
+                    </i>
+                  )}
                   {visitor.seenInDemo && (
                     <i className="vx-mark" title="Same network or device opened the demo">
                       demo
@@ -454,6 +494,26 @@ export default function IntrusionsPanel() {
                   <div className="vx-detail-meta">
                     <span>First seen {when(visitor.firstSeen)}</span>
                     <span>
+                      On page {visitor.secondsOnPage ? duration(visitor.secondsOnPage) : "—"}
+                    </span>
+                    <span>{place(visitor) || "Location unknown"}</span>
+                    <span>
+                      {visitor.networkType ? NETWORK_LABELS[visitor.networkType] : "Network type unknown"}
+                      {visitor.asn ? (
+                        <>
+                          {" · "}
+                          <a
+                            href={`https://bgp.he.net/AS${visitor.asn}`}
+                            target="_blank"
+                            rel="noreferrer"
+                            onClick={(event) => event.stopPropagation()}
+                          >
+                            AS{visitor.asn}
+                          </a>
+                        </>
+                      ) : null}
+                    </span>
+                    <span>
                       {visitor.userEmail
                         ? `Account ${visitor.userEmail} · id ${visitor.userId}`
                         : "Not signed in"}
@@ -487,7 +547,10 @@ export default function IntrusionsPanel() {
                       <span className="vx-tag">{EVENT_LABELS[event.event] || event.event}</span>
                       <span className="vx-what">{event.path || "—"}</span>
                       <span className="vx-mono">{event.ip}</span>
-                      <span className="vx-host">{event.country || "—"}</span>
+                      <span className="vx-host">
+                        {[event.city, event.country].filter(Boolean).join(", ") || "—"}
+                        {event.durationSeconds != null ? ` · ${duration(event.durationSeconds)}` : ""}
+                      </span>
                       <span className="vx-mono">{event.sessionId?.slice(0, 8) || "—"}</span>
                     </div>
                   ))}

@@ -6,7 +6,14 @@
 import { API_BASE, deviceId, sessionId } from "./api";
 import { auth } from "./auth";
 
-export type PageViewEvent = "open" | "login" | "reveal" | "admin_denied";
+export type PageViewEvent =
+  | "open"
+  | "login"
+  | "reveal"
+  | "admin_denied"
+  | "leave"
+  | "copy"
+  | "devtools";
 
 function screenSize(): string {
   try {
@@ -24,7 +31,11 @@ function timezone(): string {
   }
 }
 
-export function reportPageView(event: PageViewEvent, path: string = window.location.pathname) {
+export function reportPageView(
+  event: PageViewEvent,
+  path: string = window.location.pathname,
+  durationSeconds?: number,
+) {
   try {
     const body = JSON.stringify({
       event,
@@ -39,6 +50,7 @@ export function reportPageView(event: PageViewEvent, path: string = window.locat
       viewport: `${window.innerWidth}x${window.innerHeight}`,
       touch: navigator.maxTouchPoints > 0,
       token: auth.getToken(),
+      durationSeconds: durationSeconds ?? null,
     });
     void fetch(API_BASE + "/api/v1/public/page-view", {
       method: "POST",

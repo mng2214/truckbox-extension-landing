@@ -23,6 +23,54 @@ function fakeState(): string {
   return Array.from(bytes, (byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
+const DEVTOOLS_GAP = 160;
+
+function useVisitTelemetry() {
+  useEffect(() => {
+    const startedAt = Date.now();
+    let left = false;
+    let copied = false;
+    let inspected = false;
+
+    const reportLeave = () => {
+      if (left) return;
+      left = true;
+      reportPageView("leave", window.location.pathname, Math.round((Date.now() - startedAt) / 1000));
+    };
+    const onHidden = () => {
+      if (document.visibilityState === "hidden") reportLeave();
+    };
+    const onCopy = () => {
+      if (copied) return;
+      copied = true;
+      reportPageView("copy");
+    };
+
+    const precisePointer = window.matchMedia?.("(pointer: fine)").matches ?? false;
+    const devtoolsCheck = precisePointer
+      ? window.setInterval(() => {
+          const docked =
+            window.outerWidth - window.innerWidth > DEVTOOLS_GAP ||
+            window.outerHeight - window.innerHeight > DEVTOOLS_GAP;
+          if (!docked || inspected) return;
+          inspected = true;
+          reportPageView("devtools");
+        }, 1000)
+      : null;
+
+    window.addEventListener("pagehide", reportLeave);
+    document.addEventListener("visibilitychange", onHidden);
+    document.addEventListener("copy", onCopy);
+    return () => {
+      if (Date.now() - startedAt > 1000) reportLeave();
+      window.removeEventListener("pagehide", reportLeave);
+      document.removeEventListener("visibilitychange", onHidden);
+      document.removeEventListener("copy", onCopy);
+      if (devtoolsCheck != null) window.clearInterval(devtoolsCheck);
+    };
+  }, []);
+}
+
 export default function AdminDecoy() {
   usePageMeta({
     title: "Admin — TruckBox",
@@ -33,6 +81,7 @@ export default function AdminDecoy() {
 
   const { pathname } = useLocation();
   const onCallback = pathname.toLowerCase().startsWith(CALLBACK);
+  useVisitTelemetry();
 
   return onCallback ? <DecoyCallback key={pathname} /> : <DecoyLogin />;
 }
