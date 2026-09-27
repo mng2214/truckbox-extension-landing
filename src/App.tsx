@@ -640,7 +640,7 @@ function CountUp({ to, decimals = 0, prefix = "", suffix = "" }: {
   to: number; decimals?: number; prefix?: string; suffix?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
+  const inView = useInView(ref, { once: true, margin: "-80px 0px" });
   const [reduced] = useState(
     () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
   );
