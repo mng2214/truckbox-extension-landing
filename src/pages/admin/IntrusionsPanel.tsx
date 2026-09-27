@@ -31,6 +31,10 @@ type Intruder = {
   paths: string[];
   eventsSeen: string[];
   seenInDemo: boolean;
+  reviewed: boolean;
+  newSinceReview: boolean;
+  reviewedAt: string | null;
+  reviewedBy: string | null;
 };
 
 type IntrusionEvent = {
@@ -136,6 +140,8 @@ export default function IntrusionsPanel() {
   const [events, setEvents] = useState<Record<string, IntrusionEvents>>({});
   const [copied, setCopied] = useState<string | null>(null);
   const [day, setDay] = useState(readAdminTheme);
+  const [hideReviewed, setHideReviewed] = useState(false);
+  const [reviewFailed, setReviewFailed] = useState(false);
 
   const flipTheme = () => {
     setDay((was) => {
@@ -200,10 +206,37 @@ export default function IntrusionsPanel() {
       .catch(() => setEvents((previous) => ({ ...previous, [key]: { total: 0, events: [] } })));
   };
 
-  const shown = rows ?? [];
-  const signedIn = shown.filter((visitor) => visitor.userEmail).length;
-  const pressedLogin = shown.filter((visitor) => visitor.eventsSeen.includes("login")).length;
-  const alsoDemo = shown.filter((visitor) => visitor.seenInDemo).length;
+  const setReviewed = (visitor: Intruder, reviewed: boolean) => {
+    const key = visitor.visitorKey;
+    const apply = (value: boolean) =>
+      setRows(
+        (previous) =>
+          previous?.map((row) =>
+            row.visitorKey === key
+              ? {
+                  ...row,
+                  reviewed: value,
+                  newSinceReview: false,
+                  reviewedAt: value ? new Date().toISOString() : null,
+                }
+              : row,
+          ) ?? previous,
+      );
+    apply(reviewed);
+    setReviewFailed(false);
+    const path = `/api/v1/admin/intrusions/${encodeURIComponent(key)}/review`;
+    (reviewed ? api.put(path) : api.del(path)).catch(() => {
+      apply(!reviewed);
+      setReviewFailed(true);
+    });
+  };
+
+  const all = rows ?? [];
+  const shown = hideReviewed ? all.filter((visitor) => !visitor.reviewed) : all;
+  const unreviewed = all.filter((visitor) => !visitor.reviewed).length;
+  const signedIn = all.filter((visitor) => visitor.userEmail).length;
+  const pressedLogin = all.filter((visitor) => visitor.eventsSeen.includes("login")).length;
+  const alsoDemo = all.filter((visitor) => visitor.seenInDemo).length;
 
   return (
     <div className={"vx" + (day ? " is-day" : "")}>
@@ -243,6 +276,14 @@ export default function IntrusionsPanel() {
 
         <button
           type="button"
+          className={"vx-refresh vx-toggle" + (hideReviewed ? " is-on" : "")}
+          onClick={() => setHideReviewed((value) => !value)}
+        >
+          {hideReviewed ? "Show checked" : "Hide checked"}
+        </button>
+
+        <button
+          type="button"
           className="vx-refresh"
           onClick={() => setReloads((count) => count + 1)}
           disabled={busy}
@@ -257,6 +298,9 @@ export default function IntrusionsPanel() {
       </p>
 
       {failed && <p className="vx-note is-bad">Could not load the list. Try again.</p>}
+      {reviewFailed && (
+        <p className="vx-note is-bad">The check was not saved — the request failed. Try again.</p>
+      )}
       {busy && <div className="vx-progress" aria-label="Loading" />}
 
       {rows && rows.length >= PAGE && (
@@ -267,7 +311,7 @@ export default function IntrusionsPanel() {
 
       {rows && rows.length > 0 && (
         <p className="vx-count">
-          {`${rows.length} visitors · ${signedIn} signed in to TruckBox · ${pressedLogin} pressed Log in · ${alsoDemo} also seen in the demo`}
+          {`${rows.length} visitors · ${unreviewed} not checked · ${signedIn} signed in to TruckBox · ${pressedLogin} pressed Log in · ${alsoDemo} also seen in the demo`}
         </p>
       )}
 
@@ -275,7 +319,11 @@ export default function IntrusionsPanel() {
         <p className="vx-note">Nobody in this window yet.</p>
       )}
 
-      {rows && rows.length > 0 && (
+      {rows && rows.length > 0 && shown.length === 0 && (
+        <p className="vx-note">Everything in this window is checked.</p>
+      )}
+
+      {shown.length > 0 && (
         <div className={"vx-table" + (busy ? " is-busy" : "")}>
           <div className="vx-head">
             <span>Last seen</span>
@@ -295,6 +343,7 @@ export default function IntrusionsPanel() {
               className={
                 "vx-row vx-level-" +
                 levelOf(visitor) +
+                (visitor.reviewed ? " is-reviewed" : "") +
                 (open === visitor.visitorKey ? " is-open" : "")
               }
             >
@@ -304,6 +353,25 @@ export default function IntrusionsPanel() {
                 onClick={() => toggle(visitor.visitorKey)}
               >
                 <span className="vx-when">
+                  <i
+                    className={"vx-check" + (visitor.reviewed ? " is-on" : "")}
+                    role="checkbox"
+                    aria-checked={visitor.reviewed}
+                    aria-label="Checked"
+                    tabIndex={-1}
+                    title={visitor.reviewed ? "Checked — click to uncheck" : "Mark as checked"}
+                    onClick={(event) => {
+                      event.stopPropagation();
+                      setReviewed(visitor, !visitor.reviewed);
+                    }}
+                  >
+                    ✓
+                  </i>
+                  {visitor.newSinceReview && (
+                    <i className="vx-mark is-new" title="New activity since you last checked">
+                      new
+                    </i>
+                  )}
                   {visitor.seenInDemo && (
                     <i className="vx-mark" title="Same network or device opened the demo">
                       demo
@@ -373,6 +441,14 @@ export default function IntrusionsPanel() {
                         {copied === visitor.visitorKey + action.id ? "Copied" : action.label}
                       </button>
                     ))}
+
+                    <button
+                      type="button"
+                      className={"vx-action" + (visitor.reviewed ? " is-blocked" : "")}
+                      onClick={() => setReviewed(visitor, !visitor.reviewed)}
+                    >
+                      {visitor.reviewed ? "Uncheck" : "Mark as checked"}
+                    </button>
                   </div>
 
                   <div className="vx-detail-meta">
@@ -383,6 +459,11 @@ export default function IntrusionsPanel() {
                         : "Not signed in"}
                     </span>
                     <span>{visitor.seenInDemo ? "Also opened the demo" : "Not seen in the demo"}</span>
+                    <span>
+                      {visitor.reviewedAt
+                        ? `${visitor.reviewed ? "Checked" : "Last checked"} ${when(visitor.reviewedAt)}${visitor.reviewedBy ? ` by ${visitor.reviewedBy}` : ""}${visitor.newSinceReview ? " — new activity since" : ""}`
+                        : "Not checked yet"}
+                    </span>
                     <span>
                       {visitor.timezone || "—"} · {visitor.language || "—"} · {visitor.screen || "—"}
                     </span>

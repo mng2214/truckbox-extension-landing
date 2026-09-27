@@ -1067,3 +1067,44 @@
 /* Third series: emails sent from the saved list. Slot 3 of the validated palette. */
 .vx { --vx-s3: #199e70; }
 .vx.is-day { --vx-s3: #1baf7a; }
+
+.vx-check {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid var(--vx-dim);
+  background: transparent;
+  color: transparent;
+  font-size: 11px;
+  font-style: normal;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.vx-check:hover {
+  border-color: var(--vx-ok);
+}
+
+.vx-check.is-on {
+  border-color: var(--vx-ok);
+  background: var(--vx-ok);
+  color: var(--vx-bg);
+}
+
+.vx-mark.is-new {
+  border-color: var(--vx-accent);
+  color: var(--vx-accent);
+}
+
+.vx-row.is-reviewed .vx-line {
+  opacity: 0.5;
+}
+
+.vx-row.is-reviewed .vx-line:hover {
+  opacity: 0.85;
+}
