@@ -2613,7 +2613,7 @@ export function Privacy({ lead = false }: { lead?: boolean }) {
             <Heading className="ed-display mt-6 text-5xl md:text-7xl" style={{ textTransform: "none" }}>
               Privacy Policy &amp; Terms
             </Heading>
-            <p className="mt-2 ed-label">Last updated — September 19, 2026</p>
+            <p className="mt-2 ed-label">Last updated — October 2, 2026</p>
           </div>
         </Reveal>
 
@@ -2765,6 +2765,20 @@ export function Privacy({ lead = false }: { lead?: boolean }) {
                 <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Google's Privacy Policy</a>.
               </p>
 
+              <h3 id="privacy-osow">OS/OW permit &amp; escort calculator (beta)</h3>
+              <p>
+                When you use the OS/OW calculator in the web cabinet, we process the information you
+                enter and the results we compute for you:
+              </p>
+              <ul>
+                <li><b>What you enter.</b> Origin and destination, load and cargo dimensions and weight, trailer settings, pickup date and time, escort and cost assumptions, and any quote names and economics you choose to save.</li>
+                <li><b>What we keep.</b> A log of each calculation (lane, dimensions, states on the route, totals and time) used to run the service, enforce fair-use limits and improve the calculator; the quotes you save, until you delete them; and a record of when you accepted the calculator terms and which version.</li>
+                <li><b>Routing provider.</b> To build the route, the origin and destination coordinates and the vehicle's dimensions, weight and axle count are sent to HERE Technologies, which provides routing. Route results may be cached by us for up to 30 days. HERE's handling of that request is governed by{" "}
+                  <a href="https://legal.here.com/privacy" target="_blank" rel="noreferrer">HERE's privacy policy</a>.</li>
+                <li><b>Map display.</b> The route map is drawn in your browser with map tiles from OpenFreeMap, built on OpenStreetMap data. Your browser requests those tiles directly, so the tile provider receives your IP address and the map area being viewed.</li>
+              </ul>
+              <p>We do not sell the information you enter in the calculator.</p>
+
               <h3>Broker authority &amp; FMCSA data</h3>
               <p>
                 Truck Box can display publicly available broker authority and safety information from
@@ -2859,7 +2873,7 @@ export function Privacy({ lead = false }: { lead?: boolean }) {
 
             <article id="terms" className="tb-card p-6 sm:p-8 tb-prose">
               <h3 style={{ fontSize: "1.5rem", margin: "0 0 12px" }}>Terms &amp; Conditions</h3>
-              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>September 19, 2026</b></p>
+              <p style={{ fontSize: "0.9rem" }}>Last updated: <b>October 2, 2026</b></p>
 
               <h3>Acceptance</h3>
               <p>
@@ -2980,6 +2994,21 @@ export function Privacy({ lead = false }: { lead?: boolean }) {
                 financial, legal, or business advice, and you are responsible for independently
                 verifying any information before relying on it or doing business with any broker.
               </p>
+
+              <h3 id="terms-osow">OS/OW permit &amp; escort calculator (beta)</h3>
+              <p>
+                The OS/OW calculator is a <b>beta feature</b> that produces <b>estimates only</b>. By
+                checking the agreement box and continuing in the calculator, you accept this section
+                together with the rest of these Terms; we record the date and the version you accepted.
+              </p>
+              <ul>
+                <li><b>Not a permit.</b> The calculator does not issue, order, or guarantee any permit, and Truck Box is not a permit service, permit agent, or escort provider. Only the issuing state, county, or city authority can grant a permit and set its route, conditions, fees, escorts, and travel times.</li>
+                <li><b>Data may be wrong or out of date.</b> State rules, fees, escort and police thresholds, travel restrictions, and holidays are compiled from public sources, may be summarized or simplified, and can change without notice. Some states, rules, roads, and conditions are not modeled at all (for example local roads, city and county permits, rush-hour curfews, seasonal and weather restrictions, bridge and structural analysis, and conditions printed on an individual permit). Labels such as "draft" or "verified" describe our own review status and are not a warranty.</li>
+                <li><b>Routes and trip plans are approximate.</b> Routes come from a third-party mapping provider and may differ from the route a state authorizes; they do not verify clearances, bridge ratings, or road restrictions. Transit days, daylight windows, and hours-of-service calculations are planning estimates only and are not legal or compliance advice; drivers and carriers remain solely responsible for complying with FMCSA hours-of-service rules and all other laws.</li>
+                <li><b>Costs are estimates.</b> Escort, police, hotel, fuel, toll, and truck-day costs depend on the assumptions you enter and on third parties' actual prices.</li>
+                <li><b>Your responsibility.</b> Before you quote, bid, accept, or move a load, you must verify every requirement and fee with each state's permit office, obtain the actual permits, and follow the conditions printed on them.</li>
+                <li><b>No liability for reliance.</b> To the maximum extent permitted by law, TruckBox LLC is not responsible for fines, citations, permit denials or delays, detention, missed or under-priced loads, escort or police costs, damage, or any other loss arising from use of or reliance on the calculator. The Disclaimer, Limitation of liability, and Indemnification sections below apply in full.</li>
+              </ul>
 
               <h3>Subscriptions, billing, and cancellation</h3>
               <p>

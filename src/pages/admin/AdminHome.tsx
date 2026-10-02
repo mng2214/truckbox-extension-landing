@@ -29,6 +29,12 @@ const TILES = [
     tag: "cabinet",
   },
   {
+    to: "/admin2214/osow",
+    name: "OS/OW calculator",
+    what: "Who prices oversize loads, how often, on which lanes — and the calculations per day.",
+    tag: "cabinet",
+  },
+  {
     to: "/admin2214/accounts",
     name: "Accounts & teams",
     what: "Who is working right now, which company they sit in, and how much each person sends.",

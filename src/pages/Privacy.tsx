@@ -10,7 +10,20 @@ import { usePageMeta } from "../lib/meta";
 export default function PrivacyPage() {
   usePageMeta({ title: "Privacy & Terms — TruckBox", description: "How TruckBox handles your data: Google sign-in only, no password storage, emails sent from your own Gmail. Full privacy policy and terms of service.", path: "/privacy" });
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "auto" });
+    // Links like /privacy#terms-osow (from the OS/OW calculator) land on that section.
+    const sectionId = window.location.hash.slice(1);
+    if (!sectionId) {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      return;
+    }
+    // After layout settles (fonts, header), so the heading clears the fixed header.
+    const timer = window.setTimeout(() => {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+      const headerOffset = 110;
+      window.scrollTo({ top: section.getBoundingClientRect().top + window.scrollY - headerOffset, behavior: "auto" });
+    }, 120);
+    return () => window.clearTimeout(timer);
   }, []);
 
   return (

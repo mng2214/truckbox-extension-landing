@@ -8,7 +8,7 @@ import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   Menu, X, Sun, Moon, LogOut, HelpCircle, User, Building2, ArrowLeft,
-  LayoutDashboard, Users, BarChart3, Sparkles, Mail, UserCircle,
+  LayoutDashboard, Users, BarChart3, Sparkles, Mail, UserCircle, Ruler,
 } from "lucide-react";
 import { api, ApiError, sessionId } from "../../lib/api";
 import { OracleMark } from "../../components/OracleMark";
@@ -34,6 +34,10 @@ const DiscoveryPanel = lazy(() =>
 
 const AgentPanel = lazy(() =>
   import("./AgentPanel").then((m) => ({ default: m.AgentPanel }))
+);
+
+const OsowPanel = lazy(() =>
+  import("./osow/OsowPanel").then((m) => ({ default: m.OsowPanel }))
 );
 
 const SUPPORT_TELEGRAM = "https://t.me/mngartur";
@@ -193,6 +197,8 @@ export default function Cabinet() {
     return (
       <Bounce
         reason={ctx.bounceReason ?? "INSTALL"}
+        email={ctx.email}
+        onRefresh={() => void load()}
         onSignOut={signOut}
         telegram={SUPPORT_TELEGRAM}
         ctaOverride={
@@ -209,6 +215,7 @@ export default function Cabinet() {
     if (s === "team" || s === "statistics") return isManager;
     if (s === "discovery") return ctx.panels.includes("discovery");
     if (s === "agent") return ctx.panels.includes("agent");
+    if (s === "osow") return true;
     if (s === "mailboxes" || s === "accounts" || s === "company") return true;
     return false;
   };
@@ -270,9 +277,9 @@ export default function Cabinet() {
           </>
         )}
 
-        {(ctx.panels.includes("discovery") || ctx.panels.includes("agent")) && (
-          <span className="tb-nav-label">Tools</span>
-        )}
+        <span className={"tb-nav-label" + (!ctx.panels.includes("personal") && !isManager ? " is-first" : "")}>
+          Tools
+        </span>
         {ctx.panels.includes("discovery") && (
           <NavItem
             label="Oracle"
@@ -293,6 +300,13 @@ export default function Cabinet() {
             onClick={() => goto("agent")}
           />
         )}
+        <NavItem
+          label="OS/OW"
+          sub="Permits & escorts"
+          icon={<Ruler />}
+          active={section === "osow"}
+          onClick={() => goto("osow")}
+        />
 
         <span className="tb-nav-label">Settings</span>
         <NavItem label="Mailboxes" icon={<Mail />} active={section === "mailboxes"} onClick={() => goto("mailboxes")} />
@@ -312,21 +326,9 @@ export default function Cabinet() {
         >
           {ctx.email}
         </span>
-        <a
-          className="tb-nav tb-nav-support"
-          href={SUPPORT_TELEGRAM}
-          target="_blank"
-          rel="noreferrer"
-        >
-          <TelegramMark />
-          <span className="tb-nav-text">
-            <span>Support</span>
-            <span className="tb-nav-sub">Chat on Telegram</span>
-          </span>
-        </a>
         <button type="button" className="tb-nav" onClick={() => setHelpOpen(true)}>
           <HelpCircle />
-          Need help?
+          Support
         </button>
         <NavItem label="Sign out" icon={<LogOut />} active={false} onClick={signOut} />
       </div>
@@ -415,6 +417,11 @@ export default function Cabinet() {
             <AgentPanel campaignId={params.id ? Number(params.id) : null} />
           </Suspense>
         )}
+        {section === "osow" && (
+          <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
+            <OsowPanel citySuggest={ctx.panels.includes("discovery")} />
+          </Suspense>
+        )}
         {section === "mailboxes" && <MailboxesPanel />}
         {section === "accounts" && <AccountsPanel />}
         {section === "company" && <CompanyInfoPanel />}
@@ -457,7 +464,7 @@ function HelpDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
           <motion.div
             role="dialog"
             aria-modal="true"
-            aria-label="Need help?"
+            aria-label="Support"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
@@ -476,7 +483,7 @@ function HelpDialog({ open, onClose }: { open: boolean; onClose: () => void }) {
                 className="ed-display"
                 style={{ fontSize: "1.4rem", color: "var(--ink)", lineHeight: 1.1 }}
               >
-                Need help?
+                Support
               </h2>
               <button type="button" className="tb-icon-btn" aria-label="Close" onClick={onClose}>
                 <X className="h-4 w-4" />

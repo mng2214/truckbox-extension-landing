@@ -5,12 +5,14 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Check, ChevronDown, Copy, Flame, Info, MapPin, Mail, Phone, Search } from "lucide-react";
+import { Check, ChevronDown, Copy, Flame, MapPin, Mail, Phone, Search } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
 import { probeAgent } from "./agent/AgentApi";
 import { AgentSection } from "./agent/AgentSection";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+const ORACLE_TERMS_KEY = "oracle_terms_accepted";
 
 type SideMode = "city" | "state";
 
@@ -241,18 +243,21 @@ export function DiscoveryPanel() {
     fetchQuota();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const [showDemo, setShowDemo] = useState(() => {
+  // Asked once per browser: pressing OK is the user agreeing to the Terms and Privacy Policy.
+  const [showTerms, setShowTerms] = useState(() => {
     try {
-      return sessionStorage.getItem("oracle_demo_seen") !== "1";
+      return localStorage.getItem(ORACLE_TERMS_KEY) !== "1";
     } catch {
       return true;
     }
   });
-  const dismissDemo = () => {
+  const acceptTerms = () => {
     try {
-      sessionStorage.setItem("oracle_demo_seen", "1");
-    } catch {}
-    setShowDemo(false);
+      localStorage.setItem(ORACLE_TERMS_KEY, "1");
+    } catch {
+      /* storage blocked — the dialog just shows again next visit */
+    }
+    setShowTerms(false);
   };
 
   const groups = useMemo(() => (rows ? groupByBroker(rows) : []), [rows]);
@@ -338,9 +343,11 @@ export function DiscoveryPanel() {
 
   return (
     <section className="flex flex-col">
-      {showDemo && (
+      {showTerms && (
         <div
-          onClick={dismissDemo}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="oracle-terms-title"
           style={{
             position: "fixed",
             inset: 0,
@@ -356,7 +363,7 @@ export function DiscoveryPanel() {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              maxWidth: "420px",
+              maxWidth: "560px",
               width: "100%",
               background: "var(--bg-2)",
               border: "1px solid var(--hairline)",
@@ -364,24 +371,31 @@ export function DiscoveryPanel() {
               boxShadow: "0 24px 60px rgba(0,0,0,0.5)",
             }}
           >
-            <span className="ed-label">Heads up</span>
             <h2
+              id="oracle-terms-title"
               className="ed-display"
-              style={{ fontSize: "1.7rem", color: "var(--ink)", marginTop: "0.55rem" }}
+              style={{ fontSize: "1.7rem", color: "var(--ink)" }}
             >
-              Demo feature
+              Oracle
             </h2>
-            <p style={{ color: "var(--muted)", marginTop: "0.8rem", lineHeight: 1.55 }}>
-              Oracle is an experimental demo. It may be temporarily unavailable or behave
-              inconsistently while we keep working on it. It is free for now, with a few searches a
-              day, and will become a paid feature later.
+            <p className="sm:whitespace-nowrap" style={{ color: "var(--muted)", marginTop: "0.8rem", lineHeight: 1.55 }}>
+              By pressing OK you agree to the{" "}
+              <a className="ed-accent" href="/privacy#terms" target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>
+                Terms
+              </a>{" "}
+              and{" "}
+              <a className="ed-accent" href="/privacy#privacy" target="_blank" rel="noreferrer" style={{ textDecoration: "underline" }}>
+                Privacy Policy
+              </a>
+              .
             </p>
             <button
               className="ed-btn ed-btn-accent"
               style={{ marginTop: "1.5rem" }}
-              onClick={dismissDemo}
+              onClick={acceptTerms}
+              autoFocus
             >
-              Got it
+              OK
             </button>
           </div>
         </div>
@@ -461,26 +475,6 @@ export function DiscoveryPanel() {
         </span>
       )}
 
-      <div
-        className="mt-3"
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          gap: "0.7rem",
-          padding: "0.75rem 0.9rem",
-          borderLeft: "3px solid var(--accent)",
-          background: "color-mix(in oklab, var(--accent) 8%, transparent)",
-        }}
-      >
-        <Info className="h-4 w-4 shrink-0" style={{ color: "var(--accent)", marginTop: 2 }} />
-        <p style={{ fontSize: "0.84rem", lineHeight: 1.5, color: "var(--ink)" }}>
-          <b>Experimental demo.</b>{" "}
-          <span style={{ color: "var(--muted)" }}>
-            Oracle is still being built and may be unavailable at times. Free while in demo — it
-            will become a paid feature later.
-          </span>
-        </p>
-      </div>
 
       <form onSubmit={run} className="mt-9 flex flex-col gap-7">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-7">
