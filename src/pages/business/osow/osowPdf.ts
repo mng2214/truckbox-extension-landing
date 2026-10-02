@@ -11,7 +11,7 @@ import { jsPDF } from "jspdf";
 import autoTable from "jspdf-autotable";
 import { computeLedger, type EconForm } from "./econModel";
 import { durationLabel, stopPlace, stopReasonsLabel, tripDayLabel, tripMomentLabel } from "./format";
-import { DISCLAIMER, humanize, SMOOTHING_OPTIONS } from "./format";
+import { DISCLAIMER, humanize, shortDate, SMOOTHING_OPTIONS } from "./format";
 import { formatFtIn, formatLb } from "./parseDims";
 import type { BrokerContact, CalculateRequest, CalculateResponse, StateRow } from "./types";
 
@@ -219,7 +219,7 @@ export function buildOsowDoc(input: OsowPdfInput, now: Date): jsPDF {
         r.covered ? escorts(r.escortsInterstate) : "-",
         r.covered ? escorts(r.escortsOther) : "-",
         flags(r),
-        !r.covered ? "No data" : r.status === "verified" ? "Verified" : "Draft",
+        !r.covered ? "No data" : r.status === "verified" ? `Verified ${shortDate(r.verifiedOn)}` : "Draft",
       ].map(latin1),
     ),
     columnStyles: { 1: { halign: "right" }, 3: { halign: "right", fontStyle: "bold" } },

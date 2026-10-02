@@ -589,6 +589,13 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
   const polylines = useMemo(() => (routeKey ? routeKey.split("|") : []), [routeKey]);
 
   const verified = coverage?.filter((c) => c.status === "verified").length ?? 0;
+  // The day the verified set was last checked against the states' own sources (ISO dates sort as text).
+  const verifiedAsOf =
+    coverage
+      ?.filter((c) => c.status === "verified" && c.verifiedOn)
+      .map((c) => c.verifiedOn as string)
+      .sort()
+      .at(-1) ?? null;
 
   return (
     <section className="osw flex flex-col">
@@ -625,6 +632,7 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
               onClick={() => setCoverageOpen((o) => !o)}
             >
               Rules for {coverage.length} of 48 states · {verified} verified
+              {verifiedAsOf && <> as of {shortDate(verifiedAsOf)}</>}
               <ChevronDown size={11} style={{ transform: coverageOpen ? "rotate(180deg)" : "none" }} />
             </button>
           )}

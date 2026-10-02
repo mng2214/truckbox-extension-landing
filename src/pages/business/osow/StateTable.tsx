@@ -252,7 +252,7 @@ function StatusChip({ row }: { row: StateRow }) {
   if (row.status === "verified") {
     return (
       <span className="tb-chip is-ok" title={`Checked against the state's own sources on ${shortDate(row.verifiedOn)}`}>
-        <ShieldCheck /> Verified
+        <ShieldCheck /> Verified {shortDate(row.verifiedOn)}
       </span>
     );
   }
