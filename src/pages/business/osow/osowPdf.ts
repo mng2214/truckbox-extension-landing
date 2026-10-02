@@ -174,7 +174,9 @@ export function buildOsowDoc(input: OsowPdfInput, now: Date): jsPDF {
       String(L.axles),
       "Escort carry",
       request.costs.escortCars != null
-        ? `${request.costs.escortCars} car${request.costs.escortCars === 1 ? "" : "s"}, whole route`
+        ? request.costs.escortCars === 0
+          ? "none priced (provided by others)"
+          : `${request.costs.escortCars} car${request.costs.escortCars === 1 ? "" : "s"}, whole route`
         : (SMOOTHING_OPTIONS.find((o) => o.value === request.smoothing)?.label ?? request.smoothing),
     ],
   ];

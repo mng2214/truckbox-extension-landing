@@ -70,8 +70,15 @@ export function StateTable({
         {fixedEscortCars != null ? (
           <span className="flex items-center gap-2" style={{ fontSize: "0.76rem", color: "var(--muted)" }}>
             <span className="osw-sublabel">Escort cars</span>
-            <span className="tb-chip" title="Set in escort cost settings — state rules don't change the count">
-              ×{fixedEscortCars} · whole route
+            <span
+              className="tb-chip"
+              title={
+                fixedEscortCars === 0
+                  ? "Set in escort cost settings — no escort cars priced; the state's requirement still shows per row"
+                  : "Set in escort cost settings — state rules don't change the count"
+              }
+            >
+              {fixedEscortCars === 0 ? "none · not priced" : `×${fixedEscortCars} · whole route`}
             </span>
           </span>
         ) : (

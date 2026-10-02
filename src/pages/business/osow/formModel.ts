@@ -319,7 +319,8 @@ export type CostKey = Exclude<keyof EscortCosts, "escortCars">;
 export type CostText = Record<CostKey, string>;
 
 /** Auto (null) follows each state's rules; a number fixes the cars for the whole route. */
-export const ESCORT_CAR_CHOICES: (number | null)[] = [null, 1, 2, 3, 4];
+/** null = each state's rules; 0 = none priced (someone else provides them); 1-4 = cars on the whole route. */
+export const ESCORT_CAR_CHOICES: (number | null)[] = [null, 0, 1, 2, 3, 4];
 
 export const COST_FIELDS: { key: CostKey; label: string; pre?: string; post?: string }[] = [
   { key: "escortRatePerMile", label: "Escort rate per car", pre: "$", post: "/mi" },

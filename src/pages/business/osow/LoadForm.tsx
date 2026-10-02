@@ -491,10 +491,16 @@ export function LoadForm({
                     role="radio"
                     aria-checked={escortCars === cars}
                     className={escortCars === cars ? "is-active" : ""}
-                    title={cars == null ? "As many as each state requires, only where required" : `${cars} car${cars === 1 ? "" : "s"} on every mile of the route`}
+                    title={
+                      cars == null
+                        ? "As many as each state requires, only where required"
+                        : cars === 0
+                          ? "No escort cars priced — the shipper or a third party provides them. Each state's requirement still shows."
+                          : `${cars} car${cars === 1 ? "" : "s"} on every mile of the route`
+                    }
                     onClick={() => setEscortCars(cars)}
                   >
-                    {cars == null ? "Auto" : `×${cars}`}
+                    {cars == null ? "Auto" : cars === 0 ? "None" : `×${cars}`}
                   </button>
                 ))}
               </div>
@@ -538,7 +544,7 @@ function summarizeCosts(costText: CostText, escortCars: number | null): string {
   const rate = costText.escortRatePerMile || "2.00";
   const hotel = costText.escortHotelPerNight || "120";
   const speed = costText.averageMph || "45";
-  const cars = escortCars == null ? "" : ` · ×${escortCars} cars`;
+  const cars = escortCars == null ? "" : escortCars === 0 ? " · no escorts priced" : ` · ×${escortCars} cars`;
   return `$${rate}/mi · $${hotel}/night · ${speed} mph${cars}`;
 }
 

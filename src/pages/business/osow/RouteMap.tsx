@@ -162,6 +162,9 @@ export default function RouteMap({
       map = new MlMap({
         container: host,
         style: STYLE[theme],
+        // MapLibre defaults to 'high-performance', which on dual-GPU Macs switches the display to
+        // the discrete GPU the first time a map mounts and blanks the screen for a moment.
+        canvasContextAttributes: { powerPreference: "low-power" },
         bounds,
         fitBoundsOptions: { padding: 36 },
         attributionControl: { compact: true },
