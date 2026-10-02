@@ -5,9 +5,33 @@
 
 import { useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
-import { FlaskConical } from "lucide-react";
+import { BookOpen, FileX, FlaskConical, Route, ShieldAlert } from "lucide-react";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
+
+/** What "estimate" means, one block per point so none of them reads as fine print. */
+const POINTS = [
+  {
+    icon: BookOpen,
+    label: "Public sources",
+    text: "State rules and fees come from public sources and may be outdated, incomplete or wrong.",
+  },
+  {
+    icon: Route,
+    label: "Approximate",
+    text: "The route, trip days and escort counts are approximate — the state sets the real ones on your permit.",
+  },
+  {
+    icon: FileX,
+    label: "Not a permit",
+    text: "It is not a permit and does not order one. Verify with each state's permit office before you quote, bid or move a load.",
+  },
+  {
+    icon: ShieldAlert,
+    label: "No liability",
+    text: "TruckBox is not responsible for fines, delays or losses from relying on these numbers.",
+  },
+] as const;
 
 /**
  * Shown before the calculator can be used, and again whenever the terms version changes. It can't
@@ -75,11 +99,37 @@ export function OsowTermsDialog({
         <p style={{ margin: "10px 0 0", fontSize: "0.9rem", color: "var(--sub)", lineHeight: 1.55 }}>
           This calculator is in beta. Everything it shows is an <b style={{ color: "var(--ink)" }}>estimate</b>:
         </p>
-        <ul style={{ margin: "8px 0 0", paddingLeft: "1.1rem", fontSize: "0.88rem", color: "var(--sub)", lineHeight: 1.55 }}>
-          <li>State rules and fees come from public sources and may be outdated, incomplete or wrong.</li>
-          <li>The route, trip days and escort counts are approximate — the state sets the real ones on your permit.</li>
-          <li>It is not a permit and does not order one. Verify with each state's permit office before you quote, bid or move a load.</li>
-          <li>TruckBox is not responsible for fines, delays or losses from relying on these numbers.</li>
+        <ul
+          style={{
+            margin: "12px 0 0",
+            padding: 0,
+            listStyle: "none",
+            display: "grid",
+            gap: 1,
+            background: "var(--hairline)",
+            border: "1px solid var(--hairline)",
+          }}
+        >
+          {POINTS.map(({ icon: Icon, label, text }) => (
+            <li
+              key={label}
+              style={{
+                display: "flex",
+                gap: 12,
+                alignItems: "flex-start",
+                padding: "10px 12px",
+                background: "var(--bg-2)",
+              }}
+            >
+              <Icon size={16} strokeWidth={1.75} style={{ flexShrink: 0, marginTop: 2, color: "var(--accent)" }} />
+              <span style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                <span className="ed-label" style={{ color: "var(--ink)" }}>
+                  {label}
+                </span>
+                <span style={{ fontSize: "0.86rem", color: "var(--sub)", lineHeight: 1.5 }}>{text}</span>
+              </span>
+            </li>
+          ))}
         </ul>
 
         <label
