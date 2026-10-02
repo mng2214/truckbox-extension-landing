@@ -41,12 +41,11 @@ function allowedDriverPayMode(mode: unknown): DriverPayMode {
 
 /**
  * The driver's pay for this load, and what it was worked out from. A share of the load is taken
- * from the rate minus permits, escorts and police — money that only passes through.
+ * from the gross load rate, the way percentage drivers are paid.
  */
 export function driverPayFor(
   econ: EconForm,
   routeMiles: number,
-  passThrough: number,
 ): { amount: number | null; note: string; payBase: number | null } {
   if (econ.driverPayMode === "per_mile") {
     const payPerMile = readNumber(econ.driverPayPerMile);
@@ -58,13 +57,13 @@ export function driverPayFor(
     };
   }
   const loadRate = readNumber(econ.loadRate);
-  const payBase = loadRate == null ? null : Math.max(0, loadRate - passThrough);
+  const payBase = loadRate == null ? null : Math.max(0, loadRate);
   const percent = readNumber(econ.driverPayPercent);
   if (percent == null) return { amount: null, note: "Set the % of the load", payBase };
   if (payBase == null) return { amount: null, note: `${percent}% — enter the load rate`, payBase };
   return {
     amount: (payBase * percent) / 100,
-    note: `${percent}% of $${Math.round(payBase).toLocaleString("en-US")}`,
+    note: `${percent}% of gross $${Math.round(payBase).toLocaleString("en-US")}`,
     payBase,
   };
 }
@@ -163,7 +162,7 @@ export function computeLedger(result: CalculateResponse, econ: EconForm): Ledger
     const routeTolls = result.routeTollsUsd ?? null;
     const tolls = typedTolls ?? routeTolls ?? 0;
     const fuel = mpg && mpg > 0 && diesel != null ? (routeMiles / mpg) * diesel : null;
-    const driverPay = driverPayFor(econ, routeMiles, passThrough);
+    const driverPay = driverPayFor(econ, routeMiles);
     const costs = passThrough + (fuel ?? 0) + tolls + (driverPay.amount ?? 0);
     const profit = loadRate != null ? loadRate - costs : null;
     const missing = [fuel == null ? "fuel" : null, driverPay.amount == null ? "driver pay" : null].filter(Boolean);

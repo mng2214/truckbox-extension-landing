@@ -24,7 +24,17 @@ import {
 import type { TripStop } from "./types";
 
 // The bundled library can't find its worker next to itself once Vite has renamed the chunks.
-setWorkerUrl(workerUrl);
+// In production the worker runs from a blob: a worker loaded by URL obeys the security policy
+// it was first served with, and the browser keeps that policy with the cached script after the
+// site's policy changes - so tiles stayed blocked for anyone who opened the map before the tile
+// host was allowed. A blob worker always takes the page's current policy. (Dev has no policy,
+// and its worker imports other modules, which a blob can't resolve.)
+const workerReady: Promise<void> = import.meta.env.PROD
+  ? fetch(workerUrl)
+      .then((response) => (response.ok ? response.text() : Promise.reject(new Error(`worker ${response.status}`))))
+      .then((source) => setWorkerUrl(URL.createObjectURL(new Blob([source], { type: "text/javascript" }))))
+      .catch(() => setWorkerUrl(workerUrl))
+  : Promise.resolve(setWorkerUrl(workerUrl));
 
 const STYLE = {
   light: "https://tiles.openfreemap.org/styles/positron",
@@ -144,10 +154,21 @@ export default function RouteMap({
 }) {
   const hostRef = useRef<HTMLDivElement>(null);
   const [failed, setFailed] = useState(false);
+  const [workerLoaded, setWorkerLoaded] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    void workerReady.then(() => {
+      if (active) setWorkerLoaded(true);
+    });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const host = hostRef.current;
-    if (!host) return;
+    if (!host || !workerLoaded) return;
     const lines = decodeAll(polylines);
     if (!lines.length) return;
 
@@ -217,7 +238,7 @@ export default function RouteMap({
     }
 
     return () => map.remove();
-  }, [polylines, theme, origin, destination, stops, routeMiles]);
+  }, [polylines, theme, origin, destination, stops, routeMiles, workerLoaded]);
 
   if (failed) {
     return (

@@ -394,15 +394,32 @@ function createEngine(host: HTMLDivElement, labels: LabelEls): Engine {
 
   const frame = () => {
     if (!model || !current) return;
-    // Fit the whole rig + load (not the ground) for this canvas's aspect, from the front-left.
+    // Fit the whole rig + load (not the ground) from the front-left: back the camera off until
+    // every corner of its box is inside this canvas, so a tall or a wide view both show it all.
     const bounds = new THREE.Box3().setFromObject(current.group);
-    const sphere = bounds.getBoundingSphere(new THREE.Sphere());
-    const vfov = (camera.fov * Math.PI) / 180;
-    const hfov = 2 * Math.atan(Math.tan(vfov / 2) * camera.aspect);
-    const dist = (sphere.radius / Math.sin(Math.min(vfov, hfov) / 2)) * 0.6;
-    const target = sphere.center.clone();
+    const target = bounds.getCenter(new THREE.Vector3());
     target.y = Math.min(target.y, (Math.max(LEGAL.heightIn, cargoBox(model)?.y1 ?? 0) / 12) * 0.42);
     const dir = new THREE.Vector3(-0.5, 0.34, 0.8).normalize();
+    const cameraRight = new THREE.Vector3().crossVectors(dir.clone().negate(), new THREE.Vector3(0, 1, 0)).normalize();
+    const cameraUp = new THREE.Vector3().crossVectors(cameraRight, dir.clone().negate()).normalize();
+    const vfov = (camera.fov * Math.PI) / 180;
+    // A little room at the edges for the dimension labels.
+    const halfHeightSlope = Math.tan(vfov / 2) * 0.86;
+    const halfWidthSlope = Math.tan(vfov / 2) * camera.aspect * 0.9;
+    let dist = 0;
+    for (const x of [bounds.min.x, bounds.max.x]) {
+      for (const y of [bounds.min.y, bounds.max.y]) {
+        for (const z of [bounds.min.z, bounds.max.z]) {
+          const offset = new THREE.Vector3(x, y, z).sub(target);
+          const towardCamera = offset.dot(dir);
+          dist = Math.max(
+            dist,
+            towardCamera + Math.abs(offset.dot(cameraRight)) / halfWidthSlope,
+            towardCamera + Math.abs(offset.dot(cameraUp)) / halfHeightSlope,
+          );
+        }
+      }
+    }
     camera.position.copy(target).addScaledVector(dir, dist);
     controls.target.copy(target);
     controls.update();

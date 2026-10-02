@@ -217,7 +217,7 @@ export function Economics({
 
 const DRIVER_PAY_MODES: { value: DriverPayMode; label: string; title: string }[] = [
   { value: "per_mile", label: "$/mi", title: "Driver paid per mile" },
-  { value: "percent_of_load", label: "% of load", title: "Driver paid a share of the load rate, after permits and escorts" },
+  { value: "percent_of_load", label: "% of gross", title: "Driver paid a share of the gross load rate" },
 ];
 
 function DriverPayModeSwitch({ mode, onChange }: { mode: DriverPayMode; onChange: (mode: DriverPayMode) => void }) {

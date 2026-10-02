@@ -655,7 +655,7 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
         </div>
       ) : (
         <>
-          <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,1fr)] items-start">
+          <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] items-start">
             <LoadForm
               form={form}
               setForm={setForm}
