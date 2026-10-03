@@ -391,6 +391,13 @@ function createEngine(host: HTMLDivElement, labels: LabelEls): Engine {
     placeLabels();
   };
   controls.addEventListener("change", render);
+  // Until the user turns or zooms the view, every resize re-fits the rig (the card grows with the
+  // form beside it); after that only a big change in shape does, so their view is kept.
+  let viewMovedByUser = false;
+  const onUserMove = () => {
+    viewMovedByUser = true;
+  };
+  controls.addEventListener("start", onUserMove);
 
   const frame = () => {
     if (!model || !current) return;
@@ -423,6 +430,7 @@ function createEngine(host: HTMLDivElement, labels: LabelEls): Engine {
     camera.position.copy(target).addScaledVector(dir, dist);
     controls.target.copy(target);
     controls.update();
+    viewMovedByUser = false;
   };
 
   const setTheme = (t: "light" | "dark") => {
@@ -464,8 +472,8 @@ function createEngine(host: HTMLDivElement, labels: LabelEls): Engine {
     renderer.setSize(w, h);
     camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    // A big change in shape (layout switch, phone rotation) re-frames; a few pixels don't.
-    if (Math.abs(camera.aspect - lastAspect) / lastAspect > 0.25) frame();
+    // A big change in shape (layout switch, phone rotation) re-frames even a view the user moved.
+    if (!viewMovedByUser || Math.abs(camera.aspect - lastAspect) / lastAspect > 0.25) frame();
     lastAspect = camera.aspect;
     render();
   });
@@ -483,11 +491,13 @@ function createEngine(host: HTMLDivElement, labels: LabelEls): Engine {
       const distance = THREE.MathUtils.clamp(offset.length() * factor, controls.minDistance, controls.maxDistance);
       camera.position.copy(controls.target).add(offset.setLength(distance));
       controls.update();
+      viewMovedByUser = true;
       render();
     },
     dispose: () => {
       ro.disconnect();
       controls.removeEventListener("change", render);
+      controls.removeEventListener("start", onUserMove);
       controls.dispose();
       if (current) disposeTree(current.group);
       disposeTree(scene);

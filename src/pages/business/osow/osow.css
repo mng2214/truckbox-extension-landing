@@ -309,8 +309,13 @@ body.tb-cabinet-bg .osw .osw-unit .ed-input.osw-input.has-post { padding-right: 
 /* ---- visuals ---- */
 .osw .osw-visual { position: relative; width: 100%; height: 320px; background: var(--bg); overflow: hidden; }
 @media (min-width: 640px) { .osw .osw-visual { height: 420px; } }
-/* Beside the form on a wide screen the model gets the column's height, not a strip. */
-@media (min-width: 1280px) { .osw .osw-visual { height: 520px; } }
+/* Beside the form on a wide screen the model card is as tall as the Lane + Load cards (the panel
+   sets --osw-model-height) and stays in place; the 3D view takes whatever the card has left. */
+@media (min-width: 1280px) {
+  .osw .osw-model-card { display: flex; flex-direction: column; min-height: var(--osw-model-height, 0px); }
+  .osw .osw-model-card > :nth-child(2) { flex: 1 1 auto; }
+  .osw .osw-model-card > .osw-visual { flex: 1 1 0; height: auto; min-height: 420px; }
+}
 .osw .osw-visual canvas { display: block; outline: none; }
 .osw .osw-visual:focus-within { outline: 2px solid var(--accent); outline-offset: -2px; }
 .osw .osw-3d-label {

@@ -15,6 +15,7 @@ import {
   formatDim,
   limitNote,
   type CargoKey,
+  type CostGroup,
   type CostText,
   type Derived,
 } from "./formModel";
@@ -97,6 +98,23 @@ export function LoadForm({
       return { ...f, mode };
     });
 
+  const renderCostFields = (group: CostGroup) =>
+    COST_FIELDS.filter((costField) => costField.group === group).map((costField) => {
+      const problem = rangeError(costText[costField.key] ?? "", RANGES[costField.key]);
+      return (
+        <Field
+          key={costField.key}
+          label={costField.label}
+          value={costText[costField.key]}
+          pre={costField.pre}
+          post={costField.post}
+          inputMode="decimal"
+          onChange={(value) => setCostText((previous) => ({ ...previous, [costField.key]: sanitizeDecimal(value, 8) }))}
+          hint={problem ? { text: problem, kind: "error" } : costField.hint ? { text: costField.hint } : null}
+        />
+      );
+    });
+
   const swap = () => setForm((f) => ({ ...f, origin: f.destination, destination: f.origin }));
   const rigEdited = Object.keys(form.rigEdits[derived.rig.id] ?? {}).length > 0;
   const hasOverrides = Object.keys(form.overrides).length > 0;
@@ -170,8 +188,8 @@ export function LoadForm({
         </div>
       </section>
 
-      {/* Load */}
-      <section className="osw-card">
+      {/* Load — the load model beside the form ends level with this card's bottom. */}
+      <section className="osw-card" data-model-align-end>
         <div className="osw-card-head">
           <span className="osw-card-title">Load</span>
           <div className="tb-seg" role="tablist" aria-label="Input mode">
@@ -444,6 +462,16 @@ export function LoadForm({
         </div>
       </section>
 
+      {/* Trip */}
+      <section className="osw-card">
+        <div className="osw-card-head">
+          <span className="osw-card-title">Trip</span>
+        </div>
+        <div className="osw-card-body">
+          <div className="osw-grid">{renderCostFields("trip")}</div>
+        </div>
+      </section>
+
       {/* Escort cost settings */}
       <section className="osw-card">
         <button
@@ -460,30 +488,12 @@ export function LoadForm({
           </span>
         </button>
         {costsOpen && (
-          <div className="osw-card-body">
-            <div className="osw-grid is-4">
-              {COST_FIELDS.map((costField) => (
-                <Field
-                  key={costField.key}
-                  label={costField.label}
-                  value={costText[costField.key]}
-                  pre={costField.pre}
-                  post={costField.post}
-                  inputMode="decimal"
-                  onChange={(value) =>
-                    setCostText((previous) => ({ ...previous, [costField.key]: sanitizeDecimal(value, 8) }))
-                  }
-                  hint={
-                    rangeError(costText[costField.key] ?? "", RANGES[costField.key])
-                      ? { text: rangeError(costText[costField.key] ?? "", RANGES[costField.key]) as string, kind: "error" }
-                      : null
-                  }
-                />
-              ))}
-            </div>
-            <div className="osw-field" style={{ marginTop: 12 }}>
-              <span className="osw-flabel">Escort cars</span>
-              <div className="tb-seg" role="radiogroup" aria-label="Escort cars" style={{ width: "fit-content" }}>
+          <div className="osw-card-body flex flex-col gap-5">
+            <div className="flex flex-col gap-2.5">
+              <span className="osw-sublabel">Escort cars</span>
+              <div className="osw-field">
+                <span className="osw-flabel">How many</span>
+                <div className="tb-seg" role="radiogroup" aria-label="Escort cars" style={{ width: "fit-content", maxWidth: "100%", flexWrap: "wrap" }}>
                 {ESCORT_CAR_CHOICES.map((cars) => (
                   <button
                     key={cars ?? "auto"}
@@ -503,8 +513,14 @@ export function LoadForm({
                     {cars == null ? "Auto" : cars === 0 ? "None" : `×${cars}`}
                   </button>
                 ))}
+                </div>
               </div>
+              <div className="osw-grid">{renderCostFields("escorts")}</div>
+            </div>
 
+            <div className="flex flex-col gap-2.5">
+              <span className="osw-sublabel">Police</span>
+              <div className="osw-grid">{renderCostFields("police")}</div>
             </div>
           </div>
         )}
@@ -543,9 +559,8 @@ function shortLabel(k: DimKey): string {
 function summarizeCosts(costText: CostText, escortCars: number | null): string {
   const rate = costText.escortRatePerMile || "2.00";
   const hotel = costText.escortHotelPerNight || "120";
-  const speed = costText.averageMph || "45";
   const cars = escortCars == null ? "" : escortCars === 0 ? " · no escorts priced" : ` · ×${escortCars} cars`;
-  return `$${rate}/mi · $${hotel}/night · ${speed} mph${cars}`;
+  return `$${rate}/mi · $${hotel}/night${cars}`;
 }
 
 /** Native date/time picker styled like the other form fields. */

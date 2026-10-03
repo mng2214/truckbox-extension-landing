@@ -315,7 +315,8 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
     }
     const costProblem = COST_FIELDS.find((costField) => rangeError(costText[costField.key] ?? "", RANGES[costField.key]));
     if (costProblem) {
-      rejectForm(`Check escort cost settings: ${costProblem.label} must be ${RANGES[costProblem.key].label}.`);
+      const card = costProblem.group === "trip" ? "Trip" : "escort cost settings";
+      rejectForm(`Check ${card}: ${costProblem.label} must be ${RANGES[costProblem.key].label}.`);
       return;
     }
     if (!/^\d{4}-\d{2}-\d{2}$/.test(pickupDate) || !/^\d{2}:\d{2}$/.test(pickupTime)) {
@@ -590,6 +591,23 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
 
   const verified = coverage?.filter((c) => c.status === "verified").length ?? 0;
   // The day the verified set was last checked against the states' own sources (ISO dates sort as text).
+  // On a wide screen the load model beside the form ends level with the bottom of the Load card,
+  // whatever the lane and load cards hold (errors, hints, the rig editor).
+  const alignModelToForm = useCallback((grid: HTMLDivElement | null) => {
+    if (!grid) return;
+    const loadCard = grid.querySelector<HTMLElement>("[data-model-align-end]");
+    if (!loadCard) return;
+    const align = () => {
+      const height = loadCard.getBoundingClientRect().bottom - grid.getBoundingClientRect().top;
+      grid.style.setProperty("--osw-model-height", `${Math.ceil(height)}px`);
+    };
+    const observer = new ResizeObserver(align);
+    observer.observe(loadCard);
+    if (grid.firstElementChild) observer.observe(grid.firstElementChild);
+    align();
+    return () => observer.disconnect();
+  }, []);
+
   const verifiedAsOf =
     coverage
       ?.filter((c) => c.status === "verified" && c.verifiedOn)
@@ -655,7 +673,7 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
         </div>
       ) : (
         <>
-          <div className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] items-start">
+          <div ref={alignModelToForm} className="mt-6 grid gap-5 xl:grid-cols-[minmax(0,0.88fr)_minmax(0,1.12fr)] items-start">
             <LoadForm
               form={form}
               setForm={setForm}
@@ -834,7 +852,7 @@ function VisualCard({
   const overweight = (v.grossLb != null && v.grossLb > 80_000) || axlesOverLegal;
   const ready = v.widthIn != null && v.heightIn != null && v.lengthIn != null;
   return (
-    <section className="osw-card xl:sticky xl:top-6">
+    <section className="osw-card osw-model-card">
       <div className="osw-card-head">
         <span className="flex items-center gap-2 flex-wrap">
           <span className="osw-card-title">Load model</span>

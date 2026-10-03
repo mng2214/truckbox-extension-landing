@@ -318,15 +318,23 @@ export type CostKey = Exclude<keyof EscortCosts, "escortCars">;
 
 export type CostText = Record<CostKey, string>;
 
-/** Auto (null) follows each state's rules; a number fixes the cars for the whole route. */
 /** null = each state's rules; 0 = none priced (someone else provides them); 1-4 = cars on the whole route. */
 export const ESCORT_CAR_CHOICES: (number | null)[] = [null, 0, 1, 2, 3, 4];
 
-export const COST_FIELDS: { key: CostKey; label: string; pre?: string; post?: string }[] = [
-  { key: "escortRatePerMile", label: "Escort rate per car", pre: "$", post: "/mi" },
-  { key: "escortHotelPerNight", label: "Hotel per car", pre: "$", post: "/night" },
-  { key: "policeCostEach", label: "Police escort", pre: "$", post: "each" },
-  { key: "averageMph", label: "Average speed", post: "mph" },
+/** The settings card's sections: what escort cars cost, what police cost, how fast the truck goes. */
+export type CostGroup = "escorts" | "police" | "trip";
+
+export const COST_FIELDS: { key: CostKey; label: string; group: CostGroup; pre?: string; post?: string; hint?: string }[] = [
+  { key: "escortRatePerMile", label: "Rate per car", group: "escorts", pre: "$", post: "/mi" },
+  { key: "escortHotelPerNight", label: "Hotel per car", group: "escorts", pre: "$", post: "/night" },
+  { key: "policeCostEach", label: "Police escort", group: "police", pre: "$", post: "each", hint: "Each police escort a state requires" },
+  {
+    key: "averageMph",
+    label: "Truck average speed",
+    group: "trip",
+    post: "mph",
+    hint: "Sets trip days and escort nights",
+  },
 ];
 
 export const DEFAULT_COSTS: Record<CostKey, number> = {
