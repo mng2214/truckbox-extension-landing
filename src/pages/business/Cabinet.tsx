@@ -304,6 +304,7 @@ export default function Cabinet() {
           label="OS/OW"
           sub="Permits & escorts"
           icon={<Ruler />}
+          fresh
           active={section === "osow"}
           onClick={() => goto("osow")}
         />
@@ -556,6 +557,7 @@ function NavItem({
   icon,
   active,
   premium,
+  fresh,
   onClick,
 }: {
   label: string;
@@ -563,12 +565,14 @@ function NavItem({
   icon: React.ReactNode;
   active: boolean;
   premium?: boolean;
+  /** A new tool: marked in green the way premium ones are in purple. */
+  fresh?: boolean;
   onClick: () => void;
 }) {
   return (
     <button
       onClick={onClick}
-      className={"tb-nav" + (active ? " is-active" : "") + (premium ? " is-premium" : "")}
+      className={"tb-nav" + (active ? " is-active" : "") + (premium ? " is-premium" : "") + (fresh ? " is-fresh" : "")}
     >
       {icon}
       {sub ? (
@@ -581,6 +585,11 @@ function NavItem({
       )}
       {premium && (
         <span className="tb-prem-spark" aria-label="Premium">
+          <Sparkles />
+        </span>
+      )}
+      {fresh && (
+        <span className="tb-fresh-spark" aria-label="New">
           <Sparkles />
         </span>
       )}

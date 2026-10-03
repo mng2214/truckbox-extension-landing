@@ -334,6 +334,9 @@ body.tb-cabinet-bg {
   --pp: #8b78ff;
   --pp-ink: #a394ff;
   --pp-tint: rgba(139, 120, 255, 0.15);
+  --gg: #2fbf71;
+  --gg-ink: #52d68e;
+  --gg-tint: rgba(47, 191, 113, 0.14);
   --tb-cabinet-bg: #0d0d0f;
   --tb-panel: #141416;
   --tb-topbar-bg: #141416;
@@ -358,6 +361,9 @@ body.tb-cabinet-bg {
   --pp: #7b5cff;
   --pp-ink: #5b3fe0;
   --pp-tint: #f0ecff;
+  --gg: #16a35a;
+  --gg-ink: #0f7f45;
+  --gg-tint: #e6f7ee;
   --tb-cabinet-bg: #f4f4f5;
   --tb-panel: #ffffff;
   --tb-topbar-bg: #ffffff;
@@ -498,6 +504,12 @@ body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark { margin-left: auto; color:
 body.tb-cabinet-bg .tb-nav.is-premium .tb-prem-spark svg { width: 12px; height: 12px; }
 body.tb-cabinet-bg .tb-nav.is-premium:hover { background: var(--pp-tint); color: var(--pp-ink); }
 body.tb-cabinet-bg .tb-nav.is-premium:hover svg { color: var(--pp-ink); }
+/* A new tool, marked in green the way premium ones are in purple. */
+body.tb-cabinet-bg .tb-nav.is-fresh svg:first-child { color: var(--gg); }
+body.tb-cabinet-bg .tb-nav.is-fresh .tb-fresh-spark { margin-left: auto; color: var(--gg); display: inline-flex; }
+body.tb-cabinet-bg .tb-nav.is-fresh .tb-fresh-spark svg { width: 12px; height: 12px; }
+body.tb-cabinet-bg .tb-nav.is-fresh:hover { background: var(--gg-tint); color: var(--gg-ink); }
+body.tb-cabinet-bg .tb-nav.is-fresh:hover svg { color: var(--gg-ink); }
 
 body.tb-cabinet-bg .tb-card {
   background: var(--bg-2);
