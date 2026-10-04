@@ -1,0 +1,159 @@
+{
+  "code" : "AZ",
+  "name" : "Arizona",
+  "slug" : "arizona",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "57'6\"",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "ADOT MVD Commercial Vehicle Permits (Class A) / ADOT Class C Permits Office",
+    "url" : "https://azdot.gov/mvd/services/enforcement/commercial-vehicle-permits/general-permit-information/oversizeoverweight",
+    "phone" : "602-712-8280",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$15",
+    "note" : "Class A single trip, excess size only: $15 (Class A covers up to 14' W, 16' H, 120' L, 250,000 lb)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$75",
+    "note" : "Class A single trip, excess weight or size + weight: $75 (A.R.S. 28-1105(A)(2)-(3))."
+  }, {
+    "kind" : "other",
+    "when" : "Over 14' wide",
+    "amount" : "Depends on the load",
+    "note" : "Class C (beyond the Class A envelope): $30 at <=80,000 lb, $90 over 80,000 lb. Valid 4 working days."
+  }, {
+    "kind" : "other",
+    "when" : "Over 16' high",
+    "amount" : "Depends on the load",
+    "note" : "Class C triggered by height over 16': $30 / $90 over 80,000 lb."
+  }, {
+    "kind" : "other",
+    "when" : "Over 120' long",
+    "amount" : "Depends on the load",
+    "note" : "Class C triggered by length over 120': $30 / $90 over 80,000 lb."
+  }, {
+    "kind" : "other",
+    "when" : "Over 250,000 lb",
+    "amount" : "$90",
+    "note" : "Class C triggered by gross over 250,000 lb: $90."
+  }, {
+    "kind" : "other",
+    "when" : "Over 18' wide",
+    "amount" : "Depends on the load",
+    "note" : "Class C greater than 18 ft: $40 at <=80,000 lb, $100 over 80,000 lb. ADOT wording 'greater than 18 feet in height and width' read as either dimension - verify."
+  }, {
+    "kind" : "other",
+    "when" : "Over 18' high",
+    "amount" : "Depends on the load",
+    "note" : "Class C greater than 18 ft high: $40 / $100 over 80,000 lb."
+  }, {
+    "kind" : "other",
+    "when" : "Over 250,000 lb",
+    "amount" : "$2.50 per mile",
+    "note" : "Engineering/bridge analysis $125 per 50-mile increment (modeled as $2.50/mi, min $125; rounding up to whole increments not modeled). Also charged below 250,000 lb when axle weights exceed R17-6-411 Tables 3.01-3.09 or posted bridge limits - not modeled."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 250,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 10' wide",
+    "text" : "Over 10' wide: no continuous travel - move 1/2 hour before sunrise to 1/2 hour after sunset; night (from 3:00 a.m.) and weekend moves only on Table 4 routes designated for night/weekend transport (up to 16' W, 16' H, 120' L, 250,000 lb). Keep 2,000 ft from other permitted loads."
+  }, {
+    "when" : "Over 14'6\" high",
+    "text" : "Over 14'6\" high: daylight only (1/2 hr before sunrise to 1/2 hr after sunset) except Table 4 night/weekend routes up to 16' high."
+  }, {
+    "when" : "Over 120' long",
+    "text" : "Over 120' long: daylight only; night/weekend/holiday moves only if approved on the Class C permit."
+  }, {
+    "when" : "Over 250,000 lb",
+    "text" : "Over 250,000 lb: daylight only; night/weekend/holiday moves only if approved on the Class C permit."
+  }, {
+    "when" : "Over 10' wide",
+    "text" : "Holiday ban (also applies over 14'6\" H, 10' front/rear overhang, 120' L, 250,000 lb): no moves on New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving, Christmas; stop at 12 noon the day before (Thursday or Friday for weekend holidays) and resume 1/2 hr before sunrise the day after."
+  }, {
+    "when" : "Over 10' wide",
+    "text" : "Metro curfew (Phoenix and Tucson listed routes), Mon-Fri 7:00-9:00 a.m. and 4:00-6:00 p.m.: over 10' wide either needs a rear escort (10-12' on some Phoenix routes) or may not move (over 12', and all over 10' on listed Tucson I-10/I-19 segments)."
+  } ],
+  "travel" : [ {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Night/weekend moves only on ADOT Table 4 routes."
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 250,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "A.R.S. 28-1105 Special permit fees",
+    "url" : "https://azleg.gov/ars/28/01105.htm"
+  }, {
+    "title" : "ADOT Oversize/Overweight Permits (Class A eligibility and fees)",
+    "url" : "https://azdot.gov/mvd/services/enforcement/commercial-vehicle-permits/general-permit-information/oversizeoverweight"
+  }, {
+    "title" : "ADOT Class C Permits (fees, engineering analysis, DPS escorts)",
+    "url" : "https://azdot.gov/business/permits/class-c-permits"
+  }, {
+    "title" : "Arizona Administrative Register, Notice of Final Rulemaking 17 A.A.C. 6 (eff. July 8, 2022), incl. R17-6-305, R17-6-401..404, R17-6-412 Table 4",
+    "url" : "https://azdot.gov/sites/default/files/media/2022/07/OversizeandOverweightEnvelopeandSpecialPermitRulesEffective07082022.pdf"
+  }, {
+    "title" : "17 A.A.C. 6 R17-6-101/102 and Table 1 Threshold Dimensions (Supp. 22-2)",
+    "url" : "https://azdot.gov/sites/default/files/media/2022/08/17-06Page7-8.pdf"
+  }, {
+    "title" : "17 A.A.C. 6 R17-6-402..404 night/weekend, holiday, metro curfew (Supp. 22-2)",
+    "url" : "https://azdot.gov/sites/default/files/media/2022/08/17-06HolidayRestrictions.pdf"
+  }, {
+    "title" : "ADOT Table 4 Master List of Permanent Highway Restrictions, Requirements, Conditions and Allowances (as of 07/10/2025)",
+    "url" : "https://azdot.gov/sites/default/files/2023-12/table-4-road-restriction-info.pdf"
+  } ],
+  "notes" : [ "Legal height is 14' (13'6\" on Table 4 restricted routes). Legal width 8'6\" (8' on some restricted routes). Legal length: 57'6\" semitrailer on the National Network, 53' (or 65' overall) elsewhere; overhang 3' front / 6' rear.", "Class A single trip covers up to 14' W, 16' H, 120' L, 250,000 lb; anything beyond is a Class C permit (valid 4 working days, ~48 h processing).", "Escorts are route-specific (R17-6-305 + R17-6-412 Table 4). Modeled from the dominant Table 4 pattern: over 14' wide = rear escort on most interstate segments, front+rear on most US/state routes. Many US/state segments require front+rear from 10' or 12' wide - check Table 4 for the actual route.", "Night escorts (3:00 a.m. to 1/2 hr before sunrise, R17-6-402): over 11-14' wide rear; over 14-16' front+rear; over 15' high front with height pole.", "Law enforcement (DPS) escorts are required only where Table 4 or the Class C permit says so (max two per R17-6-412(E)); no general dimension trigger. Route survey/contingency plan is decided case by case for Class C (R17-6-108).", "Class A permits are valid on state routes only; city/county roads need local permits (e.g., City of Phoenix)." ]
+}

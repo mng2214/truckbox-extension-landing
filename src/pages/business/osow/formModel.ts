@@ -64,6 +64,43 @@ export function emptyForm(): FormSnapshot {
   };
 }
 
+export function rigForEquipment(equipment: string, lengthFt: number | null): string | null {
+  const code = equipment.trim().toUpperCase();
+  const longTrailer = lengthFt != null && lengthFt >= 53;
+  if (/^(FH|HS)/.test(code)) return "hotshot";
+  if (/RGN|^LB|^LO/.test(code)) return "rgn2";
+  if (/DD/.test(code)) return "dd48";
+  if (/SD/.test(code)) return longTrailer ? "step53" : "step48";
+  if (/^(F|CN|CONG|MX|HS|LA)/.test(code)) return longTrailer ? "flat53" : "flat48";
+  return null;
+}
+
+export function applyLoadLink(form: FormSnapshot, params: URLSearchParams): FormSnapshot | null {
+  const origin = (params.get("origin") ?? "").trim().slice(0, 120);
+  const destination = (params.get("destination") ?? "").trim().slice(0, 120);
+  if (!origin && !destination) return null;
+  const weight = (params.get("weight") ?? "").replace(/\D/g, "").slice(0, 7);
+  const lengthFt = Number((params.get("length") ?? "").replace(/\D/g, "")) || null;
+  const namedRig = RIGS.some((rig) => rig.id === params.get("rig")) ? params.get("rig") : null;
+  const rigId = namedRig ?? rigForEquipment(params.get("equipment") ?? "", lengthFt);
+  const dimension = (key: string) => (params.get(key) ?? "").trim().slice(0, 16);
+  return {
+    ...form,
+    origin: origin || form.origin,
+    destination: destination || form.destination,
+    mode: "cargo",
+    cargo: {
+      ...form.cargo,
+      length: dimension("cargoLength") || form.cargo.length,
+      width: dimension("width") || form.cargo.width,
+      height: dimension("height") || form.cargo.height,
+      weight: weight || form.cargo.weight,
+    },
+    rigId: rigId ?? form.rigId,
+    rigAuto: rigId ? false : form.rigAuto,
+  };
+}
+
 export function parseDim(key: DimKey, raw: string | undefined): number | null {
   const s = (raw ?? "").trim();
   if (!s) return null;
@@ -286,7 +323,9 @@ export function deriveLoad(form: FormSnapshot): Derived {
 export type LimitNote = { over: boolean; text: string };
 
 /** The legal-limit hint under each overall field. Limits vary by state; these are the common ones. */
-export function limitNote(key: DimKey, v: number | null, tractorLengthIn: number): LimitNote | null {
+const PICKUP_COMBINATION_IN = 780;
+
+export function limitNote(key: DimKey, v: number | null, rig: Pick<Rig, "tractorLengthIn" | "towVehicle">): LimitNote | null {
   switch (key) {
     case "widthIn":
       return v != null && v > LEGAL.widthIn
@@ -297,7 +336,12 @@ export function limitNote(key: DimKey, v: number | null, tractorLengthIn: number
         ? { over: true, text: `+${formatFtIn(v - LEGAL.heightIn)} over 13' 6"` }
         : { over: false, text: `Legal 13' 6" in most states` };
     case "lengthIn": {
-      const trailer = v != null ? v - tractorLengthIn : null;
+      if (rig.towVehicle === "pickup") {
+        return v != null && v > PICKUP_COMBINATION_IN
+          ? { over: false, text: "Many states cap pickup + trailer at 65'" }
+          : { over: false, text: "Bumper to rear" };
+      }
+      const trailer = v != null ? v - rig.tractorLengthIn : null;
       return trailer != null && trailer > LEGAL.trailerLengthIn
         ? { over: true, text: `${formatFtIn(trailer)} past tractor > 53'` }
         : { over: false, text: "Bumper to rear" };

@@ -3,8 +3,21 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { join, extname, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
-const ROUTES = ["/", "/guide", "/update", "/faq", "/privacy", "/business/start", "/dat-load-board-tools"];
 const DIST = join(dirname(fileURLToPath(import.meta.url)), "..", "dist");
+const STATES = JSON.parse(
+  await readFile(join(dirname(fileURLToPath(import.meta.url)), "..", "src", "data", "osow-states", "index.json"), "utf8"),
+);
+const ROUTES = [
+  "/",
+  "/guide",
+  "/update",
+  "/faq",
+  "/privacy",
+  "/business/start",
+  "/dat-load-board-tools",
+  "/oversize-permit-calculator",
+  ...STATES.map((state) => `/oversize-permits/${state.slug}`),
+];
 
 const MIME = {
   ".html": "text/html",
@@ -63,6 +76,7 @@ try {
     const url = `http://127.0.0.1:${port}${route}`;
     await page.goto(url, { waitUntil: "networkidle2", timeout: 60_000 });
     await page.waitForSelector("h1, h2", { timeout: 10_000 }).catch(() => {});
+    await page.waitForFunction(() => !document.querySelector("[data-prerender-pending]"), { timeout: 10_000 }).catch(() => {});
     await new Promise((r) => setTimeout(r, 600));
 
     const html = await page.evaluate(() => {

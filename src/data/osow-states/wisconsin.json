@@ -1,0 +1,164 @@
+{
+  "code" : "WI",
+  "name" : "Wisconsin",
+  "slug" : "wisconsin",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : "75'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "WisDOT Oversize/Overweight Permit Unit",
+    "url" : "https://wisconsindot.gov/Pages/dmv/com-drv-vehs/mtr-car-trkr/osow-requirements.aspx",
+    "phone" : "608-266-7320",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$15",
+    "note" : "Oversize-only permit: $15 overlength only, $20 overwidth or overheight, $25 overwidth and overheight (built from this line + the two +$5 lines). Overweight permits include any oversize (see overweight line)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 8'6\" wide, legal weight",
+    "amount" : "$5",
+    "note" : "+$5 for overwidth (part of the $20/$25 oversize fee)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 13'6\" high, legal weight",
+    "amount" : "$5",
+    "note" : "+$5 for overheight (part of the $20/$25 oversize fee)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight single trip (includes any oversize): $20 up to 90,000; $35/$45/$55/$65/$75/$85 per 10,000 lb band to 150,000; then +$10 per 10,000 lb or fraction (table here stops at 500,000 lb)."
+  }, {
+    "kind" : "other",
+    "when" : "Overweight",
+    "amount" : "Set by the state",
+    "note" : "$10 per WisDOT region (district) when size/weight requires regional route review, and $10 per structure review when gross weight requires it. Not predictable from dimensions alone."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 140' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, over 110' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 160' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, over 110' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 18' wide, over 110' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 20' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 18' wide",
+    "text" : "1 police escort. Wisconsin State Patrol escort; request by email to the post at least 48 h ahead."
+  }, {
+    "when" : "Over 200' long",
+    "text" : "1 police escort. Wisconsin State Patrol escort; request at least 48 h ahead."
+  }, {
+    "when" : "Over 20' wide",
+    "text" : "2 police escorts. Wisconsin State Patrol escorts; request at least 48 h ahead."
+  }, {
+    "when" : "Over 350,000 lb",
+    "text" : "1 police escort. Loads over 350,000 lb need one law-enforcement escort."
+  } ],
+  "survey" : [ ],
+  "superload" : [ ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "No oversize travel 4-8 PM in Columbia, Dane, Milwaukee, Rock and Waukesha counties on Sundays, Fridays from the 4th Friday in May through Labor Day, restricted-travel holidays and the day before. Milwaukee County expressways: no oversize Mon-Thu 6-9 AM and 3-6 PM, Fri 6-9 AM, Fri/Sun 3-8 PM. Madison Beltline: no oversize Mon-Fri 6-9 AM and 3-6 PM."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12 ft wide, 13'6\" high or 150 ft long: no travel in darkness, Saturday noon to Sunday sunrise, Sunday 4-8 PM, or from noon the day before to sunrise the day after each restricted-travel holiday (WisDOT publishes the yearly list)."
+  }, {
+    "when" : "Over 150' long",
+    "text" : "Over 12 ft wide, 13'6\" high or 150 ft long: no travel in darkness, Saturday noon to Sunday sunrise, Sunday 4-8 PM, or from noon the day before to sunrise the day after each restricted-travel holiday (WisDOT publishes the yearly list)."
+  }, {
+    "when" : "Over 13'6\" high",
+    "text" : "Over 12 ft wide, 13'6\" high or 150 ft long: no travel in darkness, Saturday noon to Sunday sunrise, Sunday 4-8 PM, or from noon the day before to sunrise the day after each restricted-travel holiday (WisDOT publishes the yearly list)."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only (not oversize) loads may travel 24 hours a day including weekends and holidays unless the permit says otherwise."
+  }, {
+    "when" : "Over 14' wide",
+    "text" : "Permits over 14 ft wide, 14'6\" high or 150 ft long are not valid on most of the Milwaukee County expressway system; over 16 ft wide not on Interstates unless the permit specifically authorizes it."
+  } ],
+  "travel" : [ {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "sat from 12:00: Saturday noon until sunrise Sunday (the night is already closed)", "sun 16:00–20:00" ],
+    "note" : null
+  }, {
+    "when" : "Over 150' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "sat from 12:00: Saturday noon until sunrise Sunday (the night is already closed)", "sun 16:00–20:00" ],
+    "note" : null
+  }, {
+    "when" : "Over 13'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "sat from 12:00: Saturday noon until sunrise Sunday (the night is already closed)", "sun 16:00–20:00" ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "WisDOT MV2600 Oversize/Overweight Single Trip Permit Information (fee chart, 6/2021)",
+    "url" : "https://wisconsindot.gov/Documents/formdocs/mv2600.pdf"
+  }, {
+    "title" : "WisDOT MV2605 Single Trip Permit General Conditions (7/2024)",
+    "url" : "https://www.wisconsindot.gov/Documents/formdocs/mv2605.pdf"
+  }, {
+    "title" : "WisDOT Minimum Standards for Escort Vehicles (escort grid, 7/9/2018)",
+    "url" : "https://wisconsindot.gov/Documents/dmv/com-drv-vehs/mtr-car-trkr/escort-grid.pdf"
+  }, {
+    "title" : "Wis. Admin. Code ch. Trans 254 Single trip permits",
+    "url" : "https://docs.legis.wisconsin.gov/code/admin_code/trans/254"
+  }, {
+    "title" : "Wis. Stat. 348.07 Length of vehicles",
+    "url" : "https://docs.legis.wisconsin.gov/document/statutes/348.07"
+  } ],
+  "notes" : [ "Escort grid is minimum; WisDOT may add escorts for route complexity, turns or traffic. Escort also required whenever the load crosses the centerline on two-way roads or the left edge of the right lane on multilane highways (lane-width dependent, not modeled).", "Height over 16 ft: front pole vehicle in addition to grid escorts, but total private escorts including the pole car never exceed two.", "Single-trip maximums: single vehicle 50 ft, mobile crane 60 ft; other dimensions depend on the load and route. No published 'superload' class in Trans 254.", "Permits are valid only on State, US and Interstate highways; local roads need local permits." ]
+}

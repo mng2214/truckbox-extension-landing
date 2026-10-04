@@ -1,0 +1,124 @@
+{
+  "code" : "SD",
+  "name" : "South Dakota",
+  "slug" : "south-dakota",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "South Dakota Highway Patrol Motor Carrier Services - Permit Center (SDAPS)",
+    "url" : "https://sdtruckinfo.sd.gov/rules-regulations/motor-carrier-handbook/chapter-6/permits/",
+    "phone" : "605-224-7364",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$25",
+    "note" : "Individual single-trip permit $25 (book of 10 self-issuing permits $250); one permit covers size and weight."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.02 per ton-mile",
+    "note" : "Plus $0.02 per ton (or fraction) that gross exceeds an axle-count base, per mile on state trunk highways, minimum $1. Base: 2 axles 40,000; 3 axles 60,000; 4 axles 80,000; 5 axles 85,000; 6 axles 90,000; 7+ axles 95,000 lb. Not modeled because the base depends on axle count."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 20' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ ],
+  "restrictions" : [ {
+    "when" : "Over 10' wide",
+    "text" : "Over 10' wide: daylight hours only (1/2 hour before sunrise to 1/2 hour after sunset)."
+  }, {
+    "when" : "Over 14'6\" high",
+    "text" : "Over 14'6\" high: daylight hours only. Permit holder is responsible for all vertical clearances (SD DOT height restriction list)."
+  }, {
+    "when" : "Over 110' long",
+    "text" : "Combination over 110' long: daylight hours only (also single units over 45', 2-unit combos with a unit over 60', 3+ unit combos with a unit over 48')."
+  }, {
+    "when" : "Oversize, on two-lane and other roads",
+    "text" : "Oversize on non-Interstate state highways more than 2 miles from an Interstate interchange: daylight hours only. Any move that needs an escort: daylight only."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only permit vehicles may move at night if no escort is required. Overweight permits need DOT route approval first."
+  }, {
+    "when" : "Oversize",
+    "text" : "Oversize permit invalid when visibility is 1/2 mile or less; any OS/OW permit invalid on snow, ice, slush or frost-covered roads."
+  } ],
+  "travel" : [ {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 110' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Oversize, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "ARSD 70:03:01:02 Single-trip permit - procedures - fees",
+    "url" : "https://sdlegislature.gov/api/Rules/70:03:01:02.html"
+  }, {
+    "title" : "ARSD 70:03:01:07 Restrictions on time of movement",
+    "url" : "https://sdlegislature.gov/api/Rules/70:03:01:07.html"
+  }, {
+    "title" : "ARSD 70:03:01:20 Escort vehicles (eff. 5/1/2023)",
+    "url" : "https://sdlegislature.gov/api/Rules/70:03:01:20.html"
+  }, {
+    "title" : "SD Motor Carrier Handbook ch. 6 - Permits",
+    "url" : "https://sdtruckinfo.sd.gov/rules-regulations/motor-carrier-handbook/chapter-6/permits/"
+  }, {
+    "title" : "SD Motor Carrier Handbook ch. 5 - Vehicle Size Regulations",
+    "url" : "https://sdtruckinfo.sd.gov/rules-regulations/motor-carrier-handbook/chapter-5/vehicle-size-regulations/"
+  }, {
+    "title" : "SDCL 32-22-8.1 Length limitations",
+    "url" : "https://sdlegislature.gov/api/Statutes/32-22-8.1.html"
+  }, {
+    "title" : "SDCL 32-22-16 Maximum weight",
+    "url" : "https://sdlegislature.gov/api/Statutes/32-22-16.html"
+  }, {
+    "title" : "ARSD 70:03:01:20.01 Special traffic handling requirements",
+    "url" : "https://sdlegislature.gov/api/Rules/70:03:01:20.01.html"
+  } ],
+  "notes" : [ "Black Hills routes need escorts at lower widths: front escort over 10' wide on US-14A (Spearfish-US-85), US-85 (WY line-US-14A), parts of US-385, SD-44, SD-231, US-16A, SD-244, SD-87, SD-89, SD-36, SD-40, SD-473; front escort over 16' on US-16 (Keystone Wye-WY), parts of US-14A, US-385, SD-89, SD-85, SD-71, SD-471 (ARSD 70:03:01:20). Not modeled by route.", "Multiple escorts and flagpersons required if the load extends more than 2' into an adjacent lane or traffic cannot pass without using the shoulder (ARSD 70:03:01:20.01).", "No superload class, police-escort trigger, route-survey trigger or statewide weekend/holiday ban was found in ARSD 70:03:01; verify with SDHP whether holiday restrictions are applied on permits.", "Only single-trip permits are issued for overweight on the Interstate." ]
+}

@@ -190,6 +190,8 @@ export type OsowAccess = {
   /** The calculator terms version the user must accept, and whether they have. */
   termsVersion: string;
   termsAccepted: boolean;
+  monthlyUsed: number;
+  monthlyLimit: number | null;
 };
 
 export type QuoteSummary = {

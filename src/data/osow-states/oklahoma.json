@@ -1,0 +1,140 @@
+{
+  "code" : "OK",
+  "name" : "Oklahoma",
+  "slug" : "oklahoma",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "ODOT Size and Weight Permit Division (OkiePROS)",
+    "url" : "https://oklahoma.gov/odot/about-us/laws-and-rules/size-and-weight-permits.html",
+    "phone" : "405-425-7012",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$40",
+    "note" : "Single trip oversize permit."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$40",
+    "note" : "Single trip overweight permit (OS+OW = $40 + $40)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "$10 per 1,000 lb over the legal load limit. Legal gross off the Interstate is 90,000 lb, so this overstates by up to $100 on non-Interstate-only routes. Rounding of partial 1,000 lb not stated in statute."
+  }, {
+    "kind" : "other",
+    "when" : "Over 16' wide",
+    "amount" : "Set by the state",
+    "note" : "ODOT fee sheet: Special Movement Fee $500 for newly manufactured items over 16' and up to 23' wide (not houses or manufactured homes). Charged only when the commodity is newly manufactured, so it is left to the state here."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15'8\" high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 80' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 100' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 20' wide",
+    "text" : "1 police escort. 47 O.S. 14-120.2 only sets the fee (full DPS cost); ODOT decides per load when an OHP escort is required. Shown from 20 ft, the width the DPS escort-contract form is written for (dual-lane superload maximum); the count is ODOT/DPS's."
+  } ],
+  "survey" : [ {
+    "when" : "Over 15'8\" high",
+    "text" : null
+  } ],
+  "superload" : [ ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only (1/2 hour before sunrise to 1/2 hour after sunset) unless the permit authorizes night travel. Weekend travel is allowed."
+  }, {
+    "when" : "Oversize",
+    "text" : "No movement of any permitted load on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day and Christmas Day. Movement allowed on MLK Day, Presidents' Day and Veterans Day."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only loads may travel at night, but the holiday ban (New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas) applies to every permitted load. Overweight requests needing a load route review must reach ODOT Bridge Division at least 5 working days before the move."
+  }, {
+    "when" : "Oversize, on interstates and freeways",
+    "text" : "Interstate curfew in Oklahoma, Tulsa and Cleveland counties: no oversize movement 7:00-9:00 AM and 3:30-6:30 PM (Central), Monday-Friday (2-mile I-35 segment between SH-9 East exit 108 and SH-9 West exit 106 exempt)."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "47 O.S. 14-116 Permit fees (OSCN)",
+    "url" : "https://www.oscn.net/applications/oscn/DeliverDocument.asp?CiteID=82480"
+  }, {
+    "title" : "ODOT Size & Weight Permit Fees",
+    "url" : "https://oklahoma.gov/content/dam/ok/en/odot/about-us/laws-rules/size-and-weight-permits/permit-fees.pdf"
+  }, {
+    "title" : "OAC 730:50 Subchapter 5 Size and Weight Permit Load (eff. 9-11-23)",
+    "url" : "https://www.oklahoma.gov/content/dam/ok/en/odot/about-us/laws-rules/size-and-weight-permits/Size%20and%20Weight%20Permit%20Load.pdf"
+  }, {
+    "title" : "Oklahoma Statutes Title 47 (47 O.S. 14-101, 14-103, 14-120.1)",
+    "url" : "https://www.oklegislature.gov/OK_Statutes/CompleteTitles/os47.rtf"
+  }, {
+    "title" : "ODOT Oklahoma Size and Weight Permits (FAQ, curfews, contacts)",
+    "url" : "https://oklahoma.gov/odot/about-us/laws-and-rules/size-and-weight-permits.html"
+  }, {
+    "title" : "DPS Application for OHP Escort Contract",
+    "url" : "https://oklahoma.gov/content/dam/ok/en/odot/size-and-weight-permits/ohp-escort-contract.pdf"
+  }, {
+    "title" : "ODOT proposed amendments to OAC 730 Chapter 50 (25.11.07, redline)",
+    "url" : "https://oklahoma.gov/content/dam/ok/en/odot/about-us/laws-rules/25.11.07%20-%20730%20Chap.%2050.pdf"
+  } ],
+  "notes" : [ "Superload = any overweight load exceeding the ODOT Standard Drawing OL-1 trucks (configuration-dependent, not a single gross weight); requires bridge-by-bridge structural analysis on unstudied routes. Not modeled.", "Max width 16' on the Interstate system for routine permits; dual-lane superloads up to 20' on the state highway system.", "Legal gross is 80,000 lb on Interstates and 90,000 lb on other state highways; this file uses 80,000.", "Over-height-only special permits (above 14') are exempt from the daylight/holiday prohibitions per 47 O.S. 14-103(B)(1); not modeled.", "ODOT has proposed amendments to OAC 730:50 (Nov 2025 redline) that would change some triggers (e.g. length escort 80' -> 90'); current file uses the rules effective 9-11-23. Check adoption status.", "Not included: $2 fee for faxed/emailed permits and 4% credit-card convenience fee (ODOT fee sheet).", "Daily road restriction list (width/length restrictions for construction) published by ODOT; check before routing." ]
+}

@@ -1,0 +1,135 @@
+{
+  "code" : "WA",
+  "name" : "Washington",
+  "slug" : "washington",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "WSDOT Commercial Vehicle Services",
+    "url" : "https://wsdot.wa.gov/travel/commercial-vehicles/commercial-vehicle-permits",
+    "phone" : "360-704-6340",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$10",
+    "note" : "Single-trip dimensional permit $10 (3-day). Statute applies $10 to all overlegal loads except overweight; overweight loads pay the weight fee instead (see overweight line)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Per-mile rate by pounds over legal capacity (greater of gross or axle excess); $4.25 at 100,000 lb excess plus $0.50 per additional 5,000 lb (table here stops at 400,000 lb excess). Minimum $14; rounded to nearest dollar. Excess here is gross minus 80,000, which can overstate it for vehicles legal above 80,000 in WA."
+  }, {
+    "kind" : "other",
+    "when" : "Over 200,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Superload: if WSDOT pavement/structure analysis needs significant resources, applicant may be asked to share the cost (estimate given first)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 11' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 125' long, on two-lane and other roads",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 145' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 20', on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, over 14'6\" high, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 14' high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 200,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 125' long",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "May be restricted on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving and the day after, Christmas, starting at noon the day before."
+  }, {
+    "when" : "Overweight",
+    "text" : "May be restricted on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving and the day after, Christmas, starting at noon the day before."
+  }, {
+    "when" : "Oversize",
+    "text" : "Commuter-hour restrictions on specified high-volume state highway sections (areas, hours and widths published by WSDOT and attached to the permit)."
+  }, {
+    "when" : "Oversize",
+    "text" : "Night movement only if 'night movement approved' is on the permit. No movement with visibility under 500 ft or hazardous road conditions (snow, ice, slides, wind, flooding)."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Night movement only when the permit says so."
+  } ],
+  "sources" : [ {
+    "title" : "RCW 46.44.0941 Special permits - Fees",
+    "url" : "https://lawfilesext.leg.wa.gov/Law/RCW/RCW%20%2046%20%20TITLE/RCW%20%2046%20.%2044%20%20CHAPTER/RCW%20%2046%20.%2044%20.0941.htm"
+  }, {
+    "title" : "Chapter 468-38 WAC Vehicle size and weight - highway restrictions - equipment",
+    "url" : "https://app.leg.wa.gov/wac/default.aspx?cite=468-38&full=true"
+  }, {
+    "title" : "WSDOT Commercial vehicle permit types & fees",
+    "url" : "https://wsdot.wa.gov/travel/commercial-vehicles/commercial-vehicle-permits/permit-types-fees"
+  }, {
+    "title" : "RCW 46.44.010 / .020 / .030 / .041 legal width, height, length, gross weight",
+    "url" : "https://app.leg.wa.gov/rcw/default.aspx?cite=46.44.030"
+  } ],
+  "notes" : [ "Overwidth maximums: 14 ft on two-lane highways, 20 ft on barrier-divided multilane, 32 ft on undivided multilane (wider only where design allows).", "Escort length triggers in WAC are trailer length including load (105 ft two-lane, 125 ft multilane); this file uses overall length, which triggers slightly earlier. Rear-overhang over 1/3 of trailer length, or 20 ft on single units, also needs a rear escort on two-lane highways.", "Superload: >200,000 lb, >16 ft high, >16 ft wide or trailing unit + load >125 ft. Apply 30 days ahead if over 200,000 lb, 7 days if dimensional only. Extra pilots and/or law enforcement may be required case by case.", "Legal gross in WA is axle/bridge-table based up to 105,500 lb; verify overweight status against axle configuration." ]
+}

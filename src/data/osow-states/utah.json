@@ -1,0 +1,194 @@
+{
+  "code" : "UT",
+  "name" : "Utah",
+  "slug" : "utah",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "UDOT Motor Carrier Division",
+    "url" : "https://connect.udot.utah.gov/business/motor-carriers/size-weight-permitting/",
+    "phone" : "801-965-4892",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$30",
+    "note" : "Single-trip oversize permit $30 (96 h). If the load is also overweight, the combined oversize-and-overweight permit on the overweight line replaces it."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Single-trip oversize-and-overweight permit up to 125,000 lb gross: $60 (96 h)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 125,000 lb",
+    "amount" : "$0.02 per ton-mile",
+    "note" : "$0.012 per mile per 1,000 lb above 80,000 (= $0.024/ton-mile of excess). State rounds miles up to 50, pounds up to 25,000 and the fee to nearest $10; min $80, max $540. Also required when any axle exceeds non-divisible axle limits even under 125,000 lb."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 120' long, on interstates and freeways",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' high, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 105' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' high, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 20'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 20'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 20' wide, on interstates and freeways",
+    "text" : "2 police escorts. At least 2 police escorts (plus 2 pilots); UHP sets the final number. Request 48 h ahead."
+  }, {
+    "when" : "Over 17' wide, on two-lane and other roads",
+    "text" : "2 police escorts. At least 2 police escorts (plus 2 pilots); UHP sets the final number. Request 48 h ahead."
+  }, {
+    "when" : "Over 175' long",
+    "text" : "2 police escorts. At least 2 police escorts (plus 2 pilots); UHP sets the final number."
+  }, {
+    "when" : "Over 17'6\" high",
+    "text" : "2 police escorts. At least 2 police escorts (plus 2 pilots); UHP sets the final number."
+  } ],
+  "survey" : [ {
+    "when" : "Over 18' high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 20' wide, on interstates and freeways",
+    "text" : null
+  }, {
+    "when" : "Over 17' wide, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 17'6\" high",
+    "text" : null
+  }, {
+    "when" : "Over 125,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Night (from 1/2 h after sunset to 1/2 h before sunrise) only up to 14 ft wide on freeways / 12 ft on secondary highways with 1 pilot; not authorized over 105 ft long, 14'6\" high or 10 ft overhang."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Wasatch Front curfew Mon-Fri 6-9 AM and 3:30-6 PM (Weber, Davis, Salt Lake, north Utah County, I-80/I-84 segments) and no travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas (2 PM day before to sunrise day after) for loads over 12 ft wide, 105 ft long or 14'6\" high."
+  }, {
+    "when" : "Over 105' long",
+    "text" : "Wasatch Front curfew Mon-Fri 6-9 AM and 3:30-6 PM (Weber, Davis, Salt Lake, north Utah County, I-80/I-84 segments) and no travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas (2 PM day before to sunrise day after) for loads over 12 ft wide, 105 ft long or 14'6\" high."
+  }, {
+    "when" : "Over 14'6\" high",
+    "text" : "Wasatch Front curfew Mon-Fri 6-9 AM and 3:30-6 PM (Weber, Davis, Salt Lake, north Utah County, I-80/I-84 segments) and no travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas (2 PM day before to sunrise day after) for loads over 12 ft wide, 105 ft long or 14'6\" high."
+  }, {
+    "when" : "Over 10' wide",
+    "text" : "No travel over 10 ft wide, 105 ft long or 10 ft overhang with snow/ice on the road or visibility under 1,000 ft."
+  } ],
+  "travel" : [ {
+    "when" : "Over 14' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 105' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Utah Admin. Code R909-2 Utah Size and Weight Rule (eff. 3/16/2026)",
+    "url" : "https://adminrules.utah.gov/api/public/getfile/uac-pdf/866f8c81-1273-4868-9085-b5cd459d8222.pdf/R909-2.pdf"
+  }, {
+    "title" : "Utah Code 72-7-406 Oversize and overweight permits -- Fees",
+    "url" : "https://le.utah.gov/xcode/Title72/Chapter7/72-7-S406.html"
+  }, {
+    "title" : "UDOT Oversize Non-Divisible Load Permit Fee Schedule",
+    "url" : "https://connect.udot.utah.gov/business/motor-carriers/size-weight-permitting/oversize-overweight-provisions/oversize-non-divisible-load-provisions/oversize-non-divisible-load-permit-fee-schedule/"
+  }, {
+    "title" : "UDOT Oversize Non-Divisible Load Provisions",
+    "url" : "https://connect.udot.utah.gov/business/motor-carriers/size-weight-permitting/oversize-overweight-provisions/oversize-non-divisible-load-provisions/"
+  } ],
+  "notes" : [ "Single-trip permits valid 96 continuous hours.", "Loads over 17 ft wide on two-lane routes, 20 ft on interstates or 17'6\" high need division authorization at least 2 business days ahead; permittee pays utility clearances and police escorts.", "Single-pilot position (front vs rear) is not specified by R909-2-14 except for overhangs; vehicle count is what matters for cost." ]
+}

@@ -1,0 +1,194 @@
+{
+  "code" : "MT",
+  "name" : "Montana",
+  "slug" : "montana",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : "75'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "MDT Motor Carrier Services - Permits (eTRIPs)",
+    "url" : "https://www.mdt.mt.gov/business/mcs/permits.aspx",
+    "phone" : "406-444-7262",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$10",
+    "note" : "Single Trip Over-Dimensional Permit (Trip Oversize) $10."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.06 per ton-mile",
+    "note" : "Overweight trip permit: $3.50 per 5,000 lb of EXCESS AXLE weight per 25-mile increment (= $0.056 per excess ton-mile). MDT rounds weight up to the next 5,000 lb and miles up to the next 25 mi, and excess is summed per axle group, not gross minus 80,000 - treat as an estimate. Loads over the bridge formula but with legal axle weights instead pay $10 (<=100 mi), $30 (101-199 mi) or $50 (200+ mi)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 16'6\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 18' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 12'6\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16'6\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 18' wide, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 24' wide, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 150' long, on two-lane and other roads",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 200' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 24' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 18' wide",
+    "text" : null
+  }, {
+    "when" : "Over 17' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Interstate: travel allowed 24/7 up to 18' wide (lights full length and width), including holidays/holiday weekends; loads over 18' wide cannot travel on holidays or holiday weekends."
+  }, {
+    "when" : "Oversize",
+    "text" : "Non-interstate: 24/7 up to 10' wide, 150' long, 15'6\" high; larger loads daylight only. Holidays/holiday weekends: over 10' to 12'6\" wide daylight only; over 12'6\" wide, 150' long or 15'6\" high no travel."
+  }, {
+    "when" : "Oversize",
+    "text" : "Holidays: New Year's Day, Memorial Day, Fourth of July, Labor Day, Thanksgiving, Christmas. Holiday on Fri/Sat bans Fri-Sun; on Sun/Mon bans Sat-Mon; on Tue-Thu bans that day; Thanksgiving bans Thu-Sun (ARM 18.8.101)."
+  }, {
+    "when" : "Over 18' wide",
+    "text" : "Non-interstate: over 18' wide - no weekend travel."
+  }, {
+    "when" : "Over 150' long",
+    "text" : "Non-interstate: over 150' long - no weekend travel."
+  }, {
+    "when" : "Over 17' high",
+    "text" : "Non-interstate: over 17' high - no weekend travel."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight bridge conditions printed on the permit: max 55 mph, one overweight vehicle per bridge, no stopping/shifting on bridges; non-interstate 10 mph on bridges; centerline-crossing condition needs daylight travel and one front + one rear pilot on non-interstate routes."
+  }, {
+    "when" : "Oversize",
+    "text" : "No travel when MDT places a route under severe driving conditions. Pilot-escorted moves must not delay traffic more than 15 minutes."
+  } ],
+  "travel" : [ {
+    "when" : "Over 10' wide, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 150' long, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 15'6\" high, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 17' high, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12'6\" wide, on two-lane and other roads",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 18' wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 18' wide, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "MDT - MT Permitting: Reference & FAQs (updated 01/27/2026)",
+    "url" : "https://www.mdt.mt.gov/other/webdata/external/mcs/MANUALS/MT-Permitting-FAQ.PDF"
+  }, {
+    "title" : "MDT - Montana Permit Restrictions, eTRIPs (updated 07/27/2026)",
+    "url" : "https://www.mdt.mt.gov/other/webdata/external/mcs/MT-PERMIT-RESTRICTIONS-New.PDF"
+  }, {
+    "title" : "MDT - 2026 Montana Commercial Vehicle Size and Weight and Safety Trucker's Handbook",
+    "url" : "https://www.mdt.mt.gov/other/webdata/external/MCS/manuals/MT-Truckers-Handbook-Info.pdf"
+  }, {
+    "title" : "MDT - Permits for Commercial Motor Carriers",
+    "url" : "https://www.mdt.mt.gov/business/mcs/permits.aspx"
+  }, {
+    "title" : "ARM 18.8.511A When Pilot Vehicles Are Required (eff. 3/21/2026)",
+    "url" : "https://rules.mt.gov/browse/collections/aec52c46-128e-4279-9068-8af5d5432d74/policies/48552417-0d10-410e-b98b-1841ffe100b3"
+  } ],
+  "notes" : [ "No police-escort or mandatory route-survey thresholds were found in MDT's published permit documents; permittee is responsible for checking clearances. Superloads go through eTRIPs district approval (class 1 decision within 2 working days, class 2 within 5).", "Overweight bridge conditions may add pilot vehicles on non-interstate routes (1 rear for the 10-mph condition, 1 front + 1 rear for centerline crossing) - assigned per permit, not modeled as escorts.", "Legal gross depends on the bridge formula and axle count (single 20,000, tandem 34,000; up to 131,060 lb for long combinations). Calculator uses 80,000 lb for a 5-axle combination; for longer/heavier configurations the actual excess (and fee) may be lower.", "Montana counts a load as oversize over 8'6\" wide, 14' high, 75' overall (with overhang), single unit over 55', or trailer over 53'." ]
+}

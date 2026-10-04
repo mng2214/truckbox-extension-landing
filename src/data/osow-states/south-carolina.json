@@ -1,0 +1,161 @@
+{
+  "code" : "SC",
+  "name" : "South Carolina",
+  "slug" : "south-carolina",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "SCDOT Oversize/Overweight (OSOW) Permit Office (SafeHaul)",
+    "url" : "https://www.scdot.org/business/permits-osow.html",
+    "phone" : "803-737-6769",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$30",
+    "note" : "Single trip permit $30 (one permit covers size and weight)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16' wide",
+    "amount" : "Depends on the load",
+    "note" : "'Excessive width' rates $35 (>16'), $40 (>18'), $45 (>20'), $50 (>22'). Modeled as replacing the $30 rate (group) - verify whether SCDOT charges it in addition to the $30."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 130,000 lb",
+    "amount" : "$100",
+    "note" : "Superload application fee, non-refundable."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 130,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Superload engineering analysis fee."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 130,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Superload impact fee $3.00 per 1,000 lb for loads over 130,000 lb. Statute does not say whether it is on total gross or on weight above 130,000 lb (e.g. 150,000 lb: $450 vs $60) - verify with SCDOT."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 500,000 lb",
+    "amount" : "$0.10 per ton-mile",
+    "note" : "Megaload impact fee $0.05 per 1,000 lb per mile on the entire gross weight (= $0.10 per ton-mile)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15'11\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 124'11\" long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 15'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide",
+    "text" : "2 police escorts. Over 16' wide: one front and one rear police escort (in addition to two civilian escorts) unless the Permit Director approves otherwise in writing; escorting officers may require more. Request via SC DPS State Transport Police."
+  } ],
+  "survey" : [ {
+    "when" : "Over 15'11\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 130,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Sunrise to sunset only, Monday-Sunday. No travel on New Year's Day, Memorial Day, Fourth of July, Labor Day, Thanksgiving and Christmas; the Permit Director may also restrict noon the day before to noon the day after."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' to 15' wide: no travel near large urban areas 7-9 AM every day, 3-6 PM on school days and 4:30-6 PM on non-school days."
+  }, {
+    "when" : "Over 15' wide",
+    "text" : "Over 15' wide: travel only 9 AM-3 PM on school days and 9 AM-4 PM other days."
+  }, {
+    "when" : "Over 14' wide",
+    "text" : "Over 14' wide: must use four-lane highways (two-lane only with 12'+ lanes where possible) and be the only vehicle on bridges 18' wide or less. Over 16' needs a separate over-16' application and route approval."
+  }, {
+    "when" : "Oversize",
+    "text" : "Memorial Day-Labor Day: no Saturday/Sunday movement east of I-95 in the Myrtle Beach area (US-378, SC-327, US-76, SC-576, US-501, SC-22, SC-31, SC-9, US-17 from NC line to Georgetown, and nearby routes). Convoys prohibited (2 miles apart)."
+  }, {
+    "when" : "Overweight",
+    "text" : "Loads up to 130,000 lb gross with legal dimensions may get continuous (24-hour) travel on request; holiday bans still apply."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Sunrise to sunset, Monday-Sunday."
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : false,
+    "weekends" : null,
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "No travel on the six holidays for any permit."
+  }, {
+    "when" : "Over 130,000 lb, legal size",
+    "daylightOnly" : true,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Continuous travel only up to 130,000 lb with legal dimensions; heavier loads sunrise to sunset."
+  }, {
+    "when" : "Over 15' wide",
+    "daylightOnly" : true,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri, sat, sun until 09:00: Before 9 AM", "mon, tue, wed, thu, fri from 15:00 (months [1, 2, 3, 4, 5, 8, 9, 10, 11, 12]): After 3 PM on school days (school year approximated as Aug-May weekdays)", "mon, tue, wed, thu, fri, sat, sun from 16:00: After 4 PM on other days" ],
+    "note" : "Over 15' wide: 9 AM-3 PM on school days, 9 AM-4 PM other days, Monday-Sunday."
+  } ],
+  "sources" : [ {
+    "title" : "SCDOT Oversize/Overweight Permits (fee schedule, contacts)",
+    "url" : "https://www.scdot.org/business/permits-osow.html"
+  }, {
+    "title" : "SC Code 57-3-130 Special permit; fees",
+    "url" : "https://www.scstatehouse.gov/code/t57c003.php"
+  }, {
+    "title" : "SCDOT Guidelines for Movement of OSOW Vehicles and Loads (Rev. 8/2021)",
+    "url" : "https://www.scdot.org/content/dam/scdot-legacy/business/pdf/osow/OSOW_Guidelinesfor_movement.pdf"
+  }, {
+    "title" : "SC Code Title 56 Chapter 5 (56-5-4030 width, 56-5-4060 height, 56-5-4070 length, 56-5-4140 gross weight)",
+    "url" : "https://www.scstatehouse.gov/code/t56c005.php"
+  } ],
+  "notes" : [ "Routine permit maximums: 16' wide, 125' long; beyond needs Permit Director approval. Height must clear structures by 3 in.; utilities must be arranged at least 3 working days ahead.", "Superload also triggered by any single axle over 20,000 lb (not modeled); takes 3-5 business days. Loads over 300,000 lb may need an independent structural analysis by a licensed engineer.", "Fee schedule last revised July 1, 2012 per SCDOT; $5 credit-card convenience fee not included.", "Department may require a rear escort for 12'-14' loads on multi-lane roads at its discretion." ]
+}

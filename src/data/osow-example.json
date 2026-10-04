@@ -1,0 +1,157 @@
+{
+  "pricedOn" : "2026-10-03",
+  "request" : {
+    "origin" : "Houston, TX",
+    "destination" : "Chicago, IL",
+    "load" : {
+      "widthIn" : 174,
+      "heightIn" : 172,
+      "lengthIn" : 852,
+      "frontOverhangIn" : 0,
+      "rearOverhangIn" : 0,
+      "grossLb" : 120000,
+      "axles" : 6,
+      "axlesOverLegal" : false
+    },
+    "roadOverrides" : { },
+    "smoothing" : "conservative",
+    "costs" : {
+      "escortRatePerMile" : 2.0,
+      "escortHotelPerNight" : 120.0,
+      "policeCostEach" : 0.0,
+      "averageMph" : 45.0,
+      "escortCars" : null
+    },
+    "pickupDate" : "2026-10-06",
+    "pickupTime" : "08:00"
+  },
+  "result" : {
+    "routeMiles" : 1120.5,
+    "routeSource" : "cache",
+    "states" : [ {
+      "state" : "TX",
+      "name" : "Texas",
+      "covered" : true,
+      "status" : "verified",
+      "researchedOn" : "2026-10-02",
+      "verifiedOn" : "2026-10-02",
+      "miles" : 299.3,
+      "interstateMiles" : 298.2,
+      "otherMiles" : 1.1,
+      "roadUsed" : "mixed",
+      "permitTotal" : 210.0,
+      "permitComplete" : true,
+      "escortsInterstate" : {
+        "front" : 0,
+        "rear" : 1
+      },
+      "escortsOther" : {
+        "front" : 1,
+        "rear" : 0
+      },
+      "escortVehicleMiles" : 299.31,
+      "policeCount" : 0,
+      "survey" : false,
+      "superload" : false
+    }, {
+      "state" : "AR",
+      "name" : "Arkansas",
+      "covered" : true,
+      "status" : "verified",
+      "researchedOn" : "2026-10-02",
+      "verifiedOn" : "2026-10-02",
+      "miles" : 330.9,
+      "interstateMiles" : 330.9,
+      "otherMiles" : 0.0,
+      "roadUsed" : "interstate",
+      "permitTotal" : 337.0,
+      "permitComplete" : true,
+      "escortsInterstate" : {
+        "front" : 0,
+        "rear" : 1
+      },
+      "escortsOther" : {
+        "front" : 0,
+        "rear" : 0
+      },
+      "escortVehicleMiles" : 330.93,
+      "policeCount" : 0,
+      "survey" : false,
+      "superload" : false
+    }, {
+      "state" : "MO",
+      "name" : "Missouri",
+      "covered" : true,
+      "status" : "verified",
+      "researchedOn" : "2026-10-02",
+      "verifiedOn" : "2026-10-02",
+      "miles" : 88.2,
+      "interstateMiles" : 88.2,
+      "otherMiles" : 0.0,
+      "roadUsed" : "interstate",
+      "permitTotal" : 95.0,
+      "permitComplete" : true,
+      "escortsInterstate" : {
+        "front" : 0,
+        "rear" : 1
+      },
+      "escortsOther" : {
+        "front" : 0,
+        "rear" : 0
+      },
+      "escortVehicleMiles" : 88.18,
+      "policeCount" : 0,
+      "survey" : false,
+      "superload" : false
+    }, {
+      "state" : "IL",
+      "name" : "Illinois",
+      "covered" : true,
+      "status" : "verified",
+      "researchedOn" : "2026-10-02",
+      "verifiedOn" : "2026-10-02",
+      "miles" : 402.1,
+      "interstateMiles" : 397.0,
+      "otherMiles" : 5.1,
+      "roadUsed" : "mixed",
+      "permitTotal" : 245.0,
+      "permitComplete" : true,
+      "escortsInterstate" : {
+        "front" : 0,
+        "rear" : 0
+      },
+      "escortsOther" : {
+        "front" : 0,
+        "rear" : 0
+      },
+      "escortVehicleMiles" : 0.0,
+      "policeCount" : 0,
+      "survey" : false,
+      "superload" : false
+    } ],
+    "totals" : {
+      "permits" : 887.0,
+      "escorts" : 1556.84,
+      "escortVehicleMiles" : 718.42,
+      "escortNights" : 1,
+      "police" : 0.0,
+      "total" : 2443.84,
+      "complete" : true,
+      "unpricedLines" : 0
+    },
+    "flags" : {
+      "superload" : false,
+      "survey" : false,
+      "police" : false
+    },
+    "tripPlan" : {
+      "transitDays" : 3,
+      "holdDays" : 0,
+      "pickup" : "2026-10-06T08:00:00",
+      "arrival" : "2026-10-08T10:36:00",
+      "driveHours" : 24.9,
+      "escortNights" : 1
+    },
+    "routeTollsUsd" : 32.6
+  }
+}

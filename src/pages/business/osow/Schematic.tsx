@@ -7,7 +7,7 @@
 // at any width. Colours come from osow.css classes, so both cabinet themes work.
 
 import { useEffect, useRef, useState } from "react";
-import { LEGAL } from "./equipment";
+import { LEGAL, PICKUP } from "./equipment";
 import { formatFtIn } from "./parseDims";
 import { cargoBox, dimLabels, excessParts, extentX, legalEnvelope, type Box, type VisualModel } from "./visual";
 
@@ -101,17 +101,33 @@ function SideView({ model, width }: { model: VisualModel; width: number }) {
       <text className="view-t" x={X(-12)} y={11}>Side</text>
       <line className="ground" x1={X(-12)} y1={Y(0)} x2={X(extent + 12)} y2={Y(0)} />
 
-      {/* tractor */}
-      {rect(20, 30, T + 40, 44, "deck")}
-      {rect(-4, 18, 6, 36, "deck")}
-      {poly([[0, 36], [0, 66], [8, 72], [56, 76], [56, 36]], "body")}
-      {poly([[56, 36], [56, 118], [62, 132], [70, 140], [124, 140], [124, 36]], "body")}
-      {poly([[64, 102], [72, 128], [116, 128], [116, 102]], "glass")}
-      {rect(124, 44, sleeperEnd, 132, "body")}
-      {rect(T - 12, 44, T + 36, 50, "deck")}
-      {wheel(34, WHEEL_R, "s")}
-      {wheel(T - 10, WHEEL_R, "d1")}
-      {wheel(T + 42, WHEEL_R, "d2")}
+      {model.rig.towVehicle === "pickup" ? (
+        <>
+          {rect(18, 22, PICKUP.rearAxleX + 34, 30, "deck")}
+          {poly([[0, 28], [0, 54], [6, 58], [64, 60], [64, 28]], "body")}
+          {poly([[64, 28], [64, 60], [86, 82], [148, 82], [156, 76], [156, 28]], "body")}
+          {poly([[90, 60], [102, 76], [146, 76], [146, 60]], "glass")}
+          {rect(158, 30, PICKUP.bedEndX, 54, "body")}
+          {rect(PICKUP.ballX - 6, 36, PICKUP.ballX + 6, 62, "deck")}
+          {rect(PICKUP.ballX - 6, 52, T + 6, 62, "deck")}
+          {rect(T - 6, layout.segments[0].topIn - 10, T + 6, 62, "deck")}
+          {wheel(PICKUP.frontAxleX, PICKUP.wheelR, "s")}
+          {wheel(PICKUP.rearAxleX, PICKUP.wheelR, "d1")}
+        </>
+      ) : (
+        <>
+          {rect(20, 30, T + 40, 44, "deck")}
+          {rect(-4, 18, 6, 36, "deck")}
+          {poly([[0, 36], [0, 66], [8, 72], [56, 76], [56, 36]], "body")}
+          {poly([[56, 36], [56, 118], [62, 132], [70, 140], [124, 140], [124, 36]], "body")}
+          {poly([[64, 102], [72, 128], [116, 128], [116, 102]], "glass")}
+          {rect(124, 44, sleeperEnd, 132, "body")}
+          {rect(T - 12, 44, T + 36, 50, "deck")}
+          {wheel(34, WHEEL_R, "s")}
+          {wheel(T - 10, WHEEL_R, "d1")}
+          {wheel(T + 42, WHEEL_R, "d2")}
+        </>
+      )}
 
       {/* trailer */}
       {layout.segments.map((s, i) => rect(s.x0, s.topIn - 10, s.x1, s.topIn, "deck", `seg${i}`))}

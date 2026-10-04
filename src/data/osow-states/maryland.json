@@ -1,0 +1,196 @@
+{
+  "code" : "MD",
+  "name" : "Maryland",
+  "slug" : "maryland",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "MDOT SHA Motor Carrier Division - Hauling Permits Unit (Maryland One)",
+    "url" : "https://roads.maryland.gov/mdotsha/pages/hp.aspx?did=hp&pageid=58",
+    "phone" : "800-846-6435",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$30",
+    "note" : "COMAR 11.04.01.08C(1)(a): $30 base special hauling permit fee covering the first 40 tons of gross weight. Single trip one way, valid 5 days; extension $5."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "COMAR 11.04.01.08C(1)(b): $5 per ton or part of a ton over 40 tons (80,000 lb). Confirmed against the current regulation (40 tons); SHA's older fee sheet showed 45 tons."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 13' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 85' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 85' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 120,000 lb, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120,000 lb, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 13'11\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 139'11\" long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 15'11\" wide",
+    "text" : "1 police escort. Off-duty Maryland State Police; cost set by SHA schedule (manual 2008 listed $250). Notify MSP 48 hours ahead."
+  }, {
+    "when" : "Over 149,999 lb",
+    "text" : "1 police escort. 75 tons or more. SHA may also require police for 65-75 tons, traffic diversion, or multi-lane occupancy."
+  } ],
+  "survey" : [ {
+    "when" : "Over 14'5\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 150,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 119'11\" long",
+    "text" : null
+  }, {
+    "when" : "Over 15'11\" wide",
+    "text" : null
+  }, {
+    "when" : "Over 15'11\" high",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "SHA: day moves 9:00 a.m.-3:30 p.m., night moves 8:00 p.m.-6:00 a.m.; loads up to 200,000 lb GVW, 13'11\" wide, 14'6\" high and 120' long may move 24/7 per permit. No travel on New Year's Day, Good Friday, Memorial Day, Independence Day, Labor Day, Thanksgiving Day, Christmas Day. Exact hours are printed on the permit."
+  }, {
+    "when" : "Over 13'11\" wide",
+    "text" : "14 ft wide or more: travel 9:00 a.m.-3:30 p.m. only, on any highway."
+  }, {
+    "when" : "Over 11'11\" wide",
+    "text" : "12 ft+ wide (also 100 ft+ long or over 45 tons): Capital Beltway (I-495/I-95) and Baltimore Beltway (I-695) only 9:00 a.m.-3:30 p.m."
+  }, {
+    "when" : "Over 99'11\" long",
+    "text" : "100 ft+ long: Capital Beltway (I-495/I-95) and Baltimore Beltway (I-695) only 9:00 a.m.-3:30 p.m."
+  }, {
+    "when" : "Over 90,000 lb",
+    "text" : "Over 45 tons: Beltways 9:00 a.m.-3:30 p.m. only; speed at least 10 mph under the posted limit."
+  }, {
+    "when" : "Oversize",
+    "text" : "MdTA toll facilities (incl. I-95 JFK Hwy north of Fort McHenry Tunnel): permit moves only 9 a.m. Monday to 12 noon Friday, call facility 1 hour ahead. Fort McHenry Tunnel bans > 14'6\" high or > 11' wide; Baltimore Harbor Tunnel (I-895) bans > 8' wide or > 13'6\" high."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Up to 13'11\" wide, 14'6\" high, 120' long and 200,000 lb may move around the clock. Good Friday is also closed (not modeled)."
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 200,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 13'11\" wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri, sat, sun until 09:00", "mon, tue, wed, thu, fri, sat, sun from 15:30" ],
+    "note" : "14 ft wide or more: 9:00 a.m. to 3:30 p.m. only, on any highway."
+  }, {
+    "when" : "Over 150,000 lb",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri, sat, sun 06:00–09:00", "mon, tue, wed, thu, fri, sat, sun 15:30–20:00" ],
+    "note" : "Super loads over 150,000 lb: day moves 9:00 a.m.-3:30 p.m. or night moves 8:00 p.m.-6:00 a.m."
+  } ],
+  "sources" : [ {
+    "title" : "MDOT SHA - Maryland Overdimensional Permit Limitations",
+    "url" : "https://roads.maryland.gov/mdotsha/pages/index.aspx?PageId=500"
+  }, {
+    "title" : "COMAR 11.04.01.08 - Fees (permits for oversize and overweight vehicles)",
+    "url" : "https://regs.maryland.gov/us/md/exec/comar/11.04.01.08"
+  }, {
+    "title" : "COMAR Title 11 Subtitle 04 (11.04.02 general conditions/hours, 11.04.03 excessive size/weight, 11.04.04 escorts)",
+    "url" : "https://regs.maryland.gov/us/md/exec/comar/11.04/index.full.html"
+  }, {
+    "title" : "Maryland Transportation Article §24-104.1 - Length limits",
+    "url" : "https://mgaleg.maryland.gov/mgawebsite/Laws/StatuteText?article=gtr&section=24-104.1&enactments=false"
+  }, {
+    "title" : "MDOT SHA - Hauling Permits",
+    "url" : "https://roads.maryland.gov/mdotsha/pages/hp.aspx?did=hp&pageid=58"
+  }, {
+    "title" : "MDOT SHA - Permit fees sheet (tons/fee table)",
+    "url" : "https://www.roads.maryland.gov/oots/permit_fees.pdf"
+  }, {
+    "title" : "MDOT SHA - Maryland Oversize/Overweight Hauling Permit Manual (as of April 10, 2008)",
+    "url" : "https://www.roads.maryland.gov/oots/MD_Hauling_permit_manual.pdf"
+  }, {
+    "title" : "MDOT SHA press release - Maryland One system eliminates bridge review fees (2016)",
+    "url" : "https://roads.maryland.gov/mdotsha/pages/pressreleasedetails.aspx?PageId=0&newsId=2726"
+  } ],
+  "notes" : [ "COMAR 11.04.02.06 (base rule, stricter than current SHA web guidance): daylight 1/2 hr after sunrise to 1/2 hr before sunset, no Saturday after noon, no Sunday, no listed holiday periods - unless the permit sets other hours. Verify which hours SHA prints on current permits.", "Fee basis conflict: COMAR 11.04.01.08 (chapter revised 2010) charges $5/ton over 40 tons; SHA fee sheet permit_fees.pdf charges $30 up to 45 tons then $5/ton. Calculator follows COMAR.", "Other possible charges not modeled: SHA district monitoring $200/day when required; off-duty MSP escort per SHA schedule; MdTA and Baltimore City fees collected on the permit; engineering structural review $8/structure for > 60 tons per COMAR (SHA reported in 2016 that automated Maryland One permits eliminated bridge review fees).", "Escort position: single escort modeled rear on interstate, front on non-interstate. Construction equipment over 12 ft wide off the Interstate also needs 1 escort (not modeled).", "Excessive size (>= 16' high/wide or >= 100' long) needs application 2 working days ahead; > 60 tons needs 10 business days; > 250 tons 30 business days; bonds may be required.", "Francis Scott Key Bridge (I-695) closed - permits using it must be rerouted (SHA notice).", "SHA permits cover state roads; Baltimore City and county/local roads need their own approvals." ]
+}

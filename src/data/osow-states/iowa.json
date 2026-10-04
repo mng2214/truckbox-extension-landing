@@ -1,0 +1,116 @@
+{
+  "code" : "IA",
+  "name" : "Iowa",
+  "slug" : "iowa",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Iowa DOT Motor Vehicle Division - Oversize/Overweight Permits",
+    "url" : "https://iowadot.gov/motor-carriers/how-do-i-get-oversize-overweight-permits/permit-types",
+    "phone" : "515-237-3264",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$35",
+    "note" : "Single-trip permit $35 (Iowa Code 321E.14(1)(e)); one permit covers size and weight. Valid 5 days; round trip on the same route is the same price. No gross weight cap, but max 20,000 lb per axle (46,000 lb per qualifying tandem); over 100,000 lb gross needs a no-undue-damage determination."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Vehicle must be registered for the permitted gross weight; single-trip registration costs $4 per ton over 40 tons (Iowa Code 321E.12(1)(b), 761 IAC 511.5(5)). Not owed if the truck is already registered for the full weight (or private-carrier exemption). Rounding of partial tons is assumed up - verify."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 120' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16'6\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Travel 1/2 hour before sunrise to 1/2 hour after sunset. Night travel allowed only if not over 12' wide, 14'6\" high, 100' long, axle weights legal, roadway at least 22' wide with 11' lanes, and safety lighting at the widest point. Only when roads are clear of ice and snow and visibility is at least 1/4 mile."
+  }, {
+    "when" : "Oversize",
+    "text" : "No movement on Memorial Day, Independence Day or Labor Day, after noon the day before, or during holiday weekends (holiday on Fri-Mon), or during special events with abnormally high traffic; resume 1/2 hour before sunrise the day after."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight permits follow the same daylight, holiday-weekend and weather rules; night travel only if axle weights are legal and dimensions within 12' wide / 14'6\" high / 100' long."
+  }, {
+    "when" : "Over 16' high",
+    "text" : "Over 16' high: carrier must contact affected public utilities; written utility verification may be required."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ "Memorial Day", "Independence Day", "Labor Day" ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 100' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Iowa Administrative Code 761-Chapter 511 - Special Permits for Operation and Movement of Vehicles and Loads of Excess Size and Weight (IAC 6/10/26)",
+    "url" : "https://www.legis.iowa.gov/docs/iac/chapter/761.511.pdf"
+  }, {
+    "title" : "Iowa Code 321E.14 - Fees for permits (2026)",
+    "url" : "https://www.legis.iowa.gov/docs/code/321E.14.pdf"
+  }, {
+    "title" : "Iowa Code Chapter 321E - Vehicles of Excessive Size and Weight (321E.12 single-trip registration)",
+    "url" : "https://www.legis.iowa.gov/docs/code/321E.pdf"
+  }, {
+    "title" : "Iowa DOT - Types of Oversize/Overweight Permits (legal limits, single trip $35)",
+    "url" : "https://iowadot.gov/motor-carriers/how-do-i-get-oversize-overweight-permits/permit-types"
+  } ],
+  "notes" : [ "Escort chart (761 IAC 511.20): non_interstate = 2-lane column, interstate = 4-lane column. 12'-14'6\" wide needs a front (2-lane) or rear (4-lane) escort OR an amber/strobe light on the power unit and rear of the load - modeled as no escort vehicle. 14'6\"-16'6\" wide: 2-lane front escort required; 4-lane rear escort or amber lights. 16'6\"-18' wide: 4-lane rear, 2-lane front. Over 120' long: rear escort. 14'6\"-20' high: front escort with height pole.", "Iowa sets no fixed escort/police thresholds above 18' wide; the permit office may require additional escorts. Escorts may not stop traffic - an on-duty peace officer must be arranged for traffic control. Escort service by state/local officers may cost up to $250 per day per person and car (Iowa Code 321E.14(3)).", "No formal superload thresholds found in Iowa rules; very large or heavy moves are reviewed case by case (bridge/pavement engineer approval).", "Permits cover state and interstate highways only; city/county roads need local permits.", "Legal length: 53' semitrailer (57' lowboy for construction equipment), 45' single vehicle; no overall tractor-semitrailer limit listed." ]
+}

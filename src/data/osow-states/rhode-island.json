@@ -1,0 +1,148 @@
+{
+  "code" : "RI",
+  "name" : "Rhode Island",
+  "slug" : "rhode-island",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "RIDOT Oversize/Overweight Permits",
+    "url" : "https://www.ri.gov/DOT/osow",
+    "phone" : "401-563-4582",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$40",
+    "note" : "Single trip non-divisible permit $40 (31-25-21(c)); one permit covers size and weight. The older RICR regulation still shows $20 - statute governs."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 11'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 11'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 79'11\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 79'11\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 90' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\", on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\", on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 11'11\" wide, rear overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 13'6\" high, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 13'11\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 199,999 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 8'6\" wide",
+    "text" : "Over 8'6\" wide, over 80' long or over 130,000 lb: no travel 7-9 AM or 3-7 PM Monday-Friday on freeways and arterials."
+  }, {
+    "when" : "Over 80' long",
+    "text" : "Over 80' long: no travel 7-9 AM or 3-7 PM Monday-Friday on freeways and arterials."
+  }, {
+    "when" : "Over 130,000 lb",
+    "text" : "Over 130,000 lb: no travel 7-9 AM or 3-7 PM Monday-Friday on freeways and arterials."
+  }, {
+    "when" : "Oversize",
+    "text" : "Holidays: no Sat/Sun/Mon travel for Memorial Day, Victory Day (2nd Mon Aug), Labor Day, MLK Day, Columbus Day weekends; no day or previous-night travel on Independence Day, Veterans Day, Christmas, New Year's; no Wednesday-Sunday travel Thanksgiving week; no Saturday night or Sunday travel Easter."
+  }, {
+    "when" : "Overweight",
+    "text" : "Holiday restrictions in 31-25-21(f) apply to permitted moves generally (Memorial/Victory/Labor/MLK/Columbus weekends Sat-Mon, July 4/Veterans/Christmas/New Year's plus prior night, Thanksgiving Wed-Sun, Easter Sat night-Sun)."
+  }, {
+    "when" : "Oversize",
+    "text" : "RICR regulation (text unchanged since 2002) still says daylight only (30 min before sunrise to 30 min after sunset) and no moves sunset Friday to sunrise Monday; the 2022 statute rewrite lists only peak-hour and holiday bans. Confirm current night/weekend policy with RIDOT before planning."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri 07:00–09:00: 31-25-21(f)(1): no travel 7-9 a.m. on freeways and arterials (over 8'6\" wide, 80' long or 130,000 lb)", "mon, tue, wed, thu, fri 15:00–19:00: 31-25-21(f)(1): no travel 3-7 p.m. Monday-Friday" ],
+    "note" : "Follows R.I. Gen. Laws 31-25-21(f) as amended 2022 (peak-hour and holiday bans; the former night/weekend clause (f)(2) was deleted). The 2002 RICR regulation still reads daylight only, no weekends - the statute controls."
+  } ],
+  "sources" : [ {
+    "title" : "R.I. Gen. Laws 31-25-21 Power to permit excess size or weight (fees, travel restrictions; amended 2022, 2025)",
+    "url" : "https://webserver.rilegislature.gov/Statutes/TITLE31/31-25/31-25-21.htm"
+  }, {
+    "title" : "290-RICR-40-00-1 Rules and Regulations Regarding Overweight and Oversize Vehicle Permits",
+    "url" : "https://rules.sos.ri.gov/regulations/part/290-40-00-1"
+  }, {
+    "title" : "RIDOT OSOW FAQs",
+    "url" : "https://www.dot.ri.gov/travel/docs/bridge_restrictions/RIDOT_OSOW_FAQs.pdf"
+  }, {
+    "title" : "R.I. Gen. Laws 31-25-6 Maximum number and length of coupled vehicles",
+    "url" : "https://webserver.rilegislature.gov/Statutes/TITLE31/31-25/31-25-6.htm"
+  }, {
+    "title" : "R.I. Gen. Laws 31-25-3 / 31-25-4 Maximum width / height",
+    "url" : "https://webserver.rilegislature.gov/Statutes/TITLE31/31-25/31-25-4.htm"
+  }, {
+    "title" : "R.I. Gen. Laws 31-25-14 Maximum weight and tandem axles",
+    "url" : "https://webserver.rilegislature.gov/Statutes/TITLE31/31-25/31-25-14.htm"
+  } ],
+  "notes" : [ "Escort also required for 30,000 lb or more on any axle and whenever the permit reviewer decides (RIDOT FAQ); axle weights not modeled.", "Police: buildings moved need local/state police escort; on the Jamestown Bridge loads over 9' wide must arrange police to halt traffic at one end. No general police trigger.", "Superload (>= 200,000 lb, route dependent) requires an independent third-party structural analysis of every structure on the route at the carrier's cost (not priced).", "Permits cover state-maintained roads only; Mount Hope and Newport (Pell) bridges (RI Bridge Authority) and city/town streets need their own permission.", "Extra-large loads (beyond New England consortium limits) need applications 5 working days ahead." ]
+}

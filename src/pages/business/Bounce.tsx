@@ -5,9 +5,7 @@
 
 import { Link } from "react-router-dom";
 import type { BounceReason } from "./types";
-
-const INSTALL_URL =
-  "https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd";
+import { INSTALL_URL } from "./installLink";
 
 type Copy = {
   title: string;

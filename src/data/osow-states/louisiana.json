@@ -1,0 +1,189 @@
+{
+  "code" : "LA",
+  "name" : "Louisiana",
+  "slug" : "louisiana",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "59'6\"",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Louisiana DOTD Truck Permit Office (LaGeaux)",
+    "url" : "https://dotd.la.gov/about/office-of-operations/oversized-and-overweight-truck-permits/single-trip-permits/",
+    "phone" : "800-654-1433",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$10",
+    "note" : "Oversize permit $10 per day / per trip (one trip per day if over width or height). An overweight permit covers oversize dimensions at no extra charge, so only the higher of the two lines is charged."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 80,000 lb, up to 100,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "R.S. 32:387 Schedule #3 (5+ axles): gross 80,001-100,000 lb priced by Louisiana miles 0-50 / 51-100 / 101-150 / 151-200 / over 200. One band per line; the group keeps the single matching band. 2-4 axle vehicles use Schedules #1/#2 (not modeled). Valid 5 days."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 100,000 lb, up to 108,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 100,001-108,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 108,000 lb, up to 120,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 108,001-120,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 120,000 lb, up to 132,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 120,001-132,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 132,000 lb, up to 152,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 132,001-152,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 152,000 lb, up to 172,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 152,001-172,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 172,000 lb, up to 192,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 172,001-192,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 192,000 lb, up to 212,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 192,001-212,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 212,000 lb, up to 232,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 212,001-232,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 232,000 lb, up to 254,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Schedule #3 band 232,001-254,000 lb by Louisiana miles (0-50 / 51-100 / 101-150 / 151-200 / over 200)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Up to 80,000 lb, overweight",
+    "amount" : "Set by the state",
+    "note" : "Gross within 80,000 lb but an axle group over its limit: Schedule #3 is keyed to gross weight, so LADOTD prices this from the axle weights."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 254,000 lb",
+    "amount" : "$15",
+    "note" : "Over 254,000 lb: $15 permit fee plus the ton-mile line below and a structural evaluation."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 254,000 lb",
+    "amount" : "$0.75 per ton-mile",
+    "note" : "Over 254,000 lb: $0.75 per ton-mile of weight in excess of 80,000 lb (plus the $15 permit fee and structural evaluation)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 254,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Structural evaluation fee per structure type: $187.50 (timber/concrete slab bridges), $1,275 (truss, continuous span, movable bridges and all Mississippi River structures), $750 (all other structures). Also applies to 232,001-254,000 lb loads for route segments off the National Highway System."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15'10\" high, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide",
+    "text" : "1 police escort. Louisiana State Police escort required over 16' wide (arranged via the nearest Troop; DPS sets the charge)."
+  }, {
+    "when" : "Over 18' wide",
+    "text" : "2 police escorts. Over 18' wide: front and rear State Police escorts."
+  }, {
+    "when" : "Over 125' long",
+    "text" : "1 police escort. State Police escort required over 125' long; hauling trailer must have a steerable/trackable dolly."
+  }, {
+    "when" : "Over 18' high",
+    "text" : "2 police escorts. Over 18' high: front and rear State Police escorts may be required."
+  } ],
+  "survey" : [ {
+    "when" : "Over 18' high",
+    "text" : null
+  }, {
+    "when" : "Over 18' wide",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 232,000 lb, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 254,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Permitted loads move sunrise to sunset only; no night travel, no travel in inclement weather (heavy rain, fog, ice, snow, low visibility) and none on designated holidays - unless the load is legal width and length, not over 14'4\" high, not over 120,000 lb and nothing projects."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight loads not over 120,000 lb with legal width/length, height 14'4\" or less and no projections may travel at night, in moderate weather and on holidays; heavier loads follow the daylight/no-holiday rule."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' wide: no weekday travel 7-9 a.m. and 3:30-5:30 p.m. on listed interstate segments in Shreveport (I-20), Monroe (I-20), Lake Charles (I-210, I-10), Baton Rouge (I-110, I-10, I-12) and New Orleans (I-610, I-10); and no travel in the City of New Orleans 7-9 a.m. and 3:30-6 p.m. weekdays (except on the interstate and US-90 Bus)."
+  }, {
+    "when" : "Oversize or overweight",
+    "text" : "Permitted vehicles may not cross or be within 2 miles of a Mississippi River bridge in New Orleans 6:30-9 a.m. and 3:30-6 p.m. Mon-Fri. The US-190 Mississippi River bridge in Baton Rouge is closed at the same hours to loads over 8'6\" wide, 14'4\" high, 70' long, over 120,000 lb, or with projecting loads."
+  }, {
+    "when" : "Over 16'5\" high",
+    "text" : "Over 16'5\" high: obtain a pre-approved route at least 48 hours before the move. Over 18' high: contact each DOTD district on the route for utility/route approvals; bucket trucks required."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "DOTD announces the holiday closures each year (e.g. Thanksgiving Thursday-Sunday, Christmas and New Year Friday-Sunday); modeled as noon the day before through the holiday and the adjoining weekend."
+  }, {
+    "when" : "Over 120,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "LA DOTD - Louisiana Regulations for Trucks, Vehicles, and Loads (Updated 2026)",
+    "url" : "https://dotd.la.gov/media/chxdsfee/rules-and-reg-book-2026-7.pdf"
+  }, {
+    "title" : "LA DOTD - Single Trip Permits (oversize $10, overweight by GVW and mileage)",
+    "url" : "https://dotd.la.gov/about/office-of-operations/oversized-and-overweight-truck-permits/single-trip-permits/"
+  }, {
+    "title" : "La. R.S. 32:387 - Special permits; fees (overweight fee schedules)",
+    "url" : "https://legis.la.gov/legis/Law.aspx?d=88327"
+  } ],
+  "notes" : [ "Private escorts are required for 12'-16' wide and 90'-125' long; above 16' wide or 125' long Louisiana State Police escorts are required, so the private-escort count may be overstated for the largest loads. Escorts trail over-width loads on multi-lane highways and lead them on two-lane highways; they trail over-length loads on all highways. Private escort vehicles need a $10/year Louisiana Escort Vehicle Permit.", "Pole car in front over 15'10\" high on state highways (interstate-only moves exempt); line-lifting pole truck over 16'8\"; on multi-lane highways a height-pole car is needed in addition to the rear escort.", "Loads over 18' wide may need a DOTD district representative to approve/accompany; over 232,000 lb (non-designated) or 254,000 lb (all highways) apply 4-6 weeks ahead; over 900,000 lb may need independent engineering analysis.", "Overweight fee uses the over-200-mile column as an upper bound - short Louisiana legs cost less (see note on the line).", "The holiday list is not spelled out in the 2026 regulations book ('certain designated holidays') - verify with the Truck Permit Office.", "Legal: 8'6\" wide; 14' high on interstates, 13'6\" elsewhere; semitrailer plus load 59'6\" on designated truck routes, 65' overall on other highways; 80,000 lb gross (tridum/quadrum combinations may have higher legal gross on non-interstate)." ]
+}

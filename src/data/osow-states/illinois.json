@@ -1,0 +1,299 @@
+{
+  "code" : "IL",
+  "name" : "Illinois",
+  "slug" : "illinois",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Illinois Department of Transportation - Bureau of Operations, Permit Office (ITAP)",
+    "url" : "https://idot.illinois.gov/doing-business/permit-and-sales-marketplace/oversize-and-overweight-permits.html",
+    "phone" : "217-785-1477",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category a (any overdimension); $12/$15/$18/$21 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 10' wide, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category b (over 10 ft wide); $15/$20/$25/$30 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 70' long, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category b (over 70 ft long); $15/$20/$25/$30 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 12' wide, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category c (over 12 ft wide); $25/$30/$35/$40 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14'6\" high, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category c (over 14 ft 6 in high); $25/$30/$35/$40 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 85' long, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category c (over 85 ft long); $25/$30/$35/$40 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' wide, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category d (over 14 ft wide); $30/$40/$50/$60 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 15' high, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category d (over 15 ft high); $30/$40/$50/$60 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 100' long, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category d (over 100 ft long); $30/$40/$50/$60 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 18' wide, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category e (over 18 ft wide); $50/$75/$100/$125 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16' high, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category e (over 16 ft high); $50/$75/$100/$125 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 120' long, legal weight",
+    "amount" : "Depends on the load",
+    "note" : "Table 1 category e (over 120 ft long); $50/$75/$100/$125 for 0-90/91-180/181-270/over 270 Illinois miles. The highest category of width, height and length applies."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 12'6\" wide, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Table 2 footnote: the overweight fee already covers dimensions up to 12 ft 6 in wide, 15 ft high and 145 ft long; a width of 12 ft 7 in to 14 ft 6 in adds $15."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14'6\" wide, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight load over 14 ft 6 in wide: Table 1 category d is added to the Table 2 fee (Table 2 footnote)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 18' wide, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight load over 18 ft wide: Table 1 category e is added to the Table 2 fee."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 15' high, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight load over 15 ft high: Table 1 category d is added to the Table 2 fee."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16' high, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight load over 16 ft high: Table 1 category e is added to the Table 2 fee."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 145' long, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight load over 145 ft long: Table 1 category e (over 120 ft) is added to the Table 2 fee."
+  }, {
+    "kind" : "overweight",
+    "when" : "Up to 88,000 lb, overweight",
+    "amount" : "Depends on the load",
+    "note" : "Table 2 category f (6+ axles up to 88,000 lb; 15-307(b)): $10 for 0-45 Illinois miles, then +$2.5 per 45 miles or part (table listed to 495 miles, last step extrapolated). A load legal in gross but over an axle limit pays this category too (Table 3 axle fees may differ)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 88,000 lb, up to 100,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Table 2 category g (6+ axles 88,001-100,000 lb; 15-307(b)): $15 for 0-45 Illinois miles, then +$10 per 45 miles or part (table listed to 495 miles, last step extrapolated). A load legal in gross but over an axle limit pays this category too (Table 3 axle fees may differ)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 100,000 lb, up to 110,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Table 2 category h (6+ axles 100,001-110,000 lb; 15-307(b)): $20 for 0-45 Illinois miles, then +$12.5 per 45 miles or part (table listed to 495 miles, last step extrapolated). A load legal in gross but over an axle limit pays this category too (Table 3 axle fees may differ)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 110,000 lb, up to 120,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Table 2 category i (6+ axles 110,001-120,000 lb; 15-307(b)): $30 for 0-45 Illinois miles, then +$25 per 45 miles or part (table listed to 495 miles, last step extrapolated). A load legal in gross but over an axle limit pays this category too (Table 3 axle fees may differ)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 120,000 lb",
+    "amount" : "$50",
+    "note" : "Over the practical maximum (120,000 lb on 6+ axles): 15-307(g) superload base $50, plus the ton-mile line below."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 120,000 lb",
+    "amount" : "$0.04 per ton-mile",
+    "note" : "Loads outside the fee categories (over 120,000 lb on 6+ axles; over 100,000 lb on 5 axles): $50 (base line) + 3.5 cents per ton-mile in excess of legal weight, plus the Table 1 fee for each overdimension. IDOT engineering/bridge analysis and field investigation may add $40/hour (92 IAC 554.910)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14'6\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 18' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" wide, over 14'6\" high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high, over 110' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" wide, over 110' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 145' long",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 18' wide",
+    "text" : "1 police escort. Illinois State Police escort required over 18' wide. ISP processing fee $80 per ISP district crossed ($160 Chicago District) paid to the Permit Office, plus ISP hourly charges; book 24h ahead (217-782-6527). Local police may substitute inside a city/county."
+  }, {
+    "when" : "Over 200' long",
+    "text" : "1 police escort. Illinois State Police escort required over 200' long ($80 per ISP district, $160 Chicago, plus hourly)."
+  }, {
+    "when" : "Over 18' high",
+    "text" : "1 police escort. Illinois State Police escort required over 18' high; the Permit Office may waive it if a field investigation finds no overhead obstructions."
+  } ],
+  "survey" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 120,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 145' long",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Loads up to 12' wide, 13'6\" high and 115' long (within practical maximum weights): 1/2 hour before sunrise to 1/2 hour after sunset, 7 days. Larger loads: 1/2 hour before sunrise to 1/2 hour after sunset Mon-Fri and until noon Saturday (no Sunday). Holiday restriction starts at noon the day before New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving and Christmas (and holiday weekends). No travel on snow/ice or impaired visibility."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight loads with legal dimensions may move 24 hours a day, 7 days a week (holiday restrictions still apply). Loads above practical maximum size/weight may be limited to a specified day and time."
+  }, {
+    "when" : "Oversize",
+    "text" : "Cook County: loads over 12' wide, 13'6\" high or above practical maximum weights are prohibited on Cook County expressways except I-55 north of exit 277, I-57 south of US-6 and I-290 north of I-294; max height on Chicago-area controlled-access highways is 13'6\". City of Chicago and Cook County roads need their own permits."
+  }, {
+    "when" : "Over 14'6\" wide",
+    "text" : "Over 14'6\" wide: generally limited to days the Permit Office is open; bridge/obstruction horizontal clearance must exceed load width by 24\"; load must stay in one lane and yield to traffic."
+  }, {
+    "when" : "Over 18' wide",
+    "text" : "Over 18' wide: generally authorized only on interstates and other multilane controlled-access highways."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Legal size, overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 13'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 115' long",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "92 Ill. Adm. Code 554 - Permits for Oversize/Overweight Vehicles (IDOT rules)",
+    "url" : "https://www.ilga.gov/agencies/JCAR/EntirePart?titlepart=09200554"
+  }, {
+    "title" : "IDOT Table 1 - Overdimension Fee Categories (rev. 1/16/2024)",
+    "url" : "https://idot.illinois.gov/content/dam/soi/en/web/idot/documents/doing-business/specialty-lists/highways/permits/table1.pdf"
+  }, {
+    "title" : "IDOT Table 2 - Overweight Fee Categories",
+    "url" : "https://idot.illinois.gov/content/dam/soi/en/web/idot/documents/doing-business/specialty-lists/highways/permits/table2.pdf"
+  }, {
+    "title" : "625 ILCS 5/15-307 - Fees for overweight-gross loads",
+    "url" : "https://www.ilga.gov/legislation/ilcs/fulltext.asp?DocName=062500050K15-307"
+  }, {
+    "title" : "IDOT OPER 753 - Maximum Legal Dimensions and Weights (rev. 01/05/23)",
+    "url" : "https://idot.illinois.gov/content/dam/soi/en/web/idot/documents/idot-forms/oper/oper-753.pdf"
+  }, {
+    "title" : "IDOT - Oversize and Overweight Permits (permit office contact)",
+    "url" : "https://idot.illinois.gov/doing-business/permit-and-sales-marketplace/oversize-and-overweight-permits.html"
+  } ],
+  "notes" : [ "Single trip permits are valid for 5 working days. Illinois Tollway moves need a separate Tollway permit; local roads need local permits.", "Escort placement (92 IAC 554.408): one escort leads on two-lane highways and trails on multilane divided highways; with two, one leads and one trails; escorts leading loads over 14'6\" high carry a height pole. The third escort (over 16' wide or 145' long) is modeled as a second front vehicle - position is set by the permit.", "Practical maximum weights (92 IAC 554.604): 120,000 lb on 6+ axles, 100,000 lb on 5 axles, 76,000 lb on 4 axles, 68,000 lb on 3 axles, 48,000 lb on 2 axles. Practical maximum height 15', length 145'. Above these: superload review, bridge analysis and possibly $40/hour engineering fees.", "Overweight fees in this file assume a 6+ axle tractor-semitrailer (15-307(b)); 5-axle, crane, and axle-only overweight (Table 3) fees differ. Use IDOT's ITAP fee estimator to confirm.", "Moves over 16' wide require a District investigation (route review), which can delay issuance.", "Legal: 8'6\" wide, 13'6\" high, 53' semitrailer, no overall length limit for tractor-semitrailers on Class I/II designated highways (65' overall on non-designated highways), 80,000 lb gross." ]
+}

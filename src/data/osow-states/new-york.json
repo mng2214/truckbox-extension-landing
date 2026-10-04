@@ -1,0 +1,222 @@
+{
+  "code" : "NY",
+  "name" : "New York",
+  "slug" : "new-york",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "NYSDOT Central Permit Office (Albany)",
+    "url" : "https://www.dot.ny.gov/nypermits/special-hauling-permits",
+    "phone" : "888-783-1685",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$40",
+    "note" : "NYSDOT trip permit $40 (same for Superload); amendment $10. Valid up to 5 permissible hauling days. Excludes permit-service charges; 1995 rule table also lists a $4 insurance payment when no PERM 17 certificate is on file."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 79'11\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 10', on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 10', on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 79'11\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 10', on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 10', on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13'11\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 99'11\" long, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17'11\" wide, on interstates and freeways",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 159'11\" long, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 160' long",
+    "text" : "1 police escort. Over 160' long (over 200' on NYS Thruway); State Police escort rates per NYSDOT superload page"
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "1 police escort. Over 16' wide"
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : "1 police escort. Over 200,000 lb, or vehicle must cross a structure centerline"
+  }, {
+    "when" : "Over 15'11\" high",
+    "text" : "1 police escort. 16' high or more"
+  } ],
+  "survey" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15'11\" high",
+    "text" : null
+  }, {
+    "when" : "Over 160' long",
+    "text" : null
+  }, {
+    "when" : "Over 199,999 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15'11\" high",
+    "text" : null
+  }, {
+    "when" : "Over 160' long",
+    "text" : null
+  }, {
+    "when" : "Over 199,999 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Travel 1/2 hr before sunrise to 1/2 hr after sunset only; no Saturdays, Sundays or holidays (New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas) and none after noon on the weekday before Memorial Day, July 4, Labor Day, Thanksgiving, Christmas. Loads within 12' wide and 85' long that keep traffic speed may run until noon Saturday."
+  }, {
+    "when" : "Oversize",
+    "text" : "Curfew 7-9 am and 4-6 pm: statewide for loads 16'+ wide, 100'+ long or over 14' high; in business districts for loads 14'+ wide, 90'+ long or 14'+ high. Local curfews: Binghamton (>10' wide or >72' long), Syracuse 10-mi radius (>10' or >85'), Hudson/Kingston/Newburgh/Poughkeepsie (>11'), Utica/Amsterdam (>12'), Albany & Rensselaer I-787/I-90/I-87 (>13')."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only loads up to 125% of legal weight (legal dimensions, traffic speed) may travel 24/7; heavier ones follow the daylight, weekend and holiday limits above (modeled as over 100,000 lb gross - legal weight is axle-based)."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "No travel when visibility < 1,000 ft or pavement hazardous from rain, sleet, snow, ice, fog, flood or wind; permitted vehicles must stay 2,000 ft apart."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Daylight, Monday-Friday; loads within 12' wide and 85' long that keep traffic speed may also move until noon Saturday."
+  }, {
+    "when" : "Over 100,000 lb, legal size",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Overweight-only over 125% of legal weight."
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : false,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 12' wide: no Saturday movement."
+  }, {
+    "when" : "Over 85' long",
+    "daylightOnly" : false,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 85' long: no Saturday movement."
+  }, {
+    "when" : "Over 15'11\" wide",
+    "daylightOnly" : false,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri 07:00–09:00: Statewide curfew 7-9 AM", "mon, tue, wed, thu, fri 16:00–18:00: Statewide curfew 4-6 PM" ],
+    "note" : "16' wide or more: no travel 7-9 AM and 4-6 PM anywhere in New York State."
+  }, {
+    "when" : "Over 99'11\" long",
+    "daylightOnly" : false,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri 07:00–09:00: Statewide curfew 7-9 AM", "mon, tue, wed, thu, fri 16:00–18:00: Statewide curfew 4-6 PM" ],
+    "note" : "100' long or more: statewide 7-9 AM and 4-6 PM curfew."
+  }, {
+    "when" : "Over 14' high",
+    "daylightOnly" : false,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri 07:00–09:00: Statewide curfew 7-9 AM", "mon, tue, wed, thu, fri 16:00–18:00: Statewide curfew 4-6 PM" ],
+    "note" : "Over 14' high: statewide 7-9 AM and 4-6 PM curfew."
+  } ],
+  "sources" : [ {
+    "title" : "NYSDOT - Special Hauling Permit Fees",
+    "url" : "https://www.dot.ny.gov/nypermits/special-hauling-permits/fees"
+  }, {
+    "title" : "17 NYCRR Subpart 154-1 Nondivisible Load Permits (NYSDOT copy)",
+    "url" : "https://www.dot.ny.gov/nypermits/repository/nycrr154-1.pdf"
+  }, {
+    "title" : "New York State Certified Escort Manual 2025",
+    "url" : "https://www.dot.ny.gov/portal/page/portal/nypermits/repository/Vehicle%20Escort%20Manual_Final_2025.pdf"
+  }, {
+    "title" : "NYSDOT - Superload Permits",
+    "url" : "https://www.dot.ny.gov/nypermits/superloads"
+  }, {
+    "title" : "NY Vehicle and Traffic Law Section 385 (NYSDOT copy)",
+    "url" : "https://www.dot.ny.gov/nypermits/repository/73C9EA84C1942064E0430A3DFC052064"
+  }, {
+    "title" : "NYSDOT - Permit Types That Require Additional Attachments",
+    "url" : "https://www.dot.ny.gov/nypermits/repository/SupplementalPermitDocuments.pdf"
+  } ],
+  "notes" : [ "NYSDOT permits cover only State highways; the NYS Thruway, New York City and other local roads need their own permits.", "Superloads (Type 1S): route survey, letter of responsibility, vehicle diagrams, surety bond (PERM 14) and local permits; traffic control plan and State Police escort per NYSDOT policy/rates.", "Police count is 1 per trigger; the manual does not say how many troopers - check the State Police Escort Policy.", "Escort on multi-lane highways for over-height only loads is modeled as a front height-pole car; verify against permit conditions.", "Night travel may be allowed on request in Westchester, Rockland, Dutchess, Putnam, Orange, Nassau and Suffolk counties.", "Holidays are modeled with the noon-before rule for all six holidays; 154-1.2(a) closes New Year's Day itself only (no noon-before), so New Year's Eve afternoon is held here although NY allows it.", "Business-district and city curfews (7-9 AM, 4-6 PM) are local and not modeled; the statewide curfew for 16'+ wide, 100'+ long or over 14' high is." ]
+}

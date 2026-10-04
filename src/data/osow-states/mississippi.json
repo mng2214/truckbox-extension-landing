@@ -1,0 +1,159 @@
+{
+  "code" : "MS",
+  "name" : "Mississippi",
+  "slug" : "mississippi",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : "99'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "MDOT Permit & Motor Carrier Division (ExpressPass)",
+    "url" : "https://permits.mdot.ms.gov/",
+    "phone" : "601-359-1717",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$10",
+    "note" : "Single Trip - Oversize permit $10 (round trip may be purchased)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.10 per ton-mile",
+    "note" : "$0.05 per 1,000 lb (or fraction) over the legal weight x Mississippi miles = $0.10 per excess ton-mile; minimum permit fee $10 (§27-19-81). State counts each started 1,000 lb, so actual fee can be slightly higher. Over-axle loads under 80,000 lb gross are also charged but not modeled."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 99' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 99' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\"",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\"",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 15'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 159'11\" long",
+    "text" : "2 police escorts. Two blue-light escorts (front and rear) from 160 ft total length; exceptions at MDOT Permit Division Director's discretion."
+  }, {
+    "when" : "Over 15'8\" high",
+    "text" : "2 police escorts. Two blue-light escorts plus height pole from 15'9\" tall; route-based exceptions possible."
+  }, {
+    "when" : "Over 299,999 lb",
+    "text" : "2 police escorts. Two blue-light escorts for loads of 300,000 lb or more; route-based exceptions possible."
+  } ],
+  "survey" : [ {
+    "when" : "Over 17' wide",
+    "text" : null
+  }, {
+    "when" : "Over 121' long",
+    "text" : null
+  }, {
+    "when" : "Over 15'7\" high",
+    "text" : null
+  }, {
+    "when" : "Over 189,998 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 17' wide",
+    "text" : null
+  }, {
+    "when" : "Over 121' long",
+    "text" : null
+  }, {
+    "when" : "Over 15'7\" high",
+    "text" : null
+  }, {
+    "when" : "Over 189,998 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight Hours: loads 12 ft wide or less sunrise to sunset; wider than 12 ft from 30 min after sunrise to 30 min before sunset. Night moves may be permitted only for loads not over 12 ft wide, 150,000 lb, 99 ft long, 4 ft rear overhang (route-dependent height); at night loads 10 ft wide or more need a front escort on two-lane roads or rear escort on divided highways."
+  }, {
+    "when" : "Oversize",
+    "text" : "No movement after 12:00 noon on the day before, or on, New Year's Day, Memorial Day, Fourth of July, Labor Day, Thanksgiving Day and Christmas, unless otherwise permitted. No over-width movement in inclement weather."
+  }, {
+    "when" : "Overweight",
+    "text" : "Holiday restriction (no movement after noon the day before or on the 6 listed holidays) applies to permitted moves unless the permit says otherwise."
+  }, {
+    "when" : "Over 17'11\" wide",
+    "text" : "18 ft wide and over: a police ('blue light') escort may be required depending on route and load conditions (General Permit Regulations say 20 ft)."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Wider than 12 ft: 30 minutes after sunrise to 30 minutes before sunset."
+  } ],
+  "sources" : [ {
+    "title" : "MDOT Permit & Motor Carrier Division Manual (9/21/2024)",
+    "url" : "https://mdot.ms.gov/documents/Enforcement/Permits/Permits%20Manual%2009.21.24.pdf"
+  }, {
+    "title" : "MDOT Permit and Blanket Fees",
+    "url" : "https://permits.mdot.ms.gov/PermitFees.pdf"
+  }, {
+    "title" : "MDOT General Permit Regulations (300 series)",
+    "url" : "https://mdot.ms.gov/documents/Enforcement/Permits/GENERAL%20PERMIT%20REGULATIONS.pdf"
+  }, {
+    "title" : "MDOT Permit Rules - Sub-Part 6301 Over-Dimensional Permits",
+    "url" : "https://permits.mdot.ms.gov/Mississippi%20Department%20of%20Transportation%20Permit%20Resource%20Materials.pdf"
+  }, {
+    "title" : "Miss. Legislature HB 1477 (2023, as passed House) - text of Miss. Code §27-19-81 excess weight permit fee",
+    "url" : "https://billstatus.ls.state.ms.us/documents/2023/html/HB/1400-1499/HB1477PS.htm"
+  } ],
+  "notes" : [ "Escort rules for over-length (> 99 ft) and 15 ft+ overhang say 'front and/or rear escort'; calculator assumes one escort. MDOT may add escorts (incl. height pole, front and rear) on the permit, and escorts may be required on bridges.", "Super Loads need written utility/railroad acknowledgements (height over 16'7\", length over 120'), axle diagrams, route survey and a traffic control plan.", "Overweight fee is charged on weight above legal (80,000 lb gross or 20,000 single / 34,000 tandem axle) - verify the per-1,000-lb rounding on the ExpressPass quote.", "Out-of-state vehicles without Mississippi IRP may also need a $25 72-hour trip permit (not included).", "Permits are valid on state-maintained highways and Interstates; local roads need local approval." ]
+}

@@ -1,0 +1,166 @@
+{
+  "code" : "OR",
+  "name" : "Oregon",
+  "slug" : "oregon",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "ODOT Commerce and Compliance Division - Over-Dimension Permit Unit (ORION)",
+    "url" : "https://www.oregon.gov/odot/mct/pages/over-dimension-operations-oregon.aspx",
+    "phone" : "503-373-0000",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$8",
+    "note" : "State of Oregon single-trip permit fee $8 (ORS 818.270 caps it at $8); one permit covers size and weight. County/City of Portland roads may add their own fee."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 98,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Road Use Assessment Fee for non-divisible loads over 98,000 lb, replaces weight-mile tax for the loaded trip. Cents per mile from ODOT table 9926 by gross weight AND axle count (e.g. 98,001-100,000 lb: 84c/mi on 5 axles, 15c/mi on 9 axles); over 240,000 lb computed by ODOT. Statutory basis 10.9c per ESAL-mile (ORS 818.225)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 120' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 15', on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 17' high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "text" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 17' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 8'6\" wide",
+    "text" : "Night travel (1/2 hr after sunset to 1/2 hr before sunrise): 8'7\"-10' allowed on Interstates and Route Map 2 green routes only; 10'1\"-12' Interstates only; over 12' not allowed at night anywhere."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Urban areas (Portland, Salem, Eugene, Grants Pass, Medford): over 12' wide no movement 7-9 AM and 4-6 PM on business days on non-Interstates, I-5 WA line-OR217 and I-5 exits 24-33; over 14' wide also barred on all Interstates in those hours and 11 AM-1 PM on all highways in those urban areas."
+  }, {
+    "when" : "Over 8'6\" wide",
+    "text" : "Summer weekends (last Monday in May to first Monday in September): after noon Saturday and all Sunday, up to 14' allowed on Interstates and authorized routes east of the Cascades, not on non-Interstates west of the Cascades; over 14' not allowed."
+  }, {
+    "when" : "Over 8'6\" wide",
+    "text" : "Holidays (New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving, Christmas): no overwidth movement from noon the day before; up to 14' may resume on authorized routes per Attachment H schedule; over 14' not allowed through the holiday period."
+  } ],
+  "travel" : [ {
+    "when" : "Over 8'6\" wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ "New Year's Day", "Memorial Day", "Independence Day", "Labor Day", "Christmas" ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ "New Year's Day", "Memorial Day", "Independence Day", "Labor Day", "Christmas" ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 10' wide, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ "New Year's Day", "Memorial Day", "Independence Day", "Labor Day", "Christmas" ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ "New Year's Day", "Memorial Day", "Independence Day", "Labor Day", "Christmas" ],
+    "closures" : [ "sat from 12:00 (months [6, 7, 8]): Over 14' wide: no travel after noon Saturday, Memorial Day to Labor Day (approximated as June-August)", "sun (months [6, 7, 8]): Over 14' wide: no Sunday travel in summer" ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "ODOT CCD Legal Vehicle Dimensions",
+    "url" : "https://www.oregon.gov/odot/MCT/Pages/Legal-Vehicle-Dimensions.aspx"
+  }, {
+    "title" : "ORS Chapter 818 Vehicle Limits (818.225 road use assessment fee, 818.270 permit fees)",
+    "url" : "https://www.oregonlegislature.gov/bills_laws/ors/ors818.html"
+  }, {
+    "title" : "CCD Administrative Fees for Over-Dimension Permits (form 735-9973, rev. 07-2026)",
+    "url" : "https://www.oregon.gov/odot/Forms/Motcarr/9973.pdf"
+  }, {
+    "title" : "Oregon Road Use Assessment Fee (RUAF)",
+    "url" : "https://www.oregon.gov/odot/mct/pages/road-use-assessment-fee.aspx"
+  }, {
+    "title" : "Route Map 2 Designations List and Legend - pilot vehicle charts (form 735-8101, 5-26)",
+    "url" : "https://www.oregon.gov/odot/Forms/Motcarr/8101.pdf"
+  }, {
+    "title" : "ODOT CCD Oregon Superloads",
+    "url" : "https://www.oregon.gov/odot/MCT/Pages/Oregon-Superloads.aspx"
+  }, {
+    "title" : "Attachment H - Hauling Hours and Days for Overwidth Movement (form 2362, rev. 01-2026)",
+    "url" : "https://www.oregon.gov/odot/Forms/Motcarr/2362.pdf"
+  }, {
+    "title" : "Group Map 1 Designations List and Legend (form 735-8100)",
+    "url" : "https://www.oregon.gov/odot/Forms/Motcarr/8100.pdf"
+  }, {
+    "title" : "ODOT CCD Permittable Vehicle Dimensions and Weight Tables",
+    "url" : "https://www.oregon.gov/odot/MCT/pages/permittable-vehicle-dimensions-weight-tables.aspx"
+  } ],
+  "notes" : [ "Pilot car counts differ by Route Map 2 color (green/purple/red) and Group Map 1 group; this file uses Interstate and green-route values. Single-trip permit special conditions take precedence.", "Over 12' wide: certified flaggers (or the 3-pilot Certified Rolling Stop) required at listed tunnels/bridges (US26 Sunset Tunnel, several US101 bridges/tunnels, OR38, OR47, OR58, OR99E, OR126, OR138, OR238).", "Superloads may need a Traffic Control Plan with certified flaggers and ODOT-monitored moves; ODOT bills monitoring/utility costs directly. Superload permits can take up to 10 days.", "Overweight single-trip permits require a temporary pass or Oregon weight-mile tax account; weight-mile tax for 80,001-98,000 lb is a tax, not a permit fee, and is not modeled.", "ORS 818.225 (RUAF) is amended by Enrolled HB 3991 (2025 special session), which was subject to possible referendum; check current RUAF rate table before relying on it.", "Annual Non-Divisible permits and county/City of Portland routes out of scope." ]
+}

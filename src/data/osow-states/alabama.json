@@ -1,0 +1,179 @@
+{
+  "code" : "AL",
+  "name" : "Alabama",
+  "slug" : "alabama",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "57'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "ALDOT Vehicle Enforcement Office (OS/OW Permit Office)",
+    "url" : "https://www.dot.state.al.us/business/permits/osowPermits.html",
+    "phone" : "800-499-2782",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$20",
+    "note" : "General W/H/L oversize at legal weight: $20. Over-height-only loads are $10 (not modeled - calculator shows $20). Single trip valid 5 days, one round trip (loaded one way, empty the other)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Weight only: 80,001-100,000 lb $10; 100,001-125,000 $30; 125,001-150,000 $60; over 150,000 $100."
+  }, {
+    "kind" : "overweight",
+    "when" : "Oversize, overweight",
+    "amount" : "Depends on the load",
+    "note" : "W/H/L + overweight: up to 100,000 lb $20; to 125,000 $40; to 150,000 $70; over 150,000 $110 (weight fee + $10 per Ala. Admin. Code 450-3-1-.10)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 125' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 9'11\"",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 5'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 150' long",
+    "text" : "2 police escorts. Front and rear law enforcement escorts required for lengths over 150 ft"
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "2 police escorts. Superload: minimum two State Trooper/police escorts, scheduled through ALEA after permit pre-approval; ALEA bills $200 admin fee + $100/hr per officer (4-hr min) + IRS mileage"
+  }, {
+    "when" : "Over 16' high",
+    "text" : "2 police escorts. Superload: minimum two State Trooper/police escorts, scheduled through ALEA after permit pre-approval; ALEA bills $200 admin fee + $100/hr per officer (4-hr min) + IRS mileage"
+  }, {
+    "when" : "Over 300,000 lb",
+    "text" : "2 police escorts. Superload: minimum two State Trooper/police escorts, scheduled through ALEA after permit pre-approval; ALEA bills $200 admin fee + $100/hr per officer (4-hr min) + IRS mileage"
+  } ],
+  "survey" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 300,000 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 300,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight hours only. No travel at any time on Sundays, New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day, Christmas Day. No travel when visibility is under 500 ft or weather is hazardous. Keep 1/2 mile between permitted loads."
+  }, {
+    "when" : "Overweight",
+    "text" : "Permitted (overweight) vehicles: daylight hours only; no travel on Sundays or the six listed holidays; no travel in visibility under 500 ft."
+  }, {
+    "when" : "Oversize",
+    "text" : "2026 holiday blackouts (sunset to sunrise): Dec 31-Jan 2; May 23-May 26; Jul 2-Jul 6; Sep 5-Sep 8; Nov 25-Nov 30; Dec 24-Dec 28 (subject to change)."
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "Superload: most must travel 9:00 PM-6:00 AM Sunday-Thursday unless the permit office approves otherwise; city/county engineer approval for local roads; lighting plan required."
+  }, {
+    "when" : "Over 16' high",
+    "text" : "Superload: most must travel 9:00 PM-6:00 AM Sunday-Thursday unless approved; utility notification may be required over 16'6\"; bucket truck required over 16'5\"."
+  }, {
+    "when" : "Over 150' long",
+    "text" : "Superload: most must travel 9:00 PM-6:00 AM Sunday-Thursday unless the permit office approves otherwise."
+  }, {
+    "when" : "Over 300,000 lb",
+    "text" : "Superload: most must travel 9:00 PM-6:00 AM Sunday-Thursday unless approved; Special Work Authorization for bridge analysis of every structure on the route."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Ala. Admin. Code ch. 450-3-1 (ALDOT Maintenance: OS/OW permits, escorts, fees), Supp. 12/31/21",
+    "url" : "https://admincode.legislature.state.al.us/api/chapter/450-3-1"
+  }, {
+    "title" : "ALDOT Permit Fee Schedule (revised March 11, 2025)",
+    "url" : "https://www.dot.state.al.us/business/permits/pdf/PermitFee2025.pdf"
+  }, {
+    "title" : "ALDOT Alabama Superload Requirements",
+    "url" : "https://www.dot.state.al.us/business/permits/pdf/SuperloadInformation.pdf"
+  }, {
+    "title" : "ALDOT 2026 Holiday Restrictions",
+    "url" : "https://www.dot.state.al.us/business/permits/pdf/2026_Holiday_Restrictions.pdf"
+  }, {
+    "title" : "ALDOT OS/OW Rules & Regulations Presentation (post-June 1, 2017 harmonized escort rules)",
+    "url" : "https://www.dot.state.al.us/business/permits/pdf/RulesandRegulationsPresentation.pdf"
+  }, {
+    "title" : "ALEA Admin. Code 760-X-2 Superload Law Enforcement Escorts (fees)",
+    "url" : "https://www.alea.gov/sites/default/files/inline-files/ALEA%20-%20Final%20760-X-2%20Superload%20Law%20Enforcement%20Escorts.pdf"
+  }, {
+    "title" : "ALDOT OS/OW Permits page",
+    "url" : "https://www.dot.state.al.us/business/permits/osowPermits.html"
+  } ],
+  "notes" : [ "Legal width is 8'6\" only on roads with 12-ft lanes; 8'0\" on roads with narrower lanes (450-3-1-.02).", "Legal length modeled as 57 ft semitrailer, no overall limit for tractor-semitrailer; 40 ft single vehicle, 65/75 ft car haulers. Overhang beyond 5 ft front/rear also needs a permit.", "Legal gross 80,000 lb is inferred from the fee schedule (weight fees start at 80,001); verify against Code of Ala. 32-9-20(4), which has non-interstate tolerances.", "12-14 ft wide: ONE escort - front on two-lane roads, rear on multilane. Modeled as front on non-interstate, rear on interstate; multilane non-interstate roads actually need rear instead of front (same vehicle count).", "Gross over 100,000 lb requires a Routing Authorization (routing set by the permit office). Proof of PSC insurance on file required for width over 12 ft or gross over 100,000 lb.", "Mobile/modular homes, boats, houses have separate fees ($10/$20) and escort rules - not modeled." ]
+}

@@ -1,0 +1,122 @@
+{
+  "code" : "NJ",
+  "name" : "New Jersey",
+  "slug" : "new-jersey",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "NJDOT Oversize/Overweight Permits (SUPERLOAD system, issued for NJ MVC)",
+    "url" : "https://nj.gotpermits.com/",
+    "phone" : "609-963-2085",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$10",
+    "note" : "N.J.A.C. 13:18-1.6(a): $10 for an oversize OR overweight single-trip permit; $20 when both (OS line + OW line). Valid 5 days."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' wide",
+    "amount" : "Depends on the load",
+    "note" : "$1 per foot or fraction over 14' wide (13:18-1.6(b))."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 63' long, oversize or overweight",
+    "amount" : "Depends on the load",
+    "note" : "$1 per foot or fraction over 63' of trailer/load length (Guidebook Table 4; rule text says combination length over 63'). Assumes length_in is trailer/load length; tiers listed up to 151 ft (last tier: over 1800 in = $88). House trailers: over 70' instead."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$10",
+    "note" : "N.J.A.C. 13:18-1.6(a)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "$5 per 2,000 lb or fraction over the axle or gross limit, whichever excess is greater (13:18-1.6(c)); modeled on gross only - axle overages can make it higher."
+  }, {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$12",
+    "note" : "13:18-1.6(d): $12 per permit transaction plus a 5% service charge on the total permit fee (the 5% is not modeled)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 100' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 100' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Oversize permits valid sunrise to sunset only; not when visibility < 500 ft or hazardous road conditions; not on roads with < 10 ft clear passing space. Night travel only by written waiver (adds 1 escort)."
+  }, {
+    "when" : "Oversize",
+    "text" : "No oversize travel on New Year's Day, Friday before + Memorial Day, July 4, Friday before + Labor Day, Wednesday before + Thanksgiving, Christmas; holiday on Sunday also bars Monday, on Saturday bars Friday."
+  }, {
+    "when" : "Over 14' high",
+    "text" : "Over 14' high: permittee must notify utilities, NJDOT, county and municipal traffic engineering (overhead wires, signals, bridges) along the route before the move (N.J.S.A. 39:4-28) or the permit is void."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only (legal dimensions) permits valid 24/7; vehicles unable to do 40 mph may not run when lamps are required."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "NJ permits do not cover the NJ Turnpike, Garden State Parkway or Atlantic City Expressway - separate approval from NJTA/SJTA; county/municipal roads need local permits."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "N.J.A.C. 13:18-1 Permits for Overdimensional or Overweight Vehicles (NJDOT courtesy copy)",
+    "url" : "https://www.nj.gov/transportation/about/rules/documents/13-18-Current.pdf"
+  }, {
+    "title" : "NJDOT Commercial Vehicle Size and Weight Guidebook (January 2024)",
+    "url" : "https://nj.gotpermits.com/njpass/Content/state/NJ/PublicMaterials/Final%20CVG%202024-01-05.pdf"
+  }, {
+    "title" : "NJDOT - Oversize and Overweight Vehicles",
+    "url" : "https://www.nj.gov/transportation/freight/trucking/oversize.shtm"
+  } ],
+  "notes" : [ "Rule copy on NJDOT site is the MVC courtesy copy (marked 'Expires March 9, 2018'); fees/escorts match the January 2024 NJDOT guidebook - verify current N.J.A.C. 13:18-1 text.", "Fees exclude the 5% service charge on the total permit fee.", "No police escorts or superload category in NJ rules; only private escorts, no escort certification. Third escort (adjacent lane) used when required with night waiver.", "Bridge analysis is automatic in the SUPERLOAD system; applications that overstress structures are rejected and must be rerouted or reconfigured." ]
+}

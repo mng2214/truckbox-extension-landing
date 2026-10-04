@@ -1,0 +1,126 @@
+{
+  "code" : "KY",
+  "name" : "Kentucky",
+  "slug" : "kentucky",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Kentucky Transportation Cabinet - Division of Motor Carriers, Overweight/Over-Dimensional Permits",
+    "url" : "https://drive.ky.gov/Motor-Carriers/Overweight-Over-Dimensional/Pages/OWOD-Permits.aspx",
+    "phone" : "502-564-1257",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$60",
+    "note" : "Single trip OW/OD permit $60 per KYTC (plus 4% card or $3 ACH processing fee), valid 10 days. KRS 189.270 (as amended eff. July 15, 2026) now leaves fees to regulation, and a proposed 601 KAR 1:018 amendment filed Sept 15, 2026 sets single trip at $120 - verify which fee is in force."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 160,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Loads above the routine permit maximums (7-axle combination 160,000 lb; 6-axle 120,000; 5-axle 96,000) need a route/bridge analysis by KYTC's Bridge Preservation Branch. The proposed 601 KAR 1:018 amendment adds a $500 superload bridge analysis fee."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 75' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 85' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'11\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 2,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "front" : 1,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 10'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 15'6\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 160,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize or overweight",
+    "text" : "Travel allowed 24 hours, 7 days and no holiday restrictions unless the permit says otherwise (mobile homes: daylight Mon-Sat only, no Sunday)."
+  }, {
+    "when" : "Oversize or overweight",
+    "text" : "No permitted travel 7-9 a.m. and 4-6 p.m. Mon-Fri in Boone, Kenton, Campbell, Fayette and Jefferson (Louisville) counties or on the Owensboro KY 2155 bridge; loads originating in Fayette County are exempt on I-64/I-75 and connecting routes within 3 miles."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' wide: no move when the National Weather Service has issued a wind advisory, or when weather/road conditions make the move dangerous."
+  } ],
+  "travel" : [ ],
+  "sources" : [ {
+    "title" : "601 KAR 1:018 - Special overweight or overdimensional motor vehicle load permits (current regulation)",
+    "url" : "https://apps.legislature.ky.gov/law/kar/titles/601/001/018/"
+  }, {
+    "title" : "KYTC DRIVE - Overweight Over-Dimensional Frequently Asked Questions",
+    "url" : "https://drive.ky.gov/Motor-Carriers/Overweight-Over-Dimensional/Pages/Frequently-Asked-Questions.aspx"
+  }, {
+    "title" : "KYTC DRIVE - OW/OD Escort Requirements",
+    "url" : "https://drive.ky.gov/Motor-Carriers/Overweight-Over-Dimensional/Pages/OWOD-Escort-Requirements.aspx"
+  }, {
+    "title" : "KYTC DRIVE - OW/OD Legal Dimensions",
+    "url" : "https://drive.ky.gov/Motor-Carriers/Overweight-Over-Dimensional/Pages/OWOD-Legal-Dimensions.aspx"
+  }, {
+    "title" : "KYTC DRIVE - OW/OD Travel Provisions",
+    "url" : "https://drive.ky.gov/Motor-Carriers/Overweight-Over-Dimensional/Pages/OWOD-Travel-Provisions.aspx"
+  }, {
+    "title" : "601 KAR 1:018 proposed amendment (Amended After Comments, filed with LRC Sept 15, 2026)",
+    "url" : "https://apps.legislature.ky.gov/Law/kar/titles/601/001/018/REG/"
+  }, {
+    "title" : "KRS 189.270 - Special permits to exceed limits (effective July 15, 2026)",
+    "url" : "https://apps.legislature.ky.gov/law/statutes/statute.aspx?id=57662"
+  } ],
+  "notes" : [ "Escorts: 601 KAR 1:018 Section 14 sets the 2-lane / 4-lane rules (non_interstate modeled as 2-lane, interstate as 4-lane). KYTC's escort page adds 2 front + 2 rear over 16' wide, 1 front + 2 rear (with pivot/steerable dolly) over 120' long, and a rear escort when rear overhang exceeds 10'. Over 14'11\" high the front escort runs a height pole. A trail escort is also required on 2-lane roads if the load cannot keep the posted speed.", "Over 15'6\" high: submit the OW/OD Proposed Route Survey (TC 95-625). Carrier must measure all clearances along the route.", "Overweight permits require the power unit to be registered for at least 80,000 lb and at least 5 axles on combinations. Max permitted gross: 5 axles 96,000; 6 axles 120,000; 7 axles 160,000 lb; trunnion axles by bridge analysis. 'Superload' here = above 160,000 lb (Kentucky defines no superload class in the current regulation).", "Front overhang on a combination vehicle is prohibited; rear overhang max 1/3 of trailer length (35' total).", "Legal: 8'6\" wide, 13'6\" high, 53' semitrailer on interstates/designated highways; 8' wide and 65' overall on other state highways." ]
+}

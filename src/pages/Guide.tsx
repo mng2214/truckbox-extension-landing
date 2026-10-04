@@ -6,11 +6,13 @@
 import { useEffect } from "react";
 import { Header, Footer, Guide } from "../App";
 import { usePageMeta } from "../lib/meta";
+import { bridgeTouchToExtension } from "../lib/attribution";
 
 export default function GuidePage() {
   usePageMeta({ title: "Setup Guide — TruckBox for DAT & Truckstop", description: "Five-minute setup for dispatchers: install the Truck Box Chrome extension, connect Gmail or Outlook, set your template, and send your first one-click broker email from the DAT One or Truckstop load board.", path: "/guide" });
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "auto" });
+    bridgeTouchToExtension();
   }, []);
 
   return (

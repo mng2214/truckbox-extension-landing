@@ -18,6 +18,7 @@ import {
   getStates,
   isFeatureOff,
   listQuotes,
+  OSOW_FREE_LIMIT_REACHED,
   OSOW_QUOTE_NOT_FOUND,
   OSOW_TERMS_NOT_ACCEPTED,
   osowErrorMessage,
@@ -32,6 +33,9 @@ import { StateTable } from "./StateTable";
 import { TripPlanCard } from "./TripPlanCard";
 import { ActionToast } from "./ActionToast";
 import { Economics } from "./Economics";
+import { ExtensionBridge } from "./ExtensionBridge";
+import { installLink } from "../installLink";
+import { ConfirmDialog } from "../ConfirmDialog";
 import { SavedQuotes } from "./SavedQuotes";
 import { Schematic } from "./Schematic";
 import {
@@ -42,6 +46,7 @@ import {
   DEFAULT_COSTS,
   deriveLoad,
   DIM_KEYS,
+  applyLoadLink,
   emptyForm,
   formatDim,
   type CostText,
@@ -145,10 +150,15 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
   const navigate = useNavigate();
   const reduced = useReducedMotionPref();
 
-  const [form, setForm] = useState<FormSnapshot>(() => ({
-    ...emptyForm(),
-    rigEdits: loadJson<FormSnapshot["rigEdits"]>(RIGS_KEY, {}),
-  }));
+  const [form, setForm] = useState<FormSnapshot>(() => {
+    const blank = { ...emptyForm(), rigEdits: loadJson<FormSnapshot["rigEdits"]>(RIGS_KEY, {}) };
+    return applyLoadLink(blank, new URLSearchParams(window.location.search)) ?? blank;
+  });
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).has("origin")) {
+      navigate(window.location.pathname, { replace: true });
+    }
+  }, [navigate]);
   const derived = useMemo(() => deriveLoad(form), [form]);
   const [costText, setCostText] = useState<CostText>(() => loadJson(COSTS_KEY, costsToText(DEFAULT_COSTS)));
   const [smoothing, setSmoothing] = useState<Smoothing>("conservative");
@@ -164,6 +174,7 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
   const [result, setResult] = useState<CalculateResponse | null>(null);
   const [busy, setBusy] = useState<Busy>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [freeLimitOpen, setFreeLimitOpen] = useState(false);
   const [attempted, setAttempted] = useState(false);
   const [toggleError, setToggleError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
@@ -264,6 +275,11 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
       if (e instanceof ApiError && e.code === OSOW_TERMS_NOT_ACCEPTED) {
         // The terms changed since the page loaded: ask again instead of showing an error.
         refreshAccess();
+        return;
+      }
+      if (e instanceof ApiError && e.code === OSOW_FREE_LIMIT_REACHED) {
+        refreshAccess();
+        setFreeLimitOpen(true);
         return;
       }
       const msg = osowErrorMessage(e, "Calculation failed. Try again.", access?.dailyCap);
@@ -625,6 +641,24 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
           onLeave={() => navigate("/business")}
         />
       )}
+      <ConfirmDialog
+        open={freeLimitOpen}
+        title="This month's free loads are used"
+        message={
+          <>
+            You've priced {access?.monthlyLimit ?? "your"} different loads this month on the free plan. Re-pricing
+            those loads stays free, and new ones open again on {nextMonthStart()}. With TruckBox, OS/OW is unlimited and
+            you get one-click broker emails on DAT and Truckstop. 7 days free, no card.
+          </>
+        }
+        confirmLabel="Install TruckBox"
+        cancelLabel="Not now"
+        onConfirm={() => {
+          window.open(installLink("osow", "limit"), "_blank", "noopener");
+          setFreeLimitOpen(false);
+        }}
+        onClose={() => setFreeLimitOpen(false)}
+      />
       <header className="flex flex-col gap-2">
         <h1 className="ed-display mt-3 flex items-center gap-3 flex-wrap" style={{ color: "var(--ink)" }}>
           OS/OW calculator
@@ -636,7 +670,12 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
           Permits, escorts &amp; restrictions — every state on the route
         </p>
         <div className="flex flex-wrap items-center gap-2 mt-1">
-          {access && (
+          {access && access.monthlyLimit != null && (
+            <span className="tb-chip is-muted" title="Different loads priced this month on the free plan; re-pricing the same load is free">
+              Free plan&nbsp;<b style={{ color: "var(--accent)" }}>{access.monthlyUsed} / {access.monthlyLimit}</b>&nbsp;loads this month
+            </span>
+          )}
+          {access && access.monthlyLimit == null && (
             <span className="tb-chip is-muted" title="Fair-use limit per day (Central time)">
               Calculations today&nbsp;<b style={{ color: "var(--accent)" }}>{access.dailyUsed} / {access.dailyCap}</b>
             </span>
@@ -807,6 +846,8 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
               />
 
               <Economics result={result} econ={econ} setEcon={setEcon} />
+
+              {access?.monthlyLimit != null && <ExtensionBridge />}
 
               <div className="flex flex-wrap items-center justify-end gap-2 pt-3" style={{ borderTop: "1px solid var(--ink)" }}>
                 {actionMessage("bottom")}
@@ -1113,4 +1154,12 @@ function SaveField({
       <span className={"osw-hint" + (error ? " is-error" : "")}>{error ?? ""}</span>
     </div>
   );
+}
+
+function nextMonthStart(): string {
+  const today = new Date();
+  return new Date(today.getFullYear(), today.getMonth() + 1, 1).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+  });
 }

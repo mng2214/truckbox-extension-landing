@@ -21,6 +21,7 @@ export const OSOW_DAILY_LIMIT_REACHED = 1075;
 export const OSOW_QUOTE_NOT_FOUND = 1076;
 export const OSOW_QUOTE_LIMIT_REACHED = 1077;
 export const OSOW_TERMS_NOT_ACCEPTED = 1078;
+export const OSOW_FREE_LIMIT_REACHED = 1079;
 
 const BASE = "/api/v1/osow";
 
@@ -87,6 +88,9 @@ export function osowErrorMessage(e: unknown, fallback: string, dailyCap?: number
     return dailyCap
       ? `You've reached today's fair-use limit of ${dailyCap} calculations. It resets at midnight Central.`
       : "You've reached today's fair-use limit of calculations. It resets at midnight Central.";
+  }
+  if (e.code === OSOW_FREE_LIMIT_REACHED) {
+    return "You've priced this month's free loads. Install TruckBox (7 days free) for unlimited OS/OW.";
   }
   if (e.code === OSOW_QUOTE_NOT_FOUND) return "This saved quote no longer exists.";
   if (e.code === OSOW_QUOTE_LIMIT_REACHED) {

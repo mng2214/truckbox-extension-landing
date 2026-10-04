@@ -1,0 +1,186 @@
+{
+  "code" : "VT",
+  "name" : "Vermont",
+  "slug" : "vermont",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : "75'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Vermont DMV Commercial Vehicle Operations",
+    "url" : "https://dmv.vermont.gov/CVO/permits/single-trip-permit",
+    "phone" : "802-828-2064",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$48",
+    "note" : "One $48 single-trip permit covers overweight, width, indivisible overlength and height; valid 7 business days. If the load is also overweight the same $48 is shown on the overweight line instead."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$48",
+    "note" : "Single-trip permit $48 (one permit covers weight and dimensions)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 149,999 lb",
+    "amount" : "Depends on the load",
+    "note" : "Engineering inspection fee: 150,000-200,000 lb $2,000; 200,001-250,000 lb $5,000; over 250,000 lb $10,000. Must be completed before permit issue (up to 10 working days); valid 6 months for the route."
+  }, {
+    "kind" : "other",
+    "when" : "Over 14'11\" wide",
+    "amount" : "Depends on the load",
+    "note" : "Engineering inspection (width 15 ft or more): $800 up to 8 h, +$60/h beyond. Under 150,000 lb only (heavier loads priced on the weight line). One inspection per move (grouped across width/length/height)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 100' long",
+    "amount" : "Depends on the load",
+    "note" : "Engineering inspection (length over 100 ft): $800 up to 8 h, +$60/h beyond. One inspection per move (grouped across width/length/height)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 14' high",
+    "amount" : "Depends on the load",
+    "note" : "Engineering inspection (height over 14 ft): $800 up to 8 h, +$60/h beyond. One inspection per move (grouped across width/length/height)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 11'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 11'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 79'11\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 79'11\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\", on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\", on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 14'11\" wide",
+    "text" : null
+  }, {
+    "when" : "Over 100' long",
+    "text" : null
+  }, {
+    "when" : "Over 14' high",
+    "text" : null
+  }, {
+    "when" : "Over 149,999 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 14'11\" wide",
+    "text" : null
+  }, {
+    "when" : "Over 100' long",
+    "text" : null
+  }, {
+    "when" : "Over 14' high",
+    "text" : null
+  }, {
+    "when" : "Over 149,999 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only: 30 min before sunrise to 30 min after sunset (overweight-only loads that keep up with traffic are not restricted). Heavy-traffic routes may be further restricted by hour/day."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "No permits for state-highway movement over 12 ft wide, over 100 ft long or over 108,000 lb on Saturday, Sunday, or New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas."
+  }, {
+    "when" : "Over 100' long",
+    "text" : "No permits for state-highway movement over 12 ft wide, over 100 ft long or over 108,000 lb on Saturday, Sunday, or New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas."
+  }, {
+    "when" : "Over 108,000 lb",
+    "text" : "No permits for state-highway movement over 12 ft wide, over 100 ft long or over 108,000 lb on Saturday, Sunday, or New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas."
+  }, {
+    "when" : "Over 11'11\" wide",
+    "text" : "Loads 12 ft wide or more / 80 ft long or more: no travel in ice, sleet, freezing rain, slush, sticking snow, or visibility under 1/4 mile."
+  }, {
+    "when" : "Over 79'11\" long",
+    "text" : "Loads 12 ft wide or more / 80 ft long or more: no travel in ice, sleet, freezing rain, slush, sticking snow, or visibility under 1/4 mile."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 100' long",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 108,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Vermont DMV CVO-110 Rules and Instructions Governing Overweight and Overdimension Vehicle Permits (07/2022)",
+    "url" : "https://dmv.vermont.gov/sites/dmv/files/documents/CVO-110-Oversize_Permit_Rules.pdf"
+  }, {
+    "title" : "23 V.S.A. § 1402 Overweight, width, height, and length permits; fees",
+    "url" : "https://legislature.vermont.gov/statutes/section/23/013/01402"
+  }, {
+    "title" : "23 V.S.A. § 1392 Gross weight limits on highways",
+    "url" : "https://legislature.vermont.gov/statutes/section/23/013/01392"
+  }, {
+    "title" : "Vermont DMV Single Trip Permit",
+    "url" : "https://dmv.vermont.gov/CVO/permits/single-trip-permit"
+  } ],
+  "notes" : [ "Police escorts and additional pilot cars are at the Commissioner's discretion (no fixed numeric trigger).", "Special insurance certificate ($250k/$500k/$250k) required at 150,000 lb or more, or 15 ft or more wide/high.", "Vermont only routes non-direct through-loads if a state on the direct route denied the permit.", "Town highways (class 2-4) need municipal permits for overweight." ]
+}

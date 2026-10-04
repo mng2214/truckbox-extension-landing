@@ -7,6 +7,7 @@ import { useCallback, useEffect, useState } from "react";
 import { ApiError, api } from "../../lib/api";
 import type { AccountContext } from "./types";
 import { ConfirmDialog } from "./ConfirmDialog";
+import { InviteCard } from "./InviteCard";
 
 const NO_SUBSCRIPTION = 1013;
 const ALREADY_CANCELLING = 1012;
@@ -322,6 +323,8 @@ export function PersonalPanel({ ctx }: { ctx: AccountContext }) {
           {notice && <p style={{ color: "var(--sub)", fontSize: "0.85rem" }}>{notice}</p>}
         </div>
       )}
+
+      <InviteCard />
 
       <ConfirmDialog
         open={confirmCancel}

@@ -9,6 +9,7 @@ import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-route
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { captureSource } from "./lib/demoTrack";
+import { captureFirstTouch } from "./lib/attribution";
 import { clearStaleMicrosoftResult } from "./lib/microsoft";
 import { installPageGuard, installDevtoolsDetector } from "./lib/guard";
 import { applyLandingTheme, setLandingTheme } from "./lib/theme";
@@ -28,7 +29,12 @@ const AdminGate = lazy(() => import("./pages/admin/AdminGate"));
 const AdminDecoy = lazy(() => import("./pages/admin/AdminDecoy"));
 import { DECOY_ROOTS, isDecoyPath } from "./pages/admin/decoyPaths";
 const NotFoundPage = lazy(() => import("./pages/NotFound"));
+const TrackedLinkPage = lazy(() => import("./pages/TrackedLink"));
+const InvitePage = lazy(() => import("./pages/Invite"));
+const UnsubscribePage = lazy(() => import("./pages/Unsubscribe"));
 const DatToolsPage = lazy(() => import("./pages/DatTools"));
+const PermitsLanding = lazy(() => import("./pages/permits/PermitsLanding"));
+const StatePermits = lazy(() => import("./pages/permits/StatePermits"));
 const ExtensionPanel = lazy(() => import("./pages/admin/ExtensionPanel"));
 const DirectoryPanel = lazy(() => import("./pages/admin/DirectoryPanel"));
 const BackOfficePanel = lazy(() => import("./pages/admin/BackOfficePanel"));
@@ -68,6 +74,7 @@ function CrispOffAdmin() {
 }
 
 captureSource();
+captureFirstTouch();
 clearStaleMicrosoftResult();
 
 installPageGuard();
@@ -85,9 +92,15 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/" element={<App />} />
         <Route path="/privacy" element={<PrivacyPage />} />
         <Route path="/guide" element={<GuidePage />} />
+        <Route path="/r/:code" element={<TrackedLinkPage />} />
+        <Route path="/i/:code" element={<InvitePage />} />
+        <Route path="/unsubscribe/:token" element={<UnsubscribePage />} />
         <Route path="/update" element={<UpdatePage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/dat-load-board-tools" element={<DatToolsPage />} />
+        <Route path="/oversize-permit-calculator" element={<PermitsLanding />} />
+        <Route path="/oversize-permits" element={<Navigate to="/oversize-permit-calculator" replace />} />
+        <Route path="/oversize-permits/:slug" element={<StatePermits />} />
         <Route path="/demo" element={<DemoPage />} />
         {DECOY_ROOTS.map((root) => (
           <Route key={root} path={root + "/*"} element={<AdminDecoy />} />

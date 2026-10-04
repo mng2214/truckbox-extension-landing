@@ -1,0 +1,240 @@
+{
+  "code" : "IN",
+  "name" : "Indiana",
+  "slug" : "indiana",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Indiana Department of Revenue - Motor Carrier Services (OSOW permits, under INDOT rules)",
+    "url" : "https://www.in.gov/dor/motor-carrier-services/oversizeoverweight-osw/",
+    "phone" : "317-615-7200",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$20",
+    "note" : "$20 base fee (not over 148\" wide, 162\" high or 95' long). Indiana charges one base fee - only the highest line in this group is charged (105 IAC 10-1.5-3(b),(c))."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 12'4\" wide",
+    "amount" : "$30",
+    "note" : "$30 base fee: wider than 148\" (12'4\")."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 13'6\" high",
+    "amount" : "$30",
+    "note" : "$30 base fee: higher than 162\" (13'6\")."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 95' long",
+    "amount" : "$30",
+    "note" : "$30 base fee: longer than 95'."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16' wide",
+    "amount" : "$40",
+    "note" : "Superload (over 16' wide): $40 base fee."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 15' high",
+    "amount" : "$40",
+    "note" : "Superload (over 15' high): $40 base fee."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 110' long",
+    "amount" : "$40",
+    "note" : "Superload (over 110' long): $40 base fee."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Per-mile fee on Indiana miles: $0.35 (80,001-108,000 lb), $0.60 (108,001-150,000 lb), $1.00 (over 150,000 lb and all overweight superloads)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 120,000 lb",
+    "amount" : "$10",
+    "note" : "$10 review fee over 120,000 lb (fee schedule, 105 IAC 10-1.5-3(h))."
+  }, {
+    "kind" : "other",
+    "when" : "Over 108,000 lb, legal size",
+    "amount" : "$10",
+    "note" : "Overweight-only permit over 108,000 lb: $10 executive fee per the fee schedule (105 IAC 10-1.5-3(a)(5) lists the executive fee as $25 - confirm at checkout). Grouped with the review fee: the schedule charges one or the other."
+  }, {
+    "kind" : "other",
+    "when" : "Over 199,999 lb",
+    "amount" : "$25",
+    "note" : "$25 design fee for superloads of 200,000 lb and over."
+  }, {
+    "kind" : "other",
+    "when" : "Over 199,999 lb",
+    "amount" : "Set by the state",
+    "note" : "$10 per bridge reviewed on the route for loads of 200,000 lb and over (count depends on the route INDOT assigns)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12'4\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12'4\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'4\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'4\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 200,000 lb",
+    "text" : "1 police escort. Indiana State Police escort required over 200,000 lb GVW unless the route is interstate-only, has no required slowdowns and the load is under 250,000 lb. Count set by ISP."
+  }, {
+    "when" : "Over 17' wide",
+    "text" : "2 police escorts. Over 17' wide: at least front and rear ISP escorts; required slowdowns may need more."
+  } ],
+  "survey" : [ {
+    "when" : "Over 17' high",
+    "text" : null
+  }, {
+    "when" : "Over 18' wide",
+    "text" : null
+  }, {
+    "when" : "Over 130' long",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 110' long",
+    "text" : null
+  }, {
+    "when" : "Over 199,999 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Hours: up to 110' long, 10' wide, 13'6\" high and under 200,000 lb = continuous 7 days; over 110' long or 10'-14'4\" wide (up to 15' high) = 7 days, 1/2 hour before sunrise to 1/2 hour after sunset; 14'4\"-16' wide = Mon-Fri daylight; over 16' wide, over 15' high or over 200,000 lb = Mon-Fri 8:30 a.m.-3:30 p.m. local time only. No travel when visibility is under 500 ft or wind over 25 mph."
+  }, {
+    "when" : "Oversize or overweight",
+    "text" : "Holidays: no travel from noon on the last weekday before until 1/2 hour before sunrise the day after New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving and Christmas (Overweight Commodity and Bulk Milk permits exempt). Permit not valid on I-65 or I-70 inside I-465 (Indianapolis), on county roads or city streets."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight loads under 200,000 lb may travel continuously 7 days; over 200,000 lb Mon-Fri 8:30 a.m.-3:30 p.m. Holiday restrictions apply (except Overweight Commodity / Bulk Milk permits). Not valid on I-65 or I-70 inside I-465."
+  }, {
+    "when" : "Over 15' high, on two-lane and other roads",
+    "text" : "Over 15' high and routed off the interstate: a pre-qualified signal contractor with a bucket truck must accompany each load at the applicant's expense."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the last weekday before until 30 minutes before sunrise the day after",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Up to 110' long, 10' wide, 13'6\" high and under 200,000 lb: continuous 7 days; holiday restrictions apply to all permits."
+  }, {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 10' wide: 7 days, 1/2 hr before sunrise to 1/2 hr after sunset."
+  }, {
+    "when" : "Over 110' long",
+    "daylightOnly" : true,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 110' long: 7 days, daylight."
+  }, {
+    "when" : "Over 13'6\" high",
+    "daylightOnly" : true,
+    "weekends" : null,
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 13'6\" high (up to 15'): 7 days, daylight."
+  }, {
+    "when" : "Over 14'4\" wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "14'4\"-16' wide: Monday-Friday daylight."
+  }, {
+    "when" : "Over 16' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri until 08:30: Before 8:30 a.m.", "mon, tue, wed, thu, fri from 15:30: After 3:30 p.m." ],
+    "note" : "Over 16' wide: Monday-Friday 8:30 a.m.-3:30 p.m. local time only (ISP may approve other times)."
+  }, {
+    "when" : "Over 15' high",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri until 08:30: Before 8:30 a.m.", "mon, tue, wed, thu, fri from 15:30: After 3:30 p.m." ],
+    "note" : "Over 15' high: Monday-Friday 8:30 a.m.-3:30 p.m."
+  }, {
+    "when" : "Over 200,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ "mon, tue, wed, thu, fri until 08:30: Before 8:30 a.m.", "mon, tue, wed, thu, fri from 15:30: After 3:30 p.m." ],
+    "note" : "Over 200,000 lb: Monday-Friday 8:30 a.m.-3:30 p.m."
+  } ],
+  "sources" : [ {
+    "title" : "105 IAC 10-1.5 Permit Fees - INDOT final rule LSA #25-65 (Indiana Register 20250611-IR-105250065FRA)",
+    "url" : "https://iar.iga.in.gov/register/20250611-IR-105250065FRA"
+  }, {
+    "title" : "Indiana DOR Form M-204 - General Provisions of an Oversize/Overweight Vehicle Permit (4-22)",
+    "url" : "https://www.in.gov/dor/files/M-204.pdf"
+  }, {
+    "title" : "Indiana DOR Form M-204S - Special Provisions for Vehicle Permitting",
+    "url" : "https://www.in.gov/dor/files/m204s.pdf"
+  }, {
+    "title" : "Indiana DOR Motor Carrier Services - Oversize/Overweight (OSOW) general information",
+    "url" : "https://www.in.gov/dor/motor-carrier-services/oversizeoverweight-osw/"
+  } ],
+  "notes" : [ "Fee rule 105 IAC 10-1.5 took effect in 2025 (filed May 16, 2025); older DOR handbook (2017) fee text is superseded. Other admin fees: $3 amendment, $13 superload amendment, $6 time extension, $35 cancellation.", "Escorts (M-204): one escort over 12'4\" wide, 110' long or 14'6\" high - in front on undivided highways, in rear on divided highways; over 14'6\" high the escort leads with a height stick; 14'4\"-17' wide = rear only on divided highways, front and rear elsewhere. Loads with bridge weight restrictions need front and rear escorts (not modeled).", "Route survey before issuance when over 18' wide, or over 130' long without a rear steerable axle (modeled as any load over 130'); over 17' high the carrier must survey utilities and get utility letters or an affidavit.", "Indiana Toll Road moves over toll-road legal dimensions are permitted with additional fees - verify with DOR/ITR.", "Speed: loads over 85' long, 10'6\" wide or over legal height are limited to 55 mph.", "Overweight superload class is assumed to start at 200,000 lb (fee table row '200,000 lbs and over'); the rule's superload definition itself is dimensional only." ]
+}

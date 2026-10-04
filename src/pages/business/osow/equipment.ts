@@ -27,11 +27,22 @@ export type Rig = {
   /** Tractor + trailer empty weight. */
   tareLb: number;
   axles: number;
+  towVehicle?: "tractor" | "pickup";
+  autoPick?: boolean;
 };
 
 export type RigSpecKey = "deckHeightIn" | "deckLengthIn" | "tractorLengthIn" | "tareLb" | "axles";
 
 export const TRACTOR_LENGTH_IN = 240;
+export const PICKUP_TO_DECK_IN = 312;
+
+export const PICKUP = {
+  frontAxleX: 38,
+  rearAxleX: 214,
+  wheelR: 16,
+  ballX: 208,
+  bedEndX: 262,
+} as const;
 export const UPPER_DECK_IN = 60;
 export const REAR_DECK_IN = 40;
 const RGN_NECK_IN = 120;
@@ -47,6 +58,7 @@ export const LEGAL = {
 export const RIGS: Rig[] = [
   { id: "flat48", label: "Flatbed 48'", kind: "flatbed", deckHeightIn: 60, deckLengthIn: 576, tractorLengthIn: TRACTOR_LENGTH_IN, tareLb: 32_000, axles: 5 },
   { id: "flat53", label: "Flatbed 53'", kind: "flatbed", deckHeightIn: 60, deckLengthIn: 636, tractorLengthIn: TRACTOR_LENGTH_IN, tareLb: 33_000, axles: 5 },
+  { id: "hotshot", label: "Hot shot 40'", kind: "flatbed", deckHeightIn: 37, deckLengthIn: 480, tractorLengthIn: PICKUP_TO_DECK_IN, tareLb: 16_000, axles: 4, towVehicle: "pickup", autoPick: false },
   { id: "step48", label: "Step deck 48'", kind: "stepdeck", deckHeightIn: 42, deckLengthIn: 576, wellLengthIn: 444, tractorLengthIn: TRACTOR_LENGTH_IN, tareLb: 33_000, axles: 5 },
   { id: "step53", label: "Step deck 53'", kind: "stepdeck", deckHeightIn: 42, deckLengthIn: 636, wellLengthIn: 504, tractorLengthIn: TRACTOR_LENGTH_IN, tareLb: 34_000, axles: 5 },
   { id: "dd48", label: "Double drop 48'", kind: "doubledrop", deckHeightIn: 24, deckLengthIn: 576, wellLengthIn: 348, tractorLengthIn: TRACTOR_LENGTH_IN, tareLb: 38_000, axles: 5 },
@@ -115,8 +127,7 @@ const AXLE_DECK_MARGIN_IN = 24;
 const MIN_RGN_NECK_IN = 96;
 
 function trailerAxleCount(rig: Rig): number {
-  // The rig's axle count includes the tractor's three.
-  return Math.max(1, Math.min(5, rig.axles - 3));
+  return Math.max(1, Math.min(5, rig.axles - (rig.towVehicle === "pickup" ? 2 : 3)));
 }
 
 /** Axle centers spread evenly around `center`. */
@@ -245,8 +256,9 @@ export function overallDims(cargo: Cargo, rig: Rig): OverallDims & { layout: Rig
  * Ties go to a rig the cargo fits in (well, then length), then to the lighter rig.
  */
 export function suggestRig(cargo: Cargo, rigs: Rig[] = RIGS): Rig {
-  if (!rigs.length) return RIGS[0];
-  const scored = rigs.map((rig) => {
+  const candidates = rigs.filter((rig) => rig.autoPick !== false);
+  if (!candidates.length) return RIGS[0];
+  const scored = candidates.map((rig) => {
     const o = overallDims(cargo, rig);
     return { rig, o, fitsWell: o.layout.inWell, fitsLength: o.rearOverhangIn === 0 };
   });

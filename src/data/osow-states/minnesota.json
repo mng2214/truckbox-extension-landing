@@ -1,0 +1,132 @@
+{
+  "code" : "MN",
+  "name" : "Minnesota",
+  "slug" : "minnesota",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : "75'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "MnDOT Office of Freight & Commercial Vehicle Operations - Oversize/Overweight Permit Section",
+    "url" : "https://www.dot.state.mn.us/cvo/oversize/index.html",
+    "phone" : "651-296-6000",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$15",
+    "note" : "§169.86 subd. 5(a): $15 per single trip permit (valid 7 days)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Set by the state",
+    "note" : "Overweight single trip = $15 base + damage assessment fee: miles x sum of per-mile cost factors for each over-legal axle group (2-axle group $0.12-$0.30/mi, 3-axle $0.05-$0.19/mi, 4-axle $0.04-$0.20/mi by group weight). Needs axle-group weights, so not computed here."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 15' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150' long, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 20' wide",
+    "text" : null
+  }, {
+    "when" : "Over 175' long",
+    "text" : null
+  } ],
+  "superload" : [ ],
+  "restrictions" : [ {
+    "when" : "Over 12'6\" wide",
+    "text" : "Over 12'6\" wide (or over 110' long): no travel statewide from 2:00 pm the day before a holiday to 2:00 am the day after (MnDOT holiday schedule); Memorial Day-Labor Day no travel Fridays and Sundays 4:00-8:00 pm."
+  }, {
+    "when" : "Over 110' long",
+    "text" : "Over 110' long: holiday ban 2:00 pm day before to 2:00 am day after; summer Fri/Sun 4:00-8:00 pm ban; no travel weekdays 6:00-8:30 am and 3:30-6:00 pm in Twin Cities and Duluth metro."
+  }, {
+    "when" : "Over 14'6\" wide",
+    "text" : "Over 14'6\" wide: no travel weekdays 6:00-8:30 am and 3:30-6:00 pm in the Twin Cities and Duluth metro areas unless the permit says otherwise."
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "Over 16' wide: in the Twin Cities seven-county metro, travel only 12:00-5:00 am Monday-Friday unless the permit says otherwise."
+  }, {
+    "when" : "Oversize",
+    "text" : "Otherwise travel is generally not time-restricted. No movement in hazardous weather/road conditions or when visibility is under 500 ft."
+  } ],
+  "travel" : [ {
+    "when" : "Over 12'6\" wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "fri, sun 16:00–20:00 (months [6, 7, 8]): Memorial Day-Labor Day: no travel Fridays and Sundays 4-8 pm (summer approximated as June-August)" ],
+    "note" : null
+  }, {
+    "when" : "Over 110' long",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "fri, sun 16:00–20:00 (months [6, 7, 8]): Memorial Day-Labor Day: no travel Fridays and Sundays 4-8 pm (summer approximated as June-August)" ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "MnDOT - Find out if you need a permit (legal dimensions)",
+    "url" : "https://www.dot.state.mn.us/cvo/oversize/determine.html"
+  }, {
+    "title" : "Minn. Stat. §169.86 - Special permits (subd. 5 fees, overweight axle group cost factors)",
+    "url" : "https://www.revisor.mn.gov/statutes/cite/169.86"
+  }, {
+    "title" : "MnDOT - Permit Types (single trip $15; OS/OW $15 + damage assessment)",
+    "url" : "https://www.dot.state.mn.us/cvo/oversize/permit-types.html"
+  }, {
+    "title" : "MnDOT - Damage Assessment Fee Calculator",
+    "url" : "https://www.dot.state.mn.us/cvo/oversize/damage-assessment-fees.html"
+  }, {
+    "title" : "Minn. Stat. §169.812 - Escort vehicles for overdimensional loads",
+    "url" : "https://www.revisor.mn.gov/statutes/cite/169.812"
+  }, {
+    "title" : "MnDOT - Escort requirements",
+    "url" : "https://www.dot.state.mn.us/cvo/oversize/escorts.html"
+  }, {
+    "title" : "MnDOT - Route Survey",
+    "url" : "https://www.dot.state.mn.us/cvo/oversize/route-survey.html"
+  }, {
+    "title" : "MnDOT - General Provisions for Oversize/Overweight Loads (Version: August 2024)",
+    "url" : "https://edocs-public.dot.state.mn.us/edocs_public/DMResultSet/download?docId=27830707"
+  }, {
+    "title" : "Minn. Stat. §169.81 - Height and length limitations",
+    "url" : "https://www.revisor.mn.gov/statutes/cite/169.81"
+  } ],
+  "notes" : [ "Peace officer escort (plus lead and rear escorts) is required whenever any part of the load or vehicle extends left of the centerline on an undivided roadway (§169.812 subd. 2(d)) - depends on lane width, not modeled. MnDOT may add escorts on the permit.", "Width escort trigger is > 15 ft measured at the bottom of the load OR > 16 ft measured at the top; calculator uses overall width vs 15 ft.", "Escort drivers must hold Minnesota pilot-car certification (or CO, FL, NC, OK, UT, VA, WA certificates).", "No published 'superload' class found; heavy loads go through MnDOT route/bridge approval on the permit. Verify any extra review thresholds with MnDOT.", "Legal overall length 75' is the general rule; TT + semitrailer longer than 75' is allowed only on 4-lane divided highways and designated access routes.", "MnDOT permits are valid on Interstate, US and MN state highways only; county/township/municipal roads need local approval." ]
+}

@@ -1,0 +1,187 @@
+{
+  "code" : "CT",
+  "name" : "Connecticut",
+  "slug" : "connecticut",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "CTDOT Oversize/Overweight Permit Office (Bureau of Highway Operations); email dot.osowpermits@ct.gov; phone is the general CTDOT line",
+    "url" : "https://portal.ct.gov/dot/permits/oversize-overweight-permits",
+    "phone" : "860-594-2560",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$42",
+    "note" : "$30 permit + $12 electronic transmittal fee; one permit covers size and weight. Valid 3 days."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 200,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "Engineering analysis fee: $2 per 1,000 lb (or fraction) over 200,000 lb permit weight, i.e. 2 x ceil((gross - 200,000) / 1,000)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 13'5\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'11\" wide",
+    "front" : 1,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 14' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 80' long, on two-lane and other roads",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 100' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 100' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 119'11\" long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 25', on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 25', on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 25', on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 25', on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 13'5\" wide, over 15' high",
+    "text" : "2 police escorts. CT State Police front and rear: over 13'5\" wide and over 15' high (also 15'1\"+ high with 13'6\"+ width)"
+  }, {
+    "when" : "Over 15'3\" high",
+    "text" : "2 police escorts. CT State Police front and rear at 15'4\" high or greater"
+  }, {
+    "when" : "Over 119'11\" long",
+    "text" : "2 police escorts. CT State Police front and rear over 119'11\" long"
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "2 police escorts. Superload: CSP escorts typically required; number set by CTDOT"
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : "2 police escorts. Superload: CSP escorts typically required; number set by CTDOT"
+  } ],
+  "survey" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only (1/2 hour after sunrise to 1/2 hour before sunset). No travel on Saturdays, Sundays or holidays; weekend permits (Sat/Sun daylight to noon) available on request for loads up to 12' W, 13'6\" H, 80' L, 160,000 lb."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight permits: daylight only, no Saturday/Sunday/holiday travel (same rule as oversize)."
+  }, {
+    "when" : "Oversize",
+    "text" : "2026 holiday blackouts: Jan 1; Good Friday Apr 3 until daylight Mon Apr 6; noon Fri May 22 until daylight Tue May 26; Sat Jul 4; noon Fri Sep 4 until daylight Tue Sep 8; noon Wed Nov 25 until daylight Mon Nov 30; noon Thu Dec 24 until daylight Sat Dec 26."
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "Superload (over 16' W/H, 150' L or 200,000 lb): nighttime moves only, certified CT route survey within one week of the move, enforcement inspections, apply at least 5 business days ahead."
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : "Superload (over 200,000 lb): nighttime moves only, certified CT route survey, apply at least 5 business days ahead."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "CTDOT Oversize Overweight Permits (single trip fee, 2026 holiday restrictions)",
+    "url" : "https://portal.ct.gov/dot/permits/oversize-overweight-permits"
+  }, {
+    "title" : "CTDOT OSOW Frequently Asked Questions (legal limits, escort table, superload)",
+    "url" : "https://portal.ct.gov/dot/permits/oversize-overweight-permits/faq"
+  }, {
+    "title" : "Regulations of Connecticut State Agencies 14-270-1 to 14-270-25 Oversize/Overweight Vehicle Permit Regulations",
+    "url" : "https://eregulations.ct.gov/eRegsPortal/Browse/getDocument?guid=%7BC09DE155-0500-C8F4-B8C3-F2ED60B3DCDD%7D"
+  }, {
+    "title" : "Connecticut General Statutes ch. 248, Sec. 14-270(d) permit fees",
+    "url" : "https://www.cga.ct.gov/current/pub/chap_248.htm"
+  } ],
+  "notes" : [ "Legal: 8'6\" wide, 13'6\" high, 45' single vehicle, 53' trailer (43' kingpin), 80,000 lb on 5+ axles (51'+ wheelbase).", "Escort table: divided highways modeled as interstate (1 rear escort over 12'), undivided as non-interstate (1 front over 12'); 13'6\"+ wide front + rear; 15'+ wide front + 2 rear. Over 14' high front escort (front pole car required from 14'6\").", "Maximum permitted width is 16' (except house moves/national defense). Over 130,000 lb requires special consideration by the Commissioner (allow up to 2 weeks).", "CTDOT may add civilian or CSP escorts for construction, geometry, time of day or bottlenecks; a CSP escort may replace one civilian escort.", "Separate from permits: Connecticut Highway Use Fee (per-mile tax for trucks 26,000 lb+, registered with CT DRS) - not included." ]
+}

@@ -1,0 +1,172 @@
+{
+  "code" : "NC",
+  "name" : "North Carolina",
+  "slug" : "north-carolina",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "NCDOT Oversize/Overweight Permit Unit (Raleigh)",
+    "url" : "https://connect.ncdot.gov/business/trucking/Pages/overpermits.aspx",
+    "phone" : "888-221-8166",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Over 8'6\" wide",
+    "amount" : "$12",
+    "note" : "$12 for over-width. Single trip permit valid 10 calendar days."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' high",
+    "amount" : "$12",
+    "note" : "$12 for over-height."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 73' long",
+    "amount" : "$12",
+    "note" : "Threshold modeled as overall length over 73' (20' tractor + legal 53' trailer), since the engine only knows the overall length. $12 for over-length (threshold here = 53' trailer/load length; single vehicle 40', other combinations 60')."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$12",
+    "note" : "$12 for overweight (weight up to 132,000 lb)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 132,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "$3 per 1,000 lb over 132,000 lb (tiers assume each started 1,000 lb counts; listed to 300,000 lb = $504, heavier loads not extended)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 132,000 lb",
+    "amount" : "$100",
+    "note" : "$100 non-refundable superload application fee (engineering study). Charged once per application - if the load is also 17'+ wide this and the width line double-count."
+  }, {
+    "kind" : "other",
+    "when" : "Over 16'11\" wide",
+    "amount" : "$100",
+    "note" : "$100 non-refundable superload application fee (17'+ wide). Charged once - see weight line."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'5\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 110' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\"",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 149,999 lb",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide",
+    "text" : "1 police escort. Over 16' wide: three escorts total, one of which must be NC State Highway Patrol"
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 132,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 16'11\" wide",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Sunrise to sunset, Monday through Sunday, unless the permit states otherwise. Loads over 16' wide or over 14' high: written application at least 2 business days before the move."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "Over-width/height/length loads and loads over 112,000 lb: no travel from noon the weekday before until noon the weekday after Independence Day, Thanksgiving and Christmas (2026: Jul 3 noon-Jul 6 noon; Nov 25 noon-Nov 27 noon; Dec 24 noon-Dec 28 noon)."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' wide: no travel 7-9 am and 4-6 pm within 10 miles of the city limits of Charlotte, Raleigh, Durham and Chapel Hill."
+  }, {
+    "when" : "Overweight",
+    "text" : "Continuous 24/7 travel only up to 112,000 lb and 10' wide with no other over-dimension; superloads (> 132,000 lb) never continuous."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "No movement with visibility under 500 ft or unsafe conditions; permitted vehicles of the same company/origin must travel at least 2 miles apart."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the weekday before to noon the weekday after",
+    "holidayNames" : [ "Independence Day", "Thanksgiving", "Christmas" ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 112,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the weekday before to noon the weekday after",
+    "holidayNames" : [ "Independence Day", "Thanksgiving", "Christmas" ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "N.C. G.S. 20-119 Special permits for vehicles of excessive size or weight; fees",
+    "url" : "https://ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-119.html"
+  }, {
+    "title" : "19A NCAC 02D .0602 Permits - Issuance Requirements (readopted 7/1/2019)",
+    "url" : "http://ncrules.state.nc.us/ncac/title%2019a%20-%20transportation/chapter%2002%20-%20division%20of%20highways/subchapter%20d/19a%20ncac%2002d%20.0602.html"
+  }, {
+    "title" : "19A NCAC 02D .0607 Permits - Movement and Travel Requirements (readopted 7/1/2019)",
+    "url" : "http://ncrules.state.nc.us/ncac/title%2019a%20-%20transportation/chapter%2002%20-%20division%20of%20highways/subchapter%20d/19a%20ncac%2002d%20.0607.html"
+  }, {
+    "title" : "NCDOT Publication E-9 Escort Vehicles (Rev 8/24)",
+    "url" : "https://connect.ncdot.gov/business/trucking/Documents/Publication%20E-9.pdf"
+  }, {
+    "title" : "NCDOT Publication ST-1 Single Trip Permits (Rev 11/19)",
+    "url" : "https://connect.ncdot.gov/business/trucking/Documents/Single%20Trip%20Publication%20(ST-1).pdf"
+  }, {
+    "title" : "N.C. G.S. 20-116 Size of vehicles and loads",
+    "url" : "https://ncleg.gov/EnactedLegislation/Statutes/HTML/BySection/Chapter_20/GS_20-116.html"
+  }, {
+    "title" : "NCDOT Publication SL-6 Superload Permits (Rev 1/20)",
+    "url" : "https://connect.ncdot.gov/business/trucking/Documents/Superload%20Publication%20(SL-6).pdf"
+  }, {
+    "title" : "NCDOT OS/OW Permit Office Holiday Closings 2026",
+    "url" : "https://connect.ncdot.gov/business/trucking/Documents/Holidays%20Schedule%202026.pdf"
+  }, {
+    "title" : "NCDOT - Oversize/Overweight Trucking Permits",
+    "url" : "https://connect.ncdot.gov/business/trucking/Pages/overpermits.aspx"
+  } ],
+  "notes" : [ "Superloads (> 132,000 lb, 17'+ wide, or axles over 20k steer / 25k single / 50k tandem / 60k tridem / 68k 4+ group): apply at least 10 business days ahead for bridge review.", "Max single-trip width: ST-1 (2019) says 16'11 in; rule 19A NCAC 02D .0602 (2019) says 15' with superload above 15'; SL-6 (2020) puts superload at 17'. Verify current practice.", "Over 105' overall needs Central Permit Office approval after route review (19A NCAC 02D .0602(a)(5)); ST-1 says no overall length limit for single trips.", "No general route-survey threshold found (only for 16'-wide mobile homes on certain routes); permittee is responsible for vertical clearances.", "Additional escorts may be required at the issuing agent's discretion; NC escorts must hold NC (or reciprocal) escort certification." ]
+}

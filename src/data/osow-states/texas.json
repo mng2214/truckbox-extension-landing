@@ -1,0 +1,252 @@
+{
+  "code" : "TX",
+  "name" : "Texas",
+  "slug" : "texas",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "59'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "TxDMV Motor Carrier Division (TxPROS)",
+    "url" : "https://www.txdmv.gov/motor-carriers/oversize-overweight-permits",
+    "phone" : "800-299-1700",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$60",
+    "note" : "General single-trip permit fee $60 (Texas.gov adds $0.25 + 2.25% card fee, not included). When the load is also overweight, the $60 is included in the overweight line instead (one permit)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "$60 permit + highway maintenance fee ($150/$225/$300/$375 by gross) + vehicle supervision fee ($35 for 200,001-254,300 lb with >=95 ft axle spacing; $500 for super heavy). 200,001-254,300 lb with <95 ft axle spacing or any axle group over max permit weight is super heavy: $935, not $470."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 18' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 125' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 20'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 20'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, over 17' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, over 110' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, front overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, rear overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' high, over 110' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' high, front overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' high, rear overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, front overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, rear overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 20', rear overhang over 20'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 20' wide",
+    "text" : null
+  }, {
+    "when" : "Over 18'11\" high",
+    "text" : null
+  }, {
+    "when" : "Over 125' long",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 254,300 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daytime only (30 min before sunrise to 30 min after sunset) unless permit authorizes night travel. Night allowed for overweight-only loads, or on Interstate when not over 10 ft wide / 100 ft long with legal overhangs."
+  }, {
+    "when" : "Over 14' wide",
+    "text" : "No movement over 14 ft wide, 16 ft high or 110 ft long on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day or Christmas Day - the holiday date itself (unless TxDMV grants an exception)."
+  }, {
+    "when" : "Over 16' high",
+    "text" : "No movement over 14 ft wide, 16 ft high or 110 ft long on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day or Christmas Day - the holiday date itself (unless TxDMV grants an exception)."
+  }, {
+    "when" : "Over 110' long",
+    "text" : "No movement over 14 ft wide, 16 ft high or 110 ft long on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day or Christmas Day - the holiday date itself (unless TxDMV grants an exception)."
+  }, {
+    "when" : "Oversize",
+    "text" : "TxDOT district curfews apply (commonly 7-9 AM and 4-6 PM Mon-Fri in metro areas); check the district restriction lists and the conditions printed on the permit."
+  } ],
+  "travel" : [ {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 100' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Oversize, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Front overhang over 3'",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Night travel needs legal overhangs: 3 ft front (Transp. Code 621.206)."
+  }, {
+    "when" : "Rear overhang over 4'",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Night travel needs legal overhangs: 4 ft rear (Transp. Code 621.206)."
+  }, {
+    "when" : "Over 14' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 16' high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 110' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "TxDMV Motor Carrier Handbook (May 2025)",
+    "url" : "https://www.txdmv.gov/sites/default/files/body-files/Motor_Carrier_Handbook.pdf"
+  }, {
+    "title" : "TxDMV General Single-Trip Permits",
+    "url" : "https://www.txdmv.gov/motor-carriers/oversize-overweight-permits/general-single-trip"
+  }, {
+    "title" : "TxDMV Holiday Hours & Movement Restrictions",
+    "url" : "https://www.txdmv.gov/motor-carriers/oversize-overweight-permits/holiday-movement-restrictions"
+  }, {
+    "title" : "TxDMV Permit Restrictions by District (curfews, index of district PDFs)",
+    "url" : "https://ftp.txdmv.gov/pub/txdmv-info/mcd/permit_restrictions/"
+  }, {
+    "title" : "TxDMV Escort and Equipment Requirements",
+    "url" : "https://www.txdmv.gov/motor-carriers/oversize-overweight-permits/escort-and-equipment-requirements"
+  }, {
+    "title" : "Texas DPS - Extended Loads (Transportation Code 621.206: 3 ft front / 4 ft rear)",
+    "url" : "https://www.dps.texas.gov/section/commercial-vehicle-enforcement/extended-loads"
+  }, {
+    "title" : "43 Tex. Admin. Code § 219.11 - General Oversize/Overweight Permit Requirements (time of movement)",
+    "url" : "https://www.law.cornell.edu/regulations/texas/43-Tex-Admin-Code-SS-219-11"
+  } ],
+  "notes" : [ "Super heavy: >254,300 lb gross, any axle group over max permit weight, or 200,001-254,300 lb with <95 ft overall axle spacing. Apply 6-8 weeks ahead (Form MCD-305).", "TxDMV may require law-enforcement escorts depending on size, route or nature of the load (no fixed numeric trigger published).", "Escort road mapping is approximate: Texas rule says 'two-lane highway' (front) vs 'divided/four-lane highway' (rear), not interstate vs non-interstate." ]
+}

@@ -1,0 +1,157 @@
+{
+  "code" : "GA",
+  "name" : "Georgia",
+  "slug" : "georgia",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : "100'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Oversize Permit Unit (Georgia Department of Public Safety, on behalf of GDOT) - GAPROS",
+    "url" : "https://www.dot.ga.gov/GDOT/Pages/OversizePermits.aspx",
+    "phone" : "844-837-5500",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$30",
+    "note" : "Standard Single Trip permit $30 (up to 16' wide/high and 150,000 lb). Georgia issues one permit per move - only the highest line in this group is charged. Valid up to 10 days."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16' wide",
+    "amount" : "$125",
+    "note" : "Superload Single $125: wider than 16' (up to 180,000 lb). May take up to 3 days."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16' high",
+    "amount" : "$125",
+    "note" : "Superload Single $125: higher than 16'."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Standard $30 up to 150,000 lb; Superload Single $125 for 150,001-180,000 lb; Superload Plus $500 over 180,000 lb (bridge analysis, up to 3 weeks); Mega Load (300,000 lb and above) also $500 plus outside engineering paid by the carrier."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 100' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 125' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15'5\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'8\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'8\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide",
+    "text" : "1 police escort. Over 16' wide: GDOT sets escorts case by case and may require a police escort with blue lights."
+  }, {
+    "when" : "Over 300,000 lb",
+    "text" : "2 police escorts. Mega Load: minimum of two police escorts with blue lights at all times, plus any in the approved traffic control plan."
+  } ],
+  "survey" : [ {
+    "when" : "Over 300,000 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 150,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Travel only from 30 minutes after sunrise to 30 minutes before sunset, Monday-Saturday (Rule 672-2-.03(c)); no travel on New Year's Day, Memorial Day, July 4th, Labor Day, Thanksgiving or Christmas, or in fog, snow or ice. The GDOT web page also says 'Monday through Sunday' - verify Sunday travel."
+  }, {
+    "when" : "Oversize",
+    "text" : "Atlanta I-285 perimeter: permitted loads may enter only to pick up or deliver inside it; no movement inside 7-9 a.m. and 3-6 p.m. Mon-Fri per Rule 672-2-.02(4) (the GDOT web page states 6-9 a.m. and 4-6 p.m.). No parking on interstate right-of-way while waiting."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only loads up to 125,000 lb with legal dimensions may move 24 hours/7 days except in bad weather and on the six listed holidays; heavier loads follow daylight Mon-Sat rules. Atlanta I-285 perimeter limits apply."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' wide: do not travel when visibility is under 600 feet or ground wind exceeds 25 mph."
+  }, {
+    "when" : "Over 14'8\" wide",
+    "text" : "Over 14'8\" wide: no movement on routes with bridges under 28' lateral clearance without a front escort; all warning lights on truck, load and escorts must operate."
+  }, {
+    "when" : "Over 300,000 lb",
+    "text" : "Mega Load: GDOT-prequalified consultant analysis, field route survey and traffic control/movement plan required; GDOT anticipates moves between 10 a.m. and 3 p.m.; allow at least 30 business days for review."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Sunday",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "672-2-.03(c): Monday through Saturday, 30 minutes after sunrise to 30 minutes before sunset."
+  }, {
+    "when" : "Legal size, overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 125,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Sunday",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "GDOT - Oversize Permits and Regulations (permit types, fees, escort summary, legal dimensions)",
+    "url" : "https://www.dot.ga.gov/GDOT/Pages/OversizePermits.aspx"
+  }, {
+    "title" : "Rules of State Department of Transportation, Chapter 672-2 (Permits for Vehicles or Loads of Excess Weight or Dimension)",
+    "url" : "https://www.dot.ga.gov/PartnerSmart/permits/Documents/Rules/672-2.pdf"
+  }, {
+    "title" : "O.C.G.A. Title 32, Ch. 6, Art. 2 - Dimensions and Weight of Vehicles (GDOT selected sections)",
+    "url" : "https://www.dot.ga.gov/PartnerSmart/permits/Documents/title32.pdf"
+  }, {
+    "title" : "GDOT - Proposed Mega Load Movement requirements (loads over 300,000 lb)",
+    "url" : "https://www.dot.ga.gov/PartnerSmart/permits/Documents/MegaLoad.pdf"
+  } ],
+  "notes" : [ "Escort vehicles must be driven by GDOT-certified pilot/escort drivers (reciprocity only with listed states).", "Length 75'-100' and width 12'-14'8\" on limited-access/interstate need a rear escort OR amber light on the load - modeled as no escort vehicle. On 4-lane non-interstate roads, 12'-14'8\" wide needs a rear (not front) escort; the non-interstate rule here assumes the 2-lane case (same vehicle count).", "Height 15'6\" or more: front escort with height pole unless the hauler has an NJUNS trip approval ticket. Loads 18' or higher (houses) need NJUNS approval before the permit is issued.", "Legal overall length 100' is GDOT's stated 'Overall Legal Dimension'; O.C.G.A. 32-6-24 sets no overall limit for tractor-semitrailers on interstate/STAA routes (53' semitrailer).", "Loads over 150,000 lb must meet GDOT rig configuration requirements; superloads may take up to 3 days, superload plus up to 3 weeks." ]
+}

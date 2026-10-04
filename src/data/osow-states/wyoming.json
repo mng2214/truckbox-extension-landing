@@ -1,0 +1,164 @@
+{
+  "code" : "WY",
+  "name" : "Wyoming",
+  "slug" : "wyoming",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "60'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Wyoming Highway Patrol - Overweight Loads Office (OWL)",
+    "url" : "https://whp.wyo.gov/commercial-carrier",
+    "phone" : "307-777-4376",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$25",
+    "note" : "Oversize permit $25 (Class A/B/C single trip, valid up to 4 days)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 15' wide",
+    "amount" : "Depends on the load",
+    "note" : "$0.03 per mile for each foot or fraction of width over 15 ft."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 15' high",
+    "amount" : "Depends on the load",
+    "note" : "$0.03 per mile for each foot or fraction of height over 15 ft."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.06 per ton-mile",
+    "note" : "$0.06 per ton (or fraction) over the statutory limit per mile, $40 minimum. State uses the greatest excess (axle, group or gross); excess here is gross over 80,000, which understates it if an axle group is the larger overage and overstates it for configurations legal above 80,000 lb."
+  }, {
+    "kind" : "other",
+    "when" : "Over 250,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Over 125 tons (250,000 lb) or allowable weights: permittee pays all Department costs (route/structure analysis and personnel accompanying the move) before issuance."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 13'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 109'11\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 149'11\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 24'11\"",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 250,000 lb",
+    "text" : "1 police escort. Department/WHP personnel may accompany loads over 125 tons; number set by OWL, cost billed to the permittee."
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 18' wide",
+    "text" : null
+  }, {
+    "when" : "Over 17' high",
+    "text" : null
+  }, {
+    "when" : "Over 120' long",
+    "text" : null
+  }, {
+    "when" : "Over 160,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only, except: up to 10 ft wide on Interstates only; combinations under 110 ft overall with a single unit over 60 ft; single units up to 75 ft (if signed and lighted); or with WHP permission. Overweight-only loads are not limited to daylight."
+  }, {
+    "when" : "Over 13'11\" wide",
+    "text" : "Moves requiring escorts: no travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas, from 1/2 h after sunset the evening before to 1/2 h before sunrise the day after (whole 3-day weekend when the holiday adjoins a weekend), or during local celebrations."
+  }, {
+    "when" : "Over 109'11\" long",
+    "text" : "Moves requiring escorts: no travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas, from 1/2 h after sunset the evening before to 1/2 h before sunrise the day after (whole 3-day weekend when the holiday adjoins a weekend), or during local celebrations."
+  }, {
+    "when" : "Over 17' high",
+    "text" : "Moves requiring escorts: no travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas, from 1/2 h after sunset the evening before to 1/2 h before sunrise the day after (whole 3-day weekend when the holiday adjoins a weekend), or during local celebrations."
+  }, {
+    "when" : "Over 18' wide",
+    "text" : "Over 18 ft wide: no travel on primary/secondary highways during local school-bus or heavy commuter hours (set by OWL); 24 h advance notice for loads over 18 ft wide or high; over 26 ft wide not allowed on roads about 32 ft wide or less."
+  }, {
+    "when" : "Oversize",
+    "text" : "Weather: may be restricted on ice/snow; no movement when roads are 'no unnecessary travel' or chain law is in effect; wind-related closures for light, high-profile loads (Class 1-4 restrictions)."
+  } ],
+  "travel" : [ {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Oversize, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 13'11\" wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 109'11\" long",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 17' high",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Wyoming Highway Patrol - Commercial Carrier (permits, fees, escorts)",
+    "url" : "https://whp.wyo.gov/commercial-carrier"
+  }, {
+    "title" : "WYDOT Rules, Motor Carrier Section, Chapter 5 Size and Weight Limitations of Vehicles (2024 revision as filed)",
+    "url" : "https://wyoleg.gov/arules/2012/rules/ARR24-049P.pdf"
+  } ],
+  "notes" : [ "Class B/C (routine) single-trip limits: 18 ft wide, 17 ft high, 120 ft overall, 25,000 single / 55,000 tandem / 65,000 triple axle, 160,000 lb gross. Beyond these is a Class A super load approved only by the OWL.", "The rule also charges $0.03/ft/mile for single-unit length over 75 ft; not modeled here because input length is overall combination length - add manually for long single units.", "Escort thresholds: 14 ft wide or 110 ft long on two-lane routes (1 front + 1 rear); 15 ft wide or 150 ft long on Interstate/divided (1 rear); 25 ft rear overhang (1 rear); over 17 ft high (front with height pole). Any part crossing the centerline on two-lane roads also needs front+rear. OWL may add escorts (and requires a rear escort for overweight moves with special restrictions).", "Chapter 5 text cited is the 2024 revision as filed with the Legislature; confirm the adopted version on rules.wyo.gov.", "Legal gross in WY is bridge-table based up to 117,000 lb; verify overweight status against axle configuration.", "Oversize ($25 + mileage) and overweight ($0.06/ton-mile, $40 min) fees are listed separately in the rule and are added together when a load is both - verify with OWL." ]
+}

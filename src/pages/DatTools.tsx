@@ -73,9 +73,16 @@ const TOOLS: Tool[] = [
     alt: "Floating keycaps with two of them pressed — moving through the load board from the keyboard",
   },
   {
+    title: "Pricing an oversize load before you call",
+    body: [
+      "A wide or heavy load pays more for a reason: every state on the route wants its permit fee, some want pilot cars or police, and most stop the load at sunset and on holiday weekends. Quote it without that and the margin goes to the permits.",
+      "Open a hot shot, flatbed, step deck, RGN or Conestoga load on DAT One or Truckstop and the Permits button takes the lane, the equipment and the weight straight into the TruckBox oversize permit calculator: fees, escorts, travel times and trip days for each state, checked against each state's DOT. The calculator is free for 5 loads a month and unlimited with the extension.",
+    ],
+  },
+  {
     title: "Both boards, one set of settings",
     body: [
-      "One-click email, broker credit checks with RTS, Apex and Triumph, route maps, the profit calculator, saved loads and the keyboard shortcuts all work on Truckstop exactly as they do on DAT One — same templates, same sender mailbox, same limits. Nothing to set up twice when you work both boards in the same day.",
+      "One-click email, broker credit checks with RTS, Apex and Triumph, route maps, the profit calculator, the Permits button, saved loads and the keyboard shortcuts all work on Truckstop exactly as they do on DAT One — same templates, same sender mailbox, same limits. Nothing to set up twice when you work both boards in the same day.",
       "Auto Emailer is the one exception: it runs on DAT One only, because it depends on how that board feeds new postings into the page. Everything else is identical on both.",
     ],
   },
@@ -188,6 +195,9 @@ export default function DatToolsPage() {
                 </Link>
                 <Link className="ed-btn" to="/faq">
                   <span>FAQ</span>
+                </Link>
+                <Link className="ed-btn" to="/oversize-permit-calculator">
+                  <span>Oversize permit calculator</span>
                 </Link>
               </div>
             </div>

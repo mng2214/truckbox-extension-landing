@@ -1,0 +1,385 @@
+[ {
+  "code" : "AL",
+  "name" : "Alabama",
+  "slug" : "alabama",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "AZ",
+  "name" : "Arizona",
+  "slug" : "arizona",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "AR",
+  "name" : "Arkansas",
+  "slug" : "arkansas",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 3
+}, {
+  "code" : "CA",
+  "name" : "California",
+  "slug" : "california",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "CO",
+  "name" : "Colorado",
+  "slug" : "colorado",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 3
+}, {
+  "code" : "CT",
+  "name" : "Connecticut",
+  "slug" : "connecticut",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "DE",
+  "name" : "Delaware",
+  "slug" : "delaware",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 3
+}, {
+  "code" : "FL",
+  "name" : "Florida",
+  "slug" : "florida",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "GA",
+  "name" : "Georgia",
+  "slug" : "georgia",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "ID",
+  "name" : "Idaho",
+  "slug" : "idaho",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "IL",
+  "name" : "Illinois",
+  "slug" : "illinois",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 6
+}, {
+  "code" : "IN",
+  "name" : "Indiana",
+  "slug" : "indiana",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "IA",
+  "name" : "Iowa",
+  "slug" : "iowa",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "KS",
+  "name" : "Kansas",
+  "slug" : "kansas",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "KY",
+  "name" : "Kentucky",
+  "slug" : "kentucky",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "LA",
+  "name" : "Louisiana",
+  "slug" : "louisiana",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 3
+}, {
+  "code" : "ME",
+  "name" : "Maine",
+  "slug" : "maine",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "MD",
+  "name" : "Maryland",
+  "slug" : "maryland",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 8
+}, {
+  "code" : "MA",
+  "name" : "Massachusetts",
+  "slug" : "massachusetts",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "MI",
+  "name" : "Michigan",
+  "slug" : "michigan",
+  "verified" : false,
+  "verifiedOn" : null,
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 9
+}, {
+  "code" : "MN",
+  "name" : "Minnesota",
+  "slug" : "minnesota",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 9
+}, {
+  "code" : "MS",
+  "name" : "Mississippi",
+  "slug" : "mississippi",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 5
+}, {
+  "code" : "MO",
+  "name" : "Missouri",
+  "slug" : "missouri",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "MT",
+  "name" : "Montana",
+  "slug" : "montana",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 5
+}, {
+  "code" : "NE",
+  "name" : "Nebraska",
+  "slug" : "nebraska",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "NV",
+  "name" : "Nevada",
+  "slug" : "nevada",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 2
+}, {
+  "code" : "NH",
+  "name" : "New Hampshire",
+  "slug" : "new-hampshire",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 2
+}, {
+  "code" : "NJ",
+  "name" : "New Jersey",
+  "slug" : "new-jersey",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 3
+}, {
+  "code" : "NM",
+  "name" : "New Mexico",
+  "slug" : "new-mexico",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "NY",
+  "name" : "New York",
+  "slug" : "new-york",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 6
+}, {
+  "code" : "NC",
+  "name" : "North Carolina",
+  "slug" : "north-carolina",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 9
+}, {
+  "code" : "ND",
+  "name" : "North Dakota",
+  "slug" : "north-dakota",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 5
+}, {
+  "code" : "OH",
+  "name" : "Ohio",
+  "slug" : "ohio",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 6
+}, {
+  "code" : "OK",
+  "name" : "Oklahoma",
+  "slug" : "oklahoma",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "OR",
+  "name" : "Oregon",
+  "slug" : "oregon",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 9
+}, {
+  "code" : "PA",
+  "name" : "Pennsylvania",
+  "slug" : "pennsylvania",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "RI",
+  "name" : "Rhode Island",
+  "slug" : "rhode-island",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 6
+}, {
+  "code" : "SC",
+  "name" : "South Carolina",
+  "slug" : "south-carolina",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "SD",
+  "name" : "South Dakota",
+  "slug" : "south-dakota",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 8
+}, {
+  "code" : "TN",
+  "name" : "Tennessee",
+  "slug" : "tennessee",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 5
+}, {
+  "code" : "TX",
+  "name" : "Texas",
+  "slug" : "texas",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 7
+}, {
+  "code" : "UT",
+  "name" : "Utah",
+  "slug" : "utah",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "VT",
+  "name" : "Vermont",
+  "slug" : "vermont",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "VA",
+  "name" : "Virginia",
+  "slug" : "virginia",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 3
+}, {
+  "code" : "WA",
+  "name" : "Washington",
+  "slug" : "washington",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "WV",
+  "name" : "West Virginia",
+  "slug" : "west-virginia",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 4
+}, {
+  "code" : "WI",
+  "name" : "Wisconsin",
+  "slug" : "wisconsin",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 5
+}, {
+  "code" : "WY",
+  "name" : "Wyoming",
+  "slug" : "wyoming",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "sourceCount" : 2
+} ]

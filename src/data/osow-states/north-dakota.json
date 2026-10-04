@@ -1,0 +1,125 @@
+{
+  "code" : "ND",
+  "name" : "North Dakota",
+  "slug" : "north-dakota",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "North Dakota Highway Patrol - Motor Carrier Permit Office (Bismarck)",
+    "url" : "https://www.statepatrol.nd.gov/e-permits",
+    "phone" : "701-328-2621",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "Depends on the load",
+    "note" : "Single trip permit $20 (NDCC 39-12-02(3)(f)); 150,001-160,000 lb $30 ... 190,001+ lb $70 (NDAC 38-06-03-01). Valid 5 days for one one-way move."
+  }, {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$10",
+    "note" : "$10 service/routing fee per single trip permit (Policy 9-6, 11/2025; Annex E 8/2023 still says $8). $5 extra if faxed."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 200,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "$0.05 per ton-mile on the weight above 200,000 lb (NDAC 38-06-03-01(3)); tiers round up to whole tons, listed to 400,000 lb. May be reduced for axle configuration/road condition. Spring-thaw/load-restricted highways carry separate higher ton-mile fees (not modeled)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 16' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 18' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 18' wide",
+    "text" : "1 police escort. Over 18' wide: NDHP escort if required by the regional commander (Annex E: required for heavy loads unless exempted); NDHP bills $50/hour and $0.50/mile per trooper"
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 200,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "No over-dimensional travel from 1/2 hr after sunset to 1/2 hr before sunrise unless the load is 12' wide or less and 120' long or less (night travel then allowed with clearance lights and amber beacon)."
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "Over 16' wide: no travel after noon Saturday, all day Sunday, or on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas (from noon the day before until sunrise the day after)."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "No movement in inclement weather, on slippery roads, or with visibility of 1/2 mile or less; convoy units at least 1,000 ft apart."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight permits not valid on bituminous pavement at 90 F or above; no overweight permits during spring load restrictions (except under the Road Restriction Permit Policy 9-17)."
+  }, {
+    "when" : "Over 18' high",
+    "text" : "Over 18' high: written authority from utility companies to pass under overhead wires; permittee responsible for all vertical clearances."
+  } ],
+  "travel" : [ {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "NDHP Policy 9-6 Permits for Oversize and Overweight Vehicles and/or Loads Excluding Workover Rigs (11/21/2025)",
+    "url" : "https://www.statepatrol.nd.gov/sites/default/files/documents/MC/2026MCPolicies/9-6%20Permits%20for%20Oversize%20and%20Overweight%20Vehicles%20and-or%20Loads%20Excluding%20Workover%20Rigs%20Handout3.26-UA.pdf"
+  }, {
+    "title" : "NDHP Policy 9-15 Pilot Car Policy",
+    "url" : "https://www.statepatrol.nd.gov/sites/default/files/documents/MC/2026MCPolicies/9-15%20Pilot%20Car%20Policy%20Handout4.26.pdf"
+  }, {
+    "title" : "NDHP Policy 9-6 Annex E Heavy Load Permit Policy (> 200,000 lb)",
+    "url" : "https://www.statepatrol.nd.gov/sites/default/files/documents/MC/2026MCPolicies/9-6-e%20Heavy%20Load%20Permit%20Policy%20for%20Loads%20in%20Excess%20of%20200%2C000%20lbs.%20Gross%20Weight%20Handout3.26-UA.pdf"
+  }, {
+    "title" : "N.D. Admin. Code 38-06-03 Permit Fees",
+    "url" : "https://ndlegis.gov/information/acdata/pdf/38-06-03.pdf"
+  }, {
+    "title" : "N.D. Century Code Chapter 39-12 Size, Width, and Height Restrictions",
+    "url" : "https://ndlegis.gov/cencode/t39c12.pdf"
+  } ],
+  "notes" : [ "14 ft 6 in to 16 ft wide on two-lane highways: one lead pilot car is required unless the hauling vehicle carries rotating/flashing amber light(s) visible 500 ft front and rear (Policy 9-15) - the calculator assumes the light option (no escort). No pilot car up to 16' on four-lane divided highways.", "Overweight routing limited by NDDOT bridge/approved-gross-weight maps; ND state highways (non-interstate) allow up to 105,500 lb legal, calculator uses 80,000.", "Statute allows an online-permit fee of up to $15; policy currently lists a $10 service/routing fee.", "Heavy loads (> 200,000 lb) also pay NDDOT traffic control, inspection and a $25 engineering fee when extra analysis is needed; permits not issued in spring restrictions or when heat/rain risk damage." ]
+}

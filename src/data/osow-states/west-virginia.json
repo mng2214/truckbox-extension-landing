@@ -1,0 +1,213 @@
+{
+  "code" : "WV",
+  "name" : "West Virginia",
+  "slug" : "west-virginia",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "WVDOT Division of Highways - Central Permit Office",
+    "url" : "https://transportation.wv.gov/oversizeoverweight-hauling-permits",
+    "phone" : "304-558-9547",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$20",
+    "note" : "Single-trip basic fee $20 covers oversize, overweight or both (valid 5 days). If the load is also overweight the $20 is shown on the overweight line instead. Superloads pay the same fees."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$20",
+    "note" : "Single-trip basic fee $20 (one permit covers weight and dimensions)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.04 per ton-mile",
+    "note" : "Overweight fee $0.04 per ton-mile. The rule does not state whether tons are excess or gross weight - excess over legal assumed; VERIFY (gross basis would be several times higher)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 120,000 lb",
+    "amount" : "Set by the state",
+    "note" : "When low-impact bridge monitors are assigned: $150 first bridge, $100 second, $50 each additional, max $750. Superloads (>120,000 lb) need bridge analysis; bridge strengthening, professional analysis charges or a bond may be required."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 10'5\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 74'11\" long, on two-lane and other roads",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 95' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 95' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 100' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 10'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 10'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 10'5\" wide, over 15' high, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, over 15' high, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, over 15' high",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, over 15' high, on two-lane and other roads",
+    "front" : 3,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, over 15' high, on interstates and freeways",
+    "front" : 1,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 15' high, over 100' long",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 120,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Sunrise to sunset only. Up to 14 ft wide: seven days a week (not on holidays/holiday weekends). Over 14 ft wide (and other loads exceeding Turnpike weekend limits): Monday-Friday only."
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "Loads over 16 ft wide move only Sunday morning until noon; escorts as specified on the permit."
+  }, {
+    "when" : "Oversize",
+    "text" : "No travel on legal holidays or holiday weekends (WV Code 2-2-1; WVDOH publishes yearly high-travel-day and event closures, e.g. WVU home football days in Monongalia/Marion/Harrison/Preston counties)."
+  }, {
+    "when" : "Overweight",
+    "text" : "No travel on legal holidays or holiday weekends. Overweight-only loads up to 135,000 lb (110,000 lb on the WV Turnpike) may otherwise travel 24/7 when requested."
+  }, {
+    "when" : "Oversize",
+    "text" : "Escorted loads: no travel on two-lane highways Mon-Fri 7-9 AM and 2:30-4 PM during the school year; Charleston area (I-64 Exit 39-85, I-77 Exit 85-106, US119 Ruth-I-64, within 5 mi of city) 7-9 AM and 4-6 PM during DST, 9 AM-4 PM only during EST."
+  }, {
+    "when" : "Oversize",
+    "text" : "WV Turnpike: 14'1\"-18' wide sunrise-sunset Mon-Thu; 18'1\"-24'6\" wide Sundays before noon only; over 24'7\" limited by toll plazas."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 16' wide may move only Sunday morning until noon - not modeled; check the permit."
+  } ],
+  "sources" : [ {
+    "title" : "WVDOH Permit Information (rev. 3-17-2023)",
+    "url" : "https://webapps.transportation.wv.gov/TWS/WVDOTDocumentStorageMigration/PDF/Transportation/highways/maintenance/hauling_permits/Documents/PERMIT%20INFORMATION.pdf"
+  }, {
+    "title" : "157CSR5 Traffic and Safety Rules (2026 proposed amendment text, Secretary of State)",
+    "url" : "https://apps.sos.wv.gov/adlaw/csr/readfile.aspx?DocId=59125&Format=PDF"
+  }, {
+    "title" : "WVDOT Permit Types",
+    "url" : "https://transportation.wv.gov/permit-types"
+  }, {
+    "title" : "WVDOH High Travel Days, Events and Other Restrictions (2024)",
+    "url" : "https://webapps.transportation.wv.gov/TWS/WVDOTDocumentStorageMigration/PDF/Transportation/highways/maintenance/hauling_permits/Documents/High%20Travel%20Days.pdf"
+  } ],
+  "notes" : [ "Single-trip limits: 16 ft wide, 120,000 lb gross, 28,000 single / 45,000 tandem / 50,000 tri / 55,000 quad axle; height and length limited by route. Anything beyond is a superload (same fee, bridge analysis).", "Max overhang on any permit: 15 ft front, 30 ft rear.", "Police escort: DOH decides for houses or similar large structures that significantly disrupt traffic; applicant must arrange it with local law enforcement (no numeric trigger).", "Escort thresholds use the WVDOH table: width ranges start at 10'6\", 12'1\", 14'1\", 15'1\"; length at 75', 95'1\", 100'1\". Districts and the Parkway Authority may require more escorts. 4-lane non-Interstate at 15'1\"-16' needs 1 front + 2 rear (non_interstate here uses the 2-lane 2 front + 1 rear; same vehicle count). On Interstate at 15'1\"-16' the table says 2 rear only, but the 14'1\" rule's front escort still matches here (engine takes max), so 1 front is over-counted.", "157CSR5 text cited is the 2026 proposed amendment; confirm the adopted version." ]
+}

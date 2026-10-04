@@ -38,7 +38,7 @@ import {
   ZoomIn,
 } from "lucide-react";
 
-type NavItem = { href: string; label: string; route?: boolean; desktopOnly?: boolean };
+type NavItem = { href: string; label: string; route?: boolean; desktopOnly?: boolean; wideOnly?: boolean };
 
 /* ===== Site-wide constants ============================================== */
 
@@ -46,10 +46,11 @@ const NAV: NavItem[] = [
   { href: "/demo", label: "Demo", route: true, desktopOnly: true },
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
+  { href: "/oversize-permit-calculator", label: "Permits", route: true },
   { href: "/business/start", label: "Teams", route: true },
   { href: "/guide", label: "Guide", route: true },
   { href: "/faq", label: "FAQ", route: true },
-  { href: "/privacy", label: "Privacy", route: true },
+  { href: "/privacy", label: "Privacy", route: true, wideOnly: true },
   { href: "/#contact", label: "Contact" },
 ];
 
@@ -401,7 +402,7 @@ export function Header() {
           <Link
             to="/"
             onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-            className="tb-brand flex items-center gap-3"
+            className="tb-brand flex shrink-0 items-center gap-3 whitespace-nowrap"
             aria-label="Truck Box — home"
           >
             {logoFailed ? (
@@ -453,7 +454,7 @@ export function Header() {
               <Link
                 key={n.href}
                 to={n.href}
-                className="tb-nav-link ed-label whitespace-nowrap"
+                className={"tb-nav-link ed-label whitespace-nowrap" + (n.wideOnly ? " hidden xl:inline" : "")}
               >
                 {n.label}
               </Link>
@@ -2404,7 +2405,7 @@ const FAQS = [
         <p>
           Open the TruckBox extension, go to the <strong>Factoring</strong> tab, select your provider
           — <strong>RTS</strong>, <strong>Apex Capital</strong> or <strong>Triumph</strong> — and click <strong>Login</strong>.
-          After signing in to your factoring account, you'll be able to check broker credit directly from the DAT load board.
+          After signing in to your factoring account, you'll be able to check broker credit directly from the DAT One and Truckstop load boards.
         </p>
     ),
   },

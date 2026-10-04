@@ -1,0 +1,152 @@
+{
+  "code" : "TN",
+  "name" : "Tennessee",
+  "slug" : "tennessee",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "TDOT Oversize & Overweight Permit Office",
+    "url" : "https://www.tn.gov/tdot/traffic-operations-division/oversize---overweight-permits.html",
+    "phone" : "615-741-3821",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Over 8'6\" wide",
+    "amount" : "Depends on the load",
+    "note" : "Excessive width: $20 up to 14', $30 to 16', then $30 + $5 per foot or fraction over 16' (tiers listed to 26'; add $5/ft beyond)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 13'6\" high",
+    "amount" : "$20",
+    "note" : "Excessive height fee."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 73' long",
+    "amount" : "$20",
+    "note" : "Excessive length fee. Legal is the towed unit (50' from the kingpin, i.e. a 53' trailer), not the overall length; modeled as overall length over 73' (20' tractor + 53' trailer). Overhang over 5' front+rear total also needs a permit per TDOT FAQ."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$20",
+    "note" : "Excessive weight base fee."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.06 per ton-mile",
+    "note" : "$0.06 per ton-mile on weight over 80,000 lb (TDOT FAQ). The $0.12/ton-mile rate over 165,000 lb in the rule applies to towing vehicles only."
+  }, {
+    "kind" : "other",
+    "when" : "Over 165,000 lb",
+    "amount" : "Depends on the load",
+    "note" : "TDOT Structures bridge evaluation, charged per route proposed: $100 (165,001-250,000 lb), $300 (250,001-500,000 lb), actual cost over 500,000 lb (not priced here)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12'6\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12'6\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 13'6\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 17'11\" wide",
+    "text" : "2 police escorts. THP escort for loads 18' wide on Interstate or federal-aid highways (FAQ: at least 2-3 troopers; TDOT price list: $65/hour + $0.13/mile per trooper; Level 2 inspection, 10+ days processing). Also possible for any super load at TDOT's discretion."
+  }, {
+    "when" : "Over 17'11\" high",
+    "text" : "2 police escorts. THP escort for loads 18' high on any highway (FAQ: at least 2-3 troopers; $65/hour + $0.13/mile per trooper)."
+  } ],
+  "survey" : [ {
+    "when" : "Over 14'11\" high",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 165,000 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 165,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15'6\" high",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 12'6\" wide",
+    "text" : "Over 12'6\" wide, 15' high or 90' long: no Interstate movement 7-9 AM and 4-6 PM Mon-Fri in counties over 250,000 population. Otherwise 24/7 movement is allowed."
+  }, {
+    "when" : "Over 15' high",
+    "text" : "Over 15' high: no Interstate movement 7-9 AM and 4-6 PM Mon-Fri in counties over 250,000 population."
+  }, {
+    "when" : "Over 90' long",
+    "text" : "Over 90' long: no Interstate movement 7-9 AM and 4-6 PM Mon-Fri in counties over 250,000 population."
+  }, {
+    "when" : "Over 12'6\" wide",
+    "text" : "Holidays (2026 TDOT notice): no ESCORTED travel from 6 PM Thursday before Good Friday through Easter Sunday; from noon Friday through Memorial Day and Labor Day; from noon July 2 through July 4; from noon the Wednesday before Thanksgiving through the following Sunday; Dec 24-25 and Dec 31-Jan 1 (the rule itself, 1680-07-01-.04(2)(f), reserves December 24 through January 1). Loads not needing escorts may travel continuously under the 2026 notice."
+  }, {
+    "when" : "Oversize",
+    "text" : "Super heavy/extra-overdimensional loads (over 165,000 lb, 16' wide or 15'6\" high) may get time-of-movement limits set by TDOT; movement may also be restricted in bad weather."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Rules of TDOT Chapter 1680-07-01 Overweight and Overdimensional Movements (rev. May 2018)",
+    "url" : "https://publications.tnsosfiles.com/rules/1680/1680-07/1680-07-01.20180515.pdf"
+  }, {
+    "title" : "TDOT OS/OW Permit Prices",
+    "url" : "https://www.tn.gov/tdot/traffic-operations-division/oversize---overweight-permits/single-trip---annual.html"
+  }, {
+    "title" : "TDOT OS/OW Permit Office FAQ (rev. 07/16/2018)",
+    "url" : "https://www.tn.gov/content/dam/tn/tdot/central-services/2018-updated-forms/FAQ%20Sheet%20Complete.pdf"
+  }, {
+    "title" : "2026 TDOT OS/OW Holiday Travel Restrictions",
+    "url" : "https://www.tn.gov/content/dam/tn/tdot/traffic-operations/os-ow/holiday-restrictions/2026%20TDOT%20OS%20OW%20Holiday%20Travel%20Restrictions.doc.pdf"
+  }, {
+    "title" : "TDOT Oversize & Overweight Permits (office, contacts)",
+    "url" : "https://www.tn.gov/tdot/traffic-operations-division/oversize---overweight-permits.html"
+  } ],
+  "notes" : [ "Single trip permit valid 10 calendar days, no extensions. Over-dimension-only applications take 3-5 days; any weight 7-10 business days; THP-escorted loads at least 10 days.", "Over 10' up to 12'6\" wide: front escort required only on roads with pavement narrower than 24' (not modeled); flagperson at bridges with roadway under 20'.", "Over 16' wide requires a letter of necessity/shipper's letter; super loads need a detailed traffic control proposal and Structures Division approval.", "Holiday escort ban also applies to escorted loads triggered by height (>15') and length (>90'); only the width trigger is attached to the restriction line above.", "Bridge evaluation for loads over 500,000 lb is billed at actual cost; Structures approval may also be required under 165,000 lb depending on axle spacing." ]
+}

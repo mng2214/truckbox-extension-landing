@@ -1,0 +1,127 @@
+{
+  "code" : "NE",
+  "name" : "Nebraska",
+  "slug" : "nebraska",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Nebraska DOT Permits Office (Lincoln)",
+    "url" : "https://dot.nebraska.gov/business-center/permits/truck/",
+    "phone" : "402-471-0034",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$15",
+    "note" : "408 NAC 3-009.04: single trip overdimensional only $15; OD+OW combined permit $25 total. Valid up to 10 moving days."
+  }, {
+    "kind" : "other",
+    "when" : "Oversize, overweight",
+    "amount" : "$25",
+    "note" : "408 NAC 3-009.04: combined overdimensional + overweight single trip $25."
+  }, {
+    "kind" : "overweight",
+    "when" : "Legal size, overweight",
+    "amount" : "$20",
+    "note" : "408 NAC 3-009.04: overweight only $20; OD+OW combined $25."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 11'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 11'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 124'11\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 124'11\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15'11\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 15'11\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15'11\" high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 160,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Overdimensional moves: 30 minutes before sunrise to 30 minutes after sunset only; no travel on designated holidays/long holidays (typically from noon the day before until sunrise after; dates on NDOT holiday schedule and on the permit)."
+  }, {
+    "when" : "Oversize",
+    "text" : "No overdimensional travel Mon-Fri 7:00-9:00 am and 4:00-6:00 pm in Lincoln (US-6/34/77, N-2 inside city limits) and the Omaha urban area, incl. I-80 from Iowa line to MP 432 (Gretna)."
+  }, {
+    "when" : "Oversize",
+    "text" : "Overdimensional travel prohibited in rain, sleet, snow, slippery surfaces, visibility under 1/2 mile, or hazardous wind."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only permits are valid 24 hours/day, 7 days/week, including holidays and regardless of weather."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "NDOT - Oversize/Overweight Truck Permits",
+    "url" : "https://dot.nebraska.gov/business-center/permits/truck/"
+  }, {
+    "title" : "408 NAC Chapter 3 - Permits for Movement of Overweight and/or Overdimensional Vehicles and Loads",
+    "url" : "https://dot.nebraska.gov/media/td5ns30l/408-nac-3-04-30-2023_review-complete-610-ns.pdf"
+  }, {
+    "title" : "NDOT - Legal Sizes and Weights for Vehicles in Nebraska",
+    "url" : "https://dot.nebraska.gov/media/y1idsekz/legal-sizes-weights.pdf"
+  }, {
+    "title" : "NDOT - OD/OW Permits Observed Holidays 2026",
+    "url" : "https://dot.nebraska.gov/media/uisds1al/yearly-holiday-schedule.pdf"
+  } ],
+  "notes" : [ "Escorts 'may be required' at the Department's discretion for any load over 8'6\" wide, 90' long or 14'6\" high (408 NAC 3-003.19A); the escort rules here model only the mandatory thresholds.", "On State freeways/expressways/rural divided highways (incl. I-80) the rear escort may be omitted if the trailer has rear-facing amber flashing/strobe lights visible at 800 ft (003.19E); this calculator still counts the rear escort on interstate.", "Superloads need Lincoln Permit Office (and possibly Bridge Division/District) review; allow 5-10 business days.", "Legal gross is 80,000 lb on Interstate and up to 94,000 lb on US/State routes subject to the Nebraska axle/bridge table; calculator uses 80,000.", "Pole car 'may be required' for loads over 14'6\" high; mandatory at 16' and higher." ]
+}

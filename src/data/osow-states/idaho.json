@@ -1,0 +1,136 @@
+{
+  "code" : "ID",
+  "name" : "Idaho",
+  "slug" : "idaho",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Idaho Transportation Department - Commercial Vehicle Services (Special Permits, permits4idaho)",
+    "url" : "https://permits4idaho.com/",
+    "phone" : "208-334-8000",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$30",
+    "note" : "Oversize-only single trip permit $30 (IDAPA 39.03.01.107.05.a). If the load is also overweight a single $33 overweight/oversize permit applies instead - only the higher line in this group is charged."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$33",
+    "note" : "Overweight or overweight/oversize (non-divisible) single trip permit $33 (IDAPA 39.03.01.107.05.b)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Set by the state",
+    "note" : "Per-mile road use fee, Idaho Code 49-1004(2), set by axle count and gross weight. Column 1 starts at 4 cents/mile and rises 4 cents/mile per 2,000 lb (start: 5 axles 80,001 lb; 6 axles 97,001; 7 axles 114,001; +17,000 lb per extra axle). Column 2 (5 axles from 131,001; 6 from 148,001; 7 from 165,001) starts at $1.02/mile and rises 7 cents/mile per 2,000 lb. Below the column-1 start weight: 4 cents/mile. Not modeled because it depends on axle count."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 15' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, over 120' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 16' wide, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 18' wide, on interstates and freeways",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 120' long, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 150' long, on interstates and freeways",
+    "text" : null
+  }, {
+    "when" : "Over 250,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Interstate and black-coded routes: loads not over 12' wide, 120' long and 15' high may travel 24 hours/7 days. Larger loads: daylight only (weekends allowed) and no travel after 4 p.m. on the day before a holiday until sunrise the day after (New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving, Christmas)."
+  }, {
+    "when" : "Oversize",
+    "text" : "Red-coded routes: daylight only; travel stops 2 p.m. Friday and 2 p.m. the day before a holiday, resumes at dawn Monday / the day after; no weekend or holiday travel."
+  }, {
+    "when" : "Over 13' wide",
+    "text" : "Over 13' wide: no movement during heavy commuter traffic (6-9 a.m. and 4-6:30 p.m. Mon-Fri) in the Boise valley (I-84 MP 26-59), Coeur d'Alene (I-90 MP 0-17), Idaho Falls (I-15 MP 115-121), Pocatello valley, Twin Falls (US-93 MP 41-53), and within 1 mile of Eagle, Emmett, Garden City, Middleton and Star."
+  }, {
+    "when" : "Front overhang over 7', on two-lane and other roads",
+    "text" : "Front overhang over 7': daylight travel only on two-lane, two-way highways."
+  } ],
+  "travel" : [ {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before until dawn the day after",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Black/white routes: over 12 ft wide - daylight only, weekends allowed, no travel after 4 p.m. the day before a major holiday until dawn the day after."
+  }, {
+    "when" : "Over 120' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before until dawn the day after",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 15' high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before until dawn the day after",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "IDAPA 39.03.01 - Rules Governing Special Permits (Idaho Transportation Department, eff. 7-1-24)",
+    "url" : "https://adminrules.idaho.gov/rules/current/39/390301.pdf"
+  }, {
+    "title" : "Idaho Code 49-1010 - Size of vehicles and loads",
+    "url" : "https://legislature.idaho.gov/statutesrules/idstat/Title49/T49CH10/SECT49-1010/"
+  }, {
+    "title" : "Idaho Code 49-1004 - Permits for overweight or oversize loads (road use fee schedule)",
+    "url" : "https://legislature.idaho.gov/statutesrules/idstat/Title49/T49CH10/SECT49-1004/"
+  }, {
+    "title" : "ITD - Pilot/Escort Vehicle Travel Requirements and Vertical Clearance of Structures map (Jan 8, 2025)",
+    "url" : "https://permits4idaho.com/PDFGate.aspx?LoginNoticeID=68"
+  } ],
+  "notes" : [ "Escort rules come from the ITD pilot/escort map: interstates are white-coded; non_interstate is modeled as black-coded state highways. Red-coded routes are stricter: 8'7\"-10' wide = 1 front; 10'1\"-12'6\" = 1 front + 1 rear; over 75' long = 1 front; over 75' long and over 8'6\" wide = 1 front + 1 rear. Check the map for red segments on the route.", "The map legend stops at 18' wide; wider/extreme loads get escort requirements on the permit, and a third (advance) pilot may be required to hold opposing traffic (IDAPA 39.03.01.306.13).", "Loads over 16' high: the leading pilot car must run a non-metallic height pole; over 16'6\" the carrier must contact utilities for power lines. Over-height routes are checked against structure clearances (up to 24 working hours).", "Idaho has no formal 'superload' class: flagged thresholds are those needing additional Department approval (IDAPA 39.03.01.305.11) and bridge analysis over 250,000 lb (up to 10 business days; over 800,000 lb third-party analysis). Bridge approval is also needed for any single/steer axle over 35,000 lb.", "Legal gross 80,000 lb applies on interstate/national network; Idaho non-interstate state highways allow more by bridge formula and registration (up to 105,500 lb; 129,000 lb on designated routes by permit for divisible loads), so overweight flags on non-interstate miles may be conservative.", "Legal overhang: 4' front, 10' rear. Semitrailer 53' on national network routes, 48' elsewhere; 65' overall on routes with severe curvature.", "US-12 MP 74-174 (Nez Perce-Clearwater Forest): loads over 16' wide, 150,000 lb or 150' long need US Forest Service review, ISP safety inspection, and may need ambulance/law enforcement escorts.", "Permits4idaho is the official ITD permit portal; Special Permit fees are $30 / $33 regardless of distance." ]
+}

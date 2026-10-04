@@ -3,8 +3,9 @@
  *  Proprietary and confidential. See LICENSE.
  */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { api } from "../../lib/api";
 import { usePageMeta } from "../../lib/meta";
 import { ADMIN_THEME_KEY, readAdminTheme, writeAdminTheme } from "./theme";
 import "./visits.css";
@@ -48,6 +49,66 @@ const TILES = [
   },
 ];
 
+type SourceRow = { source: string; medium: string | null; campaign: string | null; signups: number; checkedOut: number };
+
+function SignupSources() {
+  const [rows, setRows] = useState<SourceRow[] | null>(null);
+  const [failed, setFailed] = useState(false);
+
+  useEffect(() => {
+    let active = true;
+    api
+      .get<SourceRow[]>("/api/v1/admin/signup-sources?days=90")
+      .then((result) => {
+        if (active) setRows(result);
+      })
+      .catch(() => {
+        if (active) setFailed(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  return (
+    <section className="vx-card">
+      <header className="vx-card-head">
+        <div>
+          <b className="vx-card-title">Where signups come from</b>
+          <span className="vx-card-sub">Accounts created in the last 90 days, and how many of them went to checkout</span>
+        </div>
+      </header>
+      {failed && <p className="vx-empty">Could not load the signup sources.</p>}
+      {!rows && !failed && <p className="vx-empty">Loading…</p>}
+      {rows && rows.length === 0 && <p className="vx-empty">No signups in the last 90 days.</p>}
+      {rows && rows.length > 0 && (
+        <table className="vx-table">
+          <thead>
+            <tr>
+              <th>Source</th>
+              <th>Medium</th>
+              <th>Campaign</th>
+              <th>Signups</th>
+              <th>Went to checkout</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={`${row.source}|${row.medium ?? ""}|${row.campaign ?? ""}`}>
+                <td>{row.source === "unknown" ? <span className="vx-dimmed">before tracking</span> : row.source}</td>
+                <td className="vx-dimmed">{row.medium ?? "—"}</td>
+                <td className="vx-dimmed">{row.campaign ?? "—"}</td>
+                <td>{row.signups.toLocaleString("en-US")}</td>
+                <td>{row.checkedOut.toLocaleString("en-US")}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
+    </section>
+  );
+}
+
 export default function AdminHome() {
   usePageMeta({
     title: "Admin — TruckBox",
@@ -87,6 +148,8 @@ export default function AdminHome() {
           </Link>
         ))}
       </div>
+
+      <SignupSources />
     </div>
   );
 }

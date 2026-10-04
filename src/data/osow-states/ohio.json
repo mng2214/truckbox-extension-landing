@@ -1,0 +1,158 @@
+{
+  "code" : "OH",
+  "name" : "Ohio",
+  "slug" : "ohio",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "ODOT Special Hauling Permits Office",
+    "url" : "https://www.transportation.ohio.gov/business/permits/special-hauling-permits",
+    "phone" : "614-351-2300",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$75",
+    "note" : "$20 processing + $55 surcharge (width up to 14' and height up to 14'6\"), one-way single trip."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' wide",
+    "amount" : "$145",
+    "note" : "$20 processing + $125 surcharge for width over 14'."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14'6\" high",
+    "amount" : "$145",
+    "note" : "$20 processing + $125 surcharge for height over 14'6\"."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$145",
+    "note" : "$20 processing + $125 overweight surcharge. If also oversize, only this OW surcharge is charged (OAC 5501:2-1-05(B))."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 120,000 lb",
+    "amount" : "$0.04 per ton-mile",
+    "note" : "Plus $0.04 per ton over 60 tons per mile: ((GVW - 120,000) / 2000) x Ohio miles x $0.04."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'10\" high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, over 90' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, over 14'6\" high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high, over 90' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 14'10\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 120,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 14' wide",
+    "text" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only (1/2 hour before sunrise to 1/2 hour after sunset), Sunday-Saturday. No movement from noon the day before until 1/2 hour before sunrise the day after New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving and Christmas (and the holiday weekend)."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' wide: no movement Sat 3 PM to 1/2 hr before sunrise Sun, Sun 3 PM to 1/2 hr before sunrise Mon, and (Apr 1-Nov 30) Fri 3 PM to 1/2 hr before sunrise Sat. Also no movement 6:30-9:00 AM and 4:30-6:00 PM Mon-Fri in Butler, Clermont, Cuyahoga, Delaware, Fairfield, Franklin, Geauga, Hamilton, Lake, Licking, Lorain, Lucas, Madison, Mahoning, Medina, Montgomery, Pickaway, Stark, Summit, Union, Warren and Wood counties."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight loads that are within legal dimensions are not restricted as to hours or days as long as they do not obstruct normal traffic flow (over-dimension rules above still apply if the load is also oversize)."
+  }, {
+    "when" : "Oversize",
+    "text" : "No travel in adverse weather/road conditions (storms, snow-covered or slippery roads, fog). No convoying within 500' of another permitted load. Stay in the right lane on multi-lane highways."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 12' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "sat, sun from 15:00: Sat and Sun from 3 P.M. until 1/2 hour before sunrise the next day", "fri from 15:00 (months [4, 5, 6, 7, 8, 9, 10, 11]): Fri from 3 P.M., April 1 through November 30" ],
+    "note" : "Over 12 ft wide (OS-1A section on hours of movement, items 4-5)."
+  } ],
+  "sources" : [ {
+    "title" : "OAC 5501:2-1-05 Schedule of fees and payment procedure",
+    "url" : "https://codes.ohio.gov/ohio-administrative-code/rule-5501:2-1-05"
+  }, {
+    "title" : "ODOT Form OS-1A Limitations/Provisions on the Use of a Special Hauling Permit (Rev. 01/18)",
+    "url" : "https://dam.assets.ohio.gov/image/upload/q_auto/v1751025885/transportation.ohio.gov/permits/special-hauling/os-1a.pdf"
+  }, {
+    "title" : "ODOT Operational Guide for Vehicles Operating with a Special Hauling Permit",
+    "url" : "https://www.transportation.ohio.gov/business/publications/operational-guide-special-hauling"
+  }, {
+    "title" : "ORC 5577.05 Dimension limits",
+    "url" : "https://codes.ohio.gov/ohio-revised-code/section-5577.05"
+  }, {
+    "title" : "ORC 5577.04 Weight limits",
+    "url" : "https://codes.ohio.gov/ohio-revised-code/section-5577.04"
+  }, {
+    "title" : "OAC 5501:2-1-04 Conditions on permitted movements",
+    "url" : "https://codes.ohio.gov/ohio-administrative-code/rule-5501:2-1-04"
+  } ],
+  "notes" : [ "Single trip permit valid up to 5 calendar days (OAC 5501:2-1-03). Return-trip and emergency permits have different fees (not modeled).", "Law enforcement escorts: no fixed dimension trigger; required at ODOT's discretion (bridge isolation/structural conditions, or when 8' of reserve pavement can't be kept on two-lane roads).", "On multi-lane highways 14' is the maximum width for routine permits; wider = superload with structural/route review. Special engineering analysis or traffic control costs are billed at ODOT's direct cost (OAC 5501:2-1-05(E)).", "ODOT permits cover state highways only; county/township roads, city streets and the Ohio Turnpike need separate permission.", "Superload also triggered by axle/axle-group weights above the ODOT guide's routine axle limits (not modeled)." ]
+}

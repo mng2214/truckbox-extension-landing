@@ -1,0 +1,162 @@
+{
+  "code" : "MI",
+  "name" : "Michigan",
+  "slug" : "michigan",
+  "verified" : false,
+  "verifiedOn" : null,
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "MDOT Transport Permits Unit (MiTRIP via MDOT Permit Gateway)",
+    "url" : "https://www.michigan.gov/mdot/business/permits/oversize-overweight",
+    "phone" : "517-241-8999 (option 2)",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$15",
+    "note" : "T-2 K / MCL 257.725(5): $15 single trip for over-dimension, legal weight. Valid up to 5 days; one return move may be included."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$50",
+    "note" : "T-2 K / MCL 257.725(4): $50 single trip for over-dimension and/or overweight. Grouped with the $15 oversize fee: one permit, the higher fee applies."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 15' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 100' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize or overweight",
+    "text" : "Daylight only (1/2 hr before sunrise to 1/2 hr after sunset), Monday-Friday (T-2 H applies to every permit). Exception: loads not over 10' wide, 14' high and 90' long may also move all day Saturday and Sunday until 3 p.m. when weekend travel is selected in MiTRIP (not mobile homes)."
+  }, {
+    "when" : "Oversize",
+    "text" : "No movement from noon the day before until daylight the day after New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving and Christmas; if the holiday falls on Friday or Monday the ban covers the whole 3-day weekend. See MDOT's yearly holiday table for exact dates."
+  }, {
+    "when" : "Overweight",
+    "text" : "Holiday restrictions above also apply to overweight permits. No overweight permits during spring weight-restriction period (except public emergency)."
+  }, {
+    "when" : "Over 14' wide",
+    "text" : "No permits for widths over 14 ft during the spring weight-restriction period (except public emergency)."
+  }, {
+    "when" : "Oversize",
+    "text" : "When listed on the permit (special provision 15): no movement 7-9 AM or 3-6 PM in Genesee, Ingham, Jackson, Kalamazoo, Kent, Macomb, Muskegon, Oakland, Saginaw, Washtenaw and Wayne counties."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ "sun from 15:00: Weekend travel ends Sunday 3 P.M. (loads within 10' W, 14' H, 90' L)" ],
+    "note" : "T-2 H: daylight Monday-Friday; MDOT FAQ: Saturday all day and Sunday until 3 P.M. for loads within 10' wide, 14' high, 90' long."
+  }, {
+    "when" : "Over 10' wide",
+    "daylightOnly" : false,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 10 ft wide: no weekend movement."
+  }, {
+    "when" : "Over 14' high",
+    "daylightOnly" : false,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 14 ft high: no weekend movement."
+  }, {
+    "when" : "Over 90' long",
+    "daylightOnly" : false,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : null,
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Over 90 ft long: no weekend movement."
+  } ],
+  "sources" : [ {
+    "title" : "MDOT T-2 (10/2023) - Information on the Movement of Oversize or Overweight Vehicles and Loads",
+    "url" : "https://mdotjboss.state.mi.us/webforms/GetDocument.htm?fileName=T-2.pdf"
+  }, {
+    "title" : "MDOT T-1 (05/2024) - Maximum Legal Truck Loadings and Dimensions",
+    "url" : "https://mdotjboss.state.mi.us/webforms/GetDocument.htm?fileName=T-1.pdf"
+  }, {
+    "title" : "Michigan Vehicle Code ch. VI (MCL 257.716-257.725) - Size, Weight and Load",
+    "url" : "https://www.legislature.mi.gov/documents/mcl/pdf/mcl-300-1949-VI-SIZE-WEIGHT-AND-LOAD.pdf"
+  }, {
+    "title" : "MDOT - Oversize/Overweight Permits FAQs",
+    "url" : "https://www.michigan.gov/mdot/about/faqs/business/oversize-overweight"
+  }, {
+    "title" : "MDOT - Holiday travel restrictions and closings (2026)",
+    "url" : "https://www.michigan.gov/mdot/business/truckers/holiday-travel-restrictions-and-closings"
+  }, {
+    "title" : "MDOT Form 2465 - Request for Superload Information / Route Survey Certification",
+    "url" : "https://mdotjboss.state.mi.us/webforms/GetDocument.htm?fileName=2465.pdf"
+  }, {
+    "title" : "MDOT Form 2260A - Special Provisions, Conditions and Restrictions (transport permits)",
+    "url" : "https://www.michigan.gov/documents/mdot/Permit_General_Conditions_and_Restrictions_Form_2260A_531996_7.pdf"
+  }, {
+    "title" : "J. J. Keller RegSense - Oversize and overweight movements: Michigan (secondary source for escort thresholds)",
+    "url" : "https://jjkellercompliancenetwork.com/regsense/oversize-and-overweight-movements-michigan"
+  }, {
+    "title" : "MDOT T-3 (07/2022) - Movement of Mobile Homes (section G escorts: the only MDOT-published escort thresholds)",
+    "url" : "https://mdotjboss.state.mi.us/webforms/GetDocument.htm?fileName=T-3.pdf"
+  } ],
+  "notes" : [ "Escorts follow a secondary source (J. J. Keller): MDOT assigns them per permit through numbered special provisions (11 = rear escort, 12 = front escort with height pole when over 14'6\", 14 = police supervision) and its public T-2 guide does not publish thresholds for general loads. Police supervision (provision 14) is not modeled. Check the MiTRIP permit.", "Superloads (> 16' wide, > 15' high, > 150' long): MiTRIP application + shipper letter + Route Survey Certification (Form 2465), up to 10 business days. When MDOT requires a police escort, MSP Operations (517-241-8000) also inspects vehicle, load and driver before the move.", "Legal weight in Michigan is axle-based (up to 11 axles; gross can exceed 80,000 lb on Michigan-legal configurations). MiTRIP assigns fees from actual axle weights, so a load over 80,000 lb may still be weight-legal - verify overweight status per axle configuration.", "Fees under MCL 257.725(5) may be CPI-adjusted once a year; T-2 (10/2023) still lists $15/$50.", "MDOT permits cover state trunklines (I-, US-, M- routes) only; county roads and city streets need separate permits. Mackinac Bridge, International Bridge (Sault Ste. Marie), Blue Water and Ambassador bridges need 24-hour advance contact; Mackinac Bridge requires its own escort and daylight crossing." ]
+}

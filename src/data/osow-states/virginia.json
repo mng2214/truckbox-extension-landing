@@ -1,0 +1,171 @@
+{
+  "code" : "VA",
+  "name" : "Virginia",
+  "slug" : "virginia",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Virginia DMV Hauling Permits",
+    "url" : "https://www.dmv.virginia.gov/businesses/hauling",
+    "phone" : "804-786-2787",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize, legal weight",
+    "amount" : "$20",
+    "note" : "Single-trip permit $20 (superload single-trip permit $30). Valid up to 13 days. If the load is also overweight the $20 is shown on the overweight line instead."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$20",
+    "note" : "Single-trip permit $20 (superload $30), one permit covers weight and dimensions."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.30 per mile",
+    "note" : "$0.30 per mile when overweight (also when the configuration cannot be licensed in Virginia)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 250,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Superload single-trip permits add a damage fee based on gross weight (schedule not published on the DMV pages). Superload status can start below 250,000 lb when axle weights exceed single-trip limits (24,000 single / 44,000 tandem). VDOT engineering analysis cost may also be charged."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide, on two-lane and other roads",
+    "front" : 2,
+    "rear" : 2,
+    "note" : null
+  }, {
+    "when" : "Over 14'5\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 90' long, on two-lane and other roads",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 10'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 15'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 18' wide",
+    "text" : "1 police escort. Superload travel plan may require written agreement from local law enforcement to escort through each jurisdiction; number set case by case."
+  }, {
+    "when" : "Over 200' long",
+    "text" : "1 police escort. Superload travel plan may require written agreement from local law enforcement to escort; number set case by case."
+  }, {
+    "when" : "Over 16' high",
+    "text" : "1 police escort. Superload travel plan may require written agreement from local law enforcement to escort; number set case by case."
+  }, {
+    "when" : "Over 250,000 lb",
+    "text" : "1 police escort. Superload travel plan may require written agreement from local law enforcement to escort; number set case by case."
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 15' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 250,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Travel sunrise to sunset. No travel inside city/town corporate limits 7-9 AM and 4-6 PM (except overweight-only or overlength-only up to 85 ft incl. rear overhang)."
+  }, {
+    "when" : "Oversize",
+    "text" : "No travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas: permits invalid from noon the preceding weekday through the holiday (Monday holiday: from noon Friday)."
+  }, {
+    "when" : "Overweight",
+    "text" : "No travel on New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas: permits invalid from noon the preceding weekday through the holiday (Monday holiday: from noon Friday)."
+  }, {
+    "when" : "Oversize",
+    "text" : "No travel when road conditions, visibility or weather make travel hazardous."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Sunrise to sunset applies to all permitted loads (24VAC20-82-110 B)."
+  } ],
+  "sources" : [ {
+    "title" : "24VAC20-82 Overload and Hauling Permits Regulation (eff. 3/1/2023)",
+    "url" : "https://law.lis.virginia.gov/admincodefull/title24/agency20/chapter82/"
+  }, {
+    "title" : "Virginia DMV 109 Size, Weight and Equipment Requirements",
+    "url" : "https://www.dmv.virginia.gov/sites/default/files/forms/dmv109.pdf"
+  }, {
+    "title" : "Virginia DMV Hauling Permits",
+    "url" : "https://www.dmv.virginia.gov/businesses/hauling"
+  } ],
+  "notes" : [ "Routine single-trip maximums: 15 ft wide, 15 ft high, 150 ft long, 24,000 lb single / 44,000 lb tandem axle; beyond that is a superload (apply at least 10 working days ahead).", "Over 18 ft wide, 250,000 lb, 200 ft long or 16 ft high: a detailed travel plan may be required (police, utility and VDOT authorizations). Loads over 18 ft wide or 200 ft long: escorts set case by case.", "Over 400,000 lb: vehicle schematic for VDOT; over 750,000 lb (sometimes 500,000+): applicant-hired Virginia PE structural analysis.", "Overweight permits are not valid on Interstates over 80,000 lb except for irreducible loads." ]
+}

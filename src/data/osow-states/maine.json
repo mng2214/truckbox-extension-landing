@@ -1,0 +1,151 @@
+{
+  "code" : "ME",
+  "name" : "Maine",
+  "slug" : "maine",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : "74'",
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Maine BMV Motor Carrier Services - Overlimit Permit Unit",
+    "url" : "https://www.maine.gov/sos/bmv/vehicles/commercial-vehicles-motor-carrier-services/overlimit-permits",
+    "phone" : "207-624-9000 ext. 52134",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Ch. 156 Table 1 (excess over 80,000 lb for 5+ axle combos). Maine charges only the highest of the weight/length/width/height fees (grouped), not the sum - summing lines would overstate multi-limit loads by a few dollars."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 8'6\" wide",
+    "amount" : "Depends on the load",
+    "note" : "Ch. 156 Table 3 (excess width over 102 in, in 1-ft bands after the first 2 ft). Only the highest component fee is actually charged (Ch. 156 §4)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' high",
+    "amount" : "Depends on the load",
+    "note" : "Ch. 156 Table 4 (excess height over 14 ft). Only the highest component fee is actually charged (Ch. 156 §4)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 74' long",
+    "amount" : "Depends on the load",
+    "note" : "Ch. 156 Table 2, bands measured from 74 ft (TT + 48-53 ft semitrailer). Legal base is 65 ft for other combos / 69 ft with <=48 ft trailer, which shifts the bands. Only the highest component fee is actually charged (Ch. 156 §4)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 80' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 80' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 5'",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 15' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 15'11\" wide",
+    "text" : "1 police escort. 16 ft or wider: 1 police + 1 pilot (2 police when MSP/MaineDOT/BMV deem necessary). State Police required on the Interstate system."
+  }, {
+    "when" : "Over 124'11\" long",
+    "text" : "1 police escort. 125 ft or longer: 1 police + 1 pilot. State Police required on the Interstate system."
+  }, {
+    "when" : "Rear overhang over 15'",
+    "text" : "1 police escort. Rear overhang over 15 ft: 1 police + 1 pilot."
+  }, {
+    "when" : "Over 19'11\" wide",
+    "text" : "2 police escorts. 20 ft or wider: 2 police + 1 pilot; utility/town notification, no commuter or school-bus hours."
+  }, {
+    "when" : "Over 149'11\" long",
+    "text" : "2 police escorts. 150 ft or longer: 2 police + 1 pilot; permittee does public outreach (press release, municipal notice)."
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 124'11\" long",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 160,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only: 30 min before sunrise to 30 min after sunset, Monday-Friday. April 22-November 18: Saturday until 12 PM; June 3-August 26: Saturday on I-95 only until 9 AM (other roads until 12 PM). No travel on holidays or holiday weekends; Sundays in July/August and holidays need MaineDOT Traffic Engineering pre-clearance."
+  }, {
+    "when" : "Oversize",
+    "text" : "No movement in poor visibility or on roads made dangerous by rain, snow, slush or ice. If Interstate speed is reduced to 45 mph, exit at the first opportunity."
+  }, {
+    "when" : "Over 19'11\" wide",
+    "text" : "20 ft+ wide (or 150 ft+ long): utility and town notifications, clear visibility only, no movement during commuter or school-bus hours."
+  }, {
+    "when" : "Over 149'11\" long",
+    "text" : "150 ft+ long: utility/town notifications, clear visibility only, no commuter or school-bus hours; permittee must do public outreach (press release, municipal notification)."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only permits that can move with the flow of traffic may travel at any time of day."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "Saturday until noon only Apr 22-Nov 18; outside that window no Saturday travel."
+  } ],
+  "sources" : [ {
+    "title" : "Maine BMV - Overlimit Permits",
+    "url" : "https://www.maine.gov/sos/bmv/vehicles/commercial-vehicles-motor-carrier-services/overlimit-permits"
+  }, {
+    "title" : "29-A M.R.S. §2382 - Overlimit movement permits",
+    "url" : "https://legislature.maine.gov/statutes/29-a/title29-Asec2382.html"
+  }, {
+    "title" : "29-250 CMR Ch. 156 - Fee Structure for Over Dimensional and Overweight Loads, along with State Police Escort Fee (filing 2010-281)",
+    "url" : "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/250c156-2010-281%20ACK.docx"
+  }, {
+    "title" : "29-250 CMR Ch. 157 - The Administration of Over Dimension and Overweight Permits (filing 2025-033)",
+    "url" : "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/250c157-2025-033%20ACK.docx"
+  }, {
+    "title" : "29-A M.R.S. §2380 - Height and width restrictions",
+    "url" : "https://legislature.maine.gov/statutes/29-a/title29-Asec2380.html"
+  }, {
+    "title" : "29-A M.R.S. §2390 - Maximum length limits",
+    "url" : "https://legislature.maine.gov/statutes/29-a/title29-Asec2390.html"
+  }, {
+    "title" : "Maine BMV Motor Carrier Services Manual (rev. Aug 2016), Part VI",
+    "url" : "https://www.maine.gov/sos/sites/maine.gov.sos/files/inline-files/Motor%20Carrier%20Manual.pdf"
+  } ],
+  "notes" : [ "Ch. 156 §4: if more than one limit is exceeded, only the single highest fee ($6.00-$27.50) is charged. The calculator sums the weight/width/height/length lines, so multi-limit loads are overstated (worst case ~4x). Verify actual permit fee with the Overlimit Permit Unit.", "Fee tables are from the 2010 Ch. 156 rule (still the current version listed by the Secretary of State); statute §2382(2) caps single-trip fees at $6-$30.", "The Maine Turnpike needs its own oversize/overweight permit, $10 at any toll plaza plus toll (not included in the fee lines).", "State Police escorts are billed at actual cost by DPS with a 4-hour minimum; arrange directly with MSP at least 3 working days ahead; police-escort permits generally not issued for Saturdays.", "Pilot positions: one pilot travels in front on undivided highways and behind on divided highways (modeled interstate=rear, non_interstate=front). Rear-overhang 5-15 ft needs 2 pilots; over 15 ft needs police + 1 pilot (calculator may show 2 pilots + police).", "Routine overweight ceilings without detailed MaineDOT review: 5-axle TT 130,000 lb, 6-axle 140,000 lb, 7-axle 159,000-167,000 lb, 8-axle 177,000 lb; heavier is an extreme load.", "New England Transportation Consortium (NETC) multi-state permit available for loads within 90' long, 13'6\" high, 14' wide, 108,000 lb (5-axle) / 120,000 lb (6+ axle TT-semi); larger loads need separate state permits.", "State permits cover MaineDOT roads only; local roads need town/municipal permission." ]
+}

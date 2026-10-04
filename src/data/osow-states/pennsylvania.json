@@ -1,0 +1,157 @@
+{
+  "code" : "PA",
+  "name" : "Pennsylvania",
+  "slug" : "pennsylvania",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "PennDOT Central Permit Office (APRAS)",
+    "url" : "https://www.pa.gov/content/dam/copapwp-pagov/en/penndot/documents/programs-and-doing-business/permits/haulinginformation/getting%20started%20with%20apras.pdf",
+    "phone" : null,
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$46",
+    "note" : "Single trip general issuance fee, up to 14' wide (manufactured/modular housing $53)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' wide",
+    "amount" : "$97",
+    "note" : "Single trip general issuance fee over 14' wide (manufactured/modular housing $103)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.04 per ton-mile",
+    "note" : "$0.04 per ton-mile on weight over the registered (or legal, whichever is less) gross. PennDOT rounds the excess UP to whole tons; this line uses exact tons."
+  }, {
+    "kind" : "other",
+    "when" : "Over 201,000 lb",
+    "amount" : "Set by the state",
+    "note" : "Super load preliminary application fee $68 + $12 per county on the route (fee sheet 7/1/2025). Also applies to super loads by width (>16') or length (>160'). State Police escort costs invoiced separately."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 15'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide",
+    "text" : "1 police escort. Super load (>16' wide): State Police escort or CEVO in lieu of PSP; number set by PSP/permit; cost invoiced separately."
+  }, {
+    "when" : "Over 160' long",
+    "text" : "1 police escort. Super load (>160' long): State Police escort or CEVO in lieu of PSP."
+  }, {
+    "when" : "Over 201,000 lb",
+    "text" : "1 police escort. Super load (>201,000 lb): State Police escort or CEVO in lieu of PSP."
+  } ],
+  "survey" : [ {
+    "when" : "Over 14'6\" high",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 160' long",
+    "text" : null
+  }, {
+    "when" : "Over 201,000 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 201,000 lb",
+    "text" : null
+  }, {
+    "when" : "Over 160' long",
+    "text" : null
+  }, {
+    "when" : "Over 16' wide",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "No movement sunset to sunrise, Saturday after 12 noon, Sunday, or on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving, Christmas and the day before each of these holidays (unless the permit says otherwise)."
+  }, {
+    "when" : "Overweight",
+    "text" : "Same restricted travel periods apply to all permitted moves, overweight included: no sunset-sunrise, Saturday after noon, Sunday, or holiday / day-before-holiday travel."
+  }, {
+    "when" : "Oversize",
+    "text" : "Urbanized areas (listed on Form M-938): movement only 3:00-7:30 AM, 9:00 AM-4:00 PM and 7:00 PM-sunset, 7 days a week (except holiday periods); 9 AM-4 PM only through Fort Pitt, Squirrel Hill and Liberty tunnels. Moves between 3 AM and sunrise need extra lighting and front and rear pilot cars."
+  }, {
+    "when" : "Over 14'6\" high",
+    "text" : "Over 14'6\": notify affected public utilities at least 24 hours before the move to arrange relocation of wires."
+  }, {
+    "when" : "Oversize",
+    "text" : "No convoys within 1,000 ft of another permitted oversize vehicle; pull over if more than six vehicles back up behind the load. No travel in snow/ice, visibility under 1,000 ft, or high wind."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No travel the day before or on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : true,
+    "weekends" : "No travel Saturday afternoon or Sunday",
+    "holidays" : "No travel the day before or on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "PennDOT Permit Fees - effective July 1, 2025",
+    "url" : "https://www.pa.gov/content/dam/copapwp-pagov/en/penndot/documents/programs-and-doing-business/permits/haulinginformation/documents/hauling-permit-2025-fees.pdf"
+  }, {
+    "title" : "PennDOT Form M-936A Application for Special Hauling Permit (10-25)",
+    "url" : "https://www.pa.gov/content/dam/copapwp-pagov/en/penndot/documents/public/pubsforms/forms/m-936a.pdf"
+  }, {
+    "title" : "67 Pa. Code Chapter 179 Oversize and Overweight Loads and Vehicles",
+    "url" : "https://www.pacodeandbulletin.gov/Display/pacode?file=/secure/pacode/data/067/chapter179/chap179toc.html"
+  }, {
+    "title" : "75 Pa.C.S. 1942 Special hauling permits as to weight and size",
+    "url" : "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=19&section=42&subsctn=0"
+  }, {
+    "title" : "75 Pa.C.S. 4921-4923, 4941 Width, height, length, gross weight",
+    "url" : "https://www.palegis.us/statutes/consolidated/view-statute?txtType=HTM&ttl=75&div=0&chapter=49&section=23&subsctn=0"
+  }, {
+    "title" : "PennDOT Central Permit Office Load Type Quick Reference Guide (2025)",
+    "url" : "https://www.pa.gov/content/dam/copapwp-pagov/en/penndot/documents/programs-and-doing-business/permits/haulinginformation/load-type-quick-reference-guide-2025%20version2.pdf"
+  }, {
+    "title" : "PennDOT Publication 31 Special Hauling Permit Manual (6-08)",
+    "url" : "https://www.pa.gov/content/dam/copapwp-pagov/en/penndot/documents/public/pubsforms/publications/pub%2031.pdf"
+  } ],
+  "notes" : [ "Single-trip permit valid for 5 authorized weekdays. PennDOT permits cover state highways only; local roads need local permission and the Pennsylvania Turnpike is separate.", "Overweight above 136,000 lb gross or Table 8-1/8-2 limits needs supplemental application M-936AS (3 work days); super loads need a preliminary application at least 3 weeks ahead.", "Pilot cars also required for overweight moves restricted to reduced speed or single-vehicle bridge crossings (set on the permit), and for vehicles that cannot hold 40 mph on limited-access highways.", "PennDOT published fee sheets effective July 2021, 2023 and 2025; recheck for a newer sheet.", "Pub 31 (route survey > 14'6\") is a 2008 manual; confirm the survey rule still applies." ]
+}

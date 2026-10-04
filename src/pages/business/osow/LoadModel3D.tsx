@@ -11,7 +11,7 @@ import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Minus, Plus, RotateCcw } from "lucide-react";
-import { LEGAL } from "./equipment";
+import { LEGAL, PICKUP } from "./equipment";
 import { cargoBox, dimLabels, excessParts, extentX, legalEnvelope, type Box, type VisualModel } from "./visual";
 
 type Palette = {
@@ -208,6 +208,30 @@ function buildTractor(g: THREE.Group, T: number, mats: Mats) {
   }
 }
 
+function buildPickup(g: THREE.Group, T: number, deckTopIn: number, mats: Mats) {
+  box(g, b(18, PICKUP.rearAxleX + 34, 20, 28, 16), mats.chassis);
+  box(g, b(-3, 3, 14, 28, 40), mats.chassis);
+  box(g, b(0, 64, 26, 58, 39), mats.body);
+  box(g, b(64, 156, 26, 80, 39), mats.body);
+  box(g, b(63, 65, 60, 78, 35), mats.glass);
+  box(g, b(84, 148, 60, 76, 0.8, 39.4), mats.glass);
+  box(g, b(84, 148, 60, 76, 0.8, -39.4), mats.glass);
+  for (const side of [1, -1]) {
+    const door = new THREE.Mesh(new THREE.PlaneGeometry(40, 8.8), mats.logo);
+    door.position.set(116, 48, side * 39.3);
+    if (side < 0) door.rotation.y = Math.PI;
+    g.add(door);
+  }
+  box(g, b(158, PICKUP.bedEndX, 28, 54, 40), mats.body);
+  box(g, b(PICKUP.rearAxleX - 24, PICKUP.rearAxleX + 24, 30, 46, 48), mats.body);
+  box(g, b(PICKUP.ballX - 6, PICKUP.ballX + 6, 54, 64, 10), mats.deck);
+  box(g, b(PICKUP.ballX - 6, T + 6, 54, 64, 30), mats.deck);
+  box(g, b(T - 6, T + 6, deckTopIn - 10, 64, 40), mats.deck);
+  wheel(g, PICKUP.frontAxleX, 36, PICKUP.wheelR, 10, mats);
+  wheel(g, PICKUP.frontAxleX, -36, PICKUP.wheelR, 10, mats);
+  for (const z of [44, 33, -33, -44]) wheel(g, PICKUP.rearAxleX, z, PICKUP.wheelR, 9, mats);
+}
+
 function buildTrailer(g: THREE.Group, m: VisualModel, mats: Mats) {
   const { layout } = m;
   layout.segments.forEach((s, i) => {
@@ -247,7 +271,8 @@ function buildHuman(g: THREE.Group, x: number, z: number, mats: Mats) {
 function buildModel(m: VisualModel, mats: Mats): { group: THREE.Group; anchors: Record<"w" | "h" | "l", THREE.Vector3> } {
   const g = new THREE.Group();
   const T = m.layout.tractorLengthIn;
-  buildTractor(g, T, mats);
+  if (m.rig.towVehicle === "pickup") buildPickup(g, T, m.layout.segments[0]?.topIn ?? 37, mats);
+  else buildTractor(g, T, mats);
   buildTrailer(g, m, mats);
 
   const env = legalEnvelope(m);

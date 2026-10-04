@@ -1,0 +1,202 @@
+{
+  "code" : "FL",
+  "name" : "Florida",
+  "slug" : "florida",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "FDOT State Permit Office (Over-Weight Over-Dimension Permits)",
+    "url" : "https://www.fdot.gov/maintenance/owodpermits.shtm",
+    "phone" : "850-410-5777",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$5",
+    "note" : "Overdimension trip permit (10 days) up to 12' W, 13'6\" H, 85' L: $5. The tier is set by the largest dimension. Overlength semitrailer 53'-57'6\" only: $10 (not modeled)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 12' wide",
+    "amount" : "$15",
+    "note" : "$15 tier: over 12' up to 14' wide."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 13'6\" high",
+    "amount" : "$15",
+    "note" : "$15 tier: over 13'6\" up to 14'6\" high."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 85' long",
+    "amount" : "$15",
+    "note" : "$15 tier: over 85' up to 95' long."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14' wide",
+    "amount" : "$25",
+    "note" : "$25 tier: over 14' wide."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 14'6\" high",
+    "amount" : "$25",
+    "note" : "$25 tier: over 14'6\" high."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 95' long",
+    "amount" : "$25",
+    "note" : "$25 tier: over 95' long."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Overweight trip permit per FL mile: to 95,000 $0.27; 112,000 $0.32; 122,000 $0.36; 132,000 $0.38; 142,000 $0.42; 152,000 $0.45; 162,000 $0.47. Miles are billed in 25-mile increments rounded up, total rounded up to the dollar (not modeled). Overweight + dimension fee combined is capped at $500 (not modeled)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 162,000 lb",
+    "amount" : "$0.01 per ton-mile",
+    "note" : "Over 162,000 lb: $0.003 per 1,000 lb per mile (= $0.006 per ton-mile of gross weight)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$3.33",
+    "note" : "Administrative cost $3.33 for permits over 80,000 lb. A $5 transmission fee applies when applicable (not modeled)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 95' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide, on two-lane and other roads",
+    "text" : "2 police escorts. Over 16' wide: two law enforcement escorts at all times on state roads other than limited access (local moves only); on limited access 1 LE + 1 qualified escort at night"
+  }, {
+    "when" : "Over 16' high",
+    "text" : "1 police escort. Over 16' high: one law enforcement escort plus a qualified escort with height pole; local moves only; utility personnel at low wires/signals"
+  }, {
+    "when" : "Over 250' long",
+    "text" : "1 police escort. Over 250' long: one law enforcement escort plus one qualified escort"
+  } ],
+  "survey" : [ {
+    "when" : "Over 18' high",
+    "text" : null
+  }, {
+    "when" : "Over 22' wide",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide",
+    "text" : null
+  }, {
+    "when" : "Over 18' high",
+    "text" : null
+  }, {
+    "when" : "Over 150' long",
+    "text" : null
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 8'6\" wide",
+    "text" : "Overwidth: daytime only (1/2 hour before sunrise to 1/2 hour after sunset); up to 10' wide may move all days."
+  }, {
+    "when" : "Over 10' wide",
+    "text" : "Over 10' wide: excluding weekends and holidays - FDOT's permit definition allows 1/2 hour before sunrise to noon on Sat/Sun; no travel on New Year's, Memorial Day, Independence Day, Labor Day, Thanksgiving and the day after, Christmas (Friday/Monday also observed when the holiday falls on a weekend)."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Over 12' wide: no movement in congested areas during peak traffic hours unless authorized by permit; two escorts required on lanes under 12', bridges under 30' curb to curb, or high-ADT roads."
+  }, {
+    "when" : "Over 16' wide",
+    "text" : "Over 16' wide: trip permits for local moves only, District Traffic Engineering review; over 22' wide needs a route horizontal-clearance affidavit."
+  }, {
+    "when" : "Over 14'6\" high",
+    "text" : "Over 14'6\" high: daytime only, excluding holidays; over 16' high local moves only; over 18' needs a route clearance affidavit (height + 6\")."
+  }, {
+    "when" : "Over 80' long",
+    "text" : "Over 80' long: daytime only, excluding holidays; over 85' no movement in congested areas during peak hours."
+  }, {
+    "when" : "Oversize",
+    "text" : "No travel when visibility is under 1,000 ft. Night moves only when recommended by the District Traffic office or required by the permit, and then with law enforcement escort(s)."
+  } ],
+  "travel" : [ {
+    "when" : "Over 8'6\" wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "14-26.012(7)(a): up to 10 ft wide moves all days, daytime only; holidays close only over 10 ft."
+  }, {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ "sat, sun from 12:00: Over 10 ft wide: Saturday and Sunday from 1/2 hour before sunrise until noon only" ],
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 80' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "Fla. Admin. Code R. 14-26.008 Schedule of Fees (FDOT copy)",
+    "url" : "https://fdotwww.blob.core.windows.net/sitefinity/docs/default-source/maintenance/str/owodp/schedule-of-fees.pdf?sfvrsn=d37c7453_0"
+  }, {
+    "title" : "Fla. Admin. Code ch. 14-26 (incl. 14-26.012 Movement Conditions and Restrictions), flrules.org",
+    "url" : "https://www.flrules.org/gateway/readFile.asp?sid=0&tid=0&cno=14-26&caid=1375671&type=4&file=14-26.doc"
+  }, {
+    "title" : "FDOT 'When Do You Need a Permit?' (legal limits, daytime/weekend/holiday definitions)",
+    "url" : "https://fdotwww.blob.core.windows.net/sitefinity/docs/default-source/maintenance/str/owodp/when-do-you-need-a-permit.pdf?sfvrsn=45e8edf1_0"
+  }, {
+    "title" : "FDOT Over-Weight Over-Dimension Permits page (self-issue limits, contact)",
+    "url" : "https://www.fdot.gov/maintenance/owodpermits.shtm"
+  } ],
+  "notes" : [ "Legal: 102\" wide (96\" on lanes under 12'), 13'6\" high, 53' semitrailer with kingpin up to 41' (40' single unit, 68' truck-trailer), 3' front overhang, 80,000 lb.", "Loads up to 10' wide (or up to 14'6\" high, or up to 80' long, with other dims legal) may move all days; the 10' daytime rule is for width.", "Single escort for 12-14' wide: precedes on two-lane highways, follows on four-lane divided highways (modeled interstate = rear, non-interstate = front). Overlength-only escorts ride in the rear; over 150' needs two qualified escorts except one on limited access.", "Self-issue trip permits in PAS go up to 16' W, 18' H, 150' L, 200,000 lb; the superload flag here marks loads beyond that envelope (FDOT has no formal 'superload' term).", "Rule 14-26.012(5)(e) says movement is prohibited on weekends and holidays unless noted on the permit; FDOT's published definition allows weekend travel until noon. Verify current permit wording." ]
+}

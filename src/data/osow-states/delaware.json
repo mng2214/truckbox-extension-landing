@@ -1,0 +1,164 @@
+{
+  "code" : "DE",
+  "name" : "Delaware",
+  "slug" : "delaware",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "DelDOT Oversize/Overweight Permit Office (OSOW Permit System)",
+    "url" : "https://deldot.gov/osow/application/faq",
+    "phone" : "302-760-2080",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$30",
+    "note" : "Load Code 1 Oversize / Load Code 2 Overweight base fee $30, valid 5 days."
+  }, {
+    "kind" : "other",
+    "when" : "Over 14'11\" wide",
+    "amount" : "$60",
+    "note" : "Superload base fee $60 (15'+ wide) instead of $30. Part 5 costs (DSP trooper, signal/utility work, MOT) are billed separately."
+  }, {
+    "kind" : "other",
+    "when" : "Over 14'11\" high",
+    "amount" : "$60",
+    "note" : "Superload base fee $60 (15'+ high)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 119'11\" long",
+    "amount" : "$60",
+    "note" : "Superload base fee $60 (120'+ long)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 120,000 lb",
+    "amount" : "$60",
+    "note" : "Superload base fee $60 (over 120,000 lb)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "Weight fee $10 per 8,000 lb or portion thereof over legal weight (legal GVW 80,000 lb on 5+ axles; lower for 2-4 axles); applies to overweight and superload permits."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 13' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14'11\" high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 89'11\" long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 99'11\" long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\"",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120,000 lb",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 14'11\" wide",
+    "text" : "1 police escort. Delaware State Police trooper and patrol car (third escort) over 15' wide / superload; more may be required. Notify DSP 48 h ahead."
+  }, {
+    "when" : "Over 17'5\" high",
+    "text" : "1 police escort. Superload (15'+ high): contract 1 DSP trooper and patrol car; DSP also required as third escort at 17'6\"+."
+  }, {
+    "when" : "Over 119'11\" long",
+    "text" : "1 police escort. DSP escort (third escort) at 120'+ long."
+  }, {
+    "when" : "Over 120,000 lb",
+    "text" : "1 police escort. DSP escort (third escort) over 120,000 lb."
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 14'11\" wide",
+    "text" : null
+  }, {
+    "when" : "Over 14'11\" high",
+    "text" : null
+  }, {
+    "when" : "Over 119'11\" long",
+    "text" : null
+  }, {
+    "when" : "Over 120,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Sunrise to sunset, Monday-Sunday. Night moves 9 p.m.-5 a.m. Mon-Fri only with prior approval and only for loads up to 75' L, 12' W, 14'6\" H, 120,000 lb. No moves on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving, the day after Thanksgiving, Christmas (see DelDOT Holiday Restrictions)."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight permits: sunrise to sunset Mon-Sun; same holiday prohibitions as oversize."
+  }, {
+    "when" : "Over 14'11\" wide",
+    "text" : "Superload: avoid 6-9 a.m. and 3-7 p.m.; no holiday/event moves without special permission; combination superloads should avoid beach resort routes on Mon, Fri and weekends May 15-Oct 1. Review takes 5-14 business days."
+  }, {
+    "when" : "Over 14'11\" high",
+    "text" : "15'+ high: superload; avoid 6-9 a.m. and 3-7 p.m.; signal supervisor review and utility/arborist clearances may be required."
+  }, {
+    "when" : "Over 120,000 lb",
+    "text" : "Over 120,000 lb: superload with DelDOT Bridge Management review; sunrise to sunset if it can hold within 10 mph of the posted limit."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Overweight",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "2 DE Admin. Code 2405 Oversize/Overweight Hauling Permit Policy and Procedures Manual (full text as published, 23 DE Reg 107, 08/01/19)",
+    "url" : "https://archive.regulations.delaware.gov/register/august2019/proposed/23%20DE%20Reg%20107%2008-01-19.htm"
+  }, {
+    "title" : "DelDOT OSOW Permit System FAQ (current fees, superload definition)",
+    "url" : "https://deldot.gov/osow/application/faq"
+  }, {
+    "title" : "DelDOT Oversize/Overweight Hauling Permit Policy and Procedures Manual (October 2015)",
+    "url" : "https://deldot.gov/osow/policy.pdf"
+  } ],
+  "notes" : [ "Legal: 8'6\" wide, 13'6\" high, 53' semitrailer on Interstate/US routes (60' overall combination on other highways), 6' max rear overhang, 80,000 lb GVW on 5+ axles. Axles at/over 25,000 lb trigger bridge review.", "13-14' wide: one escort, rear on multilane highways and front on two-lane highways (modeled as interstate = rear, non-interstate = front).", "Route survey (HP Form 16) is requested case by case for extreme width/height/length superloads and normally for combination (Type 5) superloads - no fixed threshold.", "Fee source: DelDOT FAQ (current); escort and travel text from the 2405 regulation as published in 2019 - check the current Delaware Administrative Code for later amendments." ]
+}

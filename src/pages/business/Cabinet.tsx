@@ -19,6 +19,7 @@ import { GoogleSignIn } from "../../components/GoogleSignIn";
 import { MicrosoftSignIn } from "../../components/MicrosoftSignIn";
 import type { AccountContext } from "./types";
 import { Bounce } from "./Bounce";
+import { installLink } from "./installLink";
 import { PersonalPanel } from "./PersonalPanel";
 import { TeamPanel } from "./TeamPanel";
 import { StatsPanel } from "./StatsPanel";
@@ -143,6 +144,17 @@ export default function Cabinet() {
   if (!authed) {
     const expired =
       typeof sessionStorage !== "undefined" && sessionStorage.getItem("tb-session-expired") === "1";
+    const pricingLoad = window.location.pathname.startsWith("/business/osow");
+    const waiting = new URLSearchParams(window.location.search);
+    const waitingLane =
+      waiting.get("origin") && waiting.get("destination") ? `${waiting.get("origin")} → ${waiting.get("destination")}` : null;
+    const waitingSize = [
+      waiting.get("width") ? `${waiting.get("width")} wide` : null,
+      waiting.get("height") ? `${waiting.get("height")} high` : null,
+      waiting.get("weight") ? `${Number(waiting.get("weight")).toLocaleString("en-US")} lb` : null,
+    ]
+      .filter(Boolean)
+      .join(" · ");
     return (
       <div
         className="min-h-screen w-full flex flex-col items-center justify-center gap-8 px-6 text-center"
@@ -156,12 +168,29 @@ export default function Cabinet() {
           <ArrowLeft className="h-4 w-4" />
           Back to site
         </a>
-        <h1 className="ed-display text-[8vw] lg:text-[3.5rem]">Account</h1>
+        <h1 className="ed-display text-[8vw] lg:text-[3.5rem]">{pricingLoad ? "Sign in to price your load" : "Account"}</h1>
         <p style={{ color: expired ? "var(--danger)" : "var(--muted)" }}>
           {expired
             ? "Your session expired — please sign in again."
-            : "Back office login."}
+            : pricingLoad
+              ? "Free: 5 loads a month, every state and every trailer. No card."
+              : "Back office login."}
         </p>
+        {pricingLoad && waitingLane && (
+          <p
+            style={{
+              margin: 0,
+              padding: "12px 16px",
+              border: "1px solid var(--line-strong)",
+              borderRadius: 10,
+              color: "var(--ink)",
+              fontWeight: 600,
+            }}
+          >
+            {waitingLane}
+            {waitingSize && <span style={{ display: "block", fontWeight: 400, color: "var(--muted)" }}>{waitingSize}</span>}
+          </p>
+        )}
         <GoogleSignIn
           onNoAccount={() => setNoAccount(true)}
           onSignedIn={() => {
@@ -209,14 +238,16 @@ export default function Cabinet() {
   }
 
   const isManager = ctx.panels.includes("team") && !!ctx.org;
+  const fullCabinet = ctx.panels.includes("personal") || isManager;
 
   const allowed = (s: string): boolean => {
     if (s === "personal") return ctx.panels.includes("personal");
     if (s === "team" || s === "statistics") return isManager;
     if (s === "discovery") return ctx.panels.includes("discovery");
     if (s === "agent") return ctx.panels.includes("agent");
-    if (s === "osow") return true;
-    if (s === "mailboxes" || s === "accounts" || s === "company") return true;
+    if (s === "osow") return ctx.panels.includes("osow");
+    if (s === "accounts") return true;
+    if (s === "mailboxes" || s === "company") return fullCabinet;
     return false;
   };
   const defaultSection = ctx.panels[0] ?? "personal";
@@ -300,19 +331,25 @@ export default function Cabinet() {
             onClick={() => goto("agent")}
           />
         )}
-        <NavItem
-          label="OS/OW"
-          sub="Permits & escorts"
-          icon={<Ruler />}
-          fresh
-          active={section === "osow"}
-          onClick={() => goto("osow")}
-        />
+        {ctx.panels.includes("osow") && (
+          <NavItem
+            label="OS/OW"
+            sub="Permits & escorts"
+            icon={<Ruler />}
+            fresh
+            active={section === "osow"}
+            onClick={() => goto("osow")}
+          />
+        )}
 
         <span className="tb-nav-label">Settings</span>
-        <NavItem label="Mailboxes" icon={<Mail />} active={section === "mailboxes"} onClick={() => goto("mailboxes")} />
+        {fullCabinet && (
+          <NavItem label="Mailboxes" icon={<Mail />} active={section === "mailboxes"} onClick={() => goto("mailboxes")} />
+        )}
         <NavItem label="Accounts" icon={<UserCircle />} active={section === "accounts"} onClick={() => goto("accounts")} />
-        <NavItem label="Company info" icon={<Building2 />} active={section === "company"} onClick={() => goto("company")} />
+        {fullCabinet && (
+          <NavItem label="Company info" icon={<Building2 />} active={section === "company"} onClick={() => goto("company")} />
+        )}
       </nav>
 
       <div className="mt-auto pt-8 flex flex-col gap-1">
@@ -404,6 +441,7 @@ export default function Cabinet() {
       </AnimatePresence>
 
       <main className="flex-1 min-w-0 p-5 sm:p-8 md:p-10">
+        {ctx.bounceReason && <PlanNudge reason={ctx.bounceReason} />}
         <TeamInviteBanner onAccepted={load} />
         {section === "personal" && <PersonalPanel ctx={ctx} />}
         {section === "team" && ctx.org && <TeamPanel onChanged={load} />}
@@ -429,6 +467,37 @@ export default function Cabinet() {
       </main>
 
       <HelpDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
+    </div>
+  );
+}
+
+function PlanNudge({ reason }: { reason: string }) {
+  const renew = reason === "PAYMENT";
+  return (
+    <div
+      role="note"
+      className="flex flex-wrap items-center justify-between gap-4 mb-6"
+      style={{ border: "1px solid var(--line)", background: "var(--bg-2)", padding: "14px 18px" }}
+    >
+      <div className="flex flex-col gap-1" style={{ minWidth: 0, maxWidth: 640 }}>
+        <b style={{ color: "var(--ink)" }}>
+          {renew ? "Your TruckBox plan has ended. The OS/OW calculator stays free." : "You're on the free OS/OW plan."}
+        </b>
+        <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
+          {renew
+            ? "Renew for unlimited OS/OW plus one-click broker emails on DAT and Truckstop, $7 a month."
+            : "Install TruckBox for unlimited OS/OW plus one-click broker emails on DAT and Truckstop. 7 days free, no card."}
+        </span>
+      </div>
+      {renew ? (
+        <a className="ed-btn ed-btn-accent" href="/#pricing">
+          <span>Renew plan</span>
+        </a>
+      ) : (
+        <a className="ed-btn ed-btn-accent" href={installLink("cabinet", "free_plan")} target="_blank" rel="noopener">
+          <span>Install TruckBox</span>
+        </a>
+      )}
     </div>
   );
 }

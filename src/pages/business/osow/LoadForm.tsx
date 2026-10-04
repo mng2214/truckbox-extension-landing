@@ -35,13 +35,15 @@ const CARGO_FIELDS: { key: Exclude<CargoKey, "frontOffset">; label: string; plac
   { key: "weight", label: "Weight", placeholder: "e.g. 45,000" },
 ];
 
-const RIG_FIELDS: { key: RigSpecKey; label: string; kind: "height" | "length" | "weight" | "count" }[] = [
-  { key: "deckHeightIn", label: "Deck height", kind: "height" },
-  { key: "deckLengthIn", label: "Trailer length", kind: "length" },
-  { key: "tractorLengthIn", label: "Tractor length", kind: "length" },
-  { key: "tareLb", label: "Tare (tractor + trailer)", kind: "weight" },
-  { key: "axles", label: "Axles", kind: "count" },
-];
+function rigFields(pickup: boolean): { key: RigSpecKey; label: string; kind: "height" | "length" | "weight" | "count" }[] {
+  return [
+    { key: "deckHeightIn", label: "Deck height", kind: "height" },
+    { key: "deckLengthIn", label: pickup ? "Deck length" : "Trailer length", kind: "length" },
+    { key: "tractorLengthIn", label: pickup ? "Bumper to deck" : "Tractor length", kind: "length" },
+    { key: "tareLb", label: pickup ? "Tare (pickup + trailer)" : "Tare (tractor + trailer)", kind: "weight" },
+    { key: "axles", label: "Axles", kind: "count" },
+  ];
+}
 
 export function LoadForm({
   form,
@@ -171,7 +173,7 @@ export function LoadForm({
               onChange={(v) => setForm((f) => ({ ...f, destination: v }))}
             />
           </div>
-          <div className="osw-grid is-4" style={{ marginTop: 12 }}>
+          <div className="osw-grid" style={{ marginTop: 12 }}>
             <DateTimeField
               label="Pickup date"
               type="date"
@@ -304,7 +306,7 @@ export function LoadForm({
                 {rigOpen && (
                   <div className="flex flex-col gap-3 pt-1">
                     <div className="osw-grid is-3">
-                      {RIG_FIELDS.map((f) => (
+                      {rigFields(derived.rig.towVehicle === "pickup").map((f) => (
                         <RigField
                           key={f.key}
                           label={f.label}
@@ -387,7 +389,7 @@ export function LoadForm({
                 {DIM_KEYS.map((key) => {
                   const value = derived.values[key];
                   if (value == null) return null;
-                  const note = limitNote(key, value, derived.rig.tractorLengthIn);
+                  const note = limitNote(key, value, derived.rig);
                   return (
                     <span key={key} className={"tb-chip " + (note?.over ? "is-danger" : "is-muted")} title={note?.text ?? DIM_LABEL[key]}>
                       {shortLabel(key)}&nbsp;<b>{derived.display[key] || formatDim(key, value)}</b>
@@ -399,7 +401,7 @@ export function LoadForm({
             {showOverallInputs && (
               <div className="osw-grid is-7">
                 {DIM_KEYS.map((k) => {
-                  const note = limitNote(k, derived.values[k], derived.rig.tractorLengthIn);
+                  const note = limitNote(k, derived.values[k], derived.rig);
                   const err = derived.errors[k];
                   const overridden = form.mode === "cargo" && form.overrides[k] != null;
                   const missing =

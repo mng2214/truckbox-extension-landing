@@ -1,0 +1,159 @@
+{
+  "code" : "CA",
+  "name" : "California",
+  "slug" : "california",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Caltrans Transportation Permits Office",
+    "url" : "https://dot.ca.gov/programs/traffic-operations/transportation-permits",
+    "phone" : "916-322-1297",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$16",
+    "note" : "Single trip permit $16 (one permit covers size and weight). Valid 7 days, one direction. Variance loads may incur additional fees for route review, engineering (SM&I) and CHP coordination (CCR Title 21 1411.3) - not modeled."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, on interstates and freeways",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 25'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 25'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "text" : "1 police escort. CHP escort over 16' wide on Yellow (multilane freeway) routes; CHP sets the number of units and hours of travel"
+  }, {
+    "when" : "Over 15' wide, on two-lane and other roads",
+    "text" : "1 police escort. CHP escort over 15' wide on Green/Blue/Brown routes; CHP sets the number of units and hours"
+  }, {
+    "when" : "Over 185' long",
+    "text" : "1 police escort. CHP escort over 185' long on Yellow/Green routes (over 135' on Blue/Brown routes)"
+  } ],
+  "survey" : [ {
+    "when" : "Over 17' high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 16' wide, on interstates and freeways",
+    "text" : null
+  }, {
+    "when" : "Over 15' wide, on two-lane and other roads",
+    "text" : null
+  }, {
+    "when" : "Over 17' high",
+    "text" : null
+  }, {
+    "when" : "Over 135' long",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 10' wide",
+    "text" : "Metro curfews for loads over 10' wide, Monday-Friday: San Diego, Sacramento and San Francisco areas no movement 7:00-9:00 a.m. and 4:00-6:00 p.m.; Los Angeles area 6:00-9:00 a.m. and 3:00-6:00 p.m. SF-Oakland Bay Bridge: no permit loads 6:30-9:00 a.m. and 3:30-6:30 p.m.; over 12' wide only 11:00 a.m.-1:00 p.m. weekdays."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "Loads requiring a pilot car: no travel from 4:00 p.m. to midnight the day before, and from noon to midnight on the holiday and each day of the holiday weekend - New Year's, Presidents Day, Memorial Day, Independence Day, Labor Day, Thanksgiving (Thu-Sun), Christmas. Travel allowed midnight/sunrise to noon on those days."
+  }, {
+    "when" : "Over 12' wide, on interstates and freeways",
+    "text" : "Yellow (multilane) routes with a pilot car: 24/7 travel allowed up to 16' wide; over 16' the CHP sets the hours."
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "text" : "Green two-lane routes with a pilot car: daylight incl. weekends up to 15' wide; night travel only up to 14' wide. Blue/Brown routes: daylight weekdays only, weekends 1/2 hr before sunrise to noon, no night travel."
+  } ],
+  "travel" : [ {
+    "when" : "Over 12' wide",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before, and from noon on the holiday and each day of its weekend",
+    "holidayNames" : [ "New Year's Day", "Presidents' Day", "Memorial Day", "Independence Day", "Labor Day", "Thanksgiving", "Christmas" ],
+    "closures" : [ ],
+    "note" : "Pilot-car loads: 4 p.m. the day before and noon on the holiday and each day of its weekend (Special Conditions for Holiday Travel)."
+  }, {
+    "when" : "Over 120' long",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before, and from noon on the holiday and each day of its weekend",
+    "holidayNames" : [ "New Year's Day", "Presidents' Day", "Memorial Day", "Independence Day", "Labor Day", "Thanksgiving", "Christmas" ],
+    "closures" : [ ],
+    "note" : "Over 120' needs a pilot car on Yellow/Green routes, so the holiday conditions apply."
+  }, {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before, and from noon on the holiday and each day of its weekend",
+    "holidayNames" : [ "New Year's Day", "Presidents' Day", "Memorial Day", "Independence Day", "Labor Day", "Thanksgiving", "Christmas" ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from 4 p.m. the day before, and from noon on the holiday and each day of its weekend",
+    "holidayNames" : [ "New Year's Day", "Presidents' Day", "Memorial Day", "Independence Day", "Labor Day", "Thanksgiving", "Christmas" ],
+    "closures" : [ ],
+    "note" : "Over 16' wide: CHP sets the hours; daylight assumed."
+  } ],
+  "sources" : [ {
+    "title" : "Caltrans Transportation Permits Manual Ch. 1 General Provisions (rev. 1/14/2026), Sec. 109 Permit Fees",
+    "url" : "https://dot.ca.gov/-/media/dot-media/programs/traffic-operations/documents/transportation-permits/tpm/2026-cvo-transportation-permits-manual-chapter-1-a11y.pdf"
+  }, {
+    "title" : "Caltrans Single Trip Permit Pilot Car Maps - Legend (pilot car and CHP escort tables)",
+    "url" : "https://dot.ca.gov/-/media/dot-media/programs/traffic-operations/documents/transportation-permits/pilot-car-maps/single-trip/2021-cvo-pcmap-single-trip-legend-a11y.pdf"
+  }, {
+    "title" : "Caltrans Transportation Permits Manual Ch. 5 Routing and Safety Requirements (2024)",
+    "url" : "https://dot.ca.gov/-/media/dot-media/programs/traffic-operations/documents/transportation-permits/tpm/2024-cvo-transportation-permits-manual-chapter-5-a11y.pdf"
+  }, {
+    "title" : "Caltrans Transportation Permits Manual Ch. 4 Variances (rev. 8/1/2017)",
+    "url" : "https://dot.ca.gov/-/media/dot-media/programs/traffic-operations/documents/transportation-permits/tpm/f0018353-tpm-chapter-4-revised-080117.pdf"
+  }, {
+    "title" : "Caltrans TPPM 2021-01 CHP Escort Requirements",
+    "url" : "https://dot.ca.gov/-/media/dot-media/programs/traffic-operations/documents/transportation-permits/tppm/2021-cvo-tppm-2021-01-chp-escort-requirements-a11y.pdf"
+  }, {
+    "title" : "California Vehicle Code 35100 (width)",
+    "url" : "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=35100"
+  }, {
+    "title" : "Caltrans Transportation Permit - Special Conditions for Holiday Travel (rev. June 2005)",
+    "url" : "https://dot.ca.gov/-/media/dot-media/programs/traffic-operations/documents/transportation-permits/application-forms-accompaniments/f0018340-sc-holiday-travel.pdf"
+  } ],
+  "notes" : [ "Legal: 102\" wide (CVC 35100), 14' high, STAA 53' semitrailer (kingpin to rear axle max 40') with unlimited overall length on the STAA network; California Legal routes have a 65' overall limit.", "Escorts depend on the route color on Caltrans pilot car maps. Interstate is modeled as Yellow (multilane): 1 pilot car over 12', 2 over 15', CHP over 16'. Non-interstate is modeled as Green (two-lane, 12' lanes, 4'+ shoulders): 1 over 12', 2 over 14', CHP over 15'. Blue routes need 1 from 11'; Brown routes 1 from 10' and 2 from 12'; Red routes require district consultation.", "Pilot car for length: Yellow/Green over 120', Blue over 100', Brown over 85'. On Yellow routes the maximum is one pilot car until width exceeds 15'. Pilot car positions are set on the permit (modeled as front).", "CHP escort also required whenever opposing lanes are used or the load must slow to cross structures; Blue/Brown routes also need CHP at 17'+ high.", "Variance permit (treated as superload) when height over 17', width over 16' on Yellow / over 15' on other routes, length over 135', or axle weights beyond the purple chart / bridge ratings (structure review). Route survey required over 17' high.", "Overweight permits are limited by bridge ratings (Orange 42,800 / Green 52,000 / Purple 60,000 lb per axle group); there is no fixed gross threshold for variance." ]
+}

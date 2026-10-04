@@ -1,0 +1,183 @@
+{
+  "code" : "CO",
+  "name" : "Colorado",
+  "slug" : "colorado",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'6\"",
+    "length" : null,
+    "trailerLength" : "57'4\"",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "CDOT Office of Freight Mobility & Safety - Permit Office",
+    "url" : "https://freight.colorado.gov/permitting-information",
+    "phone" : "303-757-9539",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$30",
+    "note" : "Single trip oversize $30 (= $15 + equal surcharge, SB 09-108)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$10 per axle",
+    "note" : "Single trip OW or OS/OW = $30 + $10 per axle."
+  }, {
+    "kind" : "other",
+    "when" : "Over 17' wide",
+    "amount" : "$250",
+    "note" : "Chapter 6 Special single trip permit $250 above the maximum limits (17' W, 16' H, 130' L on 4-lane, 200,000 lb, 25' front / 35' rear overhang); replaces the single-trip permit."
+  }, {
+    "kind" : "other",
+    "when" : "Over 16' high",
+    "amount" : "$250",
+    "note" : "Chapter 6 Special $250 (over 16' high)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 130' long",
+    "amount" : "$250",
+    "note" : "Chapter 6 Special $250 (over 130' long; the limit is 120' on non-mountainous and 110' on mountainous two-lane highways)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 200,000 lb",
+    "amount" : "$250",
+    "note" : "Chapter 6 Special $250 (200,000-500,000 lb)."
+  }, {
+    "kind" : "other",
+    "when" : "Over 500,000 lb",
+    "amount" : "$800",
+    "note" : "Superload single trip permit $800 (over 500,000 lb, or double dolly over 15' wide)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 15' wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 15' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 17' wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 115' long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110' long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 130' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 200,000 lb",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 15'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 25'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 17'6\" high",
+    "text" : null
+  }, {
+    "when" : "Over 130' long",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 17' wide",
+    "text" : null
+  }, {
+    "when" : "Over 16' high",
+    "text" : null
+  }, {
+    "when" : "Over 130' long",
+    "text" : null
+  }, {
+    "when" : "Over 200,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Over 12' wide",
+    "text" : "Night (sunset to sunrise): over 12' wide needs a pilot escort (front on two-lane, rear on four-lane highways); over 14' wide no night travel unless authorized by a Chapter 6 Special permit."
+  }, {
+    "when" : "Oversize",
+    "text" : "Holidays: no travel 6:00 a.m.-9:00 p.m. on Memorial Day, Independence Day and Labor Day, and noon-9:00 p.m. on the Friday before Memorial Day and Labor Day (Friday/Monday also restricted when July 4 falls on a weekend)."
+  }, {
+    "when" : "Over 110,000 lb",
+    "text" : "Holiday and curfew hours restrictions apply (overweight-only loads up to 110,000 lb with legal dimensions are exempt from hours restrictions)."
+  }, {
+    "when" : "Oversize",
+    "text" : "Weekday curfews (unless Chapter 6 Special): Denver area listed segments 6:00-9:00 a.m. and 3:00-6:00 p.m. Mon-Fri; Colorado Springs, Pueblo and SH 82 Aspen-Carbondale 7:00-9:00 a.m. and 4:00-6:00 p.m. Mon-Fri; Central City area only 3:00-11:00 a.m.; US 6 Clear Creek Canyon closed to extra-legal loads."
+  }, {
+    "when" : "Oversize",
+    "text" : "I-70 Morrison-West Vail: winter (Dec 1-Mar 31) no WB travel Fri 3-8 p.m. and Sat/Sun 7 a.m.-noon, no EB Sat/Sun 3-9 p.m.; summer (May 15-Sep 15) no WB Fri afternoon to 8 p.m. and Sat 8 a.m.-noon, no EB Sun 3-9 p.m. Eisenhower-Johnson Tunnels: over 13'11\" high prohibited, over 11' wide must stop for tunnel permission."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ "Memorial Day", "Independence Day", "Labor Day" ],
+    "closures" : [ ],
+    "note" : "2 CCR 601-4 404.3: Memorial Day, July 4 and Labor Day restricted 6 a.m.-9 p.m. (modeled as the whole day); other holidays are open."
+  }, {
+    "when" : "Over 14' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "CDOT Freight - Permitting Information (single trip, Chapter 6 Special and Superload fees)",
+    "url" : "https://freight.colorado.gov/permitting-information"
+  }, {
+    "title" : "2 CCR 601-4 Rules Pertaining to Transport Permits for the Movement of Extra-Legal Vehicles or Loads (current version)",
+    "url" : "https://coloradosos.gov/CCR/GenerateRulePdf.do?ruleVersionId=8635&fileName=2+CCR+601-4"
+  }, {
+    "title" : "CDOT FYI: Legal Load and Permit Info (legal dimensions/weights, fee schedule, surcharge)",
+    "url" : "https://freight.colorado.gov/sites/g/files/lrnvjt896/files/documents/CDOT%20FYI%20Legal%20Load%20and%20Permit%20Info_0.pdf"
+  } ],
+  "notes" : [ "Legal: 102\" wide, 14'6\" high, 57'4\" trailer with no overall limit; gross 80,000 lb on interstates but 85,000 lb on non-interstate highways (calculator uses 80,000). Legal overhang 4' front / 10' rear.", "Escorts depend on the route color on CDOT's Pilot Escort and Oversize Restriction Map. Interstate modeled as 'white' (4-lane: rear escort or flashing yellow light over 15'); non-interstate modeled as 'green' two-lane (front over 13', front + rear over 15'). Yellow routes need front from 11'; blue routes front from 8'6\" and front + rear from 11'; red routes need a Special permit for any overwidth.", "Length escorts: over 85' on mountainous two-lane, over 110' on other two-lane (front), over 115' on four-lane (rear). Over 16' high: front escort with height pole; over 17' high: licensed signal contractor at signalized intersections.", "Chapter 6 Special and Superload permits require at least one front and one rear pilot escort; CDOT may also require Colorado State Patrol escort, flaggers or standby pulling vehicles case by case (no fixed CSP trigger).", "Superload flag here uses the Chapter 6 Special thresholds; CDOT's own term 'Superload' ($800 permit) is reserved for over 500,000 lb or double-dolly loads over 15' wide." ]
+}

@@ -1,0 +1,142 @@
+{
+  "code" : "NH",
+  "name" : "New Hampshire",
+  "slug" : "new-hampshire",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "NHDOT Oversize and Overweight Permit Office (Bureau of Highway Maintenance, Concord)",
+    "url" : "https://www.nhdotpermits.org/",
+    "phone" : "603-271-2691",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "oversize",
+    "when" : "Oversize",
+    "amount" : "$6",
+    "note" : "RSA 266:22 I: $6 per permit for over-length, over-width, over-height or any combination. Valid 5 business days (10 for round trip)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "Depends on the load",
+    "note" : "RSA 266:22 II: by vehicle+load weight - 80,001-90,000 $9.50; 90,001-100,000 $10.50; +$2 per additional 10,000 lb (tiers listed through 200,001-210,000 = $32.50; heavier loads add $2 per further 10,000 lb, not modeled). Supermoves (>149,999 lb) may also need a PE engineering report at applicant's expense."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 11'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 11'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 89'11\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 89'11\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' high, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 14' high, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\", on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\", on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 14'11\", on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 11'11\" wide, rear overhang over 14'11\"",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 99'11\" long",
+    "text" : "1 police escort. Length 100' or more: 1 State Police escort unless State Police waive based on conditions"
+  }, {
+    "when" : "Over 14' wide",
+    "text" : "2 police escorts. Width over 14': total of 2 State Police escorts (includes the one for length >= 100'); 3 if any road closure is needed"
+  } ],
+  "survey" : [ {
+    "when" : "Over 13'6\" high",
+    "text" : null
+  }, {
+    "when" : "Over 110' long",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 15' wide",
+    "text" : null
+  }, {
+    "when" : "Over 110' long",
+    "text" : null
+  }, {
+    "when" : "Over 13'6\" high",
+    "text" : null
+  }, {
+    "when" : "Over 149,999 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Oversize (or OS+OW) moves: daylight only (1/2 hr before sunrise to 1/2 hr after sunset); not valid on weekends. Supermove permits set their own dates/times."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "Permits not valid on New Year's, MLK Day, Presidents' Day, Memorial Day, July 4, Labor Day, Columbus Day, Veterans Day, Thanksgiving + the following Friday, Christmas; holiday on Sunday also restricts Monday, on Saturday also restricts Friday. Overweight-only loads at normal traffic speed are exempt from date/time limits."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "No movement during inclement weather (fog, heavy rain, freezing rain, sleet, ice, snow, wind); no convoys; must pull over when 7+ vehicles queue behind."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : "NH also closes MLK, Presidents', Columbus and Veterans Day and the day after Thanksgiving (not modeled)."
+  } ],
+  "sources" : [ {
+    "title" : "N.H. Admin. Rules Tra 304 - Oversize and Overweight Vehicle Permits",
+    "url" : "https://www.gc.nh.gov/rules/state_agencies/tra300.html"
+  }, {
+    "title" : "NH RSA Chapter 266 (266:10 height, 266:11 length, 266:12 width, 266:18 weight, 266:22 permit fees)",
+    "url" : "https://gc.nh.gov/RSA/html/XXI/266/266-mrg.htm"
+  } ],
+  "notes" : [ "Permits cover only the NH state highway system; local roads need town/city approval. Permits issued under the New England Transportation Consortium (NETC) agreement are honored in NH without a separate NH permit.", "Every load over 13'6\" high is a supermove in NH (single-trip permit not issued) and requires a physical route survey and PE-certified engineering report - expect long lead time.", "Non-police escort for width is defined for 12' to <14'; over 14' the rule calls for 2 State Police escorts instead. The calculator still counts the non-police escort for >14' (possible over-count) - permit office may require both.", "If the engine sums police counts, a load >= 100' long and > 14' wide shows 3; the rule total is 2 (3 only with road closure).", "Divisible-load and non-interstate gross weights up to 99,000 lb require RSA 266:18-d certification; calculator uses 80,000 lb legal gross." ]
+}

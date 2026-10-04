@@ -1,0 +1,157 @@
+{
+  "code" : "NM",
+  "name" : "New Mexico",
+  "slug" : "new-mexico",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "57'6\"",
+    "gross" : "86,400 lb"
+  },
+  "office" : {
+    "name" : "NMDOT Oversize/Overweight Permit Office (NM-OPS)",
+    "url" : "https://truckpermits.dot.nm.gov/",
+    "phone" : "505-476-2475",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$25",
+    "note" : "Truckers Guide: single trip oversize permit $25; single trip overweight permit $25 (one permit when both - verify). Valid 5 days (18.19.8.50)."
+  }, {
+    "kind" : "overweight",
+    "when" : "Overweight",
+    "amount" : "$0.03 per ton-mile",
+    "note" : "Over 86,400 lb: $0.025 per ton-mile on the weight above 86,400 lb (statute rounds per 2,000 lb or major fraction). Loads > 170,000 lb also need a route engineering analysis; NMDOT may bill its cost."
+  }, {
+    "kind" : "other",
+    "when" : "Over 19'11\" wide",
+    "amount" : "Set by the state",
+    "note" : "Police escort for loads 20' or wider. NMSA 66-7-413(B) (2003 text) set $300 per day for state/local police escort on moves of 20'+ width over 5+ miles - current amount not confirmed from an official source."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 13'11\" wide, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 17'11\" wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110'1\" long, on interstates and freeways",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 110'1\" long, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 120'1\" long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 19'11\" wide",
+    "text" : "1 police escort. 20' or wider: police escort at NMDOT discretion (18.19.8.84); MVD FAQ says required. Flagmen also required at 20'+."
+  } ],
+  "survey" : [ {
+    "when" : "Over 15'5\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 170,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Daylight only (30 min before sunrise to 30 min after sunset), any day of the week, unless the permit allows continuous movement - only available up to 10' wide, 14'6\" high, 120' long, 140,000 lb."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "No movement on holidays (New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas; 12:01 am-11:59 pm) or in inclement weather (snow, ice, fog, rain, dust, visibility < 1000 ft; winds 25+ mph for oversize)."
+  }, {
+    "when" : "Oversize",
+    "text" : "Weekday curfews 7-9 am and 4-6 pm: Santa Fe and Las Cruces city limits, I-25 Santa Fe-Los Lunas, US-285 Santa Fe-Espanola, I-10 MM 139-145, I-25 MM 0-9; Albuquerque and Rio Rancho 7-9 am and 4-7 pm."
+  }, {
+    "when" : "Every permitted load",
+    "text" : "OS/OW permits must be bought online (NM-OPS) and in hand before entering New Mexico."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 10' wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 14'6\" high",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 120' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 140,000 lb",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel on the holiday",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "18.19.8 NMAC - Oversize and Overweight Vehicle Special Permits (amended 6/1/2022)",
+    "url" : "https://www.srca.nm.gov/parts/title18/18.019.0008.html"
+  }, {
+    "title" : "New Mexico Truckers Guide (NMDOT/NMDPS, 2019) - linked from NM-OPS",
+    "url" : "https://api.realfile.rtsclients.com/PublicFiles/f260a66b364d453e91ff9b3fedd494dc/390a8774-3b63-4f6e-8ff7-aa3b291f6f03/Trucker's%20Guide%202019"
+  }, {
+    "title" : "NM-OPS (New Mexico Operating Permit System) login page / announcements",
+    "url" : "https://truckpermits.dot.nm.gov/"
+  }, {
+    "title" : "NMDPS MTPD 06.00 Size and Weight - Vehicle Approach Checks policy",
+    "url" : "https://www.dps.nm.gov/wp-content/uploads/2022/07/ABMMTD.06_SizeWeight_Vehicle_Approach_Checks-1.pdf"
+  }, {
+    "title" : "NM MVD - When are escorts required? (FAQ, posted 08/06/2013)",
+    "url" : "https://www.mvd.newmexico.gov/when-are-escorts-required/"
+  }, {
+    "title" : "NMDOT Escort Map (linked from NM-OPS)",
+    "url" : "https://api.realfile.rtsclients.com/PublicFiles/f260a66b364d453e91ff9b3fedd494dc/fdaeeecc-011b-47cb-9041-55dc8f8dcb02/Escort%20Map"
+  }, {
+    "title" : "NMDOT - Ports of Entry (permit contacts, SuperLoads)",
+    "url" : "https://www.dot.nm.gov/planning-research-multimodal-and-safety/modal/ports-of-entry/"
+  } ],
+  "notes" : [ "Escorts may also be required below 14' wide on routes shown on the NMDOT Escort Map (Group A highways: 13'6\" and over; Group B: 12' and over on pickup/delivery; some cities off-interstate) - not modeled.", "An escort or extra person may be required above 16' high to verify clearances; NMDOT may require escorts for projecting loads (both discretionary, not modeled).", "Height 14'-15'6\": applicant must check the route for clearances; 15'6\"+: written route survey (valid 14 days); 18'+: written utility certification.", "The MVD escort FAQ dates from 2013 (it still lists 90' for length; the 2022 rule uses 110'1\"). The 18' two-lane front+rear rule comes only from that FAQ - verify.", "Gross legal weight 86,400 lb applies on federally designated routes subject to the NM axle/tire table (600 lb per inch of tire width)." ]
+}

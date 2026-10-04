@@ -1,0 +1,126 @@
+{
+  "code" : "NV",
+  "name" : "Nevada",
+  "slug" : "nevada",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Nevada DOT Over-Dimensional Vehicle Permits (Carson City)",
+    "url" : "https://www.dot.nv.gov/doing-business/commercial-vehicles/commercial-vehicle-permits",
+    "phone" : "775-888-7410",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$25",
+    "note" : "NAC 484D.635(1)(a): single-trip permit $25, valid 5 consecutive days (NAC 484D.625). Applications needing special engineering research/inspection are billed at NDOT cost (NAC 484D.635(3))."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide, on two-lane and other roads",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 14' wide",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 16' wide",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 15'6\" high",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 110' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 25'",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 25'",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 17' wide, on two-lane and other roads",
+    "text" : "1 police escort. Discretionary: loads wider than 17' on 2-3 lane roads - NDOT may require law-enforcement traffic control"
+  }, {
+    "when" : "Over 19' wide, on interstates and freeways",
+    "text" : "1 police escort. Discretionary: loads wider than 19' on 4+ lane roads - NDOT may require law-enforcement traffic control"
+  }, {
+    "when" : "Over 16' high",
+    "text" : "1 police escort. Discretionary: loads higher than 16' - NDOT may require utility escorts and law-enforcement traffic control"
+  } ],
+  "survey" : [ {
+    "when" : "Over 19'11\" wide",
+    "text" : null
+  }, {
+    "when" : "Over 17'11\" high",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 14' wide",
+    "text" : null
+  }, {
+    "when" : "Over 15' high",
+    "text" : null
+  }, {
+    "when" : "Over 110' long",
+    "text" : null
+  }, {
+    "when" : "Front overhang over 15'",
+    "text" : null
+  }, {
+    "when" : "Rear overhang over 15'",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Every permitted load",
+    "text" : "No travel during hours of darkness (1/2 hr after sunset to 1/2 hr before sunrise), holiday hours, or weekends (Fri 1/2 hr after sunset to Mon 1/2 hr before sunrise) unless the permit or NDOT special instructions allow it."
+  }, {
+    "when" : "Oversize",
+    "text" : "Holiday hours (New Year's, Memorial Day, July 4, Labor Day, Thanksgiving, Christmas): e.g. Monday holiday = noon-midnight preceding Friday and the Monday; Thanksgiving = noon-midnight Wednesday through Sunday. See NAC 484D.525."
+  }, {
+    "when" : "Over 12' wide",
+    "text" : "I-15 between California line and Las Vegas (Exit 33): Friday 2-10 pm northbound and Sunday 2-10 pm southbound max width 12'. Over 12' wide: NDOT may add requirements for night, weekend and holiday travel; at night/holiday hours both front and rear pilot cars are required."
+  }, {
+    "when" : "Oversize",
+    "text" : "Single-trip application must be in by 4 pm the last business day before travel; special (over-max) permits 10 business days ahead."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : true,
+    "weekends" : "No travel on Saturday or Sunday",
+    "holidays" : "No travel from noon the day before through the holiday; a Monday or Friday holiday closes the long weekend",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "NAC Chapter 484D (NAC 484D.500-484D.695: oversized/overweight vehicle permits)",
+    "url" : "https://www.leg.state.nv.us/nac/nac-484d.html"
+  }, {
+    "title" : "NRS Chapter 484D (size and weight limits; NRS 484D.600-484D.745)",
+    "url" : "https://www.leg.state.nv.us/nrs/nrs-484d.html"
+  } ],
+  "notes" : [ "Fee and escort rules taken from the Nevada Administrative Code; the NDOT permit pages (dot.nv.gov) blocked automated fetch - verify current fee/ODVP instructions there.", "Gross weight: NV uses axle limits (20,000 single / 34,000 tandem) + bridge formula with no fixed gross cap; 80,000 lb used as a typical threshold. Overweight permits are evaluated by axle configuration.", "Pilot car for >12' wide is required in front on 2-3 lane highways and front+rear during hours of darkness/holiday hours on any road (NAC 484D.670(3)); the calculator models daytime travel.", "Legal overhang: load may not extend more than 10' beyond front/rear (NAC 484D.650(1)(e)); combinations other than tractor + <=53' semitrailer are limited to 70' (75' including load).", "Single-trip permit maximums without special approval: 14' wide, 15' high, 110' long (120' with steerable rear axle), 15' overhang - modeled as superload." ]
+}

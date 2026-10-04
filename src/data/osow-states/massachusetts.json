@@ -1,0 +1,108 @@
+{
+  "code" : "MA",
+  "name" : "Massachusetts",
+  "slug" : "massachusetts",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "13'6\"",
+    "length" : null,
+    "trailerLength" : "53'",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "MassDOT Highway Division - Oversize/Overweight Truck Permits (OASIS)",
+    "url" : "https://www.mass.gov/commercial-truck-permits",
+    "phone" : "857-368-3690",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$40",
+    "note" : "700 CMR 8.00 Table 1: Irreducible Load Permit exceeding any legal limit for size and weight, $40 per trip."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 130,000 lb",
+    "amount" : "$300",
+    "note" : "Super Load (> 130,000 lb, detailed engineering calculations required): $300 single trip. Grouped with the $40 trip fee: assumes the $300 replaces (not adds to) the $40 - verify with MassDOT."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 12' wide",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 90' long",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Rear overhang over 9'11\"",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Front overhang over 9'11\"",
+    "front" : 0,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 13'6\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 100' long",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ {
+    "when" : "Over 16' wide",
+    "text" : "2 police escorts. Two Massachusetts State Police vehicles, in addition to pilot cars."
+  }, {
+    "when" : "Over 135' long",
+    "text" : "2 police escorts. Two Massachusetts State Police vehicles, in addition to pilot cars."
+  } ],
+  "survey" : [ ],
+  "superload" : [ {
+    "when" : "Over 130,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "No movement on New Year's Day, Memorial Day, Independence Day, Labor Day, Thanksgiving Day, Christmas Day; no movement from noon the day before to noon the day after New Year's Day, Independence Day and Christmas. MassDOT states travel on State Highways is otherwise allowed Monday 12:01 a.m. to noon Saturday, and Sunday 12:01 a.m. to noon."
+  }, {
+    "when" : "Overweight",
+    "text" : "Same MassDOT holiday restrictions apply to overweight permit moves."
+  }, {
+    "when" : "Oversize",
+    "text" : "Turnpike (I-90) Interchange 11A Westborough to 24 Boston: irreducible-load permits ordinarily not issued eastbound 7-10 A.M. or westbound 3-7 P.M.; Boston tunnels have similar peak-hour limits and lower clearances (Callahan/Sumner 12'6\")."
+  } ],
+  "travel" : [ {
+    "when" : "Oversize or overweight",
+    "daylightOnly" : false,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No travel from noon the day before to noon the day after",
+    "holidayNames" : [ ],
+    "closures" : [ "sat from 12:00: MassDOT: travel allowed Monday 12:01 a.m. to noon Saturday", "sun from 12:00: and Sunday 12:01 a.m. to noon" ],
+    "note" : "MassDOT: no movement on the six holidays, and from noon the day before to noon the day after New Year's, Independence Day and Christmas. One holiday mode per state, so the noon-to-noon rule is applied to all six (Memorial Day, Labor Day and Thanksgiving are held half a day early and late)."
+  } ],
+  "sources" : [ {
+    "title" : "MassDOT - Commercial truck permits: height and weight limitations (incl. holiday restrictions)",
+    "url" : "https://www.mass.gov/info-details/commercial-truck-permits-height-and-weight-limitations"
+  }, {
+    "title" : "700 CMR 8.00 - Permitting, operation, and transport of overdimensional loads (Table 1 fees)",
+    "url" : "https://www.mass.gov/doc/700-cmr-8-permitting-operation-and-transport-of-overdimensional-loads-and-certain-vehicle-trailer-combinations-on-certain-massachusetts-department-of-transportation-roadways/download"
+  }, {
+    "title" : "700 CMR 7.00 - Use of the Massachusetts Turnpike and the Metropolitan Highway System (7.07 special permits, pilot cars, State Police escort)",
+    "url" : "https://www.mass.gov/doc/700-cmr-7-use-of-the-massachusetts-turnpike-and-the-metropolitan-highway-system/download"
+  }, {
+    "title" : "MassDOT - Commercial Truck Permits (OASIS)",
+    "url" : "https://www.mass.gov/commercial-truck-permits"
+  } ],
+  "notes" : [ "Pilot/State Police thresholds come from 700 CMR 7.07(4)(d), which MassDOT applies to ways under its jurisdiction; the Metropolitan Highway System (Boston tunnels/I-90 MHS) uses tighter thresholds (1 pilot at > 80' long or > 12' wide; 2 pilots at > 95' long). Exact escort conditions are printed on the OASIS permit - verify.", "700 CMR 7.07(4)(d) excludes 'tandem units or semi-trailer units with a semi-trailer of not more than 53 feet' from the length-based pilot triggers; the calculator applies the length triggers to overall length regardless - verify how MassDOT applies this to overhanging loads.", "Overhang triggers: pilot required at 10 ft or more of overhang (4 ft or more for poles, masts, booms or similar).", "Irreducible permits on the Turnpike/MHS are charged in addition to the regular toll for the vehicle class.", "Legal gross is 80,000 lb on state highways; the Turnpike/MHS allow 99,000 lb for 5+ axles (700 CMR 7.07(3) Table 3).", "State Police escort cost is not published in the sources reviewed; price it separately." ]
+}

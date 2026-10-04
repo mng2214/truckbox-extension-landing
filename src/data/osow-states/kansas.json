@@ -1,0 +1,136 @@
+{
+  "code" : "KS",
+  "name" : "Kansas",
+  "slug" : "kansas",
+  "verified" : true,
+  "verifiedOn" : "2026-10-02",
+  "researchedOn" : "2026-10-02",
+  "legal" : {
+    "width" : "8'6\"",
+    "height" : "14'",
+    "length" : null,
+    "trailerLength" : "59'6\"",
+    "gross" : "80,000 lb"
+  },
+  "office" : {
+    "name" : "Kansas Department of Transportation - Central Permitting Office (K-TRIPS)",
+    "url" : "https://k-trips.ksdot.gov/",
+    "phone" : "785-368-6501",
+    "orderUrl" : null
+  },
+  "fees" : [ {
+    "kind" : "other",
+    "when" : "Oversize or overweight",
+    "amount" : "$40",
+    "note" : "Standard single-trip permit $40 (K.S.A. 8-1911(f)(2)(A)); one permit covers oversize and overweight. Only the highest line in this group is charged."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 16'6\" wide",
+    "amount" : "$200",
+    "note" : "Large structure single trip $200: over 16'6\" wide (K.A.R. 36-45-1 definition)."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 18' high",
+    "amount" : "$200",
+    "note" : "Large structure single trip $200: over 18' high."
+  }, {
+    "kind" : "oversize",
+    "when" : "Over 126' long",
+    "amount" : "$200",
+    "note" : "KDOT's 2025 presentation also lists length over 126' as a large structure ($200); K.A.R. 36-45-1 defines large structure by width/height only - verify."
+  }, {
+    "kind" : "overweight",
+    "when" : "Over 150,000 lb",
+    "amount" : "$200",
+    "note" : "Superload single trip $200: over 150,000 lb gross (K.A.R. 36-45-1). A load is also a superload if any axle group exceeds K.A.R. 36-1-37 limits even under 150,000 lb (not modeled)."
+  } ],
+  "escorts" : [ {
+    "when" : "Over 14' wide",
+    "front" : 1,
+    "rear" : 0,
+    "note" : null
+  }, {
+    "when" : "Over 16'6\" wide",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 18' high",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  }, {
+    "when" : "Over 150,000 lb",
+    "front" : 1,
+    "rear" : 1,
+    "note" : null
+  } ],
+  "police" : [ ],
+  "survey" : [ {
+    "when" : "Over 14' wide",
+    "text" : null
+  }, {
+    "when" : "Over 18' high",
+    "text" : null
+  }, {
+    "when" : "Over 150,000 lb",
+    "text" : null
+  } ],
+  "superload" : [ {
+    "when" : "Over 150,000 lb",
+    "text" : null
+  } ],
+  "restrictions" : [ {
+    "when" : "Oversize",
+    "text" : "Over-width or over-length permitted loads may not travel from 30 minutes after sunset to 30 minutes before sunrise (unless authorized by another statute/regulation), when visibility is under 1/2 mile, or when the highway has ice, snow pack or drifting snow."
+  }, {
+    "when" : "Overweight",
+    "text" : "Overweight-only permitted loads (legal width and length) may operate 24 hours a day, except when highway surfaces have ice, snow pack or drifting snow."
+  }, {
+    "when" : "Oversize",
+    "text" : "KHP: oversize and overweight loads may not move when visibility is under 1/2 mile or in moderate to heavy rain, sleet, snow, fog or smoke, or on slippery roads (K.A.R. 36-1-36)."
+  }, {
+    "when" : "Oversize",
+    "text" : "Urban curfews may apply 7-9 a.m. and 4-6:30 p.m. in Kansas City, Lawrence, Leavenworth, Leawood, Lenexa, Olathe, Overland Park, Shawnee, Topeka and Wichita (pickups/deliveries in those cities excluded) - check the permit."
+  } ],
+  "travel" : [ {
+    "when" : "Over 8'6\" wide",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  }, {
+    "when" : "Over 70' long",
+    "daylightOnly" : true,
+    "weekends" : "Weekends allowed",
+    "holidays" : "No holiday limits",
+    "holidayNames" : [ ],
+    "closures" : [ ],
+    "note" : null
+  } ],
+  "sources" : [ {
+    "title" : "K.S.A. 8-1911 - Permits for oversize or overweight vehicles; fees",
+    "url" : "https://kslegislature.gov/li/b2025_26/statute/008_000_0000_chapter/008_019_0000_article/008_019_0011_section/008_019_0011_k/"
+  }, {
+    "title" : "K.A.R. 36-45-1 to 36-45-10 - Escort Vehicles, Providers and Operators (KDOT copy on K-TRIPS)",
+    "url" : "https://k-trips.ksdot.gov/Kansas%20Escort%20Vehicle%20Regulations.pdf"
+  }, {
+    "title" : "KDOT K-TRIPS Permit Price List (current as of 05/23/2023)",
+    "url" : "https://k-trips.ksdot.gov/Kansas%20Permit%20Price%20List.pdf"
+  }, {
+    "title" : "K.S.A. 8-1904 - Height and length of vehicles and loads",
+    "url" : "https://kslegislature.gov/li/b2025_26/statute/008_000_0000_chapter/008_019_0000_article/008_019_0004_section/008_019_0004_k/"
+  }, {
+    "title" : "KDOT testimony to House Transportation, Mar 5 2025 - Permitting and Routing Oversize/Overweight Vehicles Through Kansas",
+    "url" : "https://kslegislature.gov/li/b2025_26/committees/ctte_h_trnsprt_1/documents/testimony/20250305_11.pdf"
+  }, {
+    "title" : "Kansas Highway Patrol FAQ - Are there certain times or conditions when an oversize load may not operate?",
+    "url" : "https://kansashighwaypatrol.gov/faq-items/are-there-certain-times-or-conditions-when-an-oversize-load-may-not-operate/"
+  }, {
+    "title" : "K.S.A. 8-1902 - Width of vehicles and loads",
+    "url" : "https://kslegislature.gov/li/b2025_26/statute/008_000_0000_chapter/008_019_0000_article/008_019_0002_section/008_019_0002_k/"
+  } ],
+  "notes" : [ "Escorts (K.A.R. 36-45-8): over 14' wide = front and rear escort, but the rear escort may be dropped if a warning light is on top of the load, another on the rear of the load 2'-8' above the road, and a rear warning sign - modeled as front only. Large structures (over 16'6\" wide or 18' high) and superloads need front and rear; a superload that must slow at bridges needs one more. Kansas sets no length-based escort rule in K.A.R. 36-45.", "Every escorted move: an escort operator must survey the permitted route within 14 days before the move (K.A.R. 36-45-7(b)). Over 16' high, the lead escort must carry a height pole. Escort operators must be certified and the provider registered with KDOT. KHP does not provide escorts.", "The escort regulation PDF posted on K-TRIPS shows blank effective dates (temporary-regulation copy); confirm the adopted text in the Kansas Administrative Regulations.", "Holiday/weekend travel restrictions were not found in the sources fetched (K.A.R. 36-1 not reachable) - verify with KDOT.", "Permit is valid only if the power unit is registered for at least the gross weight (K.S.A. 8-1911(c)).", "Legal: 8'6\" wide (K.S.A. 8-1902), 14' high, semitrailer 59'6\"; K.S.A. 8-1904(c) caps most combinations at 65' overall, but federal law bars overall-length caps for tractor-semitrailers on the National Network - modeled as no overall limit. Gross 80,000 lb on interstates; the bridge table allows up to 85,500 lb on other state highways." ]
+}
