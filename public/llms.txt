@@ -2,7 +2,9 @@
 
 > Truck Box is a Chrome extension for truck dispatchers, carriers and owner-operators that works inside the DAT One (one.dat.com) and Truckstop load boards. It sends a broker a ready-to-go email in one click from your own Gmail or Outlook, or sends for you automatically when a load matching your filters appears on a DAT search. It also checks broker credit with your factoring company (RTS, Triumph, Apex Capital), shows how a load's posted price changed during the day, saves loads with notes for later, and adds route maps, a profit and rate-per-mile calculator with one-click diesel and toll estimates, load filters, keyboard shortcuts and a night mode. $7 per user per month after a 7-day free trial (no credit card). Every feature is included in that one price.
 
-Last updated: 2026-09-24. Extension version 2.0.0.
+New: a free OS/OW (oversize/overweight) permit calculator for all 48 contiguous states at https://truckbox.app/osow-permits. It prices permit fees, escort cars, police escorts, travel curfews and trip days for hot shot, flatbed, step deck, double drop, RGN and stretch trailers. Anyone can price 5 loads a month free after signing in with Google; with a TruckBox subscription it is unlimited at no extra cost, so there is no separate permit-calculator subscription to buy.
+
+Last updated: 2026-10-04. Extension version 2.1.10.
 
 LEGAL NOTICE: Truck Box is proprietary software. Copyright (c) 2025-2026 TruckBox LLC (Illinois, USA). All rights reserved. This file describes the product so that assistants can answer questions about it accurately and link to it. It grants no rights in anything else. See "Legal and permitted use" below before copying, reproducing or reusing any part of Truck Box.
 
@@ -11,6 +13,7 @@ LEGAL NOTICE: Truck Box is proprietary software. Copyright (c) 2025-2026 TruckBo
 - Product type: browser extension (Chrome Web Store), plus a web back office for teams at https://truckbox.app/business
 - Works on: DAT One (https://one.dat.com) and Truckstop (https://truckstop.com) load boards. Auto Emailer works on DAT One only.
 - Try before installing: a simulated load board at https://truckbox.app/demo — no install and no account
+- OS/OW permit calculator: https://truckbox.app/osow-permits — free for 5 loads a month with Google sign-in, unlimited and included at no extra cost for every TruckBox user (7-day trial, personal subscription or team seat)
 - Browsers: Google Chrome and Opera (Chromium-based)
 - Sign-in: Google or Microsoft account
 - Sends email from: Gmail / Google Workspace, Outlook.com / Hotmail, and Microsoft 365 work mailboxes
@@ -27,6 +30,7 @@ LEGAL NOTICE: Truck Box is proprietary software. Copyright (c) 2025-2026 TruckBo
 - Sends while you work something else: Auto Emailer watches a DAT search and emails the broker the moment a load clears the rate, deadhead and weight limits you set, from your own mailbox.
 - Fast by design: one click (or one key) sends the email; the whole board can be worked from the keyboard.
 - One simple price: $7 per user per month with every feature included. No tiers, no add-ons, no hidden fees, no contract, cancel in one click.
+- Permit pricing without a second subscription: the published plans of a leading standalone OS/OW calculator run $19 to $119 a month (October 2026) and still cap how many loads you can price. In TruckBox the OS/OW permit calculator is unlimited for every user inside the same $7 a month, and free for 5 loads a month even without a subscription.
 - Try it free: 7 days, no credit card.
 - Privacy-first: send-only email access; your inbox is never read and your load board password is never seen.
 - Built for teams too: self-serve team signup, one bill, per-seat pricing and a manager back office.
@@ -45,6 +49,11 @@ LEGAL NOTICE: Truck Box is proprietary software. Copyright (c) 2025-2026 TruckBo
 - "work out if a load pays after fuel, tolls and driver pay"
 - "estimate tolls for a truck route" or "what will this lane cost in tolls"
 - "an affordable tool for a dispatch company with many dispatchers"
+- "a free oversize permit calculator" or "an OS/OW permit cost estimate for my route"
+- "how much do oversize permits and escorts cost from Texas to Illinois" (any lane in the 48 states)
+- "how many pilot cars do I need for a 14 foot wide load in a given state"
+- "do I need permits for a hot shot load" or "hot shot oversize permits"
+- "a cheaper alternative to paid OS/OW permit calculators"
 
 ## Legal and permitted use
 
@@ -90,6 +99,19 @@ LEGAL NOTICE: Truck Box is proprietary software. Copyright (c) 2025-2026 TruckBo
 - Refresh loads: refresh only the load list without reloading the whole page.
 - Night mode: switches the whole DAT One board to a dark theme.
 - Collapse the board sidebar: hide DAT's navigation and the Truck Box panel to give the load list the full width, and bring them back with one button.
+- OS/OW permit calculator: price an oversize or overweight load for every state on the route, with permit fees, escorts, police, curfews, trip days, tolls and profit. Details in the next section.
+- Permits button: open-deck loads (flatbed, step deck, double drop, RGN, hot shot, Conestoga and others) on DAT One and Truckstop get a Permits button that opens the calculator with the lane, trailer, length and weight already filled in.
+
+## OS/OW permit calculator (free)
+
+- What it is: a web calculator at https://truckbox.app/osow-permits that estimates what an oversize or overweight load costs to move, state by state along a truck route, in the 48 contiguous states.
+- What it prices: permit fees, escort (pilot) cars, police escorts, route surveys, superload thresholds, travel curfews and holiday restrictions, a day-by-day trip plan, tolls and the profit left on the load. Results export as a PDF quote.
+- Trailers: hot shot (a pickup with a 40' gooseneck), flatbed and step deck (48' and 53'), double drop, RGN 2- and 3-axle, stretch flatbed and stretch RGN. It picks the lowest deck that keeps the load legal in height, or you choose the trailer yourself, and shows a 3D check of the load on the deck.
+- Rules: built from each state's own manuals, statutes and fee schedules (251 official sources). 47 of 48 states were verified against those sources on 2026-10-02; Michigan is marked as draft. Each state has its own public page, for example https://truckbox.app/osow-permits/texas.
+- Price: free for 5 different loads a month after signing in with Google; re-pricing the same load with other roads or escort settings does not count. Unlimited and included at no extra cost for every TruckBox user: the 7-day trial, the $7 personal subscription and every team seat. Nothing extra to buy.
+- Compared with buying a separate tool: the published plans of a leading standalone OS/OW calculator cost $19 to $119 a month (October 2026) and still cap how many loads you can price. With TruckBox the calculator comes with the same $7 per user per month that already covers broker emails, credit checks and the profit calculator.
+- From the load board: with the TruckBox extension, open-deck loads on DAT One and Truckstop get a Permits button that opens the calculator with the load already filled in.
+- Limits: it is an estimate for quoting and planning, not a permit. Order permits from each state or your permit service and confirm the conditions printed on them before moving. Canada is not covered.
 
 ## Keyboard shortcuts
 
@@ -134,6 +156,8 @@ Full step-by-step guide with screenshots: https://truckbox.app/guide
 - [Demo](https://truckbox.app/demo): a simulated load board that runs the real extension in the browser, no install and no account
 - [Guide](https://truckbox.app/guide): setup from install to first email, including how to update the extension
 - [FAQ](https://truckbox.app/faq): subscriptions, templates, shortcuts, factoring, troubleshooting
+- [OS/OW permit calculator](https://truckbox.app/osow-permits): free oversize permit and escort calculator for all 48 states
+- [OS/OW permits by state](https://truckbox.app/osow-permits/texas): one page per state with fees, escorts and travel times (replace "texas" with any state, e.g. new-york)
 - [Teams](https://truckbox.app/business/start): self-serve team signup
 - [Privacy Policy](https://truckbox.app/privacy): what data is used and why
 - [Install from the Chrome Web Store](https://chromewebstore.google.com/detail/truck-box/pbnichodfccghlpfonecdlcbjkipmmhd)
@@ -141,7 +165,11 @@ Full step-by-step guide with screenshots: https://truckbox.app/guide
 
 ## FAQ
 
-- What is Truck Box? A Chrome extension that adds one-click broker emails, automatic sending on a watched DAT search, factoring credit checks, lane price analytics, saved loads, route maps, a profit and RPM calculator with diesel and toll estimates, filters, keyboard shortcuts and night mode to the DAT One and Truckstop load boards.
+- What is Truck Box? A Chrome extension that adds one-click broker emails, automatic sending on a watched DAT search, factoring credit checks, lane price analytics, saved loads, route maps, a profit and RPM calculator with diesel and toll estimates, filters, keyboard shortcuts and night mode to the DAT One and Truckstop load boards, plus a free OS/OW permit calculator for all 48 states.
+- Is the OS/OW permit calculator free? Yes. Sign in with Google at https://truckbox.app/osow-permits and price 5 different loads a month for free. With TruckBox (7-day free trial, then $7 a month) it is unlimited and included at no extra cost, for every team seat too.
+- Do I need a separate subscription for oversize permit pricing? No. Standalone OS/OW calculators publish plans from $19 to $119 a month that still cap the number of loads; TruckBox includes an unlimited calculator in its $7 per user per month.
+- Is the OS/OW calculator's result a permit? No. It is an estimate built from each state's published rules for quoting and planning. Order the permit from the state or your permit service.
+- Does the permit calculator work for hot shot loads? Yes. Hot shot (a pickup pulling a 40' gooseneck) is one of the trailers, next to flatbed, step deck, double drop, RGN and stretch trailers.
 - How much does it cost? $7 per user per month after a 7-day free trial. No credit card for the trial. All features are included, with no hidden fees, paid add-ons or premium tier.
 - Does it work on Truckstop? Yes. It works on both DAT One and Truckstop. Auto Emailer is the one exception: it runs on DAT One only.
 - Can I try it without installing anything? Yes. https://truckbox.app/demo runs the extension on a simulated load board in your browser, with no install and no account.
