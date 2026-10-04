@@ -5,7 +5,7 @@
 
 import React, { Suspense, lazy, useEffect } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation, useParams } from "react-router-dom";
 import "./styles.css";
 import App, { SmoothScroll } from "./App";
 import { captureSource } from "./lib/demoTrack";
@@ -45,6 +45,11 @@ const IntrusionsPanel = lazy(() => import("./pages/admin/IntrusionsPanel"));
   const q = new URLSearchParams(location.search).get("theme");
   if (q === "light" || q === "dark") setLandingTheme(q);
   else applyLandingTheme();
+}
+
+function MovedStatePermits() {
+  const { slug } = useParams();
+  return <Navigate to={`/osow-permits/${slug ?? ""}`} replace />;
 }
 
 function LandingThemeSync() {
@@ -98,9 +103,11 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <Route path="/update" element={<UpdatePage />} />
         <Route path="/faq" element={<FAQPage />} />
         <Route path="/dat-load-board-tools" element={<DatToolsPage />} />
-        <Route path="/oversize-permit-calculator" element={<PermitsLanding />} />
-        <Route path="/oversize-permits" element={<Navigate to="/oversize-permit-calculator" replace />} />
-        <Route path="/oversize-permits/:slug" element={<StatePermits />} />
+        <Route path="/osow-permits" element={<PermitsLanding />} />
+        <Route path="/osow-permits/:slug" element={<StatePermits />} />
+        <Route path="/oversize-permit-calculator" element={<Navigate to="/osow-permits" replace />} />
+        <Route path="/oversize-permits" element={<Navigate to="/osow-permits" replace />} />
+        <Route path="/oversize-permits/:slug" element={<MovedStatePermits />} />
         <Route path="/demo" element={<DemoPage />} />
         {DECOY_ROOTS.map((root) => (
           <Route key={root} path={root + "/*"} element={<AdminDecoy />} />

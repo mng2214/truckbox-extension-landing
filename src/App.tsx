@@ -46,7 +46,7 @@ const NAV: NavItem[] = [
   { href: "/demo", label: "Demo", route: true, desktopOnly: true },
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
-  { href: "/oversize-permit-calculator", label: "Permits", route: true },
+  { href: "/osow-permits", label: "Permits", route: true },
   { href: "/business/start", label: "Teams", route: true },
   { href: "/guide", label: "Guide", route: true },
   { href: "/faq", label: "FAQ", route: true },

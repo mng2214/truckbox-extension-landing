@@ -52,10 +52,10 @@ export const STATE_INDEX = stateIndex as StateEntry[];
 
 const STATE_FILES = import.meta.glob<StatePage>("../../data/osow-states/*.json", { import: "default" });
 
-export const LANDING_PATH = "/oversize-permit-calculator";
+export const LANDING_PATH = "/osow-permits";
 export const CALCULATOR_PATH = "/business/osow";
 
-export const statePath = (slug: string) => `/oversize-permits/${slug}`;
+export const statePath = (slug: string) => `/osow-permits/${slug}`;
 
 export function stateEntry(slug: string | undefined): StateEntry | undefined {
   return STATE_INDEX.find((entry) => entry.slug === slug);

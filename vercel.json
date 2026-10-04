@@ -1,4 +1,21 @@
 {
+  "redirects": [
+    {
+      "source": "/oversize-permit-calculator",
+      "destination": "/osow-permits",
+      "permanent": true
+    },
+    {
+      "source": "/oversize-permits",
+      "destination": "/osow-permits",
+      "permanent": true
+    },
+    {
+      "source": "/oversize-permits/:slug",
+      "destination": "/osow-permits/:slug",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/dat",
@@ -51,6 +68,22 @@
     {
       "source": "/dat-load-board-tools/",
       "destination": "/dat-load-board-tools/index.html"
+    },
+    {
+      "source": "/osow-permits",
+      "destination": "/osow-permits/index.html"
+    },
+    {
+      "source": "/osow-permits/",
+      "destination": "/osow-permits/index.html"
+    },
+    {
+      "source": "/osow-permits/:slug",
+      "destination": "/osow-permits/:slug/index.html"
+    },
+    {
+      "source": "/osow-permits/:slug/",
+      "destination": "/osow-permits/:slug/index.html"
     },
     {
       "source": "/(.*)",

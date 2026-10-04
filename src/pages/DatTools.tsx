@@ -196,7 +196,7 @@ export default function DatToolsPage() {
                 <Link className="ed-btn" to="/faq">
                   <span>FAQ</span>
                 </Link>
-                <Link className="ed-btn" to="/oversize-permit-calculator">
+                <Link className="ed-btn" to="/osow-permits">
                   <span>Oversize permit calculator</span>
                 </Link>
               </div>

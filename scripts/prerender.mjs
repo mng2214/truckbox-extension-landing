@@ -15,8 +15,8 @@ const ROUTES = [
   "/privacy",
   "/business/start",
   "/dat-load-board-tools",
-  "/oversize-permit-calculator",
-  ...STATES.map((state) => `/oversize-permits/${state.slug}`),
+  "/osow-permits",
+  ...STATES.map((state) => `/osow-permits/${state.slug}`),
 ];
 
 const MIME = {
