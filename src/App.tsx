@@ -38,7 +38,7 @@ import {
   ZoomIn,
 } from "lucide-react";
 
-type NavItem = { href: string; label: string; route?: boolean; desktopOnly?: boolean; wideOnly?: boolean };
+type NavItem = { href: string; label: string; route?: boolean; desktopOnly?: boolean; wideOnly?: boolean; highlight?: boolean };
 
 /* ===== Site-wide constants ============================================== */
 
@@ -46,9 +46,9 @@ const NAV: NavItem[] = [
   { href: "/demo", label: "Demo", route: true, desktopOnly: true },
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },
-  { href: "/osow-permits", label: "Permits", route: true },
   { href: "/business/start", label: "Teams", route: true },
   { href: "/guide", label: "Guide", route: true },
+  { href: "/osow-permits", label: "Permits", route: true, highlight: true },
   { href: "/faq", label: "FAQ", route: true },
   { href: "/privacy", label: "Privacy", route: true, wideOnly: true },
   { href: "/#contact", label: "Contact" },
@@ -454,9 +454,10 @@ export function Header() {
               <Link
                 key={n.href}
                 to={n.href}
-                className={"tb-nav-link ed-label whitespace-nowrap" + (n.wideOnly ? " hidden xl:inline" : "")}
+                className={"tb-nav-link ed-label whitespace-nowrap" + (n.wideOnly ? " hidden xl:inline" : "") + (n.highlight ? " tb-nav-pulse" : "")}
               >
                 {n.label}
+                {n.highlight && <span className="tb-nav-dot" aria-hidden />}
               </Link>
             ))}
           </nav>
@@ -513,7 +514,7 @@ export function Header() {
                     animate={{ y: 0 }}
                     transition={{ delay: 0.08 + i * 0.05, duration: 0.7, ease: EASE }}
                     style={{ display: "block" }}
-                    className="ed-display text-[14vw] md:text-[7rem] leading-[0.95]"
+                    className={"ed-display text-[14vw] md:text-[7rem] leading-[0.95]" + (n.highlight ? " ed-accent" : "")}
                   >
                     {n.label}
                   </motion.span>

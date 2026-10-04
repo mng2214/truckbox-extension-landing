@@ -56,6 +56,7 @@ export const LANDING_PATH = "/osow-permits";
 export const CALCULATOR_PATH = "/business/osow";
 
 export const statePath = (slug: string) => `/osow-permits/${slug}`;
+export const flagPath = (slug: string) => `/flags/${slug}.webp`;
 
 export function stateEntry(slug: string | undefined): StateEntry | undefined {
   return STATE_INDEX.find((entry) => entry.slug === slug);

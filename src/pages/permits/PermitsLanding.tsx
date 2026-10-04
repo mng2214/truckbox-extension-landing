@@ -7,28 +7,25 @@ import { useEffect, useRef, useState, type CSSProperties, type RefObject } from 
 import { Link } from "react-router-dom";
 import {
   ArrowRight,
-  CalendarDays,
-  Car,
+  BadgeCheck,
   Check,
-  Clock,
-  FileDown,
-  FileText,
-  Receipt,
-  Route,
-  Ruler,
-  Siren,
-  Weight,
-  type LucideIcon,
+  Gift,
+  LogIn,
+  MessageCircle,
+  ShieldCheck,
 } from "lucide-react";
 import { Header, Footer } from "../../App";
 import { usePageMeta } from "../../lib/meta";
 import { installLink } from "../business/installLink";
-import { CALCULATOR_PATH, LANDING_PATH, LAST_CHECKED, SOURCE_COUNT, STATE_INDEX, VERIFIED_COUNT, statePath } from "./permitsData";
-import { QuickStart } from "./QuickStart";
+import { CALCULATOR_PATH, LANDING_PATH, LAST_CHECKED, STATE_INDEX, VERIFIED_COUNT, flagPath, statePath } from "./permitsData";
 import { EXAMPLE_LANE, EXAMPLE_LOAD, EXAMPLE_PRICED_ON, EXAMPLE_STATES, EXAMPLE_TOTALS } from "./example";
 import { LEGAL, RIGS, type Rig } from "../business/osow/equipment";
 import { StateTileMap } from "./StateTileMap";
 import { TrailerProfile } from "./TrailerProfile";
+import { PricedCarousel } from "./PricedCarousel";
+import { CalculatorShowcase } from "./CalculatorShowcase";
+import { FaqAccordion } from "./FaqAccordion";
+import { useMagnetic, usePointerGlow } from "./pointerGlow";
 import "./permits.css";
 
 function feet(inches: number): string {
@@ -46,25 +43,6 @@ function trailerFacts(rig: Rig) {
 }
 
 const LANDING_RIGS = [...RIGS.filter((rig) => rig.towVehicle === "pickup"), ...RIGS.filter((rig) => rig.towVehicle !== "pickup")];
-
-const PRICED: { icon: LucideIcon; label: string }[] = [
-  { icon: FileText, label: "Permit fees" },
-  { icon: Car, label: "Escort cars" },
-  { icon: Siren, label: "Police escorts" },
-  { icon: Route, label: "Route surveys" },
-  { icon: Weight, label: "Superloads" },
-  { icon: Clock, label: "Travel curfews" },
-  { icon: CalendarDays, label: "Trip days" },
-  { icon: Receipt, label: "Tolls and profit" },
-  { icon: FileDown, label: "PDF quotes" },
-];
-
-const GALLERY = [
-  { name: "load", caption: "Cargo, trailer and a 3D check", alt: "The calculator's load form with a 28 foot excavator on an RGN and its 3D model, width and height marked over legal", width: 1680, height: 1076 },
-  { name: "states", caption: "Every state, with its order link", alt: "Per-state table: Texas, Arkansas, Missouri and Illinois with miles, road class, permit fee, escorts and order links", width: 1680, height: 638 },
-  { name: "trip", caption: "A day-by-day trip plan", alt: "Trip plan: three days from Houston to Chicago, nightly stops and escort nights", width: 1680, height: 575 },
-  { name: "economics", caption: "Profit after the permits", alt: "Economics: load rate, fuel, tolls and driver pay with the profit on the load", width: 1680, height: 666 },
-];
 
 const FAQ = [
   {
@@ -102,103 +80,55 @@ const FAQ = [
   },
 ];
 
-function Shot({ name, alt, width, height, eager }: { name: string; alt: string; width: number; height: number; eager?: boolean }) {
-  return (
-    <div className="tbp-shot">
-      <img
-        className="is-light"
-        src={`/permits/${name}-light.webp`}
-        alt={alt}
-        width={width}
-        height={height}
-        loading={eager ? "eager" : "lazy"}
-        decoding="async"
-        {...(eager ? { fetchPriority: "high" as const } : {})}
-      />
-      <img className="is-dark" src={`/permits/${name}-dark.webp`} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
-    </div>
-  );
-}
-
 function RouteReceipt() {
   return (
-    <figure className="tbp-receipt" aria-label={`Example: ${EXAMPLE_LANE.origin} to ${EXAMPLE_LANE.destination}, priced by the calculator`}>
-      <header className="tbp-receipt-head">
-        <p className="tbp-receipt-lane">
-          {EXAMPLE_LANE.origin} <ArrowRight aria-hidden className="tbp-receipt-arrow" /> {EXAMPLE_LANE.destination}
-        </p>
-        <p className="tbp-receipt-load">
-          {EXAMPLE_LOAD.cargo} on an {EXAMPLE_LOAD.trailer} · {EXAMPLE_LOAD.width} wide · {EXAMPLE_LOAD.height} high ·{" "}
-          {EXAMPLE_LOAD.gross}
-        </p>
-      </header>
+    <div className="tbp-receipt-paper">
+      <figure className="tbp-receipt" aria-label={`Example: ${EXAMPLE_LANE.origin} to ${EXAMPLE_LANE.destination}, priced by the calculator`}>
+        <header className="tbp-receipt-head">
+          <p className="tbp-receipt-lane">
+            {EXAMPLE_LANE.origin} <ArrowRight aria-hidden className="tbp-receipt-arrow" /> {EXAMPLE_LANE.destination}
+          </p>
+          <p className="tbp-receipt-load">
+            {EXAMPLE_LOAD.cargo} on an {EXAMPLE_LOAD.trailer} · {EXAMPLE_LOAD.width} wide · {EXAMPLE_LOAD.height} high ·{" "}
+            {EXAMPLE_LOAD.gross}
+          </p>
+        </header>
 
-      <ol className="tbp-receipt-states">
-        {EXAMPLE_STATES.map((row, index) => (
-          <li key={row.code} style={{ "--stop": index } as CSSProperties}>
-            <span className="tbp-receipt-code">{row.code}</span>
-            <span className="tbp-receipt-name">
-              {row.name}
-              <small>{row.miles} mi</small>
-            </span>
-            <span className="tbp-receipt-escort">{row.escorts}</span>
-            <span className="tbp-receipt-permit">{row.permit}</span>
-          </li>
-        ))}
-      </ol>
+        <ol className="tbp-receipt-states">
+          {EXAMPLE_STATES.map((row, index) => (
+            <li key={row.code} style={{ "--stop": index } as CSSProperties}>
+              <span className="tbp-receipt-code">{row.code}</span>
+              <span className="tbp-receipt-name">
+                {row.name}
+                <small>{row.miles} mi</small>
+              </span>
+              <span className="tbp-receipt-escort">{row.escorts}</span>
+              <span className="tbp-receipt-permit">{row.permit}</span>
+            </li>
+          ))}
+        </ol>
 
-      <dl className="tbp-receipt-totals">
-        <div>
-          <dt>Permits</dt>
-          <dd>{EXAMPLE_TOTALS.permits}</dd>
-        </div>
-        <div>
-          <dt>
-            Escorts <small>{EXAMPLE_TOTALS.escortMiles} car-miles, {EXAMPLE_TOTALS.escortNights} night</small>
-          </dt>
-          <dd>{EXAMPLE_TOTALS.escorts}</dd>
-        </div>
-        <div className="is-total">
-          <dt>
-            OS/OW cost <small>{EXAMPLE_TOTALS.miles} mi in {EXAMPLE_TOTALS.days} days</small>
-          </dt>
-          <dd>{EXAMPLE_TOTALS.total}</dd>
-        </div>
-      </dl>
-      <figcaption>A real run of the calculator, {EXAMPLE_PRICED_ON}.</figcaption>
-    </figure>
-  );
-}
-
-function BoardIllustration() {
-  return (
-    <figure className="tbp-board" aria-label="Illustration: the TruckBox Permits button on a DAT One or Truckstop load">
-      <div className="tbp-board-boards">
-        <span>DAT One</span>
-        <span>Truckstop</span>
-      </div>
-      <div className="tbp-board-load">
-        <p className="tbp-board-lane">
-          {EXAMPLE_LANE.origin} <ArrowRight aria-hidden className="tbp-receipt-arrow" /> {EXAMPLE_LANE.destination}
-        </p>
-        <p className="tbp-board-specs">
-          <span>RGN</span>
-          <span>76,000 lb</span>
-          <span>{EXAMPLE_TOTALS.miles} mi</span>
-        </p>
-        <span className="tbp-board-permits">
-          <Ruler aria-hidden />
-          Permits
-        </span>
-      </div>
-      <div className="tbp-board-arrow" aria-hidden>
-        <ArrowRight />
-      </div>
-      <div className="tbp-board-result">
-        <Shot name="result" alt="The calculator opened with the load filled in and priced" width={1680} height={926} />
-      </div>
-      <figcaption>Illustration of the extension's button.</figcaption>
-    </figure>
+        <dl className="tbp-receipt-totals">
+          <div>
+            <dt>Permits</dt>
+            <dd>{EXAMPLE_TOTALS.permits}</dd>
+          </div>
+          <div>
+            <dt>
+              Escorts <small>{EXAMPLE_TOTALS.escortMiles} car-miles, {EXAMPLE_TOTALS.escortNights} night</small>
+            </dt>
+            <dd>{EXAMPLE_TOTALS.escorts}</dd>
+          </div>
+          <div className="is-total">
+            <dt>
+              OS/OW cost <small>{EXAMPLE_TOTALS.miles} mi in {EXAMPLE_TOTALS.days} days</small>
+            </dt>
+            <dd>{EXAMPLE_TOTALS.total}</dd>
+          </div>
+        </dl>
+        <figcaption>A real run of the calculator, {EXAMPLE_PRICED_ON}.</figcaption>
+      </figure>
+    </div>
   );
 }
 
@@ -220,8 +150,32 @@ function StickyStart({ watch }: { watch: RefObject<HTMLElement | null> }) {
   );
 }
 
+function openChat() {
+  const crisp = (window as unknown as { $crisp?: { push: (command: unknown[]) => void; is?: unknown } }).$crisp;
+  if (crisp && typeof crisp.is === "function") crisp.push(["do", "chat:open"]);
+  else window.location.assign("/#contact");
+}
+
 export default function PermitsLanding() {
   const heroRef = useRef<HTMLElement>(null);
+  const freePlanRef = usePointerGlow<HTMLDivElement>();
+  const truckBoxPlanRef = usePointerGlow<HTMLDivElement>();
+  const heroCtaRef = useMagnetic<HTMLAnchorElement>();
+  const closeCtaRef = useMagnetic<HTMLAnchorElement>();
+  const trailerCards = LANDING_RIGS.map((rig) => (
+    <li key={rig.id}>
+      <TrailerProfile rig={rig} />
+      <h3>{rig.label}</h3>
+      <dl>
+        {trailerFacts(rig).map((fact) => (
+          <div key={fact.label}>
+            <dt>{fact.label}</dt>
+            <dd>{fact.value}</dd>
+          </div>
+        ))}
+      </dl>
+    </li>
+  ));
   usePageMeta({
     title: "Free Oversize Permit & Escort Calculator for Every State on Your Route | TruckBox",
     description:
@@ -262,20 +216,34 @@ export default function PermitsLanding() {
         <section className="tbp-hero" ref={heroRef}>
           <div className="ed-container tbp-hero-grid">
             <div className="tbp-hero-copy">
-              <h1 className="ed-display tbp-h1">Free oversize permit calculator for all 48 states</h1>
+              <h1 className="ed-display tbp-h1">
+                <span className="ed-accent">Free</span> oversize permit calculator for all 48 states
+              </h1>
               <p className="tbp-lede">Hot shot to stretch RGN. Permits, escorts, police and curfews, priced state by state.</p>
-              <QuickStart />
-              <ul className="tbp-ticks" aria-label="Free plan">
+              <Link ref={heroCtaRef} className="ed-btn ed-btn-accent tbp-hero-cta tbp-arrow-cta" to={CALCULATOR_PATH}>
+                <span>Price your load free</span>
+                <ArrowRight aria-hidden className="h-4 w-4" />
+              </Link>
+              <ul className="tbp-perks" aria-label="Free plan">
                 <li>
-                  <Check aria-hidden /> Google sign-in
+                  <LogIn aria-hidden /> Google sign-in
                 </li>
                 <li>
-                  <Check aria-hidden /> No card
+                  <ShieldCheck aria-hidden /> No card
                 </li>
                 <li>
-                  <Check aria-hidden /> 5 loads a month free
+                  <Gift aria-hidden /> 5 loads a month free
                 </li>
               </ul>
+              <div className="tbp-included">
+                <p className="tbp-included-title">
+                  <BadgeCheck aria-hidden /> Free and unlimited with TruckBox
+                </p>
+                <p className="tbp-included-text">TruckBox users price every load free. No extra subscription.</p>
+                <Link className="tbp-see-run" to="/#features">
+                  All TruckBox features for $7/month <ArrowRight aria-hidden />
+                </Link>
+              </div>
             </div>
             <div className="tbp-hero-proof">
               <RouteReceipt />
@@ -286,51 +254,17 @@ export default function PermitsLanding() {
           </div>
         </section>
 
-        <section className="tbp-trust" aria-label="Where the rules come from">
-          <div className="ed-container">
-            <dl>
-              <div>
-                <dt>States checked against their DOT</dt>
-                <dd>{VERIFIED_COUNT} of 48</dd>
-              </div>
-              <div>
-                <dt>Official sources behind the rules</dt>
-                <dd>{SOURCE_COUNT}</dd>
-              </div>
-              <div>
-                <dt>Last checked</dt>
-                <dd>{LAST_CHECKED ?? "—"}</dd>
-              </div>
-              <div>
-                <dt>Works inside</dt>
-                <dd>DAT One · Truckstop</dd>
-              </div>
-            </dl>
-          </div>
-        </section>
-
         <section className="tbp-trailers-section">
           <div className="ed-container">
-            <h2 className="ed-h2 tbp-h2">Every open-deck trailer</h2>
-            <ul className="tbp-trailers">
-              {LANDING_RIGS.map((rig) => (
-                <li key={rig.id}>
-                  <TrailerProfile rig={rig} />
-                  <h3>{rig.label}</h3>
-                  <dl>
-                    {trailerFacts(rig).map((fact) => (
-                      <div key={fact.label}>
-                        <dt>{fact.label}</dt>
-                        <dd>{fact.value}</dd>
-                      </div>
-                    ))}
-                  </dl>
-                </li>
-              ))}
-            </ul>
-            <p className="tbp-legend">
-              <span className="tbp-legend-room" aria-hidden /> Legal cargo: how tall it can be under 13'6"
-            </p>
+            <h2 className="ed-h2 tbp-h2">For every open-deck trailer</h2>
+          </div>
+          <div className="tbp-marquee">
+            <div className="tbp-marquee-track">
+              <ul className="tbp-trailers">{trailerCards}</ul>
+              <ul className="tbp-trailers" aria-hidden>
+                {trailerCards}
+              </ul>
+            </div>
           </div>
         </section>
 
@@ -338,59 +272,32 @@ export default function PermitsLanding() {
           <div className="ed-container tbp-states-grid">
             <div>
               <h2 className="ed-h2 tbp-h2">All 48 states, checked against each DOT</h2>
-              <p className="tbp-legend">
-                <span className="tbp-legend-tile" aria-hidden /> Verified ({VERIFIED_COUNT})
-                <span className="tbp-legend-tile is-draft" aria-hidden /> Draft ({STATE_INDEX.length - VERIFIED_COUNT})
-              </p>
+              <details className="tbp-state-names-wrap">
+                <summary>All state rule pages</summary>
+                <ul className="tbp-state-names">
+                  {STATE_INDEX.map((page) => (
+                    <li key={page.code}>
+                      <Link to={statePath(page.slug)}>
+                        <img src={flagPath(page.slug)} alt="" loading="lazy" height={14} />
+                        {page.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
             </div>
             <StateTileMap />
-          </div>
-          <div className="ed-container">
-            <details className="tbp-state-names-wrap">
-              <summary>All state rule pages</summary>
-              <ul className="tbp-state-names">
-                {STATE_INDEX.map((page) => (
-                  <li key={page.code}>
-                    <Link to={statePath(page.slug)}>{page.name}</Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
           </div>
         </section>
 
         <section className="tbp-priced-section">
-          <div className="ed-container">
-            <h2 className="ed-h2 tbp-h2">What it prices</h2>
-            <ul className="tbp-checks">
-              {PRICED.map((item) => (
-                <li key={item.label}>
-                  <item.icon aria-hidden />
-                  {item.label}
-                </li>
-              ))}
-            </ul>
-          </div>
+          <PricedCarousel />
         </section>
 
         <section id="calculator" className="tbp-band">
           <div className="ed-container">
             <h2 className="ed-h2 tbp-h2 tbp-band-title">The real calculator</h2>
-            <Shot
-              name="result"
-              alt="The calculator's estimate for Houston to Chicago: total OS/OW cost, permits, escorts, the route on a map and the miles in each state"
-              width={1680}
-              height={926}
-              eager
-            />
-            <ul className="tbp-gallery">
-              {GALLERY.map((shot) => (
-                <li key={shot.name}>
-                  <Shot name={shot.name} alt={shot.alt} width={shot.width} height={shot.height} />
-                  <h3>{shot.caption}</h3>
-                </li>
-              ))}
-            </ul>
+            <CalculatorShowcase />
             <div className="tbp-actions tbp-actions-center">
               <Link className="ed-btn ed-btn-accent" to={CALCULATOR_PATH}>
                 <span>Price your load free</span>
@@ -403,7 +310,7 @@ export default function PermitsLanding() {
           <div className="ed-container">
             <h2 className="ed-h2 tbp-h2">Free. Unlimited for $7.</h2>
             <div className="tbp-plans">
-              <div className="tbp-plan">
+              <div ref={freePlanRef} className="tbp-plan">
                 <p className="tbp-plan-name">Free</p>
                 <p className="tbp-plan-price">$0</p>
                 <ul>
@@ -416,7 +323,7 @@ export default function PermitsLanding() {
                   <span>Start free</span>
                 </Link>
               </div>
-              <div className="tbp-plan is-main">
+              <div ref={truckBoxPlanRef} className="tbp-plan is-main">
                 <p className="tbp-plan-name">TruckBox</p>
                 <p className="tbp-plan-price">
                   $7<small>/month</small>
@@ -437,32 +344,17 @@ export default function PermitsLanding() {
           </div>
         </section>
 
-        <section className="tbp-bridge">
-          <div className="ed-container">
-            <h2 className="ed-h2 tbp-h2">On DAT or Truckstop? One click from the load.</h2>
-            <BoardIllustration />
-            <div className="tbp-actions">
-              <a className="ed-btn ed-btn-accent" href={installLink("osow_landing", "bridge")} target="_blank" rel="noreferrer">
-                <span>Add TruckBox to Chrome</span>
-              </a>
-              <Link className="ed-btn" to="/dat-load-board-tools">
-                <span>Load board tools</span>
-              </Link>
-            </div>
-          </div>
-        </section>
-
         <section className="tbp-faq-section">
           <div className="ed-container tbp-faq-grid">
-            <h2 className="ed-h2 tbp-h2">Questions</h2>
-            <div className="tbp-faq">
-              {FAQ.map((item) => (
-                <details key={item.question}>
-                  <summary>{item.question}</summary>
-                  <p>{item.answer}</p>
-                </details>
-              ))}
+            <div className="tbp-faq-intro">
+              <h2 className="ed-h2 tbp-h2">Questions</h2>
+              <p>Something else? Ask us in the chat.</p>
+              <button type="button" className="ed-btn tbp-faq-chat" onClick={openChat}>
+                <MessageCircle aria-hidden className="h-4 w-4" />
+                <span>Ask in chat</span>
+              </button>
             </div>
+            <FaqAccordion items={FAQ} />
           </div>
         </section>
 
@@ -470,8 +362,9 @@ export default function PermitsLanding() {
           <div className="ed-container">
             <h2 className="ed-display tbp-close-title">Price your next oversize load free</h2>
             <div className="tbp-actions tbp-actions-center">
-              <Link className="ed-btn ed-btn-accent" to={CALCULATOR_PATH}>
+              <Link ref={closeCtaRef} className="ed-btn ed-btn-accent tbp-arrow-cta" to={CALCULATOR_PATH}>
                 <span>Price your load free</span>
+                <ArrowRight aria-hidden className="h-4 w-4" />
               </Link>
             </div>
             <p className="tbp-fine tbp-actions-center">Estimates from public state sources, not a permit.</p>

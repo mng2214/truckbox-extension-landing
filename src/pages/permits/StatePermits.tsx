@@ -11,6 +11,7 @@ import {
   CALCULATOR_PATH,
   LANDING_PATH,
   STATE_INDEX,
+  flagPath,
   loadState,
   readableDate,
   stateEntry,
@@ -255,6 +256,7 @@ export default function StatePermits() {
               / {entry.name}
             </nav>
             <div className="max-w-3xl">
+              <img className="tbp-flag-hero mt-8" src={flagPath(entry.slug)} alt={`Flag of ${entry.name}`} height={56} />
               <h1 className="ed-h2 mt-4">{entry.name} oversize and overweight permits: fees, escorts and travel times</h1>
               <p className="mt-6 text-lg" style={{ color: "var(--muted)" }}>
                 What {entry.name} requires for an oversize or overweight load, from its own manuals, statutes and fee
@@ -281,6 +283,7 @@ export default function StatePermits() {
               <nav className="tbp-states mt-6" aria-label="Other states">
                 {STATE_INDEX.filter((other) => other.code !== entry.code).map((other) => (
                   <Link key={other.code} to={statePath(other.slug)}>
+                    <img className="tbp-states-flag" src={flagPath(other.slug)} alt="" loading="lazy" height={20} />
                     <b>{other.name}</b>
                     <span>{other.verified ? "Verified" : "Draft"}</span>
                   </Link>

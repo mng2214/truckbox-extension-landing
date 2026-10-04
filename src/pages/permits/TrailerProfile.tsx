@@ -3,11 +3,12 @@
  *  Proprietary and confidential. See LICENSE.
  */
 
+import type { CSSProperties } from "react";
 import { LEGAL, PICKUP, rigLayout, type Rig } from "../business/osow/equipment";
 
-const VIEW_WIDTH = 1240;
-const VIEW_HEIGHT = 190;
 const GROUND = 176;
+const VIEW_HEIGHT = GROUND + 2;
+const TAIL_ROOM = 12;
 const DECK_THICKNESS = 9;
 const TRACTOR_WHEEL = 20;
 const TRAILER_WHEEL = 17;
@@ -23,11 +24,15 @@ export function TrailerProfile({ rig }: { rig: Rig }) {
     (base.segments.find((segment) => segment.kind === "well") ?? base.segments[0]).x1 -
     (base.segments.find((segment) => segment.kind === "well") ?? base.segments[0]).x0;
   const stretchFrom = rig.stretchToIn ? loading.x0 + baseLoadLength : null;
+  const drawnWidth = Math.ceil(
+    Math.max(...stretched.segments.map((segment) => segment.x1), ...stretched.trailerAxlesX.map((axleX) => axleX + TRAILER_WHEEL)) + TAIL_ROOM,
+  );
 
   return (
     <svg
       className="tbp-rig"
-      viewBox={`0 0 ${VIEW_WIDTH} ${VIEW_HEIGHT}`}
+      viewBox={`0 0 ${drawnWidth} ${VIEW_HEIGHT}`}
+      style={{ "--tbp-rig-width": drawnWidth } as CSSProperties}
       role="img"
       aria-label={`${rig.label} side view`}
       preserveAspectRatio="xMinYMax meet"
@@ -39,7 +44,6 @@ export function TrailerProfile({ rig }: { rig: Rig }) {
         width={loading.x1 - loading.x0}
         height={LEGAL.heightIn - loading.topIn}
       />
-      <line className="tbp-rig-legal" x1={0} x2={VIEW_WIDTH} y1={up(LEGAL.heightIn)} y2={up(LEGAL.heightIn)} />
 
       {pickup ? (
         <>
@@ -105,7 +109,6 @@ export function TrailerProfile({ rig }: { rig: Rig }) {
       {stretched.trailerAxlesX.map((axleX) => (
         <circle key={axleX} className="tbp-rig-wheel" cx={axleX} cy={up(TRAILER_WHEEL)} r={TRAILER_WHEEL} />
       ))}
-      <line className="tbp-rig-ground" x1={0} x2={VIEW_WIDTH} y1={GROUND + 0.5} y2={GROUND + 0.5} />
     </svg>
   );
 }

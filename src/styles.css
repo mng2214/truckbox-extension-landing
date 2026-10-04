@@ -2783,6 +2783,17 @@ html:not(.tb-light) .tb-int-mark { filter: grayscale(1) brightness(0) invert(1);
 @media (prefers-reduced-motion: reduce) {
   .tb-nav-link, .tb-nav-link::after { transition: none; }
 }
+.tb-nav-link.tb-nav-pulse { color: var(--accent); animation: tb-nav-glow 2.4s ease-in-out infinite; }
+.tb-nav-dot { position: absolute; top: -5px; right: -11px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+.tb-nav-dot::after { content: ""; position: absolute; inset: 0; border-radius: inherit; background: var(--accent); animation: tb-nav-ping 1.8s cubic-bezier(0, 0, 0.2, 1) infinite; }
+@keyframes tb-nav-ping { 75%, 100% { transform: scale(2.8); opacity: 0; } }
+@keyframes tb-nav-glow {
+  0%, 100% { text-shadow: none; }
+  50% { text-shadow: 0 0 14px color-mix(in oklab, var(--accent) 75%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tb-nav-link.tb-nav-pulse, .tb-nav-dot::after { animation: none; }
+}
 
 .tb-plan-cta { display: inline-block; max-width: 100%; }
 .tb-trial {
