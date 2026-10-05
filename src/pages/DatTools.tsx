@@ -76,7 +76,7 @@ const TOOLS: Tool[] = [
     title: "Pricing an oversize load before you call",
     body: [
       "A wide or heavy load pays more for a reason: every state on the route wants its permit fee, some want pilot cars or police, and most stop the load at sunset and on holiday weekends. Quote it without that and the margin goes to the permits.",
-      "Open a hot shot, flatbed, step deck, RGN or Conestoga load on DAT One or Truckstop and the Permits button takes the lane, the equipment and the weight straight into the TruckBox oversize permit calculator: fees, escorts, travel times and trip days for each state, checked against each state's DOT. The calculator is free for 5 loads a month and unlimited with the extension.",
+      "Open a hot shot, flatbed, step deck, RGN or Conestoga load on DAT One or Truckstop and the Permits button takes the lane, the equipment and the weight straight into the TruckBox oversize permit calculator: fees, escorts, travel times and trip days for each state, checked against each state's DOT. The calculator is free for 5 loads a month, and up to 25 calculations a day with the extension.",
     ],
   },
   {

@@ -90,7 +90,7 @@ export function osowErrorMessage(e: unknown, fallback: string, dailyCap?: number
       : "You've reached today's fair-use limit of calculations. It resets at midnight Central.";
   }
   if (e.code === OSOW_FREE_LIMIT_REACHED) {
-    return "You've priced this month's free loads. Install TruckBox (7 days free) for unlimited OS/OW.";
+    return "You've priced this month's free loads. Install TruckBox (7 days free) for up to 25 OS/OW calculations a day.";
   }
   if (e.code === OSOW_QUOTE_NOT_FOUND) return "This saved quote no longer exists.";
   if (e.code === OSOW_QUOTE_LIMIT_REACHED) {

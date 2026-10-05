@@ -7,8 +7,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Check, ChevronDown, Copy, Flame, MapPin, Mail, Phone, Search } from "lucide-react";
 import { api, ApiError } from "../../lib/api";
-import { probeAgent } from "./agent/AgentApi";
-import { AgentSection } from "./agent/AgentSection";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -194,7 +192,6 @@ export function DiscoveryPanel() {
   const minActiveDays = 2;
 
   const [rows, setRows] = useState<BrokerRow[] | null>(null);
-  const [requestId, setRequestId] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
   const [waited, setWaited] = useState(0);
   const [slow, setSlow] = useState(false);
@@ -206,11 +203,6 @@ export function DiscoveryPanel() {
   const [quota, setQuota] = useState<Quota | null>(null);
   const reduce = useReducedMotion();
 
-  const [agent, setAgent] = useState<{ available: boolean; connected: boolean }>({
-    available: false,
-    connected: false,
-  });
-  const [agentView, setAgentView] = useState<{ requestId: number | null } | null>(null);
   useEffect(() => {
     if (!loading) {
       setWaited(0);
@@ -228,10 +220,6 @@ export function DiscoveryPanel() {
       window.clearInterval(timer);
     };
   }, [loading]);
-
-  useEffect(() => {
-    probeAgent().then(setAgent);
-  }, []);
 
   const fetchQuota = () =>
     api
@@ -310,14 +298,13 @@ export function DiscoveryPanel() {
         equipment: equipment.length ? equipment : null,
         minActiveDays,
       };
-      const result = await api.post<{ requestId: number | null; brokers: BrokerRow[] }>(
+      const result = await api.post<{ brokers: BrokerRow[] }>(
         "/api/v1/discovery/search",
         query,
       );
       setLastQuery(query);
       setDetails({});
       setRows(result.brokers);
-      setRequestId(result.requestId ?? null);
       setExpanded(new Set());
       fetchQuota();
     } catch (err) {
@@ -327,19 +314,6 @@ export function DiscoveryPanel() {
       setLoading(false);
     }
   };
-
-  if (agentView) {
-    return (
-      <section className="flex flex-col">
-        <AgentSection
-          initialRequestId={agentView.requestId}
-          connected={agent.connected}
-          onConnected={() => setAgent((a) => ({ ...a, connected: true }))}
-          onClose={() => setAgentView(null)}
-        />
-      </section>
-    );
-  }
 
   return (
     <section className="flex flex-col">
@@ -424,31 +398,6 @@ export function DiscoveryPanel() {
       </h1>
       <p className="ed-label mt-2.5" style={{ display: "flex", alignItems: "baseline", gap: "1rem" }}>
         Dedicated lanes discovery
-        {agent.available && (
-          <button
-            onClick={() => setAgentView({ requestId: null })}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 6,
-              background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-              border: "1px solid color-mix(in srgb, var(--accent) 35%, transparent)",
-              borderRadius: 999,
-              color: "var(--accent)",
-              cursor: "pointer",
-              fontFamily: "var(--font-sans, inherit)",
-              fontSize: "0.8rem",
-              fontWeight: 600,
-              letterSpacing: 0,
-              textTransform: "none",
-              lineHeight: 1,
-              padding: "0.32rem 0.7rem",
-            }}
-          >
-            My campaigns
-            <span aria-hidden style={{ fontSize: "0.9em" }}>→</span>
-          </button>
-        )}
       </p>
       {quota && (
         <span
@@ -566,15 +515,6 @@ export function DiscoveryPanel() {
               </span>
             </span>
             <span className="flex items-baseline gap-4">
-              {agent.available && requestId != null && groups.length > 0 && (
-                <button
-                  className="ed-btn ed-btn-accent"
-                  style={{ fontSize: "0.78rem" }}
-                  onClick={() => setAgentView({ requestId })}
-                >
-                  Start outreach with Agent
-                </button>
-              )}
               <span className="ed-label">
                 {rows.length} lane{rows.length === 1 ? "" : "s"}
               </span>

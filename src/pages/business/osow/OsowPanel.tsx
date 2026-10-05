@@ -647,8 +647,8 @@ export function OsowPanel({ citySuggest }: { citySuggest: boolean }) {
         message={
           <>
             You've priced {access?.monthlyLimit ?? "your"} different loads this month on the free plan. Re-pricing
-            those loads stays free, and new ones open again on {nextMonthStart()}. With TruckBox, OS/OW is unlimited and
-            you get one-click broker emails on DAT and Truckstop. 7 days free, no card.
+            those loads stays free, and new ones open again on {nextMonthStart()}. With TruckBox you get up to 25
+            calculations a day and one-click broker emails on DAT and Truckstop. 7 days free, no card.
           </>
         }
         confirmLabel="Install TruckBox"

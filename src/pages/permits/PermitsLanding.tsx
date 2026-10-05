@@ -48,7 +48,7 @@ const FAQ = [
   {
     question: "Is the calculator free?",
     answer:
-      "Yes. Sign in with Google and price 5 different loads a month for free; re-pricing the same load with other roads or escort settings does not count. With a TruckBox subscription (7 days free, then $7 a month) it is unlimited.",
+      "Yes. Sign in with Google and price 5 different loads a month for free; re-pricing the same load with other roads or escort settings does not count. With a TruckBox subscription (7 days free, then $7 a month) you get up to 25 calculations a day, 750 a month.",
   },
   {
     question: "Is this a permit?",
@@ -237,9 +237,9 @@ export default function PermitsLanding() {
               </ul>
               <div className="tbp-included">
                 <p className="tbp-included-title">
-                  <BadgeCheck aria-hidden /> Free and unlimited with TruckBox
+                  <BadgeCheck aria-hidden /> 750 a month, free with TruckBox
                 </p>
-                <p className="tbp-included-text">TruckBox users price every load free. No extra subscription.</p>
+                <p className="tbp-included-text">Up to 25 calculations a day for TruckBox users. No extra subscription.</p>
                 <Link className="tbp-see-run" to="/#features">
                   All TruckBox features for $7/month <ArrowRight aria-hidden />
                 </Link>
@@ -308,7 +308,7 @@ export default function PermitsLanding() {
 
         <section className="tbp-plans-section">
           <div className="ed-container">
-            <h2 className="ed-h2 tbp-h2">Free. Unlimited for $7.</h2>
+            <h2 className="ed-h2 tbp-h2">Free. 750 a month for $7.</h2>
             <div className="tbp-plans">
               <div ref={freePlanRef} className="tbp-plan">
                 <p className="tbp-plan-name">Free</p>
@@ -329,7 +329,7 @@ export default function PermitsLanding() {
                   $7<small>/month</small>
                 </p>
                 <ul>
-                  <li><Check aria-hidden /> Unlimited loads</li>
+                  <li><Check aria-hidden /> 25 calculations a day, 750 a month</li>
                   <li><Check aria-hidden /> Permits button on DAT and Truckstop</li>
                   <li><Check aria-hidden /> Broker emails, credit checks, profit</li>
                   <li><Check aria-hidden /> 7 days free</li>
@@ -339,7 +339,7 @@ export default function PermitsLanding() {
                 </a>
               </div>
             </div>
-            <p className="tbp-fine tbp-plans-note">Paid OS/OW calculators: $19 to $119 a month, still capped.*</p>
+            <p className="tbp-fine tbp-plans-note">Paid OS/OW calculators: $19 to $119 a month.*</p>
             <p className="tbp-fine tbp-plans-note">*Plans published on a leading OS/OW calculator's pricing page, October 2026.</p>
           </div>
         </section>

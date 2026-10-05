@@ -7,7 +7,7 @@ import { useEffect, useLayoutEffect, useState, useCallback, useRef, lazy, Suspen
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import {
-  Menu, X, Sun, Moon, LogOut, HelpCircle, User, Building2, ArrowLeft,
+  Menu, X, Sun, Moon, LogOut, HelpCircle, User, ArrowLeft,
   LayoutDashboard, Users, BarChart3, Sparkles, Mail, UserCircle, Ruler,
 } from "lucide-react";
 import { api, ApiError, sessionId } from "../../lib/api";
@@ -26,15 +26,10 @@ import { StatsPanel } from "./StatsPanel";
 import { PhoneVerify } from "./PhoneVerify";
 import { AccountsPanel } from "./AccountsPanel";
 import { TeamInviteBanner } from "./TeamInviteBanner";
-import { CompanyInfoPanel } from "./CompanyInfoPanel";
 import { MailboxesPanel } from "./MailboxesPanel";
 
 const DiscoveryPanel = lazy(() =>
   import("./DiscoveryPanel").then((m) => ({ default: m.DiscoveryPanel }))
-);
-
-const AgentPanel = lazy(() =>
-  import("./AgentPanel").then((m) => ({ default: m.AgentPanel }))
 );
 
 const OsowPanel = lazy(() =>
@@ -244,10 +239,9 @@ export default function Cabinet() {
     if (s === "personal") return ctx.panels.includes("personal");
     if (s === "team" || s === "statistics") return isManager;
     if (s === "discovery") return ctx.panels.includes("discovery");
-    if (s === "agent") return ctx.panels.includes("agent");
     if (s === "osow") return ctx.panels.includes("osow");
     if (s === "accounts") return true;
-    if (s === "mailboxes" || s === "company") return fullCabinet;
+    if (s === "mailboxes") return fullCabinet;
     return false;
   };
   const defaultSection = ctx.panels[0] ?? "personal";
@@ -321,16 +315,6 @@ export default function Cabinet() {
             onClick={() => goto("discovery")}
           />
         )}
-        {ctx.panels.includes("agent") && (
-          <NavItem
-            label="Agent"
-            sub="Auto outreach"
-            icon={<Sparkles />}
-            premium
-            active={section === "agent"}
-            onClick={() => goto("agent")}
-          />
-        )}
         {ctx.panels.includes("osow") && (
           <NavItem
             label="OS/OW"
@@ -347,9 +331,6 @@ export default function Cabinet() {
           <NavItem label="Mailboxes" icon={<Mail />} active={section === "mailboxes"} onClick={() => goto("mailboxes")} />
         )}
         <NavItem label="Accounts" icon={<UserCircle />} active={section === "accounts"} onClick={() => goto("accounts")} />
-        {fullCabinet && (
-          <NavItem label="Company info" icon={<Building2 />} active={section === "company"} onClick={() => goto("company")} />
-        )}
       </nav>
 
       <div className="mt-auto pt-8 flex flex-col gap-1">
@@ -451,11 +432,6 @@ export default function Cabinet() {
             <DiscoveryPanel />
           </Suspense>
         )}
-        {section === "agent" && ctx.panels.includes("agent") && (
-          <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
-            <AgentPanel campaignId={params.id ? Number(params.id) : null} />
-          </Suspense>
-        )}
         {section === "osow" && (
           <Suspense fallback={<div style={{ color: "var(--muted)" }}>Loading…</div>}>
             <OsowPanel citySuggest={ctx.panels.includes("discovery")} />
@@ -463,7 +439,6 @@ export default function Cabinet() {
         )}
         {section === "mailboxes" && <MailboxesPanel />}
         {section === "accounts" && <AccountsPanel />}
-        {section === "company" && <CompanyInfoPanel />}
       </main>
 
       <HelpDialog open={helpOpen} onClose={() => setHelpOpen(false)} />
@@ -485,8 +460,8 @@ function PlanNudge({ reason }: { reason: string }) {
         </b>
         <span style={{ color: "var(--muted)", fontSize: "0.9rem" }}>
           {renew
-            ? "Renew for unlimited OS/OW plus one-click broker emails on DAT and Truckstop, $7 a month."
-            : "Install TruckBox for unlimited OS/OW plus one-click broker emails on DAT and Truckstop. 7 days free, no card."}
+            ? "Renew for up to 25 OS/OW calculations a day plus one-click broker emails on DAT and Truckstop, $7 a month."
+            : "Install TruckBox for up to 25 OS/OW calculations a day plus one-click broker emails on DAT and Truckstop. 7 days free, no card."}
         </span>
       </div>
       {renew ? (

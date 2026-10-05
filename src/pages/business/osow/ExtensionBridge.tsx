@@ -18,7 +18,7 @@ export function ExtensionBridge() {
         </b>
         <span style={{ color: "var(--muted)", fontSize: "0.9rem", lineHeight: 1.5 }}>
           TruckBox sits right on the load board: one-click broker emails, rate history per lane, broker credit from
-          RTS, Apex and Triumph, and unlimited OS/OW pricing. 7 days free, no card.
+          RTS, Apex and Triumph, and up to 25 OS/OW calculations a day. 7 days free, no card.
         </span>
       </div>
       <a className="ed-btn ed-btn-accent" href={installLink("osow", "result")} target="_blank" rel="noopener">
